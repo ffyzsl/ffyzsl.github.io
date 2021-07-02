@@ -27,18 +27,10 @@
 <meta property="og:site_name" content="樊飞扬的博客">
 <meta property="og:description" content="一、数据类型1、要求变量的使用要严格符合规定，所有变量必须先定义后才能使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107095141928.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107093428378.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107093501751.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107094016786.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107104840409.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107104904705.png">
-<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107105344549.png">
 <meta property="article:published_time" content="2021-07-01T23:45:41.805Z">
-<meta property="article:modified_time" content="2021-07-01T23:45:30.464Z">
+<meta property="article:modified_time" content="2021-07-02T00:02:07.552Z">
 <meta property="article:author" content="浮舟道">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210107095141928.png">
 
 <link rel="canonical" href="http://ffyzsl.icu/2021/07/02/Day%20002%EF%BC%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E3%80%81%E5%8F%98%E9%87%8F%E4%BB%A5%E5%8F%8A%E5%B8%B8%E9%87%8F%EF%BC%89/">
 
@@ -188,7 +180,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-02 07:45:41 / 修改时间：07:45:30" itemprop="dateCreated datePublished" datetime="2021-07-02T07:45:41+08:00">2021-07-02</time>
+              <time title="创建时间：2021-07-02 07:45:41 / 修改时间：08:02:07" itemprop="dateCreated datePublished" datetime="2021-07-02T07:45:41+08:00">2021-07-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -214,15 +206,84 @@
         <h2 id="一、数据类型"><a href="#一、数据类型" class="headerlink" title="一、数据类型"></a>一、数据类型</h2><p>1、要求变量的使用要严格符合规定，所有变量必须先定义后才能使用。</p>
 <span id="more"></span>
 
-<img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107095141928.png" alt="image-20210107095141928" style="zoom: 50%;" />
-
+<p>1bit表示1位<br>       1Byte表示一个字节， 1B=8b<br>       1024B=1KB<br>       1024KB=1M<br>       1024M=1G</p>
 <p><strong>分两大类：基本类型，引用类型</strong></p>
-<img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107093428378.png" alt="image-20210107093428378" style="zoom: 67%;" />
-
-<p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107093501751.png" alt="image-20210107093501751"></p>
-<p> <em><strong>long类型后加L</strong></em><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107094016786.png" alt="image-20210107094016786"></p>
+<p>基本类型</p>
+<table>
+<thead>
+<tr>
+<th align="left">键字</th>
+<th align="left">类型</th>
+<th align="left">位数 (8位一字节)</th>
+<th align="left">取值范围(表示范围)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">byte</td>
+<td align="left">整型</td>
+<td align="left">8</td>
+<td align="left">-2^7 ~ 2^7-1</td>
+</tr>
+<tr>
+<td align="left">short</td>
+<td align="left">整型</td>
+<td align="left">16</td>
+<td align="left">-2^15 ~ 2^15-1</td>
+</tr>
+<tr>
+<td align="left">int</td>
+<td align="left">整型</td>
+<td align="left">32</td>
+<td align="left">-2^31 ~ 2^31-1</td>
+</tr>
+<tr>
+<td align="left">long</td>
+<td align="left">整型</td>
+<td align="left">64</td>
+<td align="left">-2^63 ~ 2^63-1</td>
+</tr>
+<tr>
+<td align="left">float</td>
+<td align="left">浮点数</td>
+<td align="left">32</td>
+<td align="left">3.402823e+38 ~ 1.401298e-45</td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="left">浮点数</td>
+<td align="left">64</td>
+<td align="left">1.797693e+308~ 4.9000000e-324</td>
+</tr>
+<tr>
+<td align="left">char</td>
+<td align="left">文本型</td>
+<td align="left">16</td>
+<td align="left">0 ~ 2^16-1</td>
+</tr>
+<tr>
+<td align="left">boolean</td>
+<td align="left">布尔值</td>
+<td align="left">32/8</td>
+<td align="left">true/false</td>
+</tr>
+</tbody></table>
+<p>引用类型</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>接口</td>
+</tr>
+<tr>
+<td>数组</td>
+</tr>
+</tbody></table>
+<p> <em><strong>long类型后加L</strong></em></p>
 <p><em><strong>float类型后要加字母F</strong></em></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> num1=<span class="number">25.1F</span>;<span class="comment">//float类型后要加字母F</span></span><br><span class="line">        <span class="keyword">double</span> num2=<span class="number">25.122324343534343</span>;</span><br><span class="line">        <span class="comment">//字符</span></span><br><span class="line">        <span class="keyword">char</span> name=<span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        <span class="comment">//字符串，String不是关键字，而是类</span></span><br><span class="line">        String name2=<span class="string">&quot;可以是中文and english&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> num1=<span class="number">25.1F</span>;<span class="comment">//float类型后要加字母F</span></span><br><span class="line">        <span class="keyword">long</span> num3=<span class="number">30L</span>;<span class="comment">//long类型后要加字母L</span></span><br><span class="line">        <span class="keyword">double</span> num2=<span class="number">25.122324343534343</span>;</span><br><span class="line">        <span class="comment">//字符</span></span><br><span class="line">        <span class="keyword">char</span> name=<span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        <span class="comment">//字符串，String不是关键字，而是类</span></span><br><span class="line">        String name2=<span class="string">&quot;可以是中文and english&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//布尔值</span><br><span class="line">boolean flag=true;</span><br><span class="line">boolean flag2=false;</span><br></pre></td></tr></table></figure>
 
@@ -243,11 +304,12 @@
 <p>\n 换行</p>
 <p>\t  制表符</p>
 <p>……</p>
-<p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107104840409.png" alt="image-20210107104840409"></p>
-<p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107104904705.png" alt="image-20210107104904705"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String sa=<span class="keyword">new</span> String(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">String sb=<span class="keyword">new</span> String(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">System.out.println(sa==sb);</span><br><span class="line">String sc=<span class="string">&quot;hello world&quot;</span>;</span><br><span class="line">String sd=<span class="string">&quot;hello world&quot;</span>;</span><br><span class="line">System.out.println(sc==sd);</span><br><span class="line"></span><br><span class="line"><span class="comment">//false</span></span><br><span class="line"><span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="4、布尔值拓展"><a href="#4、布尔值拓展" class="headerlink" title="4、布尔值拓展"></a>4、布尔值拓展</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">if</span> (flag==<span class="keyword">true</span>)&#123;&#125;</span><br><span class="line"><span class="keyword">if</span>(flat)&#123;&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="二、类型转化"><a href="#二、类型转化" class="headerlink" title="二、类型转化"></a>二、类型转化</h2><p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210107105344549.png" alt="image-20210107105344549"></p>
+<h2 id="二、类型转化"><a href="#二、类型转化" class="headerlink" title="二、类型转化"></a>二、类型转化</h2><p>低———————————————–&gt;&gt;&gt;高</p>
+<p>byte,short,char—&gt; int —&gt; long —&gt; float —&gt; double</p>
 <p><strong>强制转化：（类型）变量名   高——低</strong></p>
 <p><strong>自动转换      低——高</strong></p>
 <p>运算中，不同类型的数据先转化为同一类型，然后进行运算。</p>
