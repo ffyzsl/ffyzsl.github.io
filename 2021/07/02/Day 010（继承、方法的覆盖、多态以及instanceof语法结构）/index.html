@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="继承">
+<meta property="og:type" content="article">
+<meta property="og:title" content="继承、方法的覆盖，多态及instanceof语法结构">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/02/Day%20010%EF%BC%88%E7%BB%A7%E6%89%BF%E3%80%81%E6%96%B9%E6%B3%95%E7%9A%84%E8%A6%86%E7%9B%96%E3%80%81%E5%A4%9A%E6%80%81%E4%BB%A5%E5%8F%8Ainstanceof%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="继承">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210116152555543.png">
+<meta property="article:published_time" content="2021-07-02T09:03:28.793Z">
+<meta property="article:modified_time" content="2021-07-02T09:04:38.347Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210116152555543.png">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/02/Day%20010%EF%BC%88%E7%BB%A7%E6%89%BF%E3%80%81%E6%96%B9%E6%B3%95%E7%9A%84%E8%A6%86%E7%9B%96%E3%80%81%E5%A4%9A%E6%80%81%E4%BB%A5%E5%8F%8Ainstanceof%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>继承、方法的覆盖，多态及instanceof语法结构 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/02/Day%20010%EF%BC%88%E7%BB%A7%E6%89%BF%E3%80%81%E6%96%B9%E6%B3%95%E7%9A%84%E8%A6%86%E7%9B%96%E3%80%81%E5%A4%9A%E6%80%81%E4%BB%A5%E5%8F%8Ainstanceof%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          继承、方法的覆盖，多态及instanceof语法结构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-02 17:03:28 / 修改时间：17:04:38" itemprop="dateCreated datePublished" datetime="2021-07-02T17:03:28+08:00">2021-07-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><span id="more"></span>
+
+<p>1、语法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;修饰符列表&#125; <span class="class"><span class="keyword">class</span> 类名 <span class="keyword">extends</span> 父类名</span>&#123;</span><br><span class="line">    类体=属性+方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、基本作用：代码复用，有了继承才有以后方法的覆盖和多态机制</p>
+<p>3、java语言当中的继承只支持单继承，一个类不能同时继承很多类，只能继承一个类，在c++中支持多继承</p>
+<p>4、B类继承A类。</p>
+<p>​      A类称为：父类，基类，superclass</p>
+<p>​      B类称为：子类，派生类，subclass</p>
+<p>5、子类继承父类</p>
+<p>​       私有的不支持继承</p>
+<p>​       构造方法不支持继承</p>
+<p>​       其他数据都可以继承</p>
+<p>6、</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C extends B&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">B extends A&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">A extends T&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C直接继承B类，但是C类间接继承T，A类。</p>
+<p>7、java语言中假设一个类没有显示继承任何类，该类默认继承JavaSE库当中提供的java.lang.Object类。（java语言中任何一个类中都有Object类的特征）</p>
+<p>实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Account01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String actno;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> balance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account01</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account01</span><span class="params">(String actno, <span class="keyword">double</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno = actno;</span><br><span class="line">        <span class="keyword">this</span>.balance = balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getActno</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setActno</span><span class="params">(String actno)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno = actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getBalance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBalance</span><span class="params">(<span class="keyword">double</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = balance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CreditAccount</span> <span class="keyword">extends</span>  <span class="title">Account01</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> credit;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CreditAccount</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCredit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> credit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCredit</span><span class="params">(<span class="keyword">double</span> credit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.credit = credit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtendsTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CreditAccount act01=<span class="keyword">new</span> CreditAccount();</span><br><span class="line">        act01.setActno(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">        act01.setBalance(<span class="number">100.5</span>);</span><br><span class="line">        act01.setCredit(<span class="number">0.99</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;账户&quot;</span>+act01.getActno()+<span class="string">&quot;余额&quot;</span>+act01.getBalance()+<span class="string">&quot;信用&quot;</span>+act01.getCredit());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">账户<span class="number">001</span>余额<span class="number">100.5</span>信用<span class="number">0.99</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="方法的覆盖"><a href="#方法的覆盖" class="headerlink" title="方法的覆盖"></a>方法的覆盖</h2><p>1、当父类中的方法无法满足当前子类的业务需求，子类需要将父类继承过来的方法进行重写或覆盖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;动物在MOVE&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫在walk&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;鸟在fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OverwirteTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Animal a=<span class="keyword">new</span> Animal();</span><br><span class="line">        a.move();</span><br><span class="line"></span><br><span class="line">        Cat c=<span class="keyword">new</span> Cat();</span><br><span class="line">        c.move();</span><br><span class="line"></span><br><span class="line">        Bird b=<span class="keyword">new</span> Bird();</span><br><span class="line">        b.move();</span><br><span class="line">        </span><br><span class="line">        yingwu y=<span class="keyword">new</span> yingwu();</span><br><span class="line">        y.move();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">动物在MOVE</span><br><span class="line">猫在walk</span><br><span class="line">鸟在fly</span><br><span class="line">鸟在fly</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">yingwu</span> <span class="keyword">extends</span> <span class="title">Bird</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2、方法重写发生在具有继承关系的父子类之间</p>
+<p>​      方法重写的时候：<strong>方法名相同，返回值类型相同，形参列表相同。</strong>访问权限不能更低，可以更高。抛出异常不能更多，可以更少</p>
+<p>3、注意：私有方法不能继承，所以不能覆盖</p>
+<p>​                 构造方法不能继承，所以不能覆盖</p>
+<p>​                 静态方法不存在覆盖</p>
+<p>4、覆盖只针对方法，不针对属性</p>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>1、关于多态中涉及到的几个概念：</p>
+<p>​        向上转型（upcasting）：子类型——-&gt;父类型</p>
+<p>​        向下转型（down casting）：父类型—–&gt;子类型【需要加强制类型转换符】</p>
+<p><strong>注意：转型必须有继承关系</strong>     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Animal在MOVE&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Cat在WALK&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">catchMouse</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫捉老鼠！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Bird在FLY&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Bird没在fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Animal a1=<span class="keyword">new</span> Animal();</span><br><span class="line">           a1.move();</span><br><span class="line">        Bird b1=<span class="keyword">new</span> Bird();</span><br><span class="line">           b1.move();</span><br><span class="line">        Cat c1=<span class="keyword">new</span> Cat();</span><br><span class="line">           c1.move();</span><br><span class="line">        c1.catchMouse();</span><br><span class="line">        Animal a2=<span class="keyword">new</span> Cat();<span class="comment">//new Cat()创建的对象类型是Cat，a2这个引用的数据类型是Animal，可见它们进行了类型转化。子类型转换为父类型，向上转换</span></span><br><span class="line">        a2.move();</span><br><span class="line">        <span class="comment">//a2.catchMouse编译错误，编译器只知道a2的类型为Animal，</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Animal在MOVE</span><br><span class="line">Bird在FLY</span><br><span class="line">Cat在WALK</span><br><span class="line">猫捉老鼠！</span><br><span class="line">Cat在WALK</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210116152555543.png" alt="image-20210116152555543"></p>
+<p>java程序分为编译阶段和运行阶段，编译无法通过则无法运行</p>
+<p>编译阶段：a2被编译器认定为是Animal类型，所以只能运行Animal中存在的方法，否则编译出错 </p>
+<p>运行阶段：因为在堆内存中创建的是一个Cat对象，所以运行结果为Cat从Animal那里继承的方法的结果（如果在Cat类中使用了方法重写，那么结果为重写之后运行的结果）</p>
+<p>如果想在a2中使用catchMouse方法，可以强制将a2类型转换为Cat类型。父类转换为子类，向下转型，（当调用的方法或者访问的属性是子类中特有的，在父类中不存在，必须进行向下转型）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cat a2=Cat(a2);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Animal a3=<span class="keyword">new</span> Bird();</span><br><span class="line">Cat a4=(Cat)a3;<span class="comment">//编译通过，但运行出错，因为Cat类和Bird类没有继承关系</span></span><br></pre></td></tr></table></figure>
+
+<p>这个异常被称为：<strong>java.lang.ClassCsatException</strong></p>
+<p>这种异常常常在“向下转型”的时候发生</p>
+<p>这样避免这种异常：使用<strong>instanceof</strong>运算符可以避免出现以上的异常</p>
+<h3 id="instanceof语法结构"><a href="#instanceof语法结构" class="headerlink" title="instanceof语法结构"></a>instanceof语法结构</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(引用 <span class="keyword">instanceof</span> 数据类型名)</span><br></pre></td></tr></table></figure>
+
+<p>以上运算符的执行结果类型为布尔类型，true or  false</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a <span class="keyword">instanceof</span> Animal</span><br></pre></td></tr></table></figure>
+
+<p>true表示：a这个引用指向的对象是一个Animal类型</p>
+<p>false表示：a这个引用指向的对象不是一个Animal类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> (a2 <span class="keyword">instanceof</span> Cat)&#123;</span><br><span class="line">            Cat c2=(Cat)a2;<span class="comment">//c2是一个新的引用</span></span><br><span class="line">            c2.catchMouse();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (a2 <span class="keyword">instanceof</span> Bird)&#123;</span><br><span class="line">            Bird b2=(Bird)a2;</span><br><span class="line">            b2.Fly();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">新增</span><br><span class="line">猫捉老鼠！</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/02/Day%20009%EF%BC%88this%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81static%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/" rel="prev" title="this关键字、static关键字">
+      <i class="fa fa-chevron-left"></i> this关键字、static关键字
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E7%9A%84%E8%A6%86%E7%9B%96"><span class="nav-number">2.</span> <span class="nav-text">方法的覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%80%81"><span class="nav-number">3.</span> <span class="nav-text">多态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#instanceof%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">instanceof语法结构</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
