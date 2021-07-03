@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Integer常用方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Integer常用方法及类型互换，java对日期的处理，System类相关的属性方法，数字格式化">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20027%EF%BC%88Integer%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81String%20%20int%20Integer%E7%B1%BB%E5%9E%8B%E4%BA%92%E8%BD%AC%E3%80%81java%E5%AF%B9%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86%E3%80%81System%E7%B1%BB%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E3%80%81%E6%95%B0%E5%AD%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6BigDecimal%E3%80%81%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="Integer常用方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210222092941876.png">
+<meta property="article:published_time" content="2021-07-03T12:36:32.953Z">
+<meta property="article:modified_time" content="2021-07-03T12:39:34.145Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/樊飞扬/AppData/Roaming/Typora/typora-user-images/image-20210222092941876.png">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20027%EF%BC%88Integer%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81String%20%20int%20Integer%E7%B1%BB%E5%9E%8B%E4%BA%92%E8%BD%AC%E3%80%81java%E5%AF%B9%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86%E3%80%81System%E7%B1%BB%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E3%80%81%E6%95%B0%E5%AD%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6BigDecimal%E3%80%81%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Integer常用方法及类型互换，java对日期的处理，System类相关的属性方法，数字格式化 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20027%EF%BC%88Integer%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81String%20%20int%20Integer%E7%B1%BB%E5%9E%8B%E4%BA%92%E8%BD%AC%E3%80%81java%E5%AF%B9%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86%E3%80%81System%E7%B1%BB%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E3%80%81%E6%95%B0%E5%AD%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6BigDecimal%E3%80%81%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Integer常用方法及类型互换，java对日期的处理，System类相关的属性方法，数字格式化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-03 20:36:32 / 修改时间：20:39:34" itemprop="dateCreated datePublished" datetime="2021-07-03T20:36:32+08:00">2021-07-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Integer常用方法"><a href="#Integer常用方法" class="headerlink" title="Integer常用方法"></a>Integer常用方法</h2><span id="more"></span>
+
+<ul>
+<li><ul>
+<li><ul>
+<li><p>```<br>public int intValue()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      将 `Integer`的值作为 `int` 。 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public static int parseInt(String s)</span><br><span class="line">                          throws NumberFormatException</span><br></pre></td></tr></table></figure>
+
+<p>将字符串参数解析为带符号的十进制整数。  字符串中的字符都必须是十进制数字，除了第一个字符可能是ASCII减号<code>&#39;-&#39;</code> （ <code>&#39;\u002D&#39;</code>  ）以指示负值或ASCII加号<code>&#39;+&#39;</code> （ <code>&#39;\u002B&#39;</code> ）以指示正值。  返回所得到的整数值，就像参数和小数10被赋予<a href="../../java/lang/Integer.html#parseInt-java.lang.String-int-"><code>parseInt(java.lang.String,  int)</code></a>方法的参数一样。 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>//String转换为int，如果String为中文，则存在异常。</p>
+<p>为：NumberFormatException异常</p>
+<h2 id="String-int-Integer类型互转"><a href="#String-int-Integer类型互转" class="headerlink" title="String  int Integer类型互转"></a>String  int Integer类型互转</h2><p><img src="C:\Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210222092941876.png" alt="image-20210222092941876"></p>
+<h2 id="java对日期的处理"><a href="#java对日期的处理" class="headerlink" title="java对日期的处理"></a>java对日期的处理</h2><h3 id="Date-转化为-String"><a href="#Date-转化为-String" class="headerlink" title="Date 转化为 String"></a>Date 转化为 String</h3><ul>
+<li><ul>
+<li><ul>
+<li>```<br>public Date(long date)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      使用给定的毫秒时间值构造一个`Date`对象。  如果给定的毫秒值包含时间信息，则驱动程序将将时间组件设置为对应于零GMT的默认时区（运行应用程序的Java虚拟机的时区）。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.Date;//导入untl下的</span><br><span class="line"></span><br><span class="line">public class Test01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date nowTime = new Date();//获取精确到毫秒的系统当前时间</span><br><span class="line">        System.out.println(nowTime);//其toSting已经被重写</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>将日期类型Date，按照指定的格式进行转换，Date——转化成具有一定格式的日期字符串——String</p>
+<p>SimpleDateFormat是java.text包下，专门负责日期格式化的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SimpleDateFormat sdf =<span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd:mm:ss SSS&quot;</span>);</span><br><span class="line"><span class="comment">//yyyy 年   MM 月   dd 日  HH 时   mm 分   ss 秒  SSS 毫秒</span></span><br><span class="line">String now= sdf.format(nowTime);</span><br><span class="line">System.out.prinln(now);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;<span class="comment">//导入untl下的</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Date nowTime = <span class="keyword">new</span> Date();<span class="comment">//获取精确到毫秒的系统当前时间</span></span><br><span class="line">        System.out.println(nowTime);</span><br><span class="line">        SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd HH:mm:ss SSS&quot;</span>);</span><br><span class="line">        String now=sdf.format(nowTime);</span><br><span class="line">        System.out.println(now);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Mon Feb <span class="number">22</span> 09:<span class="number">50</span>:<span class="number">47</span> CST <span class="number">2021</span></span><br><span class="line"><span class="number">2021</span>-<span class="number">02</span>-<span class="number">22</span> 09:<span class="number">50</span>:<span class="number">47</span> <span class="number">459</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="String-转换为-Date"><a href="#String-转换为-Date" class="headerlink" title="String 转换为 Date"></a>String 转换为 Date</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;2021-02-22 09:50:47 459&quot;</span>;</span><br><span class="line">        SimpleDateFormat sdf=<span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd HH:mm:ss SSS&quot;</span>);<span class="comment">//这里格式要对应这些、</span></span><br><span class="line">        Date nowTime = sdf.parse(s1);</span><br><span class="line">        System.out.println(nowTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Mon Feb <span class="number">22</span> 09:<span class="number">50</span>:<span class="number">47</span> CST <span class="number">2021</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> now=System.currentTimeMillis();<span class="comment">//获取自1970年1月1日00：00：00到当前系统时间的总毫秒数</span></span><br></pre></td></tr></table></figure>
+
+<p>统计一个程序运行的时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> begin=System.currentTimeMillis();</span><br><span class="line">        print();</span><br><span class="line">        <span class="keyword">long</span> over= System.currentTimeMillis()-begin;</span><br><span class="line">        System.out.println(over);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000</span>;i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;i=&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="System类相关的属性和方法"><a href="#System类相关的属性和方法" class="headerlink" title="System类相关的属性和方法"></a>System类相关的属性和方法</h2><p>System.out  (out是System类的静态变量)</p>
+<p>System.out.println()    是PrintStream类的方法</p>
+<p>System.gc()   建议启动垃圾回收器</p>
+<p>System.currentTimeMillis()   </p>
+<p>System,exit(0)  退出jdk</p>
+<h2 id="通过毫秒构建Date对象"><a href="#通过毫秒构建Date对象" class="headerlink" title="通过毫秒构建Date对象"></a>通过毫秒构建Date对象</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Date time=<span class="keyword">new</span> Date(<span class="number">1</span>);<span class="comment">//参数是一个毫秒，表示1970年1月1日00:00:00 001 注意：时区</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数字格式化"><a href="#数字格式化" class="headerlink" title="数字格式化"></a>数字格式化</h2><p>( # )  代表任意数字</p>
+<p>( , )    代表千分位</p>
+<p>( .  )    代表小数点</p>
+<p>(  0  )   代表不够时补0</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.text.DecimalFormat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        DecimalFormat df=<span class="keyword">new</span> DecimalFormat(<span class="string">&quot;###,###.##&quot;</span>);<span class="comment">//负责数字格式化</span></span><br><span class="line">        String s1=df.format(<span class="number">1123.12</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">1</span>,<span class="number">123.12</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="高精度BigDecimal"><a href="#高精度BigDecimal" class="headerlink" title="高精度BigDecimal"></a>高精度BigDecimal</h2><p>BigDecimal  属于大数据，精度极高，属于java对象（引用数据类型），为一个类，专门用在财务软件当中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BigDecmal v1=<span class="keyword">new</span> BigDecimal(<span class="number">100</span>);<span class="comment">//精度极高的100</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="产生随机数"><a href="#产生随机数" class="headerlink" title="产生随机数"></a>产生随机数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Random random=<span class="keyword">new</span> Random();</span><br><span class="line"><span class="keyword">int</span> num=random.nextInt();<span class="comment">//随机产生一个int范围内的数字</span></span><br><span class="line">System.out.println(num);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Random random=<span class="keyword">new</span> Random();</span><br><span class="line"><span class="keyword">int</span> num=random.nextInt(<span class="number">101</span>);<span class="comment">//随机产生一个小于101的数字</span></span><br><span class="line">System.out.println(num);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20026%EF%BC%88%E8%A3%85%E7%AE%B1%E5%92%8C%E6%8B%86%E7%AE%B1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81Integer%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E3%80%81%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%EF%BC%89/" rel="prev" title="装箱、拆箱，Integer的构造方法，自动装箱和自动拆箱">
+      <i class="fa fa-chevron-left"></i> 装箱、拆箱，Integer的构造方法，自动装箱和自动拆箱
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Integer%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">Integer常用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-int-Integer%E7%B1%BB%E5%9E%8B%E4%BA%92%E8%BD%AC"><span class="nav-number">2.</span> <span class="nav-text">String  int Integer类型互转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java%E5%AF%B9%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">java对日期的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Date-%E8%BD%AC%E5%8C%96%E4%B8%BA-String"><span class="nav-number">3.1.</span> <span class="nav-text">Date 转化为 String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-%E8%BD%AC%E6%8D%A2%E4%B8%BA-Date"><span class="nav-number">3.2.</span> <span class="nav-text">String 转换为 Date</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System%E7%B1%BB%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">System类相关的属性和方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%AF%AB%E7%A7%92%E6%9E%84%E5%BB%BADate%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">通过毫秒构建Date对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">数字格式化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%B2%BE%E5%BA%A6BigDecimal"><span class="nav-number">7.</span> <span class="nav-text">高精度BigDecimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="nav-number">8.</span> <span class="nav-text">产生随机数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
