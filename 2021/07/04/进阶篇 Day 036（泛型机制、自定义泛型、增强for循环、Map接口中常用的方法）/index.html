@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="泛型机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="泛型机制，自定义泛型，Map接口中的常用方法">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="泛型机制">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-04T02:59:05.252Z">
+<meta property="article:modified_time" content="2021-07-04T02:59:01.631Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>泛型机制，自定义泛型，Map接口中的常用方法 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          泛型机制，自定义泛型，Map接口中的常用方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-04 10:59:05 / 修改时间：10:59:01" itemprop="dateCreated datePublished" datetime="2021-07-04T10:59:05+08:00">2021-07-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="泛型机制"><a href="#泛型机制" class="headerlink" title="泛型机制"></a>泛型机制</h2><span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List myList =<span class="keyword">new</span> ArrayList();</span><br><span class="line">        Animal a1=<span class="keyword">new</span> Cat();</span><br><span class="line">        Animal a2=<span class="keyword">new</span> Bird();</span><br><span class="line">        myList.add(a1);</span><br><span class="line">        myList.add(a2);</span><br><span class="line">        Iterator it =myList.iterator();</span><br><span class="line">        <span class="keyword">while</span> (it.hasNext())&#123;</span><br><span class="line">            Object obj=it.next();</span><br><span class="line">            <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Cat)&#123;</span><br><span class="line">                Cat c=(Cat) obj;</span><br><span class="line">                c.catchMouse();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Animal move&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">catchMouse</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;catchMouse&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Bird fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">catchMouse</span><br></pre></td></tr></table></figure>
+
+<p>使用JDK的泛型机制，（以下仅修改主方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Animal&gt; myList =<span class="keyword">new</span> ArrayList&lt;Animal&gt;();<span class="comment">//使用泛型List&lt;Animal&gt;之后，表示List集合中只允许存储Animal类型的数据。</span></span><br><span class="line">    <span class="comment">//List&lt;Animal&gt; myList =new ArrayList&lt;&gt;();JKD8之后可以这样写，叫做自动类型推断（钻石表达式）</span></span><br><span class="line">        <span class="comment">//用泛型来指定集合中存储的数据类型</span></span><br><span class="line">        Animal a1=<span class="keyword">new</span> Cat();</span><br><span class="line">        Animal a2=<span class="keyword">new</span> Bird();</span><br><span class="line">        myList.add(a1);</span><br><span class="line">        myList.add(a2);</span><br><span class="line">        <span class="comment">//获取迭代器</span></span><br><span class="line">        Iterator&lt;Animal&gt; it =myList.iterator();<span class="comment">//这个表示迭代器迭代的是Animal类型。</span></span><br><span class="line">        <span class="keyword">while</span> (it.hasNext())&#123;</span><br><span class="line">            Animal a =it.next();</span><br><span class="line">            a.move();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>泛型主要在编译阶段的特性，在运行阶段没什么卵用。</p>
+<p>好处：1、集合中存储的集合类型统一，从集合中取出的元素是泛型指定的类型，不需要大量的“向下转型”，</p>
+<p>坏处：导致集合中存储的元素缺少多样性</p>
+<p>在泛型机制中，可以在集合中添加指定类型的子类，但如果想要使用子类特有的方法，也需要向下转型。</p>
+<h2 id="自定义泛型"><a href="#自定义泛型" class="headerlink" title="自定义泛型"></a>自定义泛型</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        GenericTest02&lt;String&gt; gt=<span class="keyword">new</span> GenericTest02&lt;&gt;();</span><br><span class="line">        gt.doSome(<span class="string">&quot;abc&quot;</span>);<span class="comment">//因为定义的泛型为String，所以在调用方法是参数必须为String类型</span></span><br><span class="line">        GenericTest02&lt;Integer&gt; gt1=<span class="keyword">new</span> GenericTest02&lt;&gt;();</span><br><span class="line">        gt1.doSome(<span class="number">100</span>);<span class="comment">//因为定义的泛型为Integer，所以在调用方法是参数必须为Integer类型</span></span><br><span class="line">        <span class="comment">//gt1.doSome(&quot;abc&quot;);在此使用String类型会报错</span></span><br><span class="line">        GenericTest02&lt;String&gt; gt2=<span class="keyword">new</span> GenericTest02&lt;&gt;();</span><br><span class="line">        gt2.get();<span class="comment">//这里返回的是String类型的</span></span><br><span class="line">        GenericTest02&lt;Integer&gt; gt3=<span class="keyword">new</span> GenericTest02&lt;&gt;();</span><br><span class="line">        gt3.get();<span class="comment">//这里返回的是Integer类型的</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GenericTest02</span>&lt;<span class="title">abc</span>&gt;</span>&#123;<span class="comment">//在&lt;&gt;里面的参数起的是“标识符”的意义，因此命名没有过多的规则，abc为标识符。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">(abc o)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSome&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> abc <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">doSome</span><br><span class="line">doSome</span><br></pre></td></tr></table></figure>
+
+<p>&lt;&gt;中的标识符一般写为T或者E，没有特殊含义。</p>
+<p>如果定义了泛型，而在定义时并不使用，则会返回一个Object类型</p>
+<h2 id="增强for循环"><a href="#增强for循环" class="headerlink" title="增强for循环"></a>增强for循环</h2><p>在JDK5之后出现的新特性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//for(元素类型 变量名:数组或集合)&#123; 变量名 &#125;</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:array)&#123;<span class="comment">//i代表数组中的元素</span></span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123456781</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; strList =<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        strList.add(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">        strList.add(<span class="string">&quot;Kitty&quot;</span>);</span><br><span class="line">        Iterator&lt;String&gt; it=strList.iterator();</span><br><span class="line">        <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">            String s=it.next();</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;strList.size();i++)&#123;</span><br><span class="line">            System.out.println(strList.get(i));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(String s:strList)&#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Hello</span><br><span class="line">Kitty</span><br><span class="line">Hello</span><br><span class="line">Kitty</span><br><span class="line">Hello</span><br><span class="line">Kitty</span><br></pre></td></tr></table></figure>
+
+<h2 id="Map接口中常用的方法"><a href="#Map接口中常用的方法" class="headerlink" title="Map接口中常用的方法"></a>Map接口中常用的方法</h2><p>1、Map和Collection没有继承关系</p>
+<p>2、Map集合以key和value的方式存储数据：键值对</p>
+<p>​     key和value都是引用数据类型</p>
+<p>​     key和value都是存储对象的内存地址</p>
+<p>​     key起到主导的地位，value时key一个附属品</p>
+<ul>
+<li><ul>
+<li><ul>
+<li><p>```<br>void clear()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      从该地图中删除所有的映射（可选操作）。 此呼叫返回后，地图将为空。 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `clear`操作不受此地图支持</span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      V put(K key,</span><br><span class="line">            V value)</span><br></pre></td></tr></table></figure>
+
+<p>将指定的值与该映射中的指定键相关联（可选操作）。  如果映射先前包含了密钥的映射，则旧值将被指定的值替换。  （映射<code>m</code>被认为包含关键字的映射<code>k</code>当且仅当<a href="../../java/util/Map.html#containsKey-java.lang.Object-"><code>m.containsKey(k)</code></a>将返回<code>true</code>  ）。 </p>
+<ul>
+<li><p>参数 </p>
+<p><code>key</code> - 指定值与之关联的键 </p>
+<p><code>value</code> - 与指定键相关联的值 </p>
+</li>
+<li><p>结果 </p>
+<p>前一个值与<code>key相关联</code> ，或<code>null，</code>如果没有<code>key的</code>映射。  （A <code>null</code>返回也可以表示该地图以前关联的<code>null</code>与<code>key</code>  ，如果实现支持<code>null的</code>值） </p>
+</li>
+<li><p>异常 </p>
+<p><code>UnsupportedOperationException</code>  -如果 <code>put</code>操作不受此地图支持 </p>
+<p><code>ClassCastException</code> -  如果指定的键或值的类阻止它存储在此映射中 </p>
+<p><code>NullPointerException</code>  - 如果指定的键或值为空，并且此映射不允许空值或值 </p>
+<p><code>IllegalArgumentException</code>  - 如果指定键或值的某些属性阻止其存储在此映射中 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>```<br>V get(Object key)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回到指定键所映射的值，或`null`如果此映射包含该键的映射。</span><br><span class="line"></span><br><span class="line">      更正式地，如果该映射包含从键`k`到值`v` ，使得`(key==null ?  k==null : key.equals(k))` ，则该方法返回`v` ;  否则返回`null` 。 （最多可以有一个这样的映射。） </span><br><span class="line"></span><br><span class="line">      如果此映射允许空值，则返回值`null`并不*一定*表明该映射不包含该键的映射关系;  地图也可能明确地将密钥映射到`null` 。 可以使用[`containsKey`](../../java/util/Map.html#containsKey-java.lang.Object-)操作来区分这两种情况。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 要返回其关联值的键 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        指定键映射到的值，如果此映射不包含键的映射， `null` </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果密钥是该地图不合适的类型（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的键为空，并且此映射不允许空键</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">public class Test01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);//&quot;1&quot;有自动装箱的操作</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">        System.out.println(map1.get(1));</span><br><span class="line">        System.out.println(map1.get(2));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">张三</span><br><span class="line">李四</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>```<br>int size()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中键值映射的数量。  如果地图包含超过`Integer.MAX_VALUE个`元素，则返回`Integer.MAX_VALUE`  。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中键值映射的数量 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">System.out.println(map1.size());</span><br><span class="line">4</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>```<br>V remove(Object key)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      如果存在（从可选的操作），从该地图中删除一个键的映射。更正式地，如果该映射包含从关键字`k`到值`v的`映射，使得`(key==null ? k==null :  key.equals(k))` ，该映射被去除。（地图最多可以包含一个这样的映射。）</span><br><span class="line"></span><br><span class="line">      返回此地图先前相关联的密钥，或`null`如果映射包含该键的映射值。 </span><br><span class="line"></span><br><span class="line">      如果此映射允许空值，那么`null`返回值并不*一定*表明此映射不包含该键的映射关系;  地图也可能显式地将密钥映射到`null` 。 </span><br><span class="line"></span><br><span class="line">      一旦呼叫返回，该映射将不包含指定键的映射。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 其映射将从地图中删除的密钥 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        前一个值与 `key相关联` ，或 `null，`如果没有 `key的`映射。 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `remove`操作不受此地图支持 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果密钥对于此地图是不合适的类型（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的键为空，并且此映射不允许空键（ [optional](Collection.html#optional-restrictions) ）</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">map1.remove(1);</span><br><span class="line">System.out.println(map1.get(1));</span><br><span class="line">System.out.println(map1.size());</span><br><span class="line">null</span><br><span class="line">3</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>boolean containsKey(Object key)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      如果此映射包含指定键的映射，则返回`true` 。  更正式地，返回`true`当且仅当该地图包含关键字`k`的映射，使得`(key==null ? k==null :  key.equals(k))` 。 （最多可以有一个这样的映射。） </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 要在此地图中存在的密钥要进行测试 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`如果此映射包含指定键的映射 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果密钥对于该地图是不合适的类型（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的键为空，并且此映射不允许空键（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      boolean containsValue(Object value)</span><br></pre></td></tr></table></figure>
+
+<p>如果此映射将一个或多个键映射到指定的值，则返回<code>true</code> 。  更正式地，返回<code>true</code>当且仅当此映射包含至少一个映射到值<code>v</code> ，使得<code>(value==null ?  v==null : value.equals(v))</code> 。  对于Map接口的大多数实现，此<code>操作</code>对于地图大小可能需要时间线性。 </p>
+<ul>
+<li><p>参数 </p>
+<p><code>value</code> - 要在此地图中存在的值要进行测试 </p>
+</li>
+<li><p>结果 </p>
+<p><code>true</code>如果该地图将一个或多个键映射到指定的值 </p>
+</li>
+<li><p>异常 </p>
+<p><code>ClassCastException</code> -  如果该值对于该地图是不合适的类型（ <a href="Collection.html#optional-restrictions">optional</a> ） </p>
+<p><code>NullPointerException</code>  - 如果指定的值为空，并且此映射不允许空值（ <a href="Collection.html#optional-restrictions">optional</a> ） </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(map1.containsKey(<span class="number">1</span>));</span><br><span class="line">        System.out.println(map1.containsKey(<span class="number">2</span>));</span><br><span class="line">        System.out.println(map1.containsValue(<span class="string">&quot;李四&quot;</span>));</span><br><span class="line">        System.out.println(map1.containsValue(<span class="string">&quot;张三&quot;</span>));</span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="keyword">true</span></span><br><span class="line"><span class="keyword">true</span></span><br><span class="line"><span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：contains方法底层调用的都是equals进行比对的，所以自定义的类型需要重写equals方法</p>
+<ul>
+<li><ul>
+<li><ul>
+<li><pre><code>boolean isEmpty()
+</code></pre>
+<p>如果此地图不包含键值映射，则返回 <code>true</code> 。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>true</code>如果此映射不包含键值映射 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20035%EF%BC%88%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81java%E5%8C%85%E6%9C%BA%E5%88%B6%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81classpath%20%E5%92%8C%20jar%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8E%BB%E9%99%A4%E9%A6%96%E5%B0%BE%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6%EF%BC%89/" rel="prev" title="字符串首尾去空格，关于前面的补充">
+      <i class="fa fa-chevron-left"></i> 字符串首尾去空格，关于前面的补充
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">泛型机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">自定义泛型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.</span> <span class="nav-text">增强for循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">Map接口中常用的方法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
