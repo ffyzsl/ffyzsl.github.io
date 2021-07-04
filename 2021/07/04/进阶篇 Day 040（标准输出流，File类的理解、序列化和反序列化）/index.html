@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="标准输出流12java.io.PrintWriterjava.io.PrintStream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="标准输出流，File类的理解，序列化和反序列化">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20040%EF%BC%88%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81%EF%BC%8CFile%E7%B1%BB%E7%9A%84%E7%90%86%E8%A7%A3%E3%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="标准输出流12java.io.PrintWriterjava.io.PrintStream">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-04T03:21:47.118Z">
+<meta property="article:modified_time" content="2021-07-04T03:23:15.019Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20040%EF%BC%88%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81%EF%BC%8CFile%E7%B1%BB%E7%9A%84%E7%90%86%E8%A7%A3%E3%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>标准输出流，File类的理解，序列化和反序列化 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20040%EF%BC%88%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81%EF%BC%8CFile%E7%B1%BB%E7%9A%84%E7%90%86%E8%A7%A3%E3%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          标准输出流，File类的理解，序列化和反序列化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-04 11:21:47 / 修改时间：11:23:15" itemprop="dateCreated datePublished" datetime="2021-07-04T11:21:47+08:00">2021-07-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="标准输出流"><a href="#标准输出流" class="headerlink" title="标准输出流"></a>标准输出流</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java.io.PrintWriter</span><br><span class="line">java.io.PrintStream</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>1、<code>java.io.PrintStream</code>：标准的字节输出流，默认输出到控制台</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hello,world&quot;</span>);</span><br><span class="line">        PrintStream p1=System.out;</span><br><span class="line">        p1.println(<span class="string">&quot;hello,kitty&quot;</span>);</span><br><span class="line">        <span class="comment">//标准输出流不需要手动close（）关闭</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//改变标准输出流的输出方向</span></span><br><span class="line">        <span class="comment">//标准输出流不再指向控制台，指向E:\study\Test03\IO_Test\printstream文件</span></span><br><span class="line">        PrintStream printStream=<span class="keyword">new</span> PrintStream(<span class="keyword">new</span> FileOutputStream(<span class="string">&quot;E:\\study\\Test03\\IO_Test\\printstream&quot;</span>));</span><br><span class="line">        System.setOut(printStream);</span><br><span class="line">        System.out.println(printStream);</span><br><span class="line">        System.out.println(<span class="string">&quot;hello,world&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;hello,kitty&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;hello,张三&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="comment">//日志工具</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">logger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//指向一个日志文件</span></span><br><span class="line">            PrintStream out=<span class="keyword">new</span> PrintStream(<span class="keyword">new</span> FileOutputStream(<span class="string">&quot;log.txt&quot;</span>,<span class="keyword">true</span>));</span><br><span class="line">            <span class="comment">//改变输出方向</span></span><br><span class="line">            System.setOut(out);</span><br><span class="line">            <span class="comment">//日期当前时间</span></span><br><span class="line">            Date nowTime =<span class="keyword">new</span> Date();</span><br><span class="line">            SimpleDateFormat sdf =<span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd HH:mm:ss SSS&quot;</span>);</span><br><span class="line">            String strTime=sdf.format(nowTime);</span><br><span class="line">            System.out.println(strTime+<span class="string">&quot;:&quot;</span>+msg);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="File类的理解"><a href="#File类的理解" class="headerlink" title="File类的理解"></a>File类的理解</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.io.File</span><br></pre></td></tr></table></figure>
+
+<p>1、File类和四大家族没有关系，File类无法完成文件的读写。</p>
+<p>2、其代表文件和目录路径名的抽象表示形式</p>
+<p><code>E:\study\Test03\IO_Test</code></p>
+<p><code>E:\study\Test03\IO_Test\a.txt</code></p>
+<p>其都是File对象，其可能是目录也可能是文件</p>
+<h3 id="File类的常用方法"><a href="#File类的常用方法" class="headerlink" title="File类的常用方法"></a>File类的常用方法</h3><ul>
+<li><ul>
+<li><ul>
+<li><p>```<br>public boolean createNewFile()</p>
+<pre><code>                  throws IOException
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      当且仅当具有该名称的文件尚不存在时，原子地创建一个由该抽象路径名命名的新的空文件。检查文件的存在和文件的创建（如果不存在）是对可能影响文件的所有其他文件系统活动是单一的操作。</span><br><span class="line"></span><br><span class="line">      注意：此方法*不*应用于文件锁定，因为生成的协议不能使其可靠地工作。 应该使用[`FileLock`](../../java/nio/channels/FileLock.html)设施。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`如果命名文件不存在并被成功创建;  `false`如果命名文件已经存在 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `IOException` - 如果发生I / O错误 </span><br><span class="line"></span><br><span class="line">        `SecurityException` -  如果存在安全管理员，并且其 `SecurityManager.checkWrite(java.lang.String)`方法拒绝对该文件的写入访问 </span><br><span class="line"></span><br><span class="line">      - 从以下版本开始： </span><br><span class="line"></span><br><span class="line">        1.2 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public boolean exists()</span><br></pre></td></tr></table></figure>
+
+<p>测试此抽象路径名表示的文件或目录是否存在。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>true</code>当且仅当存在由此抽象路径名表示的文件或目录时;  <code>false</code>否则 </p>
+</li>
+<li><p>异常 </p>
+<p><code>SecurityException</code> -  如果安全管理器存在，并且其 <code>SecurityManager.checkRead(java.lang.String)</code>方法拒绝对文件或目录的读取访问 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>public boolean mkdir()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      创建由此抽象路径名命名的目录。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`当且仅当该目录被创建时; `false`否则 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `SecurityException` -  如果存在安全管理员，并且其 `SecurityManager.checkWrite(java.lang.String)`方法不允许创建命名目录 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public boolean mkdirs()</span><br></pre></td></tr></table></figure>
+
+<p>创建由此抽象路径名命名的目录，包括任何必需但不存在的父目录。  请注意，如果此操作失败，它可能已成功创建一些必需的父目录。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>true</code>当且仅当该目录已创建，以及所有必需的父目录;  <code>false</code>否则 </p>
+</li>
+<li><p>异常 </p>
+<p><code>SecurityException</code> -  如果安全管理器存在，并且其<code>SecurityManager.checkRead(java.lang.String)</code>方法不允许验证命名目录和所有必需的父目录的存在;  或者如果<code>SecurityManager.checkWrite(java.lang.String)</code>方法不允许创建命名目录和所有必需的父目录 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>public String getParent()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此抽象路径名的父`null`的路径名字符串，如果此路径名未命名为父目录，则返回null。</span><br><span class="line"></span><br><span class="line">      抽象路径名的*父项*由路径名的前缀（如果有）和路径名的名称序列中的每个名称组成，除了最后一个。  如果名称序列为空，则路径名不会指定父目录。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        由此抽象路径名命名的父目录的路径名字符串，或 `null`如果此路径名未命名为父</span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public File getParentFile()</span><br></pre></td></tr></table></figure>
+
+<p>返回此抽象路径名的父<code>null</code>抽象路径名，如果此路径名未命名为父目录，则返回null。</p>
+<p>抽象路径名的<em>父项</em>由路径名的前缀（如果有）和路径名的名称序列中的每个名称组成，除了最后一个。  如果名称序列为空，则路径名不会指定父目录。 </p>
+<ul>
+<li><p>结果 </p>
+<p>由此抽象路径名命名的父目录的抽象路径名，或 <code>null</code>如果此路径名未命名为父 </p>
+</li>
+<li><p>从以下版本开始： </p>
+<p>1.2 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><h4 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public boolean delete()</span><br></pre></td></tr></table></figure>
+
+<p>删除由此抽象路径名表示的文件或目录。如果此路径名表示目录，则目录必须为空才能删除。</p>
+<p>请注意， <a href="../../java/nio/file/Files.html"><code>Files</code></a>类定义了一个<a href="../../java/nio/file/Files.html#delete-java.nio.file.Path-"><code>delete</code></a>方法，当一个文件不能被删除时，它会抛出一个<a href="../../java/io/IOException.html"><code>IOException</code></a> 。  这对于错误报告和诊断文件无法被删除的原因很有用。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>true</code>当且仅当文件或目录被成功删除时;  <code>false</code>否则 </p>
+</li>
+<li><p>异常 </p>
+<p><code>SecurityException</code> -  如果安全管理器存在，并且其 <code>SecurityManager.checkDelete(java.lang.String)</code>方法拒绝对该文件的删除访问 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>public String getName()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回由此抽象路径名表示的文件或目录的名称。  这只是路径名称序列中的最后一个名字。 如果路径名的名称序列为空，则返回空字符串。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        由此抽象路径名表示的文件或目录的名称，如果此路径名的名称序列为空，则为空字符串 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public boolean isDirectory()</span><br></pre></td></tr></table></figure>
+
+<p>测试此抽象路径名表示的文件是否为目录。</p>
+<p>在需要区分I / O异常和文件不是目录的情况下，或同时需要同一文件的几个属性的情况下，可以使用<a href="../../java/nio/file/Files.html#readAttributes-java.nio.file.Path-java.lang.Class-java.nio.file.LinkOption...-"><code>Files.readAttributes</code></a>方法。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>true</code>当且仅当该抽象路径名表示的文件存在<em>且</em>为目录时;  <code>false</code>否则 </p>
+</li>
+<li><p>异常 </p>
+<p><code>SecurityException</code> -  如果安全管理器存在，并且其 <code>SecurityManager.checkRead(java.lang.String)</code>方法拒绝对该文件的读取访问 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>public boolean isFile()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      测试此抽象路径名表示的文件是否为普通文件。如果文件不是目录，并且另外满足其他依赖于系统的条件，文件是*正常的* 。Java应用程序创建的任何非目录文件都保证是一个普通文件。</span><br><span class="line"></span><br><span class="line">      在需要区分I / O异常与文件不是正常文件的情况下，或同时需要同一文件的几个属性的情况下，可以使用[`Files.readAttributes`](../../java/nio/file/Files.html#readAttributes-java.nio.file.Path-java.lang.Class-java.nio.file.LinkOption...-)方法。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`当且仅当该抽象路径名表示的文件存在*且*为普通文件时;  `false`否则 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `SecurityException` -  如果安全管理器存在，并且其 `SecurityManager.checkRead(java.lang.String)`方法拒绝对该文件的读取访问 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public long lastModified()</span><br></pre></td></tr></table></figure>
+
+<p>返回此抽象路径名表示的文件上次修改的时间。</p>
+<p>凡需要从那里的情况下区分I /  O异常<code>0L</code>返回，或者在同一时间都需要在同一文件的多个属性，或者在需要的上次访问或创建时间的时间，那么可以使用<a href="../../java/nio/file/Files.html#readAttributes-java.nio.file.Path-java.lang.Class-java.nio.file.LinkOption...-"><code>Files.readAttributes</code></a>方法。 </p>
+<ul>
+<li><p>结果 </p>
+<p><code>long</code>值表示上次修改文件的时间，以时间为单位（1970年1月1日00:00:00 GMT）测量，或者如果文件不存在  <code>0L</code> ，或者如果发生I / O错误 </p>
+</li>
+<li><p>异常 </p>
+<p><code>SecurityException</code> -  如果存在安全管理员，并且其 <code>SecurityManager.checkRead(java.lang.String)</code>方法拒绝对文件的读取访问 </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>```<br>public File[] listFiles()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回一个抽象路径名数组，表示由该抽象路径名表示的目录中的文件。</span><br><span class="line"></span><br><span class="line">      如果此抽象路径名不表示目录，则此方法返回`null` 。  否则将返回一个`File`对象的数组，一个用于目录中的每个文件或目录。  表示目录本身和目录的父目录的路径名不包括在结果中。 每个生成的抽象路径名由使用[`File(File, String)`](../../java/io/File.html#File-java.io.File-java.lang.String-)构造函数的抽象路径名构造。  因此，如果这个路径名是绝对的，那么每个生成的路径名是绝对的;  如果此路径名是相对的，那么每个生成的路径名将相对于相同的目录。 </span><br><span class="line"></span><br><span class="line">      不保证结果数组中的名称字符串将以任何特定的顺序出现; 他们不是特别保证按字母顺序出现。 </span><br><span class="line"></span><br><span class="line">      请注意， [`Files`](../../java/nio/file/Files.html)类定义了[`newDirectoryStream`](../../java/nio/file/Files.html#newDirectoryStream-java.nio.file.Path-)方法来打开目录并遍历目录中文件的名称。  当使用非常大的目录时，这可能会减少资源。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        一组抽象路径名，表示由此抽象路径名表示的目录中的文件和目录。 如果目录为空，则该数组将为空。  如果此抽象路径名不表示目录，或返回I / O错误，则返回`null` 。 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `SecurityException` -  如果存在安全管理员，并且其 [`SecurityManager.checkRead(String)`](../../java/lang/SecurityManager.html#checkRead-java.lang.String-)方法拒绝对目录的读取访问 </span><br><span class="line"></span><br><span class="line">      - 从以下版本开始： </span><br><span class="line"></span><br><span class="line">        1.2 </span><br><span class="line"></span><br><span class="line">## 序列化和反序列化的理解</span><br><span class="line"></span><br><span class="line">序列化：`Serialize`   java对象存储到文件中，将java对象的状态保存下来</span><br><span class="line"></span><br><span class="line">反序列化：`DeSerialize`   将硬盘上的数据重新恢复到内存当中，恢复成java对象</span><br><span class="line"></span><br><span class="line">1、参与序列化和反序列化的对象，必须实现Serializable接口</span><br><span class="line"></span><br><span class="line">2、这个接口只是一个标志接口</span><br><span class="line"></span><br><span class="line">一个Java对象要能序列化，必须实现一个特殊的`java.io.Serializable`接口，它的定义如下：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public interface Serializable &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>  <span class="keyword">implements</span>  <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  String no;</span><br><span class="line">    <span class="keyword">private</span>  String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name,String no)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">        <span class="keyword">this</span>.no=no;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getNo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> no;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNo</span><span class="params">(String no)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.no = no;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Student s=<span class="keyword">new</span> Student(<span class="string">&quot;1111&quot;</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        ObjectOutputStream oos=<span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="string">&quot;student&quot;</span>));</span><br><span class="line">        oos.writeObject(s);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ObjectInputStream ois=<span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">&quot;students&quot;</span>));</span><br><span class="line">        Object obj=ois.readObject();</span><br><span class="line">        System.out.println(obj);</span><br><span class="line">        ois.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20039%EF%BC%88FileInputStream%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81FileOutputStream%E3%80%81%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E3%80%81FileReader%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81FileWriter%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81%E6%99%AE%E9%80%9A%E6%96%87%E6%9C%AC%E7%9A%84%E5%A4%8D%E5%88%B6%E3%80%81%E5%B8%A6%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E6%B5%81%E3%80%81%E8%BD%AC%E6%8D%A2%E6%B5%81%EF%BC%89/" rel="prev" title="FileInputStream、FileOutputStream常用方法，文件复制，FileReader、FileWriter的使用，普通文本的复制，带有缓冲区的字符流、转换流">
+      <i class="fa fa-chevron-left"></i> FileInputStream、FileOutputStream常用方法，文件复制，FileReader、FileWriter的使用，普通文本的复制，带有缓冲区的字符流、转换流
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81"><span class="nav-number">1.</span> <span class="nav-text">标准输出流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#File%E7%B1%BB%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">File类的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#File%E7%B1%BB%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">File类的常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#delete"><span class="nav-number">2.1.1.</span> <span class="nav-text">delete</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
