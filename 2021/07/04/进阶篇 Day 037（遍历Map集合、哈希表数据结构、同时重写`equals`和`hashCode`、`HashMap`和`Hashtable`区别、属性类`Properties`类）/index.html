@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="遍历Map集合第一种：获取所有的key，通过遍历key，来遍历value、">
@@ -104,6 +104,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -128,11 +129,38 @@
     <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -209,7 +237,7 @@
 <ul>
 <li><ul>
 <li><ul>
-<li>```<br>Set<K> keySet()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的键的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行中修改映射（除了通过迭代器自己的`remove`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的键的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">public class Test02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">//通过迭代器的方式来遍历集合</span><br><span class="line">        Set&lt;Integer&gt; keys=map1.keySet();//注意：此方法返回的是一个Set集合；</span><br><span class="line">        Iterator&lt;Integer&gt; it=keys.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Integer key=it.next();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">//通过增强for的方式来遍历集合</span><br><span class="line">        for (Integer key:keys)&#123;</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>```<br>Set<K> keySet()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的键的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行中修改映射（除了通过迭代器自己的`remove`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的键的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">public class Test02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">//通过迭代器的方式来遍历集合</span><br><span class="line">        Set&lt;Integer&gt; keys=map1.keySet();//注意：此方法返回的是一个Set集合；</span><br><span class="line">        Iterator&lt;Integer&gt; it=keys.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Integer key=it.next();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">//通过增强for的方式来遍历集合</span><br><span class="line">        for (Integer key:keys)&#123;</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></K></li>
 </ul>
 </li>
 </ul>
@@ -469,6 +497,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 
