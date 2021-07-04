@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="遍历Map集合第一种：获取所有的key，通过遍历key，来遍历value、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="遍历Map集合，重写两个方法，属性类Properties类">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20037%EF%BC%88%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99%60equals%60%E5%92%8C%60hashCode%60%E3%80%81%60HashMap%60%E5%92%8C%60Hashtable%60%E5%8C%BA%E5%88%AB%E3%80%81%E5%B1%9E%E6%80%A7%E7%B1%BB%60Properties%60%E7%B1%BB%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="遍历Map集合第一种：获取所有的key，通过遍历key，来遍历value、">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-04T03:01:45.015Z">
+<meta property="article:modified_time" content="2021-07-04T03:11:41.773Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20037%EF%BC%88%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99%60equals%60%E5%92%8C%60hashCode%60%E3%80%81%60HashMap%60%E5%92%8C%60Hashtable%60%E5%8C%BA%E5%88%AB%E3%80%81%E5%B1%9E%E6%80%A7%E7%B1%BB%60Properties%60%E7%B1%BB%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>遍历Map集合，重写两个方法，属性类Properties类 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20037%EF%BC%88%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99%60equals%60%E5%92%8C%60hashCode%60%E3%80%81%60HashMap%60%E5%92%8C%60Hashtable%60%E5%8C%BA%E5%88%AB%E3%80%81%E5%B1%9E%E6%80%A7%E7%B1%BB%60Properties%60%E7%B1%BB%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          遍历Map集合，重写两个方法，属性类Properties类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-04 11:01:45 / 修改时间：11:11:41" itemprop="dateCreated datePublished" datetime="2021-07-04T11:01:45+08:00">2021-07-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="遍历Map集合"><a href="#遍历Map集合" class="headerlink" title="遍历Map集合"></a>遍历Map集合</h2><p>第一种：获取所有的key，通过遍历key，来遍历value、</p>
+<span id="more"></span>
+
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>Set<K> keySet()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的键的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行中修改映射（除了通过迭代器自己的`remove`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的键的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">public class Test02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">//通过迭代器的方式来遍历集合</span><br><span class="line">        Set&lt;Integer&gt; keys=map1.keySet();//注意：此方法返回的是一个Set集合；</span><br><span class="line">        Iterator&lt;Integer&gt; it=keys.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Integer key=it.next();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">//通过增强for的方式来遍历集合</span><br><span class="line">        for (Integer key:keys)&#123;</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>第二种方式：把Map集合转换为Set集合</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet()<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的映射的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行时修改映射（除了通过迭代器自己的`remove`操作，或者通过迭代器返回的映射条目上的`setValue`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的映射的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">//Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet();</span><br><span class="line">        //以上这个方法是哪Map集合直接全部转换成Set集合</span><br><span class="line">        //Set集合中元素的类型是：Map.Entry</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map1.entrySet();</span><br><span class="line">        //遍历Set集合，每一次取出一个Node</span><br><span class="line">        Iterator&lt;Map.Entry&lt;Integer,String&gt;&gt; it1=set.iterator();</span><br><span class="line">        while(it1.hasNext())&#123;</span><br><span class="line">            Map.Entry&lt;Integer,String&gt; node =it1.next();</span><br><span class="line">            Integer key=node.getKey();</span><br><span class="line">            String value=node.getValue();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+value);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="哈希表数据结构"><a href="#哈希表数据结构" class="headerlink" title="哈希表数据结构"></a>哈希表数据结构</h2><p>1、HashMap集合底层是哈希表/散列表的数据结构</p>
+<p>2、是一个数组和单向链表的结合体</p>
+<p>3、其是一个一位数组，每一个元素都是一个单向链表</p>
+<h3 id="Map-put-k-v-的底层原理："><a href="#Map-put-k-v-的底层原理：" class="headerlink" title="Map.put(k,v)的底层原理："></a><code>Map.put(k,v)</code>的底层原理：</h3><p>第一步：先将k，v封装到<code>Node</code>对象当中</p>
+<p>第二步：底层会调用k的<code>hashCode()</code>方法得出hash</p>
+<p>然后通过哈希函数/哈希算法，将hash值转换成数组的下标，下标位置上如果没有任何元素，就把Node添加到这个位置上，如果说下标对应的位置上有链表，此时会拿着k和链表上每一个节点中的k进行<code>equals</code>，如果所有的<code>equals</code>方法返回的都是false，那么这个新节点被添加到链表的末尾，如果其中一个<code>equals</code>返回了true，那么这个节点的value将会被覆盖。</p>
+<h3 id="Map-get-k-的底层原理："><a href="#Map-get-k-的底层原理：" class="headerlink" title="Map.get(k)的底层原理："></a><code>Map.get(k)</code>的底层原理：</h3><p>先调用k的<code>HashCode()</code>方法得出哈希值，通过哈希算法转换成数组下标，通过数组下标快速定位到某个位置上，如果这个位置上什么也没有，返回null，如果这个位置上有单向链表，那么会拿着参数k和单向链表上的每个节点中的k进行<code>equals</code>，如果所有<code>equals</code>方法返回false，那么get方法返回null，只要其中有一个节点的k和参数k <code>equals</code>的时候返回true，那么此时这个节点的value就是我们要找的<code>value</code>，<code>get</code>方法最终返回这个要找的<code>vlaue</code>。</p>
+<h2 id="同时重写equals和hashCode"><a href="#同时重写equals和hashCode" class="headerlink" title="同时重写equals和hashCode"></a>同时重写<code>equals</code>和<code>hashCode</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>  java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Map&lt;Integer,String &gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();<span class="comment">//Integer,String的hashCode和equals都重写了</span></span><br><span class="line">        map.put(<span class="number">1</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        map.put(<span class="number">2</span>,<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        map.put(<span class="number">3</span>,<span class="string">&quot;王五&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;赵六&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;KING&quot;</span>);<span class="comment">//key相同，会自动覆盖value</span></span><br><span class="line">        System.out.println(map.size());</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map.entrySet();</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;Integer,String&gt; entry:set)&#123;</span><br><span class="line">            System.out.println(entry.getKey()+<span class="string">&quot;=&quot;</span>+entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">1</span>=张三</span><br><span class="line"><span class="number">2</span>=李四</span><br><span class="line"><span class="number">3</span>=王五</span><br><span class="line"><span class="number">4</span>=KING</span><br></pre></td></tr></table></figure>
+
+<p>注意：放在<code>HashMap</code>集合key部分的元素，以及放在<code>HashSet</code>集合中的元素，需要同时重写<code>hashCode</code>和<code>equals</code>方法。</p>
+<p><code>HashMap</code>集合的默认初始化容量是16，默认加载因子是0.75。这个默认加载因子是当<code>HashMap</code>集合底层数组的容量达到75%的时候，数组开始扩容。</p>
+<p>***<code>hashCode()</code>方法和<code>equasl()</code>方法都可以用IDEA工具生成，但是这两个方法需要同时生成。**</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Objects;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* public boolean equals(Object obj)&#123;</span></span><br><span class="line"><span class="comment">        if (obj==null || !(obj instanceof Student)) return  false;</span></span><br><span class="line"><span class="comment">        if (obj== this) return  true;</span></span><br><span class="line"><span class="comment">        Student s=(Student) obj;</span></span><br><span class="line"><span class="comment">        return this.name.equals(s.name);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        Student student = (Student) o;</span><br><span class="line">        <span class="keyword">return</span> Objects.equals(name, student.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hash(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s1=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        Student s2=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        System.out.println(s1.equals(s2));</span><br><span class="line">        System.out.println(s1.hashCode());</span><br><span class="line">        System.out.println(s2.hashCode());</span><br><span class="line">        Set&lt;Student&gt; students=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        students.add(s1);</span><br><span class="line">        students.add(s2);</span><br><span class="line">        System.out.println(students.size());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">true</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="HashMap和Hashtable区别"><a href="#HashMap和Hashtable区别" class="headerlink" title="HashMap和Hashtable区别"></a><code>HashMap</code>和<code>Hashtable</code>区别</h3><p>1、<code>Hashtable</code>的key和value都是不能为null的</p>
+<p>​      <code>HashMap</code>集合的key和value都是可以为null的</p>
+<p>2、<code>Hashtable</code>方法都带有synchronized：线程安全的</p>
+<p>线程安全有其他的方案，这个<code>Hashtable</code>对线程的处理导致效率较低，使用较少</p>
+<p>3、<code>Hashtable</code>和<code>HashMap</code>一样，底层都是哈希表数据结构</p>
+<h2 id="属性类Properties类"><a href="#属性类Properties类" class="headerlink" title="属性类Properties类"></a>属性类<code>Properties</code>类</h2><p>1、<code>properties</code>是一个Map集合、继承<code>Hashtable</code>,<code>properties</code>的key和value都是String类型</p>
+<p>2、其被称为属性类对象</p>
+<p>3、是线程安全的</p>
+<ul>
+<li><ul>
+<li><ul>
+<li><p>```<br>public Object setProperty(String key,                       String value)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      致电`Hashtable`方法`put` 。  提供与`getProperty`方法的`并行性` 。  强制使用字符串的属性键和值。  返回的值是`Hashtable`调用`put`的结果。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 要放入此属性列表的关键字。 </span><br><span class="line"></span><br><span class="line">        `value` - 对应的值为 `key` 。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        此属性列表中指定键的上一个值，如果没有一个， `null` 。 </span><br><span class="line"></span><br><span class="line">      - 从以下版本开始： </span><br><span class="line"></span><br><span class="line">        1.2 </span><br><span class="line"></span><br><span class="line">      - 另请参见： </span><br><span class="line"></span><br><span class="line">        [`getProperty(java.lang.String)`](../../java/util/Properties.html#getProperty-java.lang.String-) </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public String getProperty(String key)</span><br></pre></td></tr></table></figure>
+
+<p>使用此属性列表中指定的键搜索属性。  如果在此属性列表中找不到该键，则会默认属性列表及其默认值递归。  如果找不到属性，该方法返回<code>null</code> 。 </p>
+<ul>
+<li><p>参数 </p>
+<p><code>key</code> - 属性键。 </p>
+</li>
+<li><p>结果 </p>
+<p>该属性列表中具有指定键值的值。 </p>
+</li>
+<li><p>另请参见： </p>
+<p><a href="../../java/util/Properties.html#setProperty-java.lang.String-java.lang.String-"><code>setProperty(java.lang.String,  java.lang.String)</code></a> ， <a href="../../java/util/Properties.html#defaults"><code>defaults</code></a> </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Properties pro=<span class="keyword">new</span> Properties();</span><br><span class="line">        pro.setProperty(<span class="string">&quot;url&quot;</span>,<span class="string">&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;dirver&quot;</span>,<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;password&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">        String url= pro.getProperty(<span class="string">&quot;url&quot;</span>);</span><br><span class="line">        String dirver= pro.getProperty(<span class="string">&quot;dirver&quot;</span>);</span><br><span class="line">        String username= pro.getProperty(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">        String password= pro.getProperty(<span class="string">&quot;password&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(url);</span><br><span class="line">        System.out.println(dirver);</span><br><span class="line">        System.out.println(username);</span><br><span class="line">        System.out.println(password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/bjpowernode</span></span><br><span class="line">com.mysql.jdbc.Driver</span><br><span class="line">root</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="TreeSet对String是可排序的"><a href="#TreeSet对String是可排序的" class="headerlink" title="TreeSet对String是可排序的"></a><code>TreeSet</code>对String是可排序的</h2><p>1、<code>Treeset</code>集合底层实际是一个<code>TreeMap</code></p>
+<p>2、<code>TreeMap</code>集合底层是一个二叉树</p>
+<p>3、放到<code>TreeSet</code>集合中的元素，等同于放到<code>TreeMap</code>集合key部分</p>
+<p>4、<code>TreeSet</code>集合中的元素：无序不可重复，但是可以按照元素大小顺序自动排序，称为；可排序集合</p>
+<p> <code>TreeSet</code>对自定义类型是不可排序的</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/" rel="prev" title="泛型机制，自定义泛型，Map接口中的常用方法">
+      <i class="fa fa-chevron-left"></i> 泛型机制，自定义泛型，Map接口中的常用方法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88"><span class="nav-number">1.</span> <span class="nav-text">遍历Map集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">哈希表数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map-put-k-v-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">Map.put(k,v)的底层原理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map-get-k-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">Map.get(k)的底层原理：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99equals%E5%92%8ChashCode"><span class="nav-number">3.</span> <span class="nav-text">同时重写equals和hashCode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap%E5%92%8CHashtable%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">HashMap和Hashtable区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E7%B1%BBProperties%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">属性类Properties类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TreeSet%E5%AF%B9String%E6%98%AF%E5%8F%AF%E6%8E%92%E5%BA%8F%E7%9A%84"><span class="nav-number">5.</span> <span class="nav-text">TreeSet对String是可排序的</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
