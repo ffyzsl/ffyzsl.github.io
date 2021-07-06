@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="一维数组概述1、java语言中的数组是一种引用数据类型，数组的父类是Object。 2、因为数组是引用类型，所以数组对象是堆内存当中。 3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）">
+  <meta name="description" content="对表进行聚合查询聚合函数 COUNT：计算表中的记录数（行数） SUM：计算表中数值列中的数据的合计值 AVG：计算表中数值列中的数据的平均值 MAX：求出表中任意列中数据的最大值 MIN：求出表中任意列中数据的最小值">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一维数组">
-<meta property="og:url" content="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/index.html">
+<meta property="og:title" content="对表进行聚合查询">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
-<meta property="og:description" content="一维数组概述1、java语言中的数组是一种引用数据类型，数组的父类是Object。 2、因为数组是引用类型，所以数组对象是堆内存当中。 3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）">
+<meta property="og:description" content="对表进行聚合查询聚合函数 COUNT：计算表中的记录数（行数） SUM：计算表中数值列中的数据的合计值 AVG：计算表中数值列中的数据的平均值 MAX：求出表中任意列中数据的最大值 MIN：求出表中任意列中数据的最小值">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-02T11:44:27.846Z">
-<meta property="article:modified_time" content="2021-07-02T11:45:09.779Z">
+<meta property="article:published_time" content="2021-07-06T07:15:39.016Z">
+<meta property="article:modified_time" content="2021-07-06T07:15:26.730Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>一维数组 | ffy's blog</title>
+  <title>对表进行聚合查询 | ffy's blog</title>
   
 
 
@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一维数组
+          对表进行聚合查询
         </h1>
 
         <div class="post-meta">
@@ -180,7 +180,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-02 19:44:27 / 修改时间：19:45:09" itemprop="dateCreated datePublished" datetime="2021-07-02T19:44:27+08:00">2021-07-02</time>
+              <time title="创建时间：2021-07-06 15:15:39 / 修改时间：15:15:26" itemprop="dateCreated datePublished" datetime="2021-07-06T15:15:39+08:00">2021-07-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -188,7 +188,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
                 </span>
             </span>
 
@@ -203,28 +203,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="一维数组概述"><a href="#一维数组概述" class="headerlink" title="一维数组概述"></a>一维数组概述</h2><p>1、java语言中的数组是一种<strong>引用数据类型</strong>，数组的父类是Object。</p>
-<p>2、因为数组是引用类型，所以数组对象是堆内存当中。</p>
-<p>3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）</p>
-<span id="more"></span>
-
-<p>4、数组一旦创建，长度不可变</p>
-<p>5、数组分为：一维数组，二维数组，多维数组……</p>
-<p>6、所有的数组对象都哟length属性，用来获取数组中元素的个数</p>
-<p>7、java的数组要求数组中元素的类型统一</p>
-<p>8、数组在内存方面存储的时候，数组中的元素内存地址时连续的</p>
-<p>9、数组都是拿第一个元素的内存地址作为整个数组的内存地址</p>
-<p>10、下标从0开始，最后一个元素的下标是“length-1”</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array1;</span><br><span class="line"><span class="keyword">double</span>[] array2;</span><br><span class="line"><span class="keyword">boolean</span>[] array3;</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<p>11、初始化一个一维数组，包括两种方式：静态初始化一维数组，动态初始化一维数组</p>
-<p>静态初始化语法格式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>动态初始化语法格式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];<span class="comment">//5表示数组的元素个数</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="对数组内元素的访问"><a href="#对数组内元素的访问" class="headerlink" title="对数组内元素的访问"></a>对数组内元素的访问</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Array</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;;</span><br><span class="line">        System.out.println(array01.length);</span><br><span class="line">        System.out.println(array01[<span class="number">0</span>]);</span><br><span class="line">        System.out.println(array01[array01.length-<span class="number">1</span>]);</span><br><span class="line">        array01[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        System.out.println(array01[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
+        <h2 id="对表进行聚合查询"><a href="#对表进行聚合查询" class="headerlink" title="对表进行聚合查询"></a>对表进行聚合查询</h2><h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><ul>
+<li>COUNT：计算表中的记录数（行数）</li>
+<li>SUM：计算表中数值列中的数据的合计值</li>
+<li>AVG：计算表中数值列中的数据的平均值</li>
+<li>MAX：求出表中任意列中数据的最大值</li>
+<li>MIN：求出表中任意列中数据的最小值<span id="more"></span>
+以上的函数称为聚合函数或者聚集函数。</li>
+</ul>
+<p>例如：<code>SELECT COUNT(&lt;列名&gt;/*) FRPM 表名;</code></p>
+<p>COUNT函数的结果根据参数的不同而不同，COUNT(*)会得到包含NULL的数据行数，而COUNT(&lt;列名&gt;)会得到NULL之外的数据行数。</p>
+<p>一般来说，除了COUNT函数，其他聚合函数会把NULL排除在外。</p>
+<h4 id="使用聚合函数删除重复值"><a href="#使用聚合函数删除重复值" class="headerlink" title="使用聚合函数删除重复值"></a>使用聚合函数删除重复值</h4><p>例如：<code>SELECT COUNT(DISTINCT product_type) FROM product;</code>会得到一共有多少种商品类型</p>
+<p>一般来说，想要计算值的种类时，可以在COUNT函数的参数中使用DISTINCT。同时，在聚合函数的参数中使用DISTINCT，可以删除重复数据</p>
+<h3 id="对表进行分组"><a href="#对表进行分组" class="headerlink" title="对表进行分组"></a>对表进行分组</h3><p>使用<code>GROUP BY</code>子句</p>
+<p><code>SELECT &lt;列名1&gt;,&lt;列名2&gt; FROM &lt;表名&gt; GROUP BY &lt;列名1&gt;,&lt;列名2&gt;;</code></p>
+<p>在GROUP BY子句后使用的列名称为聚合键或者分组列，在查询过程中，首先会根据分组列分成不同的组，然后再查询每一组的数据。简单来说，GROUP BY 就像切分表的一把刀。</p>
+<p>使用WHERE子句进行汇总处理时，会先根据WHERE子句指定的条件进行过滤，然后再进行汇总处理</p>
+<p>注意：</p>
+<p>1、GROUP BY子句一定要写在FROM语句之后。</p>
+<p>2、GROUP BY后分列组的顺序不同，查询的结果也可能不同。</p>
+<p>3、聚合键中包含NULL时，在结果中会以“不确定”行（空行）的形式表现出来。</p>
+<p>4、在使用GROUP BY子句后，所要查询的列（SELECT子句后的列名）必须包含在GROUP BY中（不过MySQL认同这种写法，不会发生错误，但在其他DBMS中，并不支持这样的写法）</p>
+<p>5、在GROUP BY子句中不能写列的别名（PostgreSQL和MySQL不会发生错误，但并不是通常的使用方法）</p>
+<p>6、GROUP BY子句结果的显示是无序的</p>
+<p>7、只有SELECT 子句和HAVING 子句（以及ORDER BY 子句）中能够使用聚合函数</p>
+<h3 id="为聚合结果指定条件"><a href="#为聚合结果指定条件" class="headerlink" title="为聚合结果指定条件"></a>为聚合结果指定条件</h3><p><code>HAVING</code>子句</p>
+<p>WHERE子句只能指定记录（行）的条件，并不能用来指定组的条件，如果想要对集合指定条件就需要使用HAVING子句。</p>
+<p>HAVING子句必须写在GROUP BY 子句之后</p>
+<p><code>SELECT &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; FROM &lt;表名&gt; WHERE &lt;条件表达式&gt; GROUP BY &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; HAVING &lt;分组结果对应条件&gt;;</code></p>
+<p>例如：<code>SELECT product_type,COUNT(*) FROM Product GROUP BY product_type HAVING COUNT(*) =2;</code>查询出记录等于二的商品种类和个数。</p>
+<p>HAVING子句的构成要素：常数、聚合函数、GROUP BY子句中指定的列</p>
+<p>注意：有些条件相对于HAVING子句，更适合写在WHERE子句中。</p>
+<p>WHERE子句：指定行所对应的条件</p>
+<p>HAVING子句：指定组所对应的条件</p>
+<h3 id="对查询结果进行排序"><a href="#对查询结果进行排序" class="headerlink" title="对查询结果进行排序"></a>对查询结果进行排序</h3><p> <code>SELECT &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; FROM &lt;表名&gt; ORDER BY &lt;排序基准列1&gt;,&lt;排序基准列2&gt;;</code></p>
+<p>ORDER BY 子句中书写的列名称为排序键，其通常写在SELECT子句的末尾。</p>
+<h4 id="指定升序或降序"><a href="#指定升序或降序" class="headerlink" title="指定升序或降序"></a>指定升序或降序</h4><p>降序排序时，在列名后面使用<code>DESC</code>关键字。升序使用<code>ASC</code>关键字。</p>
+<p>未指定ORDER BY子句中排列顺序会默认使用升序进行排序。</p>
+<p>可以指定多个排序键。</p>
+<p>排序键中包含NULL时，会在开头或末尾进行汇总。</p>
+<p>在ORDER BY子句中可以使用SELECT子句中定义的别名。</p>
+<p>在ORDER BY子句中可以使用SELECT子句中未使用的列和聚合函数。</p>
+<p>注意：在ORDER BY子句中可以使用SELECT子句中列所对应的编号，但不建议这样使用</p>
 
     </div>
 
@@ -260,13 +281,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20017%EF%BC%88equals%E6%96%B9%E6%B3%95%E6%B7%B1%E5%B1%82%E6%AC%A1%E7%90%86%E8%A7%A3%E3%80%81Object%E7%B1%BB%E4%B8%AD%E7%9A%84hashCode%E6%96%B9%E6%B3%95%E3%80%81%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%EF%BC%89/" rel="prev" title="equals方法、Object类中的hashCode方法、匿名内部类">
-      <i class="fa fa-chevron-left"></i> equals方法、Object类中的hashCode方法、匿名内部类
+    <a href="/2021/07/05/%E6%9F%A5%E8%AF%A2%E5%9F%BA%E7%A1%80/" rel="prev" title="查询基础">
+      <i class="fa fa-chevron-left"></i> 查询基础
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/" rel="next" title="方法的参数是数组">
-      方法的参数是数组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -325,7 +343,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一维数组概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%95%B0%E7%BB%84%E5%86%85%E5%85%83%E7%B4%A0%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.</span> <span class="nav-text">对数组内元素的访问</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">对表进行聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">聚合函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E5%80%BC"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用聚合函数删除重复值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E5%88%86%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">对表进行分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E8%81%9A%E5%90%88%E7%BB%93%E6%9E%9C%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">为聚合结果指定条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">1.4.</span> <span class="nav-text">对查询结果进行排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E5%8D%87%E5%BA%8F%E6%88%96%E9%99%8D%E5%BA%8F"><span class="nav-number">1.4.1.</span> <span class="nav-text">指定升序或降序</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
