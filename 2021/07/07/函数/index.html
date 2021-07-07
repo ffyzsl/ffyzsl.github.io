@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="对表进行聚合查询聚合函数 COUNT：计算表中的记录数（行数） SUM：计算表中数值列中的数据的合计值 AVG：计算表中数值列中的数据的平均值 MAX：求出表中任意列中数据的最大值 MIN：求出表中任意列中数据的最小值">
+  <meta name="description" content="函数 算数函数  字符串函数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对表进行聚合查询">
-<meta property="og:url" content="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/index.html">
+<meta property="og:title" content="函数，谓词，CASE表达式">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/07/%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
-<meta property="og:description" content="对表进行聚合查询聚合函数 COUNT：计算表中的记录数（行数） SUM：计算表中数值列中的数据的合计值 AVG：计算表中数值列中的数据的平均值 MAX：求出表中任意列中数据的最大值 MIN：求出表中任意列中数据的最小值">
+<meta property="og:description" content="函数 算数函数  字符串函数">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-06T07:15:39.016Z">
-<meta property="article:modified_time" content="2021-07-06T07:15:26.730Z">
+<meta property="article:published_time" content="2021-07-07T06:47:51.493Z">
+<meta property="article:modified_time" content="2021-07-07T06:47:43.473Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/07/%E5%87%BD%E6%95%B0/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>对表进行聚合查询 | ffy's blog</title>
+  <title>函数，谓词，CASE表达式 | ffy's blog</title>
   
 
 
@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/07/%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          对表进行聚合查询
+          函数，谓词，CASE表达式
         </h1>
 
         <div class="post-meta">
@@ -180,7 +180,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-06 15:15:39 / 修改时间：15:15:26" itemprop="dateCreated datePublished" datetime="2021-07-06T15:15:39+08:00">2021-07-06</time>
+              <time title="创建时间：2021-07-07 14:47:51 / 修改时间：14:47:43" itemprop="dateCreated datePublished" datetime="2021-07-07T14:47:51+08:00">2021-07-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -203,49 +203,88 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="对表进行聚合查询"><a href="#对表进行聚合查询" class="headerlink" title="对表进行聚合查询"></a>对表进行聚合查询</h2><h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><ul>
-<li>COUNT：计算表中的记录数（行数）</li>
-<li>SUM：计算表中数值列中的数据的合计值</li>
-<li>AVG：计算表中数值列中的数据的平均值</li>
-<li>MAX：求出表中任意列中数据的最大值</li>
-<li>MIN：求出表中任意列中数据的最小值<span id="more"></span>
-以上的函数称为聚合函数或者聚集函数。</li>
+        <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><ul>
+<li><p>算数函数</p>
+</li>
+<li><p>字符串函数</p>
+<span id="more"></span></li>
+<li><p>日期函数</p>
+</li>
+<li><p>转换函数</p>
+</li>
+<li><p>聚合函数</p>
+</li>
 </ul>
-<p>例如：<code>SELECT COUNT(&lt;列名&gt;/*) FRPM 表名;</code></p>
-<p>COUNT函数的结果根据参数的不同而不同，COUNT(*)会得到包含NULL的数据行数，而COUNT(&lt;列名&gt;)会得到NULL之外的数据行数。</p>
-<p>一般来说，除了COUNT函数，其他聚合函数会把NULL排除在外。</p>
-<h4 id="使用聚合函数删除重复值"><a href="#使用聚合函数删除重复值" class="headerlink" title="使用聚合函数删除重复值"></a>使用聚合函数删除重复值</h4><p>例如：<code>SELECT COUNT(DISTINCT product_type) FROM product;</code>会得到一共有多少种商品类型</p>
-<p>一般来说，想要计算值的种类时，可以在COUNT函数的参数中使用DISTINCT。同时，在聚合函数的参数中使用DISTINCT，可以删除重复数据</p>
-<h3 id="对表进行分组"><a href="#对表进行分组" class="headerlink" title="对表进行分组"></a>对表进行分组</h3><p>使用<code>GROUP BY</code>子句</p>
-<p><code>SELECT &lt;列名1&gt;,&lt;列名2&gt; FROM &lt;表名&gt; GROUP BY &lt;列名1&gt;,&lt;列名2&gt;;</code></p>
-<p>在GROUP BY子句后使用的列名称为聚合键或者分组列，在查询过程中，首先会根据分组列分成不同的组，然后再查询每一组的数据。简单来说，GROUP BY 就像切分表的一把刀。</p>
-<p>使用WHERE子句进行汇总处理时，会先根据WHERE子句指定的条件进行过滤，然后再进行汇总处理</p>
-<p>注意：</p>
-<p>1、GROUP BY子句一定要写在FROM语句之后。</p>
-<p>2、GROUP BY后分列组的顺序不同，查询的结果也可能不同。</p>
-<p>3、聚合键中包含NULL时，在结果中会以“不确定”行（空行）的形式表现出来。</p>
-<p>4、在使用GROUP BY子句后，所要查询的列（SELECT子句后的列名）必须包含在GROUP BY中（不过MySQL认同这种写法，不会发生错误，但在其他DBMS中，并不支持这样的写法）</p>
-<p>5、在GROUP BY子句中不能写列的别名（PostgreSQL和MySQL不会发生错误，但并不是通常的使用方法）</p>
-<p>6、GROUP BY子句结果的显示是无序的</p>
-<p>7、只有SELECT 子句和HAVING 子句（以及ORDER BY 子句）中能够使用聚合函数</p>
-<h3 id="为聚合结果指定条件"><a href="#为聚合结果指定条件" class="headerlink" title="为聚合结果指定条件"></a>为聚合结果指定条件</h3><p><code>HAVING</code>子句</p>
-<p>WHERE子句只能指定记录（行）的条件，并不能用来指定组的条件，如果想要对集合指定条件就需要使用HAVING子句。</p>
-<p>HAVING子句必须写在GROUP BY 子句之后</p>
-<p><code>SELECT &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; FROM &lt;表名&gt; WHERE &lt;条件表达式&gt; GROUP BY &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; HAVING &lt;分组结果对应条件&gt;;</code></p>
-<p>例如：<code>SELECT product_type,COUNT(*) FROM Product GROUP BY product_type HAVING COUNT(*) =2;</code>查询出记录等于二的商品种类和个数。</p>
-<p>HAVING子句的构成要素：常数、聚合函数、GROUP BY子句中指定的列</p>
-<p>注意：有些条件相对于HAVING子句，更适合写在WHERE子句中。</p>
-<p>WHERE子句：指定行所对应的条件</p>
-<p>HAVING子句：指定组所对应的条件</p>
-<h3 id="对查询结果进行排序"><a href="#对查询结果进行排序" class="headerlink" title="对查询结果进行排序"></a>对查询结果进行排序</h3><p> <code>SELECT &lt;列名1&gt;,&lt;列名2&gt;,&lt;列名3&gt; FROM &lt;表名&gt; ORDER BY &lt;排序基准列1&gt;,&lt;排序基准列2&gt;;</code></p>
-<p>ORDER BY 子句中书写的列名称为排序键，其通常写在SELECT子句的末尾。</p>
-<h4 id="指定升序或降序"><a href="#指定升序或降序" class="headerlink" title="指定升序或降序"></a>指定升序或降序</h4><p>降序排序时，在列名后面使用<code>DESC</code>关键字。升序使用<code>ASC</code>关键字。</p>
-<p>未指定ORDER BY子句中排列顺序会默认使用升序进行排序。</p>
-<p>可以指定多个排序键。</p>
-<p>排序键中包含NULL时，会在开头或末尾进行汇总。</p>
-<p>在ORDER BY子句中可以使用SELECT子句中定义的别名。</p>
-<p>在ORDER BY子句中可以使用SELECT子句中未使用的列和聚合函数。</p>
-<p>注意：在ORDER BY子句中可以使用SELECT子句中列所对应的编号，但不建议这样使用</p>
+<h3 id="算数函数"><a href="#算数函数" class="headerlink" title="算数函数"></a>算数函数</h3><p><strong>ABS——绝对值</strong></p>
+<p><code>ABS(数值)</code></p>
+<p>当参数为NULL时，返回值也是NULL，其实当绝大多数函数的参数为NULL时，结果也是NULL。</p>
+<p><strong>MOD——求余</strong></p>
+<p><code>MOD(被除数,除数)</code></p>
+<p><strong>ROUND——四舍五入</strong></p>
+<p><code>ROUND(对象数值，保留小数的位数)</code></p>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p><strong>CONCAT——拼接</strong></p>
+<p><code>CONCAT(str1,str2,str3……)</code></p>
+<p>当其中一个为NULL时，结果也是NULL。</p>
+<p><strong>LENGTH——字符串长度</strong></p>
+<p><code>LENGTH(字符串)</code></p>
+<p>注意：与半角英文占用1字节不同，汉字这样的全角字符会占用2个以上的字节（称为多字节字符）。因此，使用MySQL中的LENGTH这样的以字节为单位的函数进行计算时，“LENGTH(函数)”的返回结果是4，同样的LENGTH函数，不同DBMS的执行结果也不尽相同。</p>
+<p><strong>LOWER——小写转换</strong></p>
+<p><code>LOWER(字符串)</code></p>
+<p><strong>REPLACE——字符串的替换</strong></p>
+<p><code>REPLACE(对象字符串,替换前的字符串,替换后的字符串)</code></p>
+<p>例如：REPLACE(abcdefabc,abc,ABC)结果为：ABCdefABC</p>
+<p><strong>SUBSTRING——字符串的截取</strong></p>
+<p><code>SUBSTRING(对象字符串 FROM 截取的起始位置 FOR 截取的字符数)</code></p>
+<p><strong>UPPER——大写转换</strong></p>
+<p><code>UPPER(字符串)</code></p>
+<h3 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h3><p><strong>CURRENT_DATE——当前日期</strong></p>
+<p><code>CURRENT_DATE</code></p>
+<p>其返回SQL执行的日期，也就是该函数执行时的日期，由于没有参数，因此无需使用括号。</p>
+<p>** CURRENT_TIME**</p>
+<p><code>CURRENT_TIME</code></p>
+<p>获取SQL执行的时间，也就是该函数执行时的时间，因为没有参数，所以无需括号。</p>
+<p><strong>CURRENT_TIMESTAMP——当前日期和时间</strong></p>
+<p><code>CURRENT_TIMESTAMP</code></p>
+<p>其具有CURRENT_DATE+CURRENT_TIME的功能，该函数可以同时获取当前的日期和时间。</p>
+<p><strong>EXTRACT——截取日期元素</strong></p>
+<p><code>EXTRACT(日期元素 FROM 日期)</code></p>
+<p>例如：<code>SELECT CURRENT_TIMESTAMP,EXTRACT(YEAR FROM CURRENT_TIMESTAMP) AS year,EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AS MONTH,EXTRACT(DAT FROM CURRENT_TIMESTAMP) AS DAY,EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AS HOUR,EXTRACT(MINUTE FROM CURRENT_TIMESTAMP) AS MINTUE,EXTRACT(SECOND FROM CURRENT_TIMESTAMP) AS SECOND; </code></p>
+<h3 id="转换函数"><a href="#转换函数" class="headerlink" title="转换函数"></a>转换函数</h3><p><strong>CAST函数</strong></p>
+<p><code>CAST(转换前的值 AS 想要转换的数据类型)</code></p>
+<p><strong>COALESCE——将NULL转换为其他值</strong></p>
+<p><code>COALESCE(数据1,数据2,数据3……)</code></p>
+<p>该函数会返回可变参数中左侧开始第一个不是NULL的值。</p>
+<h2 id="谓词"><a href="#谓词" class="headerlink" title="谓词"></a>谓词</h2><p>谓词是需要满足特定条件的函数，该条件就是返回值是真值。对通常函数而言，返回值可能是数字，字符串等类型，但谓词的返回值全都是真值（TRUE/FALSE）。</p>
+<ul>
+<li>LIKE</li>
+<li>BETWEEN</li>
+<li>IS NULL,  IS NOT NULL</li>
+<li>IN</li>
+<li>EXISTS</li>
+</ul>
+<p><strong>LIKE谓词——字符串的部分一致查询</strong></p>
+<p>LIKE谓词查询更加模糊一些，当需要进行字符串的部分一致查询时才需要使用它。</p>
+<p>1、前方一致</p>
+<p>2、中间一致</p>
+<p>3、后方一致</p>
+<p><code>%</code>代表“0个字符以上的任意字符串”</p>
+<p><code>_</code>代表“任意一个字符”</p>
+<p><strong>BETWEEN谓词——范围查询</strong></p>
+<p><code>BETWEEN 100 AND 1000;</code>等于<code>&gt;=100 and &lt;=1000</code></p>
+<p><strong>IS NULL,IS NOT NULL——判断是否为NULL</strong></p>
+<p><strong>IN谓词——OR的简便用法</strong></p>
+<p><code>IN(值，值，……)</code>只要其值等于括号内的任意一个值，就返回真。</p>
+<p><code> NOT IN (值，值，……)</code>只要其值不等于括号内的任意一个值，就返回真。</p>
+<p>在使用IN 或 NOT IN时是无法选取出NULL数据的。</p>
+<p><strong>EXISTS谓词</strong></p>
+<p>EXISTS为“存在”，<code>EXISTS()</code>括号里通常是一个子查询，EXISTS只关心记录是否存在，只有在子查询查询出满足其条件的记录时，EXISTS会返回真，NOT EXISTS于其相反，只有不存在时才会返回真。</p>
+<h4 id="使用子查询作为IN谓词的参数"><a href="#使用子查询作为IN谓词的参数" class="headerlink" title="使用子查询作为IN谓词的参数"></a>使用子查询作为IN谓词的参数</h4><p>IN或NOT IN其后括号的值可以用SELECT语句来代替</p>
+<h3 id="CASE表达式"><a href="#CASE表达式" class="headerlink" title="CASE表达式"></a>CASE表达式</h3><p>CASE在编程中通常称为（条件）分支。</p>
+<p>CASE表达式的语法分为简单CASE表达式和搜索CASE表达式两种。由于搜索CASE表达式包含了简单CASE表达式的全部功能，所以在此只介绍搜索CASE表达式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CASE WHEN&lt;求值表达式&gt; THEN &lt;表达式&gt;</span><br><span class="line">     WHEN&lt;求值表达式&gt; THEN &lt;表达式&gt;</span><br><span class="line">     WHEN&lt;求值表达式&gt; THEN &lt;表达式&gt;</span><br><span class="line">     ……</span><br><span class="line">     ELSE &lt;表达式&gt;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+<p>WHEN子句中&lt;求值表达式&gt;就是列斯“列=值”这样，返回值为真值的表达式。如果WHEN子句中的表达式返回值为真值，则执行THEN后的表达式，如果不为真，就跳到下一个CASE语句，如果所有WHEN子句中表达式都不为真，则执行ELSE子句中的表达式。</p>
+<p>ELSE子句可以省略，END不能省略。</p>
 
     </div>
 
@@ -281,13 +320,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/05/%E6%9F%A5%E8%AF%A2%E5%9F%BA%E7%A1%80/" rel="prev" title="查询基础">
-      <i class="fa fa-chevron-left"></i> 查询基础
+    <a href="/2021/07/06/%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/" rel="prev" title="数据更新">
+      <i class="fa fa-chevron-left"></i> 数据更新
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/06/%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/" rel="next" title="数据更新">
-      数据更新 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -346,7 +382,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">对表进行聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">聚合函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E5%80%BC"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用聚合函数删除重复值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E5%88%86%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">对表进行分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E8%81%9A%E5%90%88%E7%BB%93%E6%9E%9C%E6%8C%87%E5%AE%9A%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">为聚合结果指定条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">1.4.</span> <span class="nav-text">对查询结果进行排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E5%8D%87%E5%BA%8F%E6%88%96%E9%99%8D%E5%BA%8F"><span class="nav-number">1.4.1.</span> <span class="nav-text">指定升序或降序</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%95%B0%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">算数函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">日期函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">转换函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%93%E8%AF%8D"><span class="nav-number">2.</span> <span class="nav-text">谓词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%E4%BD%9C%E4%B8%BAIN%E8%B0%93%E8%AF%8D%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">2.0.1.</span> <span class="nav-text">使用子查询作为IN谓词的参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">CASE表达式</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
