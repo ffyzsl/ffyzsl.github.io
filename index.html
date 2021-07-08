@@ -151,6 +151,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/08/Linux%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%EF%BC%8Cvi%E5%8F%8Avim%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/08/Linux%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%EF%BC%8Cvi%E5%8F%8Avim%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="post-title-link" itemprop="url">Linux远程登录，vi及vim使用说明</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-08 17:04:17 / 修改时间：17:07:48" itemprop="dateCreated datePublished" datetime="2021-07-08T17:04:17+08:00">2021-07-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="远程登录到Linux"><a href="#远程登录到Linux" class="headerlink" title="远程登录到Linux"></a>远程登录到Linux</h2><p>1、Linux服务器是共享的</p>
+<p>2、程序员需要远程登录到Linux进行项目管理或开发</p>
+<p>3、Linux一般搭建在公网</p>
+<p>4、Xshell是目前最好的远程登录到Linux操作的软件，传输文件则使用Xftp</p>
+<h3 id="下载、安装和配置"><a href="#下载、安装和配置" class="headerlink" title="下载、安装和配置"></a>下载、安装和配置</h3><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Sv411r7vd?p=15&amp;share_source=copy_web">https://www.bilibili.com/video/BV1Sv411r7vd?p=15&amp;share_source=copy_web</a> （P14、P15）</p>
+<h2 id="vi和vim的基本介绍"><a href="#vi和vim的基本介绍" class="headerlink" title="vi和vim的基本介绍"></a>vi和vim的基本介绍</h2><p>Linux系统会内置vi文本编辑器</p>
+<p>Vim具有程序编辑的能力，可以看做是vi的增强版本，可以主动的以字体颜色辨别语法的正确性，方便程序设计，代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用</p>
+<h3 id="vi和vim常用的三种模式"><a href="#vi和vim常用的三种模式" class="headerlink" title="vi和vim常用的三种模式"></a>vi和vim常用的三种模式</h3><ol>
+<li>正常模式（命令模式）</li>
+<li>插入模式（输入模式）</li>
+<li>命令行模式（底线命令模式）（输入<code>:</code>)(wq：表示写入和退出)</li>
+</ol>
+<p><img src="/2021/07/08/Linux%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%EF%BC%8Cvi%E5%8F%8Avim%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/vi%E5%92%8Cvim%E5%90%84%E4%B8%AA%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%97%B4%E5%A6%82%E4%BD%95%E5%88%87%E6%8D%A2.png" alt="vi和vim各个模式之间如何切换"></p>
+<p><img src="/2021/07/08/Linux%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%EF%BC%8Cvi%E5%8F%8Avim%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/vi_and_vim%E9%94%AE%E7%9B%98%E5%9B%BEsch.png" alt="vi_and_vim键盘图"></p>
+<h3 id="命令模式："><a href="#命令模式：" class="headerlink" title="命令模式："></a>命令模式：</h3><p>（默认）、<code>i</code>切换到输入模式，<code>x</code>删除当前光标所在处的字符，<code>:</code>切换到底线命令模式</p>
+<h3 id="输入模式："><a href="#输入模式：" class="headerlink" title="输入模式："></a>输入模式：</h3><ol>
+<li><code>字符按键以及shift组合</code>，输入字符</li>
+<li><code>enter</code>，回车键，换行</li>
+<li><code>back space</code>，退格键，删除光标前一个字符</li>
+<li><code>del</code>，删除键，删除光标后一个字符</li>
+<li><code>方向键</code>，在文本中移动光标</li>
+<li><code>home/end</code>，移动光标到行首/行尾</li>
+<li><code>page up/page down</code>，上下翻页</li>
+<li><code>insert</code>，切换光标为输入/替换模式，光标将变为竖线/下划线</li>
+<li><code>esc</code>，退出输入模式，切换到命令模式</li>
+</ol>
+<h3 id="底线命令模式"><a href="#底线命令模式" class="headerlink" title="底线命令模式"></a>底线命令模式</h3><p>在命令模式下按下<code>:</code>，就进入了底线命令模式</p>
+<p>基本命令：</p>
+<ol>
+<li><code>q</code>:退出程序</li>
+<li><code>w</code>:保存文件</li>
+</ol>
+<h2 id="vi-vim使用实例（常用命令）"><a href="#vi-vim使用实例（常用命令）" class="headerlink" title="vi/vim使用实例（常用命令）"></a>vi/vim使用实例（常用命令）</h2><p>创建一个文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim 文件名</span><br></pre></td></tr></table></figure>
+
+<p>拷贝当前行 <code>yy</code>,拷贝当前行向下的n行，<code>nyy</code>,粘贴<code>p</code></p>
+<p>删除当前行<code>dd</code>,删除当前行向下n行<code>ndd</code></p>
+<p>在文件中查找某个单词，<code>命令行下/关键字，回车 查找，输入n就是查找下一个</code></p>
+<p>设置文件的行号，取消文件的行号<code>命令行下  :set nu 和 :set nonu</code></p>
+<p>撤销 <code>u</code></p>
+<p>定位到最末行<code>G</code>，定位到首行<code>gg</code>，定位到固定的行号 <code>行号 shift+g</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/08/Linux%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -831,81 +939,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20039%EF%BC%88FileInputStream%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81FileOutputStream%E3%80%81%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E3%80%81FileReader%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81FileWriter%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81%E6%99%AE%E9%80%9A%E6%96%87%E6%9C%AC%E7%9A%84%E5%A4%8D%E5%88%B6%E3%80%81%E5%B8%A6%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E6%B5%81%E3%80%81%E8%BD%AC%E6%8D%A2%E6%B5%81%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20039%EF%BC%88FileInputStream%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81FileOutputStream%E3%80%81%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E3%80%81FileReader%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81FileWriter%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81%E6%99%AE%E9%80%9A%E6%96%87%E6%9C%AC%E7%9A%84%E5%A4%8D%E5%88%B6%E3%80%81%E5%B8%A6%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E6%B5%81%E3%80%81%E8%BD%AC%E6%8D%A2%E6%B5%81%EF%BC%89/" class="post-title-link" itemprop="url">FileInputStream、FileOutputStream常用方法，文件复制，FileReader、FileWriter的使用，普通文本的复制，带有缓冲区的字符流、转换流</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-04 11:17:15 / 修改时间：11:20:17" itemprop="dateCreated datePublished" datetime="2021-07-04T11:17:15+08:00">2021-07-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="FileInputStream中常用方法"><a href="#FileInputStream中常用方法" class="headerlink" title="FileInputStream中常用方法"></a>FileInputStream中常用方法</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20039%EF%BC%88FileInputStream%E4%B8%AD%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81FileOutputStream%E3%80%81%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E3%80%81FileReader%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81FileWriter%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81%E6%99%AE%E9%80%9A%E6%96%87%E6%9C%AC%E7%9A%84%E5%A4%8D%E5%88%B6%E3%80%81%E5%B8%A6%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E5%AD%97%E7%AC%A6%E6%B5%81%E3%80%81%E8%BD%AC%E6%8D%A2%E6%B5%81%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -975,7 +1008,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
