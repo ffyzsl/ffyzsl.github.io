@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Java 开发环境搭建JDK( java development Kit)JRE(Java Runtime Environment)JVM(Java Virtual Machine)*    虚拟机">
+  <meta name="description" content="pwd ：显示当前工作目录的绝对路径">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java开发环境搭建以及HelloWorld">
-<meta property="og:url" content="http://ffyzsl.github.io/2021/07/01/Day%20001%EF%BC%88java%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95%EF%BC%89/index.html">
+<meta property="og:title" content="文件目录类">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/10/Linux%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
-<meta property="og:description" content="Java 开发环境搭建JDK( java development Kit)JRE(Java Runtime Environment)JVM(Java Virtual Machine)*    虚拟机">
+<meta property="og:description" content="pwd ：显示当前工作目录的绝对路径">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-01T02:50:53.626Z">
-<meta property="article:modified_time" content="2021-07-02T00:59:16.334Z">
+<meta property="article:published_time" content="2021-07-10T01:10:29.769Z">
+<meta property="article:modified_time" content="2021-07-10T01:10:03.442Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ffyzsl.github.io/2021/07/01/Day%20001%EF%BC%88java%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95%EF%BC%89/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/10/Linux%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>java开发环境搭建以及HelloWorld | ffy's blog</title>
+  <title>文件目录类 | ffy's blog</title>
   
 
 
@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/01/Day%20001%EF%BC%88java%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/10/Linux%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          java开发环境搭建以及HelloWorld
+          文件目录类
         </h1>
 
         <div class="post-meta">
@@ -178,23 +178,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-07-01 10:50:53" itemprop="dateCreated datePublished" datetime="2021-07-01T10:50:53+08:00">2021-07-01</time>
+              <time title="创建时间：2021-07-10 09:10:29 / 修改时间：09:10:03" itemprop="dateCreated datePublished" datetime="2021-07-10T09:10:29+08:00">2021-07-10</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-02 08:59:16" itemprop="dateModified" datetime="2021-07-02T08:59:16+08:00">2021-07-02</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
                 </span>
             </span>
 
@@ -209,15 +203,146 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Java-开发环境搭建"><a href="#Java-开发环境搭建" class="headerlink" title="Java 开发环境搭建"></a>Java 开发环境搭建</h1><p>JDK( java development Kit)<br>JRE(Java Runtime Environment)<br>JVM(Java Virtual Machine)*    虚拟机</p>
+        <p><code>pwd</code> ：显示当前工作目录的绝对路径</p>
 <span id="more"></span>
-
-<h2 id="卸载JDK"><a href="#卸载JDK" class="headerlink" title="卸载JDK"></a>卸载JDK</h2><p>1、删除java安装目录<br>2、删除JAVA_HOME（清除环境变量）<br>3、删除path下关于Java的目录<br>4、win+r   cmd   Java_version（验证是否删除）</p>
-<h2 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h2><p>1、下载相对版本的JDK<br>2、安装JDK<br>3、我的电脑  属性  高级系统设置   环境变量  系统变量  新建     JAVA_HOME 并找到安装JDK的路径<br>4、配置path变量，%JAVA_HOME%\bin  %JAVA_HOME%\jre\bin</p>
-<h1 id="HelloWorld-及-简单语法规则"><a href="#HelloWorld-及-简单语法规则" class="headerlink" title="HelloWorld 及 简单语法规则"></a>HelloWorld 及 简单语法规则</h1><p>1、新建文件夹，存放代码<br>2、新建一个java文件。    （*.java）<br>3、编写代码 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		System.out.print(<span class="string">&quot;Hello,World&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>4、编译  Javac  Java文件，会生成一个class文件。<br>5、运行，java class文件              截图（win+shift+s）</p>
-<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>1、单词大小不能出现问题，不能出现中文符号<br>2、输入的字符尽量用英文<br>3、文件名和类名必须保证一致，并且首字母大写</p>
+<p><code>ls  [参数]  目录或文件 </code> ：</p>
+<ul>
+<li> -a：显示当前目录所有的文件或目录，包括隐藏的</li>
+<li>  -l：以列表的方式显示信息</li>
+</ul>
+<p><code>cd 目录</code>： 切换到指定目录</p>
+<ul>
+<li><code>cd ~</code> 或者 <code>cd </code> 回到自己的家目录</li>
+<li><code>cd ..</code>回到当前目录的上一级目录</li>
+</ul>
+<p><code>mkdir [选项]</code> ：用于创建目录</p>
+<ul>
+<li><p>-p ：创建多级目录</p>
+<p> （<code>mkdir</code>默认创建一级目录，如果想要创建多级目录，必须使用<code>mkdir -p [目录]</code>）</p>
+</li>
+</ul>
+<p><code> rmdir [选项]  要删除的空目录</code></p>
+<ul>
+<li>注意：<code>rmdir</code>删除的是空目录，如果目录下有内容无法删除，如果需要删除非空目录，需要使用<code>rm -rf [目录]</code></li>
+</ul>
+<p><code>touch 文件名称</code> ：创建空文件</p>
+<p><code>cp [选项] 文件 指定目录</code>：拷贝文件到指定目录</p>
+<ul>
+<li><p>-r ：递归复制整个文件夹</p>
+<p> 注意：如果在复制完成之后对某些文件进行更新，如果需要再次复制，那么系统会提示是否覆盖，输入<code>y/n</code>，如果想要所有更新文件全部覆盖，这可以把命令行的首字母<code>cp</code>替换为输入强制覆盖不提示的：<code>\cp</code></p>
+</li>
+</ul>
+<p><code>rm [选项]  要删除的文件或目录</code></p>
+<ul>
+<li>-r：递归删除整个文件夹</li>
+<li>-f：强制删除不提示</li>
+</ul>
+<p><code>mv 旧文件名称  新文件名称</code>  （重命名）、        <code>mv 目录下的文件 目录</code>（移动文件）<code>mv 目录 目录</code>（将前目录整体移动到后目录）</p>
+<p><code>cat [选项] 要查看的文件 </code>：查看文件内容</p>
+<ul>
+<li><p>-n：显示行号</p>
+</li>
+<li><p><code>cat</code>只能浏览文件，而不能修改文件，为了浏览方便，一般会带上 管道命令<code>| more</code></p>
+</li>
+</ul>
+<p><code>more</code>指令：more指令时一个基于VI编辑器的文本过滤器，它以全屏幕的方式按页显示文本文件。more指令中内置了若干快捷键。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>space</td>
+<td>代表向下翻一页</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>代表向下翻一行</td>
+</tr>
+<tr>
+<td>q</td>
+<td>代表立刻离开more，不再显示该文件内容</td>
+</tr>
+<tr>
+<td>Ctrl+F</td>
+<td>向下滚动一屏</td>
+</tr>
+<tr>
+<td>Ctrl+B</td>
+<td>返回上一屏</td>
+</tr>
+<tr>
+<td>=</td>
+<td>输出当前行的行号</td>
+</tr>
+<tr>
+<td>:f</td>
+<td>输出文件名和当前行的行号</td>
+</tr>
+</tbody></table>
+<p><code>less</code>指令：less指令用来分屏查看文件内容，它的功能和more指令类似，但是比more指令更加强大，支持各种显示终端，less指令在显示文件内容时，并不是一次将整个文件加载之后才显示，而是根据显示需要加载内容，对于显示大型文件具有较高的效率。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>space</td>
+<td>向下翻动一页</td>
+</tr>
+<tr>
+<td>[pagedown]</td>
+<td>向下翻动一页</td>
+</tr>
+<tr>
+<td>[pageup]</td>
+<td>向上翻动一页</td>
+</tr>
+<tr>
+<td>/字串</td>
+<td>向下搜寻[字串]的功能；n：向下查找；N：向上查找；</td>
+</tr>
+<tr>
+<td>?字串</td>
+<td>向上搜寻[字串]的功能；n：向上查找；N：向下查找；</td>
+</tr>
+<tr>
+<td>q</td>
+<td>离开less这个程序</td>
+</tr>
+</tbody></table>
+<p><code>echo [选项] [输出内容]</code>输出内容到控制台</p>
+<p><code>head [-n] 文件</code>：用于显示文件的开头部分内容，默认情况下head指令显示文件的前10行内容，</p>
+<ul>
+<li>例如：<code>head 文件</code>（显示文件的前10行），<code>head -n 数字 文件</code>（显示“数字”行内容）</li>
+</ul>
+<p><code>tail</code>指令：</p>
+<ul>
+<li><code>tail 文件</code>：查看文件尾10行内容</li>
+<li><code>tail -n 5 文件</code>：查看文件尾5行内容，5可以是任意数字</li>
+<li><code>tail -f 文件</code>：实时追踪该文档的所有更新</li>
+</ul>
+<p><code>&gt;</code>指令和<code>&gt;&gt;</code>指令：<code>&gt;</code>输出重定向和 &gt;&gt; 追加</p>
+<ul>
+<li><code>ls -l &gt; 文件</code>：列表的内容写到文件当中（覆盖）</li>
+<li><code>ls -al &gt;&gt; 文件</code>：列表的内容追加到文件的末尾</li>
+<li><code>cat 文件1 &gt; 文件2</code>：将文件1的内容覆盖到文件2</li>
+<li><code>echo &quot;内容&quot;  &gt;&gt;  文件</code></li>
+</ul>
+<p><code>cal</code>：显示当前日历信息</p>
+<p><code>ln</code>指令：软链接也成为符号链接，类似于windows里的快捷方式，主要存放了链接其他文件的路径。</p>
+<ul>
+<li><code>ln -s [原文件或目录] [软链接名]</code>：给原文件创建一个软链接</li>
+</ul>
+<p><code>history</code>指令：查看已经执行过历史命令，也可以执行历史命令</p>
+<ul>
+<li><code>history</code>：查看所有执行过的历史命令</li>
+<li><code>history [数字]</code>：查看最近使用过的“数字”个指令</li>
+</ul>
 
     </div>
 
@@ -252,11 +377,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2021/07/02/Day%20002%EF%BC%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E3%80%81%E5%8F%98%E9%87%8F%E4%BB%A5%E5%8F%8A%E5%B8%B8%E9%87%8F%EF%BC%89/" rel="next" title="数据类型、类型转换、变量以及常量">
-      数据类型、类型转换、变量以及常量 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/" rel="prev" title="Linux开机、重启和用户登录注销，用户管理">
+      <i class="fa fa-chevron-left"></i> Linux开机、重启和用户登录注销，用户管理
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -315,7 +440,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">Java 开发环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BDJDK"><span class="nav-number">1.1.</span> <span class="nav-text">卸载JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85JDK"><span class="nav-number">1.2.</span> <span class="nav-text">安装JDK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HelloWorld-%E5%8F%8A-%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">HelloWorld 及 简单语法规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.0.1.</span> <span class="nav-text">遇到的问题</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
