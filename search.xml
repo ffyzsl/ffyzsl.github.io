@@ -459,61 +459,6 @@
       </categories>
   </entry>
   <entry>
-    <title>this关键字、static关键字</title>
-    <url>/2021/07/02/Day%20009%EF%BC%88this%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81static%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="this关键字"><a href="#this关键字" class="headerlink" title="this关键字"></a>this关键字</h2><p>方法定义中有static，需要用类名访问。没有则用引用访问</p>
-<span id="more"></span>
-
-<p>实例变量需要引用访问</p>
-<p>因为使用类名访问，没有当前对象，所以不能用this，而用引用来访问，是有对象的，所以可加this（代表当前对象）</p>
-<p>1、在<strong>带有</strong>static不能直接访问实例变量和实例方法，因为实例变量和实例方法都需要对象的存在。而static方法当中是没有this的，也就是说当前对象不存在，所以无法访问。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">thisTest02</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">10</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        thisTest02 c=<span class="keyword">new</span> thisTest02();</span><br><span class="line">        System.out.println(c.i);</span><br><span class="line">        thisTest02.dosome();<span class="comment">//dosome();</span></span><br><span class="line">        <span class="comment">//thisTest02.doother()编译错误，实例方法必须先创建对象，通过引用的方式访问</span></span><br><span class="line">        <span class="comment">//doother（），调用当前对象的doother方法，但由于main方法中没有this，所以不能调用</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dosome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;dosome&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//doother为实例方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doother</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doother&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;run&quot;</span>);</span><br><span class="line">        doother();<span class="comment">//run是一个实例方法，调用run方法的一定有对象存在，所以doother当前对象就是调用run的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="this用法"><a href="#this用法" class="headerlink" title="this用法"></a>this用法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> a)</span></span>&#123;</span><br><span class="line">        id=a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*  以下程序的id和实例变量id无关，不能采用这种方式</span></span><br><span class="line"><span class="comment">    public void setId(int id) &#123;</span></span><br><span class="line"><span class="comment">        id = id;  可以写为this.id=id;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Date</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> years;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> month;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> day;</span><br><span class="line">    <span class="comment">//当调用以下无参数构造方法时，默认创建日期为1970-1-1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Date</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years=<span class="number">1970</span>;</span><br><span class="line">        <span class="keyword">this</span>.month=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">this</span>.day=<span class="number">1</span>;</span><br><span class="line">        <span class="comment">/* 以上三行可以写为  this(1970,1,1)</span></span><br><span class="line"><span class="comment">           可以调用其他构造方法，</span></span><br><span class="line"><span class="comment">           不可以使用new Date(1970,1,1)因为会创建一个新的对象</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Date</span><span class="params">(<span class="keyword">int</span> years,<span class="keyword">int</span> month,<span class="keyword">int</span> day)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years=years;</span><br><span class="line">        <span class="keyword">this</span>.month=month;</span><br><span class="line">        <span class="keyword">this</span>.day=day;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对外提供一个方法可以打印输出日期</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.years+<span class="string">&quot;年&quot;</span>+<span class="keyword">this</span>.month+<span class="string">&quot;月&quot;</span>+<span class="keyword">this</span>.day+<span class="string">&quot;日&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getYears</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> years;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setYears</span><span class="params">(<span class="keyword">int</span> years)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years = years;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMonth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> month;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMonth</span><span class="params">(<span class="keyword">int</span> month)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.month = month;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> day;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDay</span><span class="params">(<span class="keyword">int</span> day)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.day = day;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThisTest03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Date d1=<span class="keyword">new</span> Date();</span><br><span class="line">        d1.print();</span><br><span class="line">        Date d2=<span class="keyword">new</span> Date(<span class="number">2008</span>,<span class="number">8</span>,<span class="number">8</span>);</span><br><span class="line">        d2.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1970</span>年<span class="number">1</span>月<span class="number">1</span>日</span><br><span class="line"><span class="number">2008</span>年<span class="number">1</span>月<span class="number">1</span>日</span><br></pre></td></tr></table></figure>
-
-<p>1、可以使用在实例方法当中，代表当前对像【this.】</p>
-<p>2、可以使用在构造方法中，通过当前的构造方法调用其他的构造方法【 this(实参)；】</p>
-<p><strong>this（）只能出现在构造方法中第一行</strong></p>
-<h2 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chinese</span> </span>&#123;</span><br><span class="line">    String id;</span><br><span class="line">    String name;</span><br><span class="line">    String country;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">(String id,String name,String country)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">        <span class="keyword">this</span>.country=country;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Staticworld</span> </span>&#123;</span><br><span class="line">    Chinese zhangsan=<span class="keyword">new</span> Chinese(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;张三&quot;</span>,<span class="string">&quot;China&quot;</span>);</span><br><span class="line">    Chinese lisi=<span class="keyword">new</span> Chinese(<span class="string">&quot;2&quot;</span>,<span class="string">&quot;李四&quot;</span>,<span class="string">&quot;China&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>因为两个人的国家都是China，所以可以使用static关键字。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chinese</span> </span>&#123;</span><br><span class="line">    String id;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">static</span> String country=<span class="string">&quot;China&quot;</span>;<span class="comment">//静态变量，静态变量在类加载的时候初始化，不需要创建对象，内存就开辟了</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">(String id,String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Staticworld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Chinese zhangsan=<span class="keyword">new</span> Chinese(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        System.out.println(zhangsan.id+zhangsan.name+Chinese.country);</span><br><span class="line">        Chinese lisi=<span class="keyword">new</span> Chinese(<span class="string">&quot;2&quot;</span>,<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        System.out.println(lisi.id+lisi.name+Chinese.country);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>实例变量</strong>：所有对象都有这个属性，且属性的值<strong>会</strong>随着对象的变化而变化</p>
-<p><strong>静态变量</strong>：所有对象都有这个属性，且属性的值<strong>不会</strong>随着对象的变化而变化</p>
-<p>1、static修饰的方法是静态方法</p>
-<p>2、static修饰的变量是静态变量</p>
-<p>3、所有static修饰的元素都称为静态的，都可以使用”类名.“方法访问，当然也可以用引用， 但不建议</p>
-<h3 id="静态代码块"><a href="#静态代码块" class="headerlink" title="静态代码块"></a>静态代码块</h3><p>1、语法格式</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span>&#123;</span><br><span class="line">    java语句</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2、静态代码块在类加载时执行，且只执行一次</p>
-<p>3、可以编写多个，自上而下执行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticTest02</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;类加载1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;类加载2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;主方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">类加载<span class="number">1</span></span><br><span class="line">类加载<span class="number">2</span></span><br><span class="line">主方法</span><br></pre></td></tr></table></figure>
-
-<p>4、静态代码用处：与具体的需求有关，例如在类加载的时候                      执行代码完成日志的记录。静态代码时java为程序员准备的一个特殊的时刻，这个时刻被称为类加载时刻。如希望在此刻执行一段特殊的程序，这段程序可以直接放到静态代码块当中</p>
-<p>5、通常在静态代码块中完成预备工作，完成数据的准备工具</p>
-<h3 id="方法声明为静态"><a href="#方法声明为静态" class="headerlink" title="方法声明为静态"></a><strong>方法声明为静态</strong></h3><p>1、方法描述的是动作，当所有的对象执行这个动作时，结果都是一样的，可以将这个对象提升为类级别的动作，模板级别的动作</p>
-<p>静态方法中无法直接访问实例变量和实例方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MathTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">10</span>,b=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> c =Math.cheng(a,b);</span><br><span class="line">        System.out.println(c);</span><br><span class="line">        <span class="keyword">double</span> i=<span class="number">55.5</span>,j=<span class="number">5.5</span>;</span><br><span class="line">        <span class="keyword">double</span> g= Math.chu(i,j);</span><br><span class="line">        System.out.println(g);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Math</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">cheng</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a*b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">chu</span><span class="params">(<span class="keyword">double</span> q,<span class="keyword">double</span> w)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> q/w;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>空指针异常、封装性以及构造方法</title>
     <url>/2021/07/02/Day%20007%EF%BC%88%E7%A9%BA%E6%8C%87%E9%92%88%E5%BC%82%E5%B8%B8%E3%80%81%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B0%81%E8%A3%85%E6%80%A7%E4%BB%A5%E5%8F%8A%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%89/</url>
     <content><![CDATA[<h3 id="空指针异常"><a href="#空指针异常" class="headerlink" title="空指针异常"></a>空指针异常</h3><span id="more"></span>
@@ -576,6 +521,61 @@
 <p>9、当一个类显示的构造方法定义出来了，那么系统则不</p>
 <p>再默认这个类提供缺省构造器</p>
 <p>10、<strong>构造方法支持重载机制</strong>，在一个类当中编写多个构造方法，则形成了方法重载机制</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>this关键字、static关键字</title>
+    <url>/2021/07/02/Day%20009%EF%BC%88this%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81static%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="this关键字"><a href="#this关键字" class="headerlink" title="this关键字"></a>this关键字</h2><p>方法定义中有static，需要用类名访问。没有则用引用访问</p>
+<span id="more"></span>
+
+<p>实例变量需要引用访问</p>
+<p>因为使用类名访问，没有当前对象，所以不能用this，而用引用来访问，是有对象的，所以可加this（代表当前对象）</p>
+<p>1、在<strong>带有</strong>static不能直接访问实例变量和实例方法，因为实例变量和实例方法都需要对象的存在。而static方法当中是没有this的，也就是说当前对象不存在，所以无法访问。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">thisTest02</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">10</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        thisTest02 c=<span class="keyword">new</span> thisTest02();</span><br><span class="line">        System.out.println(c.i);</span><br><span class="line">        thisTest02.dosome();<span class="comment">//dosome();</span></span><br><span class="line">        <span class="comment">//thisTest02.doother()编译错误，实例方法必须先创建对象，通过引用的方式访问</span></span><br><span class="line">        <span class="comment">//doother（），调用当前对象的doother方法，但由于main方法中没有this，所以不能调用</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dosome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;dosome&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//doother为实例方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doother</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doother&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;run&quot;</span>);</span><br><span class="line">        doother();<span class="comment">//run是一个实例方法，调用run方法的一定有对象存在，所以doother当前对象就是调用run的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="this用法"><a href="#this用法" class="headerlink" title="this用法"></a>this用法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> a)</span></span>&#123;</span><br><span class="line">        id=a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*  以下程序的id和实例变量id无关，不能采用这种方式</span></span><br><span class="line"><span class="comment">    public void setId(int id) &#123;</span></span><br><span class="line"><span class="comment">        id = id;  可以写为this.id=id;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Date</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> years;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> month;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> day;</span><br><span class="line">    <span class="comment">//当调用以下无参数构造方法时，默认创建日期为1970-1-1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Date</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years=<span class="number">1970</span>;</span><br><span class="line">        <span class="keyword">this</span>.month=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">this</span>.day=<span class="number">1</span>;</span><br><span class="line">        <span class="comment">/* 以上三行可以写为  this(1970,1,1)</span></span><br><span class="line"><span class="comment">           可以调用其他构造方法，</span></span><br><span class="line"><span class="comment">           不可以使用new Date(1970,1,1)因为会创建一个新的对象</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Date</span><span class="params">(<span class="keyword">int</span> years,<span class="keyword">int</span> month,<span class="keyword">int</span> day)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years=years;</span><br><span class="line">        <span class="keyword">this</span>.month=month;</span><br><span class="line">        <span class="keyword">this</span>.day=day;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对外提供一个方法可以打印输出日期</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.years+<span class="string">&quot;年&quot;</span>+<span class="keyword">this</span>.month+<span class="string">&quot;月&quot;</span>+<span class="keyword">this</span>.day+<span class="string">&quot;日&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getYears</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> years;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setYears</span><span class="params">(<span class="keyword">int</span> years)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.years = years;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMonth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> month;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMonth</span><span class="params">(<span class="keyword">int</span> month)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.month = month;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> day;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDay</span><span class="params">(<span class="keyword">int</span> day)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.day = day;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThisTest03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Date d1=<span class="keyword">new</span> Date();</span><br><span class="line">        d1.print();</span><br><span class="line">        Date d2=<span class="keyword">new</span> Date(<span class="number">2008</span>,<span class="number">8</span>,<span class="number">8</span>);</span><br><span class="line">        d2.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1970</span>年<span class="number">1</span>月<span class="number">1</span>日</span><br><span class="line"><span class="number">2008</span>年<span class="number">1</span>月<span class="number">1</span>日</span><br></pre></td></tr></table></figure>
+
+<p>1、可以使用在实例方法当中，代表当前对像【this.】</p>
+<p>2、可以使用在构造方法中，通过当前的构造方法调用其他的构造方法【 this(实参)；】</p>
+<p><strong>this（）只能出现在构造方法中第一行</strong></p>
+<h2 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chinese</span> </span>&#123;</span><br><span class="line">    String id;</span><br><span class="line">    String name;</span><br><span class="line">    String country;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">(String id,String name,String country)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">        <span class="keyword">this</span>.country=country;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Staticworld</span> </span>&#123;</span><br><span class="line">    Chinese zhangsan=<span class="keyword">new</span> Chinese(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;张三&quot;</span>,<span class="string">&quot;China&quot;</span>);</span><br><span class="line">    Chinese lisi=<span class="keyword">new</span> Chinese(<span class="string">&quot;2&quot;</span>,<span class="string">&quot;李四&quot;</span>,<span class="string">&quot;China&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为两个人的国家都是China，所以可以使用static关键字。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chinese</span> </span>&#123;</span><br><span class="line">    String id;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">static</span> String country=<span class="string">&quot;China&quot;</span>;<span class="comment">//静态变量，静态变量在类加载的时候初始化，不需要创建对象，内存就开辟了</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chinese</span><span class="params">(String id,String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Staticworld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Chinese zhangsan=<span class="keyword">new</span> Chinese(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        System.out.println(zhangsan.id+zhangsan.name+Chinese.country);</span><br><span class="line">        Chinese lisi=<span class="keyword">new</span> Chinese(<span class="string">&quot;2&quot;</span>,<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        System.out.println(lisi.id+lisi.name+Chinese.country);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>实例变量</strong>：所有对象都有这个属性，且属性的值<strong>会</strong>随着对象的变化而变化</p>
+<p><strong>静态变量</strong>：所有对象都有这个属性，且属性的值<strong>不会</strong>随着对象的变化而变化</p>
+<p>1、static修饰的方法是静态方法</p>
+<p>2、static修饰的变量是静态变量</p>
+<p>3、所有static修饰的元素都称为静态的，都可以使用”类名.“方法访问，当然也可以用引用， 但不建议</p>
+<h3 id="静态代码块"><a href="#静态代码块" class="headerlink" title="静态代码块"></a>静态代码块</h3><p>1、语法格式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span>&#123;</span><br><span class="line">    java语句</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、静态代码块在类加载时执行，且只执行一次</p>
+<p>3、可以编写多个，自上而下执行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticTest02</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;类加载1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;类加载2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;主方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">类加载<span class="number">1</span></span><br><span class="line">类加载<span class="number">2</span></span><br><span class="line">主方法</span><br></pre></td></tr></table></figure>
+
+<p>4、静态代码用处：与具体的需求有关，例如在类加载的时候                      执行代码完成日志的记录。静态代码时java为程序员准备的一个特殊的时刻，这个时刻被称为类加载时刻。如希望在此刻执行一段特殊的程序，这段程序可以直接放到静态代码块当中</p>
+<p>5、通常在静态代码块中完成预备工作，完成数据的准备工具</p>
+<h3 id="方法声明为静态"><a href="#方法声明为静态" class="headerlink" title="方法声明为静态"></a><strong>方法声明为静态</strong></h3><p>1、方法描述的是动作，当所有的对象执行这个动作时，结果都是一样的，可以将这个对象提升为类级别的动作，模板级别的动作</p>
+<p>静态方法中无法直接访问实例变量和实例方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MathTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">10</span>,b=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> c =Math.cheng(a,b);</span><br><span class="line">        System.out.println(c);</span><br><span class="line">        <span class="keyword">double</span> i=<span class="number">55.5</span>,j=<span class="number">5.5</span>;</span><br><span class="line">        <span class="keyword">double</span> g= Math.chu(i,j);</span><br><span class="line">        System.out.println(g);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Math</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">cheng</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a*b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">chu</span><span class="params">(<span class="keyword">double</span> q,<span class="keyword">double</span> w)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> q/w;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -710,67 +710,6 @@
 ]]></content>
       <categories>
         <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Linux开机、重启和用户登录注销，用户管理</title>
-    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
-    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
-<span id="more"></span>
-<p><code>shutdown -h 1</code> 一分钟后关机</p>
-<p><code>shutdown -r now</code> 重启计算机</p>
-<p><code>halt</code> 关机，作用和上面一样</p>
-<p><code>reboot</code> 现在重新启动计算机</p>
-<p><code>sync</code> 把内存的数据同步到磁盘</p>
-<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
-<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
-<p><code>logout</code> 注销用户</p>
-<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
-<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
-<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
-<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
-<p><code>pwd</code> 显示当前用户所在的目录</p>
-<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
-<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
-<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
-</ol>
-<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
-<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
-<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
-<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
-<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
-<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
-<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
-<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
-<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
-<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
-<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
-</li>
-<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
-<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
-</li>
-<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
-<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
-</li>
-</ol>
-<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
-<p>1：单用户（找回丢失密码）</p>
-<p>2：多用户状态没有网络服务</p>
-<p>3：多用户状态有网络服务</p>
-<p>4：系统未使用保留给用户</p>
-<p>5：图形界面</p>
-<p>6：系统重启</p>
-<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
-<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
-<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
-<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
-<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
-<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
-<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
-<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
       </categories>
   </entry>
   <entry>
@@ -922,6 +861,140 @@
       </categories>
   </entry>
   <entry>
+    <title>Linux开机、重启和用户登录注销，用户管理</title>
+    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
+    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
+<span id="more"></span>
+<p><code>shutdown -h 1</code> 一分钟后关机</p>
+<p><code>shutdown -r now</code> 重启计算机</p>
+<p><code>halt</code> 关机，作用和上面一样</p>
+<p><code>reboot</code> 现在重新启动计算机</p>
+<p><code>sync</code> 把内存的数据同步到磁盘</p>
+<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
+<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
+<p><code>logout</code> 注销用户</p>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
+<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
+<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
+<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
+<p><code>pwd</code> 显示当前用户所在的目录</p>
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
+<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
+<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
+</ol>
+<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
+<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
+<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
+<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
+<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
+<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
+<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
+<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
+<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
+<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
+</li>
+<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
+<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
+</li>
+<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
+<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
+</li>
+</ol>
+<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
+<p>1：单用户（找回丢失密码）</p>
+<p>2：多用户状态没有网络服务</p>
+<p>3：多用户状态有网络服务</p>
+<p>4：系统未使用保留给用户</p>
+<p>5：图形界面</p>
+<p>6：系统重启</p>
+<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
+<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
+<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
+<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
+<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
+<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
+<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>时间日期类，搜索查找类</title>
+    <url>/2021/07/10/Linux%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB%EF%BC%8C%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h2><p><code>date</code>：显示当前日期</p>
+<span id="more"></span>
+<ul>
+<li><p><code>date</code>：显示当前时间</p>
+</li>
+<li><p><code>date +%Y</code>：显示当前年份</p>
+</li>
+<li><p><code>date +%m</code>：显示当前月份</p>
+</li>
+<li><p><code>date +%d</code>：显示当前哪一天</p>
+</li>
+<li><p><code>date &quot;+%Y-%m-%d %H:%M:%S&quot;</code>：显示年月日时分秒</p>
+</li>
+<li><p> <code>date -s 字符串时间</code>：设置系统当前时间</p>
+</li>
+</ul>
+<h2 id="搜索查找类"><a href="#搜索查找类" class="headerlink" title="搜索查找类"></a>搜索查找类</h2><p><code>find</code>指令：从指定目录向下递归地遍历其各个子目录，将满足条件的文件或者目录显示在终端。</p>
+<p><code>find [搜索范围] [选项]</code></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-name &lt;查询方式&gt;</td>
+<td>按照指定的文件名查找模式查找文件</td>
+</tr>
+<tr>
+<td>-user &lt;用户名&gt;</td>
+<td>查找属于指定用户名所有的文件</td>
+</tr>
+<tr>
+<td>-size &lt;文件大小&gt;</td>
+<td>按照指定的文件大小查找文件</td>
+</tr>
+</tbody></table>
+<ul>
+<li>例如： <code>find /home -name hello,world.txt</code>(在home目录下搜索文件名为hello,world的文件)。<code>find /home -user ffyzsl</code>（在home目录下搜索属于用户名为ffyzsl的文件）<code>find /home -size +/-200M</code>（在home目录下搜索大小为200M的文件，+200M代表大于200M的文件，-200M代表小于200M的文件，200M代表等于200M的文件）</li>
+</ul>
+<p><code>locate</code>指令：可以快速定位文件路径，locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。locate指令无需遍历整个文件系统，查询速度较快，为了保证查询结果的准确度，管理员必须定期更新locate时刻。</p>
+<ul>
+<li><code>locate 搜索文件</code>：由于locate指令基于数据库进行查询，所以第一次运行前，必须使用<code>updatedb</code>指令创建locate数据库。</li>
+</ul>
+<p><code>grep</code>指令和管道符号：<code>grep</code>过滤查找，管道符<code>|</code>,表示将前一个命令的处理结果输出传递给后面的命令处理。</p>
+<ul>
+<li><code>grep [选项] 查找内容 源文件</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>显示匹配行及行号</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>忽略字母大小写</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux概述</title>
     <url>/2021/07/08/Linux%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<h1 id="Linux入门"><a href="#Linux入门" class="headerlink" title="Linux入门"></a>Linux入门</h1><h2 id="Linux介绍"><a href="#Linux介绍" class="headerlink" title="Linux介绍"></a>Linux介绍</h2><p>1、Linux是一块操作系统（免费、开源、安全、高效、稳定、处理高并发非常强悍）</p>
@@ -1036,39 +1109,6 @@
 ]]></content>
       <categories>
         <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>SQL概要，表的创建、删除、更新</title>
-    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
-    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
-<span id="more"></span>
-<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
-<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
-<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
-<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
-<p>2、SQL语句不区分大小写</p>
-<p>3、常数的书写方式是固定的</p>
-<p>4、单词需要用半角空格或者换行来分隔</p>
-<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
-<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
-<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
-<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
-<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
-<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
-<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
-<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
-<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
-<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
-<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
-<p>注意：已经删除的表是无法恢复的！</p>
-<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
-<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
-<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -1544,31 +1584,36 @@
       </categories>
   </entry>
   <entry>
-    <title>接口</title>
-    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20013%EF%BC%88%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
-    <content><![CDATA[<p>1、类和类之间叫做继承，类和接口之间叫做实现。继承使用extends关键字完成，实现使用implements关键字完成</p>
-<p>2、当一个非抽象的类实现接口的话，必须将接口中所有的抽象方法全部实现（覆盖/重写）</p>
+    <title>SQL概要，表的创建、删除、更新</title>
+    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
+    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
 <span id="more"></span>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> PI=<span class="number">3.1415926</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个抽象类中可以有抽象方法</span></span><br><span class="line"><span class="keyword">abstract</span>  <span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl01</span> <span class="keyword">implements</span>  <span class="title">MyMath</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个普通的类，则需要实现（重写/覆盖)接口里的方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl</span> <span class="keyword">implements</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>3、接口中的方法都是public，所以实现（重写/覆盖）时必须加public</p>
-<p>4、可以使用多态</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyMath mm=<span class="keyword">new</span> MyMathImpl();</span><br><span class="line">        <span class="keyword">int</span> result_sum=mm.sum(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">int</span> result_sub=mm.sub(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;sum &quot;</span>+result_sum+<span class="string">&quot;   sub &quot;</span>+result_sub);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>5、一个类可以实现多个接口,但必须重写接口中所有抽象方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">B2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D3</span> <span class="keyword">implements</span> <span class="title">A2</span>,<span class="title">B2</span>,<span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    B2 b1=(B2) a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>6、接口和接口之间在进行强制类型转换的时候，没有继承关系，也可以强转，（但运行时可能会出现ClassCastException异常）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        M m=<span class="keyword">new</span> E();</span><br><span class="line">        <span class="keyword">if</span>(m <span class="keyword">instanceof</span> K)&#123;</span><br><span class="line">            K k=(K) m;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">K</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span> <span class="keyword">implements</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意：接口之间没有继承关系也可以强转</strong></p>
-<p>7、继承和实现同时存在，extends关键字在前，implements在后</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test04</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flyable f=<span class="keyword">new</span> Cat01();</span><br><span class="line">        f.fly();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat01</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="keyword">implements</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;cat fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="接口在开发中的作用"><a href="#接口在开发中的作用" class="headerlink" title="接口在开发中的作用"></a>接口在开发中的作用</h4><p>接口在开发中的作用类似于多态在开发中的作用。</p>
+<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
+<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
+<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
+<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
+<p>2、SQL语句不区分大小写</p>
+<p>3、常数的书写方式是固定的</p>
+<p>4、单词需要用半角空格或者换行来分隔</p>
+<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
+<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
+<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
+<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
+<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
+<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
+<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
+<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
+<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
+<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
+<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
+<p>注意：已经删除的表是无法恢复的！</p>
+<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
+<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
 ]]></content>
       <categories>
-        <category>javaSE</category>
+        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -1628,6 +1673,34 @@
 
 <p>5、接口中有常量和抽象方法，当定义抽象方法时，在编写代码时， public abstract 可以省略。接口中的抽象方法同样不能带有方法体。</p>
 <p>6、接口中定义一个变量，则认定为是常量</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>接口</title>
+    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20013%EF%BC%88%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
+    <content><![CDATA[<p>1、类和类之间叫做继承，类和接口之间叫做实现。继承使用extends关键字完成，实现使用implements关键字完成</p>
+<p>2、当一个非抽象的类实现接口的话，必须将接口中所有的抽象方法全部实现（覆盖/重写）</p>
+<span id="more"></span>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> PI=<span class="number">3.1415926</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个抽象类中可以有抽象方法</span></span><br><span class="line"><span class="keyword">abstract</span>  <span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl01</span> <span class="keyword">implements</span>  <span class="title">MyMath</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个普通的类，则需要实现（重写/覆盖)接口里的方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl</span> <span class="keyword">implements</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、接口中的方法都是public，所以实现（重写/覆盖）时必须加public</p>
+<p>4、可以使用多态</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyMath mm=<span class="keyword">new</span> MyMathImpl();</span><br><span class="line">        <span class="keyword">int</span> result_sum=mm.sum(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">int</span> result_sub=mm.sub(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;sum &quot;</span>+result_sum+<span class="string">&quot;   sub &quot;</span>+result_sub);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5、一个类可以实现多个接口,但必须重写接口中所有抽象方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">B2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D3</span> <span class="keyword">implements</span> <span class="title">A2</span>,<span class="title">B2</span>,<span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    B2 b1=(B2) a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6、接口和接口之间在进行强制类型转换的时候，没有继承关系，也可以强转，（但运行时可能会出现ClassCastException异常）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        M m=<span class="keyword">new</span> E();</span><br><span class="line">        <span class="keyword">if</span>(m <span class="keyword">instanceof</span> K)&#123;</span><br><span class="line">            K k=(K) m;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">K</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span> <span class="keyword">implements</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：接口之间没有继承关系也可以强转</strong></p>
+<p>7、继承和实现同时存在，extends关键字在前，implements在后</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test04</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flyable f=<span class="keyword">new</span> Cat01();</span><br><span class="line">        f.fly();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat01</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="keyword">implements</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;cat fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="接口在开发中的作用"><a href="#接口在开发中的作用" class="headerlink" title="接口在开发中的作用"></a>接口在开发中的作用</h4><p>接口在开发中的作用类似于多态在开发中的作用。</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -1795,18 +1868,6 @@
       </categories>
   </entry>
   <entry>
-    <title>方法的参数是数组</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="方法的参数是数组"><a href="#方法的参数是数组" class="headerlink" title="方法的参数是数组"></a>方法的参数是数组</h2><span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        printArray(array01);</span><br><span class="line">        <span class="keyword">int</span>[] array02=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>];</span><br><span class="line">        printArray(array02);</span><br><span class="line">        System.out.println(<span class="string">&quot;------------------------------&quot;</span>);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>]);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>main方法中的String数组，数组的扩容、拷贝以及二维数组</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20020%EF%BC%88main%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84String%E6%95%B0%E7%BB%84%E3%80%81%E6%95%B0%E7%BB%84%E6%89%A9%E5%AE%B9%E3%80%81%E6%95%B0%E7%BB%84%E6%8B%B7%E8%B4%9D%E3%80%81%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/</url>
     <content><![CDATA[<p>1、JVM调用main方法，会自动传一个String数组过来，长度为args.length。 默认长度为0</p>
@@ -1845,6 +1906,18 @@
       </categories>
   </entry>
   <entry>
+    <title>方法的参数是数组</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="方法的参数是数组"><a href="#方法的参数是数组" class="headerlink" title="方法的参数是数组"></a>方法的参数是数组</h2><span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        printArray(array01);</span><br><span class="line">        <span class="keyword">int</span>[] array02=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>];</span><br><span class="line">        printArray(array02);</span><br><span class="line">        System.out.println(<span class="string">&quot;------------------------------&quot;</span>);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>]);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>两个练习</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20021%EF%BC%88%E6%95%B0%E7%BB%84%E6%A8%A1%E6%8B%9F%E6%A0%88%E3%80%81%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%89/</url>
     <content><![CDATA[<h2 id="数组模拟栈"><a href="#数组模拟栈" class="headerlink" title="数组模拟栈"></a>数组模拟栈</h2><span id="more"></span>
@@ -1865,28 +1938,6 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Room</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> no;</span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> status;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Room</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Room</span><span class="params">(<span class="keyword">int</span> no,String type,<span class="keyword">boolean</span> status)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.no=no;</span><br><span class="line">        <span class="keyword">this</span>.type=type;</span><br><span class="line">        <span class="keyword">this</span>.status=status;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;酒店编号：&quot;</span>+no+<span class="string">&quot;    类型为：&quot;</span>+type+<span class="string">&quot;   状态为：&quot;</span>+status;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (obj==<span class="keyword">null</span> || !(obj <span class="keyword">instanceof</span> Room)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>==obj) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        Room room=(Room) obj;</span><br><span class="line">        <span class="keyword">if</span> (room.status=<span class="keyword">this</span>.status &amp;&amp; room.no==<span class="keyword">this</span>.no &amp;&amp; room.type.equals(<span class="keyword">this</span>.type)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> no;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNo</span><span class="params">(<span class="keyword">int</span> no)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.no = no;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setType</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isStatus</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> status;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStatus</span><span class="params">(<span class="keyword">boolean</span> status)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.status = status;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hotel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Room[][] rooms;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Hotel</span><span class="params">()</span></span>&#123;</span><br><span class="line">        rooms=<span class="keyword">new</span> Room[<span class="number">3</span>][<span class="number">10</span>];</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        房间编号:    101 102 103……</span></span><br><span class="line"><span class="comment">                     201 202 203……</span></span><br><span class="line"><span class="comment">                     301 302 303……</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;rooms.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rooms[i].length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (i==<span class="number">0</span>)&#123;</span><br><span class="line">                    rooms[i][j]=<span class="keyword">new</span> Room((j+<span class="number">1</span>)+(i+<span class="number">1</span>)*<span class="number">100</span>,<span class="string">&quot;单人间&quot;</span>,<span class="keyword">true</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i==<span class="number">1</span>)&#123;</span><br><span class="line">                    rooms[i][j]=<span class="keyword">new</span> Room((j+<span class="number">1</span>)+(i+<span class="number">1</span>)*<span class="number">100</span>,<span class="string">&quot;双人间&quot;</span>,<span class="keyword">true</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i==<span class="number">2</span>)&#123;</span><br><span class="line">                    rooms[i][j]=<span class="keyword">new</span> Room((j+<span class="number">1</span>)+(i+<span class="number">1</span>)*<span class="number">100</span>,<span class="string">&quot;多人间&quot;</span>,<span class="keyword">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;rooms.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rooms[i].length;j++)&#123;</span><br><span class="line">                System.out.print(rooms[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//订房间</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">order</span><span class="params">(<span class="keyword">int</span> roomNo)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=roomNo/<span class="number">100</span>-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> j=roomNo%<span class="number">100</span>-<span class="number">1</span>;</span><br><span class="line">        rooms[i][j].setStatus(<span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//推房间</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exit</span><span class="params">(<span class="keyword">int</span> roomNo)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=roomNo/<span class="number">100</span>-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> j=roomNo%<span class="number">100</span>-<span class="number">1</span>;</span><br><span class="line">        rooms[i][j].setStatus(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>java中的数组排序，冒泡排序</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20022%EF%BC%88%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E3%80%81%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h2><p>1、算法实际上在java中不需要精通，因为java中已经封装好了，需要排序的话直接调用就可以，例如：java中提供的一个数组工具类</p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">java.util.Arrays</span><br></pre></td></tr></table></figure>
-
-<p>Arrays是一个工具类，其中有一个sort()方法，可以直接采用类名调用。</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> sufa;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        Arrays.sort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (array[i]&gt;array[j])&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp=array[i];</span><br><span class="line">                    array[i]=array[j];</span><br><span class="line">                    array[j]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=array.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>:j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 
 ]]></content>
       <categories>
@@ -2107,6 +2158,28 @@
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s4=String.valueOf(<span class="keyword">new</span> Sum());</span><br><span class="line">        System.out.println(s4);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sum</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">StringTest.Sum@1b6d3586<span class="comment">//</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>java中的数组排序，冒泡排序</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20022%EF%BC%88%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E3%80%81%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h2><p>1、算法实际上在java中不需要精通，因为java中已经封装好了，需要排序的话直接调用就可以，例如：java中提供的一个数组工具类</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">java.util.Arrays</span><br></pre></td></tr></table></figure>
+
+<p>Arrays是一个工具类，其中有一个sort()方法，可以直接采用类名调用。</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> sufa;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        Arrays.sort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (array[i]&gt;array[j])&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp=array[i];</span><br><span class="line">                    array[i]=array[j];</span><br><span class="line">                    array[j]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=array.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>:j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
       <categories>
         <category>javaSE</category>
       </categories>
@@ -2438,6 +2511,39 @@
       </categories>
   </entry>
   <entry>
+    <title>集合概述</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
+<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
+<span id="more"></span>
+
+<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+
+<p>集合在<code>java.util.*</code></p>
+<p>在java中集合分为两大类：</p>
+<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
+<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
+<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
+<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
+<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
+<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
+<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
+<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
+<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
+<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
+<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
+<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
+<p><code>HashMap</code>：底层是哈希表</p>
+<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
+<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
+<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Collection常用方法以及迭代</title>
     <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20033%EF%BC%88%E5%85%B3%E4%BA%8E%E5%9C%A8java.util.Collection%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8CCollection%E9%9B%86%E5%90%88%E8%BF%AD%E4%BB%A3%EF%BC%89%20(2)/</url>
     <content><![CDATA[<p>1、Collection中能存放什么元素：</p>
@@ -2585,39 +2691,6 @@
 <p>注意：添加元素也意味着集合结构的改变</p>
 <p><strong>所以删除元素时往往使用迭代器来删除</strong></p>
 <p>重点：在迭代元素的过程当中，一定要使用迭代器Iterator的remove方法删除元素</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>集合概述</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
-<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
-<span id="more"></span>
-
-<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<p>集合在<code>java.util.*</code></p>
-<p>在java中集合分为两大类：</p>
-<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
-<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
-<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
-<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
-<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
-<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
-<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
-<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
-<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
-<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
-<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
-<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
-<p><code>HashMap</code>：底层是哈希表</p>
-<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
-<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
-<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -2804,91 +2877,6 @@
       </categories>
   </entry>
   <entry>
-    <title>遍历Map集合，重写两个方法，属性类Properties类</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20037%EF%BC%88%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99%60equals%60%E5%92%8C%60hashCode%60%E3%80%81%60HashMap%60%E5%92%8C%60Hashtable%60%E5%8C%BA%E5%88%AB%E3%80%81%E5%B1%9E%E6%80%A7%E7%B1%BB%60Properties%60%E7%B1%BB%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="遍历Map集合"><a href="#遍历Map集合" class="headerlink" title="遍历Map集合"></a>遍历Map集合</h2><p>第一种：获取所有的key，通过遍历key，来遍历value、</p>
-<span id="more"></span>
-
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>Set<K> keySet()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的键的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行中修改映射（除了通过迭代器自己的`remove`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的键的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">public class Test02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">//通过迭代器的方式来遍历集合</span><br><span class="line">        Set&lt;Integer&gt; keys=map1.keySet();//注意：此方法返回的是一个Set集合；</span><br><span class="line">        Iterator&lt;Integer&gt; it=keys.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Integer key=it.next();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">//通过增强for的方式来遍历集合</span><br><span class="line">        for (Integer key:keys)&#123;</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></K></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>第二种方式：把Map集合转换为Set集合</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的映射的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行时修改映射（除了通过迭代器自己的`remove`操作，或者通过迭代器返回的映射条目上的`setValue`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的映射的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">//Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet();</span><br><span class="line">        //以上这个方法是哪Map集合直接全部转换成Set集合</span><br><span class="line">        //Set集合中元素的类型是：Map.Entry</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map1.entrySet();</span><br><span class="line">        //遍历Set集合，每一次取出一个Node</span><br><span class="line">        Iterator&lt;Map.Entry&lt;Integer,String&gt;&gt; it1=set.iterator();</span><br><span class="line">        while(it1.hasNext())&#123;</span><br><span class="line">            Map.Entry&lt;Integer,String&gt; node =it1.next();</span><br><span class="line">            Integer key=node.getKey();</span><br><span class="line">            String value=node.getValue();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+value);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="哈希表数据结构"><a href="#哈希表数据结构" class="headerlink" title="哈希表数据结构"></a>哈希表数据结构</h2><p>1、HashMap集合底层是哈希表/散列表的数据结构</p>
-<p>2、是一个数组和单向链表的结合体</p>
-<p>3、其是一个一位数组，每一个元素都是一个单向链表</p>
-<h3 id="Map-put-k-v-的底层原理："><a href="#Map-put-k-v-的底层原理：" class="headerlink" title="Map.put(k,v)的底层原理："></a><code>Map.put(k,v)</code>的底层原理：</h3><p>第一步：先将k，v封装到<code>Node</code>对象当中</p>
-<p>第二步：底层会调用k的<code>hashCode()</code>方法得出hash</p>
-<p>然后通过哈希函数/哈希算法，将hash值转换成数组的下标，下标位置上如果没有任何元素，就把Node添加到这个位置上，如果说下标对应的位置上有链表，此时会拿着k和链表上每一个节点中的k进行<code>equals</code>，如果所有的<code>equals</code>方法返回的都是false，那么这个新节点被添加到链表的末尾，如果其中一个<code>equals</code>返回了true，那么这个节点的value将会被覆盖。</p>
-<h3 id="Map-get-k-的底层原理："><a href="#Map-get-k-的底层原理：" class="headerlink" title="Map.get(k)的底层原理："></a><code>Map.get(k)</code>的底层原理：</h3><p>先调用k的<code>HashCode()</code>方法得出哈希值，通过哈希算法转换成数组下标，通过数组下标快速定位到某个位置上，如果这个位置上什么也没有，返回null，如果这个位置上有单向链表，那么会拿着参数k和单向链表上的每个节点中的k进行<code>equals</code>，如果所有<code>equals</code>方法返回false，那么get方法返回null，只要其中有一个节点的k和参数k <code>equals</code>的时候返回true，那么此时这个节点的value就是我们要找的<code>value</code>，<code>get</code>方法最终返回这个要找的<code>vlaue</code>。</p>
-<h2 id="同时重写equals和hashCode"><a href="#同时重写equals和hashCode" class="headerlink" title="同时重写equals和hashCode"></a>同时重写<code>equals</code>和<code>hashCode</code></h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>  java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Map&lt;Integer,String &gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();<span class="comment">//Integer,String的hashCode和equals都重写了</span></span><br><span class="line">        map.put(<span class="number">1</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        map.put(<span class="number">2</span>,<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        map.put(<span class="number">3</span>,<span class="string">&quot;王五&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;赵六&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;KING&quot;</span>);<span class="comment">//key相同，会自动覆盖value</span></span><br><span class="line">        System.out.println(map.size());</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map.entrySet();</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;Integer,String&gt; entry:set)&#123;</span><br><span class="line">            System.out.println(entry.getKey()+<span class="string">&quot;=&quot;</span>+entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">1</span>=张三</span><br><span class="line"><span class="number">2</span>=李四</span><br><span class="line"><span class="number">3</span>=王五</span><br><span class="line"><span class="number">4</span>=KING</span><br></pre></td></tr></table></figure>
-
-<p>注意：放在<code>HashMap</code>集合key部分的元素，以及放在<code>HashSet</code>集合中的元素，需要同时重写<code>hashCode</code>和<code>equals</code>方法。</p>
-<p><code>HashMap</code>集合的默认初始化容量是16，默认加载因子是0.75。这个默认加载因子是当<code>HashMap</code>集合底层数组的容量达到75%的时候，数组开始扩容。</p>
-<p>***<code>hashCode()</code>方法和<code>equasl()</code>方法都可以用IDEA工具生成，但是这两个方法需要同时生成。**</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Objects;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* public boolean equals(Object obj)&#123;</span></span><br><span class="line"><span class="comment">        if (obj==null || !(obj instanceof Student)) return  false;</span></span><br><span class="line"><span class="comment">        if (obj== this) return  true;</span></span><br><span class="line"><span class="comment">        Student s=(Student) obj;</span></span><br><span class="line"><span class="comment">        return this.name.equals(s.name);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        Student student = (Student) o;</span><br><span class="line">        <span class="keyword">return</span> Objects.equals(name, student.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hash(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s1=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        Student s2=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        System.out.println(s1.equals(s2));</span><br><span class="line">        System.out.println(s1.hashCode());</span><br><span class="line">        System.out.println(s2.hashCode());</span><br><span class="line">        Set&lt;Student&gt; students=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        students.add(s1);</span><br><span class="line">        students.add(s2);</span><br><span class="line">        System.out.println(students.size());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">true</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="HashMap和Hashtable区别"><a href="#HashMap和Hashtable区别" class="headerlink" title="HashMap和Hashtable区别"></a><code>HashMap</code>和<code>Hashtable</code>区别</h3><p>1、<code>Hashtable</code>的key和value都是不能为null的</p>
-<p>​      <code>HashMap</code>集合的key和value都是可以为null的</p>
-<p>2、<code>Hashtable</code>方法都带有synchronized：线程安全的</p>
-<p>线程安全有其他的方案，这个<code>Hashtable</code>对线程的处理导致效率较低，使用较少</p>
-<p>3、<code>Hashtable</code>和<code>HashMap</code>一样，底层都是哈希表数据结构</p>
-<h2 id="属性类Properties类"><a href="#属性类Properties类" class="headerlink" title="属性类Properties类"></a>属性类<code>Properties</code>类</h2><p>1、<code>properties</code>是一个Map集合、继承<code>Hashtable</code>,<code>properties</code>的key和value都是String类型</p>
-<p>2、其被称为属性类对象</p>
-<p>3、是线程安全的</p>
-<ul>
-<li><ul>
-<li><ul>
-<li><p>```<br>public Object setProperty(String key,                       String value)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      致电`Hashtable`方法`put` 。  提供与`getProperty`方法的`并行性` 。  强制使用字符串的属性键和值。  返回的值是`Hashtable`调用`put`的结果。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 要放入此属性列表的关键字。 </span><br><span class="line"></span><br><span class="line">        `value` - 对应的值为 `key` 。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        此属性列表中指定键的上一个值，如果没有一个， `null` 。 </span><br><span class="line"></span><br><span class="line">      - 从以下版本开始： </span><br><span class="line"></span><br><span class="line">        1.2 </span><br><span class="line"></span><br><span class="line">      - 另请参见： </span><br><span class="line"></span><br><span class="line">        [`getProperty(java.lang.String)`](../../java/util/Properties.html#getProperty-java.lang.String-) </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public String getProperty(String key)</span><br></pre></td></tr></table></figure>
-
-<p>使用此属性列表中指定的键搜索属性。  如果在此属性列表中找不到该键，则会默认属性列表及其默认值递归。  如果找不到属性，该方法返回<code>null</code> 。 </p>
-<ul>
-<li><p>参数 </p>
-<p><code>key</code> - 属性键。 </p>
-</li>
-<li><p>结果 </p>
-<p>该属性列表中具有指定键值的值。 </p>
-</li>
-<li><p>另请参见： </p>
-<p><a href="../../java/util/Properties.html#setProperty-java.lang.String-java.lang.String-"><code>setProperty(java.lang.String,  java.lang.String)</code></a> ， <a href="../../java/util/Properties.html#defaults"><code>defaults</code></a> </p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Properties pro=<span class="keyword">new</span> Properties();</span><br><span class="line">        pro.setProperty(<span class="string">&quot;url&quot;</span>,<span class="string">&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;dirver&quot;</span>,<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;password&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">        String url= pro.getProperty(<span class="string">&quot;url&quot;</span>);</span><br><span class="line">        String dirver= pro.getProperty(<span class="string">&quot;dirver&quot;</span>);</span><br><span class="line">        String username= pro.getProperty(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">        String password= pro.getProperty(<span class="string">&quot;password&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(url);</span><br><span class="line">        System.out.println(dirver);</span><br><span class="line">        System.out.println(username);</span><br><span class="line">        System.out.println(password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/bjpowernode</span></span><br><span class="line">com.mysql.jdbc.Driver</span><br><span class="line">root</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="TreeSet对String是可排序的"><a href="#TreeSet对String是可排序的" class="headerlink" title="TreeSet对String是可排序的"></a><code>TreeSet</code>对String是可排序的</h2><p>1、<code>Treeset</code>集合底层实际是一个<code>TreeMap</code></p>
-<p>2、<code>TreeMap</code>集合底层是一个二叉树</p>
-<p>3、放到<code>TreeSet</code>集合中的元素，等同于放到<code>TreeMap</code>集合key部分</p>
-<p>4、<code>TreeSet</code>集合中的元素：无序不可重复，但是可以按照元素大小顺序自动排序，称为；可排序集合</p>
-<p> <code>TreeSet</code>对自定义类型是不可排序的</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>泛型机制，自定义泛型，Map接口中的常用方法</title>
     <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/</url>
     <content><![CDATA[<h2 id="泛型机制"><a href="#泛型机制" class="headerlink" title="泛型机制"></a>泛型机制</h2><span id="more"></span>
@@ -3008,6 +2996,91 @@
 </ul>
 </li>
 </ul>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>遍历Map集合，重写两个方法，属性类Properties类</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20037%EF%BC%88%E9%81%8D%E5%8E%86Map%E9%9B%86%E5%90%88%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%81%E5%90%8C%E6%97%B6%E9%87%8D%E5%86%99%60equals%60%E5%92%8C%60hashCode%60%E3%80%81%60HashMap%60%E5%92%8C%60Hashtable%60%E5%8C%BA%E5%88%AB%E3%80%81%E5%B1%9E%E6%80%A7%E7%B1%BB%60Properties%60%E7%B1%BB%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="遍历Map集合"><a href="#遍历Map集合" class="headerlink" title="遍历Map集合"></a>遍历Map集合</h2><p>第一种：获取所有的key，通过遍历key，来遍历value、</p>
+<span id="more"></span>
+
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>Set<K> keySet()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的键的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行中修改映射（除了通过迭代器自己的`remove`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的键的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">public class Test02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer,String&gt; map1=new HashMap&lt;&gt;();</span><br><span class="line">        map1.put(1,&quot;张三&quot;);</span><br><span class="line">        map1.put(2,&quot;李四&quot;);</span><br><span class="line">        map1.put(3,&quot;王五&quot;);</span><br><span class="line">        map1.put(4,&quot;李六&quot;);</span><br><span class="line">//通过迭代器的方式来遍历集合</span><br><span class="line">        Set&lt;Integer&gt; keys=map1.keySet();//注意：此方法返回的是一个Set集合；</span><br><span class="line">        Iterator&lt;Integer&gt; it=keys.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Integer key=it.next();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">//通过增强for的方式来遍历集合</span><br><span class="line">        for (Integer key:keys)&#123;</span><br><span class="line">            System.out.println(key+&quot;=&quot;+map1.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></K></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>第二种方式：把Map集合转换为Set集合</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此地图中包含的映射的[`Set`](../../java/util/Set.html)视图。  该集合由地图支持，因此对地图的更改将反映在集合中，反之亦然。  如果在集合中的迭代正在进行时修改映射（除了通过迭代器自己的`remove`操作，或者通过迭代器返回的映射条目上的`setValue`操作），迭代的结果是未定义的。  该组支持元件移除，即从映射中相应的映射，经由`Iterator.remove，Set.remove，removeAll，retainAll`和`clear`操作。  它不支持`add`或`addAll`操作。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该地图中包含的映射的集合视图 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">//Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet();</span><br><span class="line">        //以上这个方法是哪Map集合直接全部转换成Set集合</span><br><span class="line">        //Set集合中元素的类型是：Map.Entry</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map1.entrySet();</span><br><span class="line">        //遍历Set集合，每一次取出一个Node</span><br><span class="line">        Iterator&lt;Map.Entry&lt;Integer,String&gt;&gt; it1=set.iterator();</span><br><span class="line">        while(it1.hasNext())&#123;</span><br><span class="line">            Map.Entry&lt;Integer,String&gt; node =it1.next();</span><br><span class="line">            Integer key=node.getKey();</span><br><span class="line">            String value=node.getValue();</span><br><span class="line">            System.out.println(key+&quot;=&quot;+value);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="哈希表数据结构"><a href="#哈希表数据结构" class="headerlink" title="哈希表数据结构"></a>哈希表数据结构</h2><p>1、HashMap集合底层是哈希表/散列表的数据结构</p>
+<p>2、是一个数组和单向链表的结合体</p>
+<p>3、其是一个一位数组，每一个元素都是一个单向链表</p>
+<h3 id="Map-put-k-v-的底层原理："><a href="#Map-put-k-v-的底层原理：" class="headerlink" title="Map.put(k,v)的底层原理："></a><code>Map.put(k,v)</code>的底层原理：</h3><p>第一步：先将k，v封装到<code>Node</code>对象当中</p>
+<p>第二步：底层会调用k的<code>hashCode()</code>方法得出hash</p>
+<p>然后通过哈希函数/哈希算法，将hash值转换成数组的下标，下标位置上如果没有任何元素，就把Node添加到这个位置上，如果说下标对应的位置上有链表，此时会拿着k和链表上每一个节点中的k进行<code>equals</code>，如果所有的<code>equals</code>方法返回的都是false，那么这个新节点被添加到链表的末尾，如果其中一个<code>equals</code>返回了true，那么这个节点的value将会被覆盖。</p>
+<h3 id="Map-get-k-的底层原理："><a href="#Map-get-k-的底层原理：" class="headerlink" title="Map.get(k)的底层原理："></a><code>Map.get(k)</code>的底层原理：</h3><p>先调用k的<code>HashCode()</code>方法得出哈希值，通过哈希算法转换成数组下标，通过数组下标快速定位到某个位置上，如果这个位置上什么也没有，返回null，如果这个位置上有单向链表，那么会拿着参数k和单向链表上的每个节点中的k进行<code>equals</code>，如果所有<code>equals</code>方法返回false，那么get方法返回null，只要其中有一个节点的k和参数k <code>equals</code>的时候返回true，那么此时这个节点的value就是我们要找的<code>value</code>，<code>get</code>方法最终返回这个要找的<code>vlaue</code>。</p>
+<h2 id="同时重写equals和hashCode"><a href="#同时重写equals和hashCode" class="headerlink" title="同时重写equals和hashCode"></a>同时重写<code>equals</code>和<code>hashCode</code></h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>  java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Map&lt;Integer,String &gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();<span class="comment">//Integer,String的hashCode和equals都重写了</span></span><br><span class="line">        map.put(<span class="number">1</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        map.put(<span class="number">2</span>,<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        map.put(<span class="number">3</span>,<span class="string">&quot;王五&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;赵六&quot;</span>);</span><br><span class="line">        map.put(<span class="number">4</span>,<span class="string">&quot;KING&quot;</span>);<span class="comment">//key相同，会自动覆盖value</span></span><br><span class="line">        System.out.println(map.size());</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer,String&gt;&gt; set=map.entrySet();</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;Integer,String&gt; entry:set)&#123;</span><br><span class="line">            System.out.println(entry.getKey()+<span class="string">&quot;=&quot;</span>+entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">1</span>=张三</span><br><span class="line"><span class="number">2</span>=李四</span><br><span class="line"><span class="number">3</span>=王五</span><br><span class="line"><span class="number">4</span>=KING</span><br></pre></td></tr></table></figure>
+
+<p>注意：放在<code>HashMap</code>集合key部分的元素，以及放在<code>HashSet</code>集合中的元素，需要同时重写<code>hashCode</code>和<code>equals</code>方法。</p>
+<p><code>HashMap</code>集合的默认初始化容量是16，默认加载因子是0.75。这个默认加载因子是当<code>HashMap</code>集合底层数组的容量达到75%的时候，数组开始扩容。</p>
+<p>***<code>hashCode()</code>方法和<code>equasl()</code>方法都可以用IDEA工具生成，但是这两个方法需要同时生成。**</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Objects;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* public boolean equals(Object obj)&#123;</span></span><br><span class="line"><span class="comment">        if (obj==null || !(obj instanceof Student)) return  false;</span></span><br><span class="line"><span class="comment">        if (obj== this) return  true;</span></span><br><span class="line"><span class="comment">        Student s=(Student) obj;</span></span><br><span class="line"><span class="comment">        return this.name.equals(s.name);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        Student student = (Student) o;</span><br><span class="line">        <span class="keyword">return</span> Objects.equals(name, student.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hash(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s1=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        Student s2=<span class="keyword">new</span> Student(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        System.out.println(s1.equals(s2));</span><br><span class="line">        System.out.println(s1.hashCode());</span><br><span class="line">        System.out.println(s2.hashCode());</span><br><span class="line">        Set&lt;Student&gt; students=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        students.add(s1);</span><br><span class="line">        students.add(s2);</span><br><span class="line">        System.out.println(students.size());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">true</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">774920</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="HashMap和Hashtable区别"><a href="#HashMap和Hashtable区别" class="headerlink" title="HashMap和Hashtable区别"></a><code>HashMap</code>和<code>Hashtable</code>区别</h3><p>1、<code>Hashtable</code>的key和value都是不能为null的</p>
+<p>​      <code>HashMap</code>集合的key和value都是可以为null的</p>
+<p>2、<code>Hashtable</code>方法都带有synchronized：线程安全的</p>
+<p>线程安全有其他的方案，这个<code>Hashtable</code>对线程的处理导致效率较低，使用较少</p>
+<p>3、<code>Hashtable</code>和<code>HashMap</code>一样，底层都是哈希表数据结构</p>
+<h2 id="属性类Properties类"><a href="#属性类Properties类" class="headerlink" title="属性类Properties类"></a>属性类<code>Properties</code>类</h2><p>1、<code>properties</code>是一个Map集合、继承<code>Hashtable</code>,<code>properties</code>的key和value都是String类型</p>
+<p>2、其被称为属性类对象</p>
+<p>3、是线程安全的</p>
+<ul>
+<li><ul>
+<li><ul>
+<li><p>```<br>public Object setProperty(String key,                       String value)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      致电`Hashtable`方法`put` 。  提供与`getProperty`方法的`并行性` 。  强制使用字符串的属性键和值。  返回的值是`Hashtable`调用`put`的结果。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `key` - 要放入此属性列表的关键字。 </span><br><span class="line"></span><br><span class="line">        `value` - 对应的值为 `key` 。 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        此属性列表中指定键的上一个值，如果没有一个， `null` 。 </span><br><span class="line"></span><br><span class="line">      - 从以下版本开始： </span><br><span class="line"></span><br><span class="line">        1.2 </span><br><span class="line"></span><br><span class="line">      - 另请参见： </span><br><span class="line"></span><br><span class="line">        [`getProperty(java.lang.String)`](../../java/util/Properties.html#getProperty-java.lang.String-) </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      public String getProperty(String key)</span><br></pre></td></tr></table></figure>
+
+<p>使用此属性列表中指定的键搜索属性。  如果在此属性列表中找不到该键，则会默认属性列表及其默认值递归。  如果找不到属性，该方法返回<code>null</code> 。 </p>
+<ul>
+<li><p>参数 </p>
+<p><code>key</code> - 属性键。 </p>
+</li>
+<li><p>结果 </p>
+<p>该属性列表中具有指定键值的值。 </p>
+</li>
+<li><p>另请参见： </p>
+<p><a href="../../java/util/Properties.html#setProperty-java.lang.String-java.lang.String-"><code>setProperty(java.lang.String,  java.lang.String)</code></a> ， <a href="../../java/util/Properties.html#defaults"><code>defaults</code></a> </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Properties pro=<span class="keyword">new</span> Properties();</span><br><span class="line">        pro.setProperty(<span class="string">&quot;url&quot;</span>,<span class="string">&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;dirver&quot;</span>,<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        pro.setProperty(<span class="string">&quot;password&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">        String url= pro.getProperty(<span class="string">&quot;url&quot;</span>);</span><br><span class="line">        String dirver= pro.getProperty(<span class="string">&quot;dirver&quot;</span>);</span><br><span class="line">        String username= pro.getProperty(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">        String password= pro.getProperty(<span class="string">&quot;password&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(url);</span><br><span class="line">        System.out.println(dirver);</span><br><span class="line">        System.out.println(username);</span><br><span class="line">        System.out.println(password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/bjpowernode</span></span><br><span class="line">com.mysql.jdbc.Driver</span><br><span class="line">root</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="TreeSet对String是可排序的"><a href="#TreeSet对String是可排序的" class="headerlink" title="TreeSet对String是可排序的"></a><code>TreeSet</code>对String是可排序的</h2><p>1、<code>Treeset</code>集合底层实际是一个<code>TreeMap</code></p>
+<p>2、<code>TreeMap</code>集合底层是一个二叉树</p>
+<p>3、放到<code>TreeSet</code>集合中的元素，等同于放到<code>TreeMap</code>集合key部分</p>
+<p>4、<code>TreeSet</code>集合中的元素：无序不可重复，但是可以按照元素大小顺序自动排序，称为；可排序集合</p>
+<p> <code>TreeSet</code>对自定义类型是不可排序的</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
