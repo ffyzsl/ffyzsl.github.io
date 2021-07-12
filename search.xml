@@ -716,6 +716,7 @@
     <title>压缩和解压类</title>
     <url>/2021/07/12/Linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%B1%BB/</url>
     <content><![CDATA[<h2 id="压缩和解压类"><a href="#压缩和解压类" class="headerlink" title="压缩和解压类"></a>压缩和解压类</h2><p><code>gzip/gunzip</code>指令</p>
+<span id="more"></span>
 <ul>
 <li><code>gzip 文件</code>：压缩文件，只能将文件压缩为<code>*.gz</code>文件</li>
 <li><code>gunzip 文件.gz</code>：解压缩文件命令</li>
@@ -1237,6 +1238,32 @@
       </categories>
   </entry>
   <entry>
+    <title>视图</title>
+    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
+<span id="more"></span>
+<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
+<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
+<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
+<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
+<p>使用视图：</p>
+<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
+<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
+<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
+<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
+<p>１、SELECT子句中未使用DISTINCT</p>
+<p>２、FROM子句中只有一张表</p>
+<p>３、未使用GROUP BY子句</p>
+<p>４、未使用HAVING 子句</p>
+<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
+<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
     <title>函数，谓词，CASE表达式</title>
     <url>/2021/07/07/%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><ul>
@@ -1321,32 +1348,6 @@
 
 <p>WHEN子句中&lt;求值表达式&gt;就是列斯“列=值”这样，返回值为真值的表达式。如果WHEN子句中的表达式返回值为真值，则执行THEN后的表达式，如果不为真，就跳到下一个CASE语句，如果所有WHEN子句中表达式都不为真，则执行ELSE子句中的表达式。</p>
 <p>ELSE子句可以省略，END不能省略。</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>视图</title>
-    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
-<span id="more"></span>
-<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
-<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
-<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
-<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
-<p>使用视图：</p>
-<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
-<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
-<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
-<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
-<p>１、SELECT子句中未使用DISTINCT</p>
-<p>２、FROM子句中只有一张表</p>
-<p>３、未使用GROUP BY子句</p>
-<p>４、未使用HAVING 子句</p>
-<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
-<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
-<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
 ]]></content>
       <categories>
         <category>MySQL</category>
@@ -1922,6 +1923,18 @@
       </categories>
   </entry>
   <entry>
+    <title>方法的参数是数组</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="方法的参数是数组"><a href="#方法的参数是数组" class="headerlink" title="方法的参数是数组"></a>方法的参数是数组</h2><span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        printArray(array01);</span><br><span class="line">        <span class="keyword">int</span>[] array02=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>];</span><br><span class="line">        printArray(array02);</span><br><span class="line">        System.out.println(<span class="string">&quot;------------------------------&quot;</span>);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>]);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>main方法中的String数组，数组的扩容、拷贝以及二维数组</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20020%EF%BC%88main%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84String%E6%95%B0%E7%BB%84%E3%80%81%E6%95%B0%E7%BB%84%E6%89%A9%E5%AE%B9%E3%80%81%E6%95%B0%E7%BB%84%E6%8B%B7%E8%B4%9D%E3%80%81%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/</url>
     <content><![CDATA[<p>1、JVM调用main方法，会自动传一个String数组过来，长度为args.length。 默认长度为0</p>
@@ -1953,18 +1966,6 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayTest02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] array=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,&#123;<span class="number">2</span>,<span class="number">35</span>,<span class="number">5</span>,<span class="number">3</span>&#125;&#125;;</span><br><span class="line">        arrayPrint(array);<span class="comment">//arrayPrint(new int[][]&#123;&#123;&#125;,&#123;&#125;,&#123;&#125;&#125;);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">arrayPrint</span><span class="params">(<span class="keyword">int</span>[][] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;array[i].length;j++)&#123;</span><br><span class="line">                System.out.print(array[i][j]+<span class="string">&quot;  &quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  </span><br><span class="line"><span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  <span class="number">5</span>  </span><br><span class="line"><span class="number">2</span>  <span class="number">35</span>  <span class="number">5</span>  <span class="number">3</span>  </span><br></pre></td></tr></table></figure>
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.print()<span class="comment">//不换行</span></span><br><span class="line">System.out.println()<span class="comment">//换行</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>方法的参数是数组</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="方法的参数是数组"><a href="#方法的参数是数组" class="headerlink" title="方法的参数是数组"></a>方法的参数是数组</h2><span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        printArray(array01);</span><br><span class="line">        <span class="keyword">int</span>[] array02=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>];</span><br><span class="line">        printArray(array02);</span><br><span class="line">        System.out.println(<span class="string">&quot;------------------------------&quot;</span>);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>]);</span><br><span class="line">        printArray(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -2239,6 +2240,50 @@
       </categories>
   </entry>
   <entry>
+    <title>StringBuffer,包装类</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
+
+<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
+<p>2、StringBuffer是一个类</p>
+<p>3、底层是一个byte[ ] 数组</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
+
+<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
+<p>byte                              java.Lang.Byte （父类Number）         </p>
+<p>short                            java.Lang.Short（父类Number）</p>
+<p>int                                 java.Lang.Integer（父类Number）</p>
+<p>Long                             java.Lang.Long（父类Number）</p>
+<p>float                              java.Lang.Float（父类Number）</p>
+<p>double                         java.Lang.Double（父类Number）</p>
+<p>boolean                       java.Lang.Boolean（父类Object）</p>
+<p>char                              java.Lang.Character（父类Object）</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>装箱、拆箱，Integer的构造方法，自动装箱和自动拆箱</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20026%EF%BC%88%E8%A3%85%E7%AE%B1%E5%92%8C%E6%8B%86%E7%AE%B1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81Integer%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E3%80%81%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%EF%BC%89/</url>
     <content><![CDATA[<h2 id="装箱和拆箱的概念"><a href="#装箱和拆箱的概念" class="headerlink" title="装箱和拆箱的概念"></a>装箱和拆箱的概念</h2><p>八种包装类中其中6个都是数字对应的包装类，他们的父类都是Number，为抽象类，无法实例化</p>
@@ -2311,50 +2356,6 @@
 
 <p>java中为了提高程序的执行效率，将-128至127之间所有的包装对象提前创建好，放到了一个方法区的“整数型常量池”中，目的是只要使用这个区间内的数据不需要再new了，直接从整数型常量池中取出来</p>
 <p>“==”永远判断的都是对象的内存地址</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>StringBuffer,包装类</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
-
-<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
-<p>2、StringBuffer是一个类</p>
-<p>3、底层是一个byte[ ] 数组</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
-
-<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
-<p>byte                              java.Lang.Byte （父类Number）         </p>
-<p>short                            java.Lang.Short（父类Number）</p>
-<p>int                                 java.Lang.Integer（父类Number）</p>
-<p>Long                             java.Lang.Long（父类Number）</p>
-<p>float                              java.Lang.Float（父类Number）</p>
-<p>double                         java.Lang.Double（父类Number）</p>
-<p>boolean                       java.Lang.Boolean（父类Object）</p>
-<p>char                              java.Lang.Character（父类Object）</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -2559,39 +2560,6 @@
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserService userService =<span class="keyword">new</span> UserService();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.register(<span class="string">&quot;zhangsan&quot;</span>,<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalArgsException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>集合概述</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
-<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
-<span id="more"></span>
-
-<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<p>集合在<code>java.util.*</code></p>
-<p>在java中集合分为两大类：</p>
-<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
-<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
-<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
-<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
-<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
-<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
-<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
-<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
-<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
-<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
-<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
-<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
-<p><code>HashMap</code>：底层是哈希表</p>
-<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
-<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
-<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -2848,6 +2816,39 @@
 
 <h2 id="ArrayList集合中一个构造方法"><a href="#ArrayList集合中一个构造方法" class="headerlink" title="ArrayList集合中一个构造方法"></a>ArrayList集合中一个构造方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List myList1=<span class="keyword">new</span> ArrayList();</span><br><span class="line">        List myList2=<span class="keyword">new</span> ArrayList(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">        Collection c=<span class="keyword">new</span> HashSet();</span><br><span class="line">        c.add(<span class="number">100</span>);</span><br><span class="line">        c.add(<span class="number">200</span>);</span><br><span class="line">        c.add(<span class="number">300</span>);</span><br><span class="line">        c.add(<span class="number">23</span>);</span><br><span class="line">        List myList3=<span class="keyword">new</span> ArrayList(c);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;myList3.size();i++)&#123;</span><br><span class="line">            System.out.println(myList3.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">100</span></span><br><span class="line"><span class="number">23</span></span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="number">300</span></span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>集合概述</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
+<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
+<span id="more"></span>
+
+<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+
+<p>集合在<code>java.util.*</code></p>
+<p>在java中集合分为两大类：</p>
+<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
+<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
+<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
+<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
+<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
+<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
+<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
+<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
+<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
+<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
+<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
+<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
+<p><code>HashMap</code>：底层是哈希表</p>
+<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
+<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
+<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
