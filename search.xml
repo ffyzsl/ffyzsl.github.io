@@ -713,6 +713,121 @@
       </categories>
   </entry>
   <entry>
+    <title>压缩和解压类</title>
+    <url>/2021/07/12/Linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="压缩和解压类"><a href="#压缩和解压类" class="headerlink" title="压缩和解压类"></a>压缩和解压类</h2><p><code>gzip/gunzip</code>指令</p>
+<ul>
+<li><code>gzip 文件</code>：压缩文件，只能将文件压缩为<code>*.gz</code>文件</li>
+<li><code>gunzip 文件.gz</code>：解压缩文件命令</li>
+</ul>
+<p><code>zip/unzip</code>指令</p>
+<ul>
+<li><p><code>zip [选项] XXX.zip 将要压缩的内容</code>：压缩文件和目录的命令</p>
+</li>
+<li><p><code>unzip [选项] XXX.zip</code>：解压缩文件</p>
+<p>zip常用选项：<code>-r</code>：递归压缩，即压缩目录</p>
+<p>unzip常用选项：<code>-d &lt;目录&gt;</code>：指定解压后的文件的存放目录</p>
+</li>
+</ul>
+<p><code>tar</code>指令：打包/解包指令，最后打包的文件是<code>.tar.gz</code>的文件</p>
+<ul>
+<li><code>tar [选项] XXX.tar.gz 打包的内容</code>：打包目录，压缩后的文件格式<code>.tar.gz</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-c</td>
+<td>产生.tar打包文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>指定压缩后的文件名</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>打包同时解压</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>解包<code>.tar</code>文件</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux开机、重启和用户登录注销，用户管理</title>
+    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
+    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
+<span id="more"></span>
+<p><code>shutdown -h 1</code> 一分钟后关机</p>
+<p><code>shutdown -r now</code> 重启计算机</p>
+<p><code>halt</code> 关机，作用和上面一样</p>
+<p><code>reboot</code> 现在重新启动计算机</p>
+<p><code>sync</code> 把内存的数据同步到磁盘</p>
+<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
+<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
+<p><code>logout</code> 注销用户</p>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
+<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
+<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
+<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
+<p><code>pwd</code> 显示当前用户所在的目录</p>
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
+<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
+<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
+</ol>
+<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
+<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
+<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
+<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
+<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
+<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
+<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
+<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
+<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
+<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
+</li>
+<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
+<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
+</li>
+<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
+<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
+</li>
+</ol>
+<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
+<p>1：单用户（找回丢失密码）</p>
+<p>2：多用户状态没有网络服务</p>
+<p>3：多用户状态有网络服务</p>
+<p>4：系统未使用保留给用户</p>
+<p>5：图形界面</p>
+<p>6：系统重启</p>
+<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
+<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
+<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
+<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
+<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
+<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
+<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>文件目录类</title>
     <url>/2021/07/10/Linux%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB/</url>
     <content><![CDATA[<p><code>pwd</code> ：显示当前工作目录的绝对路径</p>
@@ -855,67 +970,6 @@
 <li><code>history</code>：查看所有执行过的历史命令</li>
 <li><code>history [数字]</code>：查看最近使用过的“数字”个指令</li>
 </ul>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Linux开机、重启和用户登录注销，用户管理</title>
-    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
-    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
-<span id="more"></span>
-<p><code>shutdown -h 1</code> 一分钟后关机</p>
-<p><code>shutdown -r now</code> 重启计算机</p>
-<p><code>halt</code> 关机，作用和上面一样</p>
-<p><code>reboot</code> 现在重新启动计算机</p>
-<p><code>sync</code> 把内存的数据同步到磁盘</p>
-<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
-<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
-<p><code>logout</code> 注销用户</p>
-<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
-<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
-<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
-<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
-<p><code>pwd</code> 显示当前用户所在的目录</p>
-<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
-<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
-<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
-</ol>
-<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
-<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
-<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
-<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
-<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
-<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
-<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
-<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
-<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
-<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
-<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
-</li>
-<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
-<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
-</li>
-<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
-<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
-</li>
-</ol>
-<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
-<p>1：单用户（找回丢失密码）</p>
-<p>2：多用户状态没有网络服务</p>
-<p>3：多用户状态有网络服务</p>
-<p>4：系统未使用保留给用户</p>
-<p>5：图形界面</p>
-<p>6：系统重启</p>
-<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
-<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
-<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
-<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
-<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
-<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
-<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
-<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -1109,6 +1163,39 @@
 ]]></content>
       <categories>
         <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>SQL概要，表的创建、删除、更新</title>
+    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
+    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
+<span id="more"></span>
+<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
+<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
+<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
+<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
+<p>2、SQL语句不区分大小写</p>
+<p>3、常数的书写方式是固定的</p>
+<p>4、单词需要用半角空格或者换行来分隔</p>
+<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
+<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
+<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
+<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
+<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
+<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
+<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
+<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
+<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
+<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
+<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
+<p>注意：已经删除的表是无法恢复的！</p>
+<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
+<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -1584,39 +1671,6 @@
       </categories>
   </entry>
   <entry>
-    <title>SQL概要，表的创建、删除、更新</title>
-    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
-    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
-<span id="more"></span>
-<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
-<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
-<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
-<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
-<p>2、SQL语句不区分大小写</p>
-<p>3、常数的书写方式是固定的</p>
-<p>4、单词需要用半角空格或者换行来分隔</p>
-<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
-<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
-<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
-<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
-<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
-<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
-<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
-<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
-<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
-<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
-<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
-<p>注意：已经删除的表是无法恢复的！</p>
-<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
-<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
-<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
     <title>final关键字、抽象类和接口的区别</title>
     <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20%20Day%20012%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%BB%A5%E5%8F%8A%E4%B8%A4%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
     <content><![CDATA[<h2 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h2><p>1、final是java语言中第一个关键字，<br>       2、final表示最终的，不可变的<br>       3、final可以修饰变量以及方法，还有类等<br>       4、fianl修饰的类，则该类无法继承。（绝育）</p>
@@ -1945,6 +1999,28 @@
       </categories>
   </entry>
   <entry>
+    <title>java中的数组排序，冒泡排序</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20022%EF%BC%88%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E3%80%81%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h2><p>1、算法实际上在java中不需要精通，因为java中已经封装好了，需要排序的话直接调用就可以，例如：java中提供的一个数组工具类</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">java.util.Arrays</span><br></pre></td></tr></table></figure>
+
+<p>Arrays是一个工具类，其中有一个sort()方法，可以直接采用类名调用。</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> sufa;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        Arrays.sort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (array[i]&gt;array[j])&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp=array[i];</span><br><span class="line">                    array[i]=array[j];</span><br><span class="line">                    array[j]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=array.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>:j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Arrays工具类，String字符串的存储原理，String类的常用构造方法</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20023%EF%BC%88Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81String%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86%E3%80%81String%E7%B1%BB%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%89/</url>
     <content><![CDATA[<h2 id="Arrays工具类的使用"><a href="#Arrays工具类的使用" class="headerlink" title="Arrays工具类的使用"></a>Arrays工具类的使用</h2><p>SUN公司已经写好了一个数组工具类</p>
@@ -2163,72 +2239,6 @@
       </categories>
   </entry>
   <entry>
-    <title>java中的数组排序，冒泡排序</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20022%EF%BC%88%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E3%80%81%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h2><p>1、算法实际上在java中不需要精通，因为java中已经封装好了，需要排序的话直接调用就可以，例如：java中提供的一个数组工具类</p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">java.util.Arrays</span><br></pre></td></tr></table></figure>
-
-<p>Arrays是一个工具类，其中有一个sort()方法，可以直接采用类名调用。</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> sufa;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        Arrays.sort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array=&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (array[i]&gt;array[j])&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp=array[i];</span><br><span class="line">                    array[i]=array[j];</span><br><span class="line">                    array[j]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.print(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=array.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>:j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>StringBuffer,包装类</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
-
-<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
-<p>2、StringBuffer是一个类</p>
-<p>3、底层是一个byte[ ] 数组</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
-
-<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
-<p>byte                              java.Lang.Byte （父类Number）         </p>
-<p>short                            java.Lang.Short（父类Number）</p>
-<p>int                                 java.Lang.Integer（父类Number）</p>
-<p>Long                             java.Lang.Long（父类Number）</p>
-<p>float                              java.Lang.Float（父类Number）</p>
-<p>double                         java.Lang.Double（父类Number）</p>
-<p>boolean                       java.Lang.Boolean（父类Object）</p>
-<p>char                              java.Lang.Character（父类Object）</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>装箱、拆箱，Integer的构造方法，自动装箱和自动拆箱</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20026%EF%BC%88%E8%A3%85%E7%AE%B1%E5%92%8C%E6%8B%86%E7%AE%B1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81Integer%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E3%80%81%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%EF%BC%89/</url>
     <content><![CDATA[<h2 id="装箱和拆箱的概念"><a href="#装箱和拆箱的概念" class="headerlink" title="装箱和拆箱的概念"></a>装箱和拆箱的概念</h2><p>八种包装类中其中6个都是数字对应的包装类，他们的父类都是Number，为抽象类，无法实例化</p>
@@ -2301,6 +2311,50 @@
 
 <p>java中为了提高程序的执行效率，将-128至127之间所有的包装对象提前创建好，放到了一个方法区的“整数型常量池”中，目的是只要使用这个区间内的数据不需要再new了，直接从整数型常量池中取出来</p>
 <p>“==”永远判断的都是对象的内存地址</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>StringBuffer,包装类</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
+
+<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
+<p>2、StringBuffer是一个类</p>
+<p>3、底层是一个byte[ ] 数组</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
+
+<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
+<p>byte                              java.Lang.Byte （父类Number）         </p>
+<p>short                            java.Lang.Short（父类Number）</p>
+<p>int                                 java.Lang.Integer（父类Number）</p>
+<p>Long                             java.Lang.Long（父类Number）</p>
+<p>float                              java.Lang.Float（父类Number）</p>
+<p>double                         java.Lang.Double（父类Number）</p>
+<p>boolean                       java.Lang.Boolean（父类Object）</p>
+<p>char                              java.Lang.Character（父类Object）</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
