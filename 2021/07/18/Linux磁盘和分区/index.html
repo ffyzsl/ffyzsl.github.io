@@ -20,19 +20,27 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="权限">
+  <meta name="description" content="分区1、Linux归根到底只有一个根目录，一个独立且唯一的文件结构，Linux中每个分区都是用来组成整个文件系统的一部分">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux权限">
-<meta property="og:url" content="http://ffyzsl.github.io/2021/07/16/Linux%E6%9D%83%E9%99%90/index.html">
+<meta property="og:title" content="Linux磁盘和分区">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
-<meta property="og:description" content="权限">
+<meta property="og:description" content="分区1、Linux归根到底只有一个根目录，一个独立且唯一的文件结构，Linux中每个分区都是用来组成整个文件系统的一部分">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-16T02:45:12.313Z">
-<meta property="article:modified_time" content="2021-07-16T02:47:08.610Z">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/Linux%E5%88%86%E5%8C%BA%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E6%96%B0%E5%A2%9E%E7%A1%AC%E7%9B%98.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%88%86%E5%8C%BA.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%88%86%E5%8C%BA%E5%AE%8C%E6%88%90.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E6%A0%BC%E5%BC%8F%E5%8C%96.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%AE%8C%E6%88%90.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E9%87%8D%E5%90%AF%E5%90%8E%E5%A4%B1%E6%95%88.png">
+<meta property="article:published_time" content="2021-07-18T09:03:30.910Z">
+<meta property="article:modified_time" content="2021-07-18T09:07:25.630Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/Linux%E5%88%86%E5%8C%BA%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
 
-<link rel="canonical" href="http://ffyzsl.github.io/2021/07/16/Linux%E6%9D%83%E9%99%90/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/">
 
 
 <script id="page-configurations">
@@ -45,7 +53,7 @@
   };
 </script>
 
-  <title>Linux权限 | ffy's blog</title>
+  <title>Linux磁盘和分区 | ffy's blog</title>
   
 
 
@@ -156,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/16/Linux%E6%9D%83%E9%99%90/">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +177,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux权限
+          Linux磁盘和分区
         </h1>
 
         <div class="post-meta">
@@ -180,7 +188,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-16 10:45:12 / 修改时间：10:47:08" itemprop="dateCreated datePublished" datetime="2021-07-16T10:45:12+08:00">2021-07-16</time>
+              <time title="创建时间：2021-07-18 17:03:30 / 修改时间：17:07:25" itemprop="dateCreated datePublished" datetime="2021-07-18T17:03:30+08:00">2021-07-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -203,66 +211,75 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><span id="more"></span>
-
-<p>![ls -l示意图](./Linux权限/ls -l示意图.PNG)</p>
-<p>显示的内容如下：<code>-rwxrw-r--1 root root  4096 7月   9 15:21 animal </code></p>
-<p>第一个root代表所有者，第二个root代表所属组，4096代表文件大小（字节）， 7月 9 15：21代表最后修改日期，animal代表文件名。</p>
-<p><strong>0~9位说明：</strong></p>
-<p>1、第0位确定文件类型（d,-,l,c,b）</p>
+        <h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><p>1、Linux归根到底只有一个根目录，一个独立且唯一的文件结构，Linux中每个分区都是用来组成整个文件系统的一部分</p>
+<span id="more"></span>
+<p>2、Linux采用“载入”的处理方法，它的整个文件系统中包含了一整套的文件和目录，且将一个分区和一个目录联系起来，这时要载入的一个分区将使它的存储空间在一个目录下获得。</p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/Linux%E5%88%86%E5%8C%BA%E7%A4%BA%E6%84%8F%E5%9B%BE.png"></p>
 <ul>
-<li><code>l</code>是链接</li>
-<li><code>d</code>是目录</li>
-<li><code>c</code>是字符设备文件，鼠标，键盘</li>
-<li><code>b</code>是块设备</li>
-<li><code>-</code>是普通文件</li>
+<li><code>lsblk</code>或者<code>lsblk -k</code>：查看所有设备挂在情况</li>
 </ul>
-<p>2、第1~3位确定所有者拥有该文件的权限</p>
-<p>3、第4~6位确定所属组拥有该文件的权限</p>
-<p>4、第7~9位确定其他用户拥有该文件的权限</p>
-<h2 id="rwx权限"><a href="#rwx权限" class="headerlink" title="rwx权限"></a>rwx权限</h2><h3 id="rwx作用到文件"><a href="#rwx作用到文件" class="headerlink" title="rwx作用到文件"></a>rwx作用到文件</h3><p>1、<code>r</code>：代表可读（read），读取，查看</p>
-<p>2、<code>w</code>：代表可写（write），可以修改文件内容，但是不代表可以删除该文件，删除一个文件的前提条件是对该文件所在目录有写权限</p>
-<p>3、<code>x</code>：代表可执行（execute），可以被执行</p>
-<h3 id="rwx作用到目录"><a href="#rwx作用到目录" class="headerlink" title="rwx作用到目录"></a>rwx作用到目录</h3><p>1、<code>r</code>：代表可读（read），可以读取，ls查看目录内容</p>
-<p>2、<code>w</code>：代表可写（write），可以修改，对目录内创建，删除，重命名目录</p>
-<p>3、<code>x</code>：代表可执行（execute），可以进入该目录</p>
-<h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2><h3 id="修改文件或目录权限"><a href="#修改文件或目录权限" class="headerlink" title="修改文件或目录权限"></a>修改文件或目录权限</h3><p><code>chmod</code>：修改文件或者目录权限</p>
-<table>
-<thead>
-<tr>
-<th>文件类型</th>
-<th>所有者权限</th>
-<th>所属组权限</th>
-<th>其他用户权限</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>d</td>
-<td>rwx</td>
-<td>rwx</td>
-<td>r-x</td>
-</tr>
-</tbody></table>
-<p>u：所有者，g：所有组，o：其他用户，a：所有用户（u，g，o的总和）</p>
-<p>第一种方式：+，-，=变更权限</p>
+<h3 id="硬盘说明"><a href="#硬盘说明" class="headerlink" title="硬盘说明"></a>硬盘说明</h3><p>1、Linux硬盘分为IDE硬盘和SCSI硬盘，目前基本上使SCSI硬盘</p>
+<p>2、对于IDE硬盘，驱动器标识符为“hdx<del>”，其中“hd”表明分区所在设备的类型，这里是指IDE硬盘了，“x”为盘号（a为基本盘，b为基本从属盘，c为辅助主盘，d为辅助从属盘），“</del>”代表分区，前四个分区用数字1到4表示，他们是主分区或扩展分区，从5开始就是逻辑分区。例如：hda3表示为第一个IDE硬盘上的第三个主分区或扩展分区，hdb2表示第二个IDE硬盘上的第二个主分区或扩展分区。</p>
+<p>3、对于SCSI硬盘则标识为“sdx~”，SCSI硬盘是用“sd”来表示分区所在设备的类型的，其余则和IDE硬盘的表示方法一样。</p>
+<h3 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h3><p>增加一块硬盘</p>
 <ul>
-<li><code>chmod u=rwx,g=rx,o=x 文件/目录</code></li>
-<li><code>chmod o+w 文件/目录</code></li>
-<li><code>chmod a-x 文件/目录</code></li>
+<li>虚拟机添加硬盘</li>
+<li>分区</li>
+<li>格式化</li>
+<li>挂载</li>
+<li>设置可以自动挂载</li>
 </ul>
-<p>第二种方式：通过数字变更权限，r=4,w=2,x=1</p>
+<p>1、为虚拟机添加硬盘可以直接在软件里设置。设置后重启，然后使用命令<code>lsblk</code>查看分区情况。</p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E6%96%B0%E5%A2%9E%E7%A1%AC%E7%9B%98.png"></p>
+<p>此时这块硬盘还未分区。</p>
+<p>使用分区命令：<code>fdisk /dev/sdb</code></p>
 <ul>
-<li> <code>chmod u=rwx,g=rwx,o=x 文件/目录</code>相当于<code>chmod 751</code></li>
+<li><code>m</code>：显示命令列表</li>
+<li><code>p</code>：显示磁盘分区 同 <code>fdisk -l</code></li>
+<li><code>n</code>：新增分区</li>
+<li><code>d</code>：删除分区</li>
+<li><code>w</code>：写入并退出</li>
 </ul>
-<h3 id="修改文件所有者"><a href="#修改文件所有者" class="headerlink" title="修改文件所有者"></a>修改文件所有者</h3><p><code>chown</code>：修改文件所有者</p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%88%86%E5%8C%BA.png"></p>
+<p>再使用<code>lsblk</code></p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%88%86%E5%8C%BA%E5%AE%8C%E6%88%90.png"></p>
+<p>然后格式化磁盘：</p>
+<p>分区命令：<code>mkfs -t ext4 /dev/sdb2</code>，其中</p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E6%A0%BC%E5%BC%8F%E5%8C%96.png"></p>
+<p>准备挂载，将其挂载到newdisk目录</p>
+<p>挂载：将一个分区与一个目录联系起来</p>
 <ul>
-<li> <code>chown newowner 文件/目录</code>：改变所有者</li>
-<li><code>chown newowner:newgroup 文件/目录</code>：改变所有者和所在组</li>
-<li><code>-R</code>：如果是目录，则使其下所有者子文件或目录递归生效</li>
+<li><code>mount 设备名称  挂载目录</code></li>
 </ul>
-<h3 id="修改文件所在组"><a href="#修改文件所在组" class="headerlink" title="修改文件所在组"></a>修改文件所在组</h3><p><code>chgrp</code>：修改文件所在组</p>
+<p>卸载：取消联系</p>
 <ul>
-<li><code>chgrp newgroup 文件/目录</code>：改变所有组</li>
+<li><code>umount 设备名称 或者 挂载目录</code></li>
+</ul>
+<p>首先在根目录创建一个newdisk目录，<code>mkdir newdisk</code></p>
+<p>挂载：<code>mount /dev/sdb2 /newdisk</code></p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E5%AE%8C%E6%88%90.png"></p>
+<p>注意：用命令行挂载，重启后会失效</p>
+<p><img src="/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/%E9%87%8D%E5%90%AF%E5%90%8E%E5%A4%B1%E6%95%88.png"></p>
+<h2 id="磁盘情况查询"><a href="#磁盘情况查询" class="headerlink" title="磁盘情况查询"></a>磁盘情况查询</h2><p><code>df -h</code>：查询系统整体磁盘使用情况</p>
+<p><code>du -h</code>：查询指定目录的磁盘占用情况，默认为当前目录</p>
+<ul>
+<li><code>-s</code>：指定目录占用大小汇总</li>
+<li><code>-h</code>：带计量单位</li>
+<li><code>-a</code>：含文件</li>
+<li><code>--max-depth=1</code>：子目录深度</li>
+<li><code>-c</code>：列出明细的同时，增加汇总值</li>
+</ul>
+<h2 id="磁盘相关指令"><a href="#磁盘相关指令" class="headerlink" title="磁盘相关指令"></a>磁盘相关指令</h2><p>1、统计/opt文件夹下文件的个数</p>
+<p>2、统计/opt文件夹下目录的个数</p>
+<p>3、统计/opt文件夹下文件的个数，包括子文件夹里的</p>
+<p>4、统计/opt文件夹下目录的个数，包括子文件夹里的</p>
+<p>5、以树状显示目录结构</p>
+<ul>
+<li><code>ls -l /opt | grep &quot;^-&quot; | wc -l</code></li>
+<li><code>ls -l /opt | grep &quot;^d&quot; | wc -l</code></li>
+<li><code>ls -lR /opt | grep &quot;^-&quot; | wc -l</code></li>
+<li><code>ls -lR /opt | grep &quot;^d&quot; | wc -l</code></li>
+<li><code>tree /opt</code></li>
 </ul>
 
     </div>
@@ -299,13 +316,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/12/Linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%B1%BB/" rel="prev" title="压缩和解压类">
-      <i class="fa fa-chevron-left"></i> 压缩和解压类
+    <a href="/2021/07/16/Linux%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/" rel="prev" title="任务调度">
+      <i class="fa fa-chevron-left"></i> 任务调度
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/16/Linux%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/" rel="next" title="任务调度">
-      任务调度 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -364,7 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E9%99%90"><span class="nav-number">1.</span> <span class="nav-text">权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rwx%E6%9D%83%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text">rwx权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rwx%E4%BD%9C%E7%94%A8%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">rwx作用到文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rwx%E4%BD%9C%E7%94%A8%E5%88%B0%E7%9B%AE%E5%BD%95"><span class="nav-number">2.2.</span> <span class="nav-text">rwx作用到目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9D%83%E9%99%90"><span class="nav-number">3.</span> <span class="nav-text">修改权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95%E6%9D%83%E9%99%90"><span class="nav-number">3.1.</span> <span class="nav-text">修改文件或目录权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%89%80%E6%9C%89%E8%80%85"><span class="nav-number">3.2.</span> <span class="nav-text">修改文件所有者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%89%80%E5%9C%A8%E7%BB%84"><span class="nav-number">3.3.</span> <span class="nav-text">修改文件所在组</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%8C%BA"><span class="nav-number">1.</span> <span class="nav-text">分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E7%9B%98%E8%AF%B4%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">硬盘说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">应用实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E6%83%85%E5%86%B5%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.</span> <span class="nav-text">磁盘情况查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E7%9B%B8%E5%85%B3%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">磁盘相关指令</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
