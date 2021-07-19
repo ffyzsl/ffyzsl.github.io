@@ -668,51 +668,6 @@
       </categories>
   </entry>
   <entry>
-    <title>final关键字、super关键字</title>
-    <url>/2021/07/02/Day%20011%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81super%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h1><p>-final是一个关键字，表示最终的，不可变的<br>       -final修饰的类无法被继承</p>
-<span id="more"></span>
-<pre><code>   -final修饰的方法无法被覆盖
-   -final修饰的变量一旦赋值之后，不可重新赋值
-</code></pre>
-<h2 id="super关键字"><a href="#super关键字" class="headerlink" title="super关键字"></a>super关键字</h2><p>1、<strong>this</strong></p>
-<p>this能出现在实例方法和构造方法中</p>
-<p>​     语法结构：this.     this()</p>
-<p>this不能使用在静态方法中。</p>
-<p>this只能出现在构造方法第一行，通过当前的构造方法去调用“本类”中其他的构造方法，目的是：代码复用</p>
-<p>2、<strong>super</strong></p>
-<p>super能出现在实例方法和构造方法中</p>
-<p>​     语法结构：super.    super()</p>
-<p>super不能使用在静态方法中。</p>
-<p>super()     只能出现在构造方法第一行，通过当前的构造方法去调用“本类”中其他的构造方法，目的是：创建子类对象时，先初始化父类型特征</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> B();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;A类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="comment">//super()  默认有这一段代码</span></span><br><span class="line">            System.out.println(<span class="string">&quot;B类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">A类的无参数构造方法</span><br><span class="line">B类的无参数构造方法</span><br></pre></td></tr></table></figure>
-
-<p>super()  表示通过了子类的构造方法调用父类的构造方法，模拟现实世界中的这种场景：要想有儿子，需要先有父亲</p>
-<p>如果在A类中手动创建一个构造方法，这系统不在提供无参数构造系统，这时运行出错。</p>
-<p><strong>当一个构造方法第一行，既没有this()又没有super()的话，默认会有一个super()；表示通过当前子类的构造方法调用父类的无参数构造方法，所以必须保证父类的无参数构造方法是存在的。</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> B();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;A类的有参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(<span class="number">123</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;B类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">A类的有参数构造方法</span><br><span class="line">B类的无参数构造方法</span><br></pre></td></tr></table></figure>
-
-<p>对super的调用必须是构造方法中第一个语句</p>
-<p>注意：this()和super()不能共存，他们都只能出现在构造方法的第一行</p>
-<p>无论怎样，父类的构造方法一定执行</p>
-<p>练习</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> C();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        System.out.println(<span class="string">&quot;B类的有参数构造方法执行（String）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的有参数构造方法执行（String）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">(String name,<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的有参数构造方法执行（String，age）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A类的无参数构造方法执行</span><br><span class="line">B类的无参数构造方法执行</span><br><span class="line">C类的有参数构造方法执行（String）</span><br><span class="line">C类的无参数构造方法执行</span><br></pre></td></tr></table></figure>
-
-<p>例子：银行输入查找账户，余额，信誉度</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankSeek</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CreditAccount act01=<span class="keyword">new</span> CreditAccount();</span><br><span class="line">        System.out.println(<span class="string">&quot;账户&quot;</span>+act01.getActno()+<span class="string">&quot;  余额&quot;</span>+act01.getBalance()+<span class="string">&quot;  信誉度&quot;</span>+act01.getCredit());</span><br><span class="line">        CreditAccount act02=<span class="keyword">new</span> CreditAccount(<span class="string">&quot;1111&quot;</span>,<span class="number">10000.0</span>,<span class="number">0.99</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;账户&quot;</span>+act02.getActno()+<span class="string">&quot;  余额&quot;</span>+act02.getBalance()+<span class="string">&quot;  信誉度&quot;</span>+act02.getCredit());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String actno;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> balance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        <span class="comment">//actno=null;</span></span><br><span class="line">        <span class="comment">//balance=0.0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">(String actno,<span class="keyword">double</span> balance)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno=actno;</span><br><span class="line">        <span class="keyword">this</span>.balance=balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getActno</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setActno</span><span class="params">(String actno)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno = actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getBalance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBalance</span><span class="params">(<span class="keyword">double</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = balance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreditAccount</span> <span class="keyword">extends</span> <span class="title">Account</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> credit;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CreditAccount</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        <span class="comment">//credit=0.0;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CreditAccount</span><span class="params">(String actno,<span class="keyword">double</span> balance, <span class="keyword">double</span> credit)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(actno,balance);<span class="comment">//可以通过super()来调用父类的构建方法进行赋值。</span></span><br><span class="line">        <span class="keyword">this</span>.credit=credit;</span><br><span class="line">        <span class="comment">//在这里不能用同样的方法给actno，balance赋值，因为这两个变量是父类中的私有变量</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCredit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> credit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCredit</span><span class="params">(<span class="keyword">double</span> credit)</span> </span>&#123;</span><br><span class="line">        credit = credit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以上程序在JVM中：</p>
-<p><img src="/2021/07/02/Day%20011%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81super%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210117142547227.png" alt="image-20210117142547227"></p>
-<p>注意：父类中有，子类中有 ，如果想在子类中访问“父类的特征”，super，不能省略</p>
-<p>super.属性名  【访问父类的属性】</p>
-<p>super.方法名(实参)   【访问父类的方法】</p>
-<p>super(实参)       【调用父类的构造方法】</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>任务调度</title>
     <url>/2021/07/16/Linux%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/</url>
     <content><![CDATA[<h2 id="crontab任务调度"><a href="#crontab任务调度" class="headerlink" title="crontab任务调度"></a>crontab任务调度</h2><p><code>crontab</code>进行定时任务的设置</p>
@@ -860,6 +815,51 @@
 ]]></content>
       <categories>
         <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>final关键字、super关键字</title>
+    <url>/2021/07/02/Day%20011%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81super%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h1><p>-final是一个关键字，表示最终的，不可变的<br>       -final修饰的类无法被继承</p>
+<span id="more"></span>
+<pre><code>   -final修饰的方法无法被覆盖
+   -final修饰的变量一旦赋值之后，不可重新赋值
+</code></pre>
+<h2 id="super关键字"><a href="#super关键字" class="headerlink" title="super关键字"></a>super关键字</h2><p>1、<strong>this</strong></p>
+<p>this能出现在实例方法和构造方法中</p>
+<p>​     语法结构：this.     this()</p>
+<p>this不能使用在静态方法中。</p>
+<p>this只能出现在构造方法第一行，通过当前的构造方法去调用“本类”中其他的构造方法，目的是：代码复用</p>
+<p>2、<strong>super</strong></p>
+<p>super能出现在实例方法和构造方法中</p>
+<p>​     语法结构：super.    super()</p>
+<p>super不能使用在静态方法中。</p>
+<p>super()     只能出现在构造方法第一行，通过当前的构造方法去调用“本类”中其他的构造方法，目的是：创建子类对象时，先初始化父类型特征</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> B();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;A类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="comment">//super()  默认有这一段代码</span></span><br><span class="line">            System.out.println(<span class="string">&quot;B类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">A类的无参数构造方法</span><br><span class="line">B类的无参数构造方法</span><br></pre></td></tr></table></figure>
+
+<p>super()  表示通过了子类的构造方法调用父类的构造方法，模拟现实世界中的这种场景：要想有儿子，需要先有父亲</p>
+<p>如果在A类中手动创建一个构造方法，这系统不在提供无参数构造系统，这时运行出错。</p>
+<p><strong>当一个构造方法第一行，既没有this()又没有super()的话，默认会有一个super()；表示通过当前子类的构造方法调用父类的无参数构造方法，所以必须保证父类的无参数构造方法是存在的。</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> B();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;A类的有参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(<span class="number">123</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;B类的无参数构造方法&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">A类的有参数构造方法</span><br><span class="line">B类的无参数构造方法</span><br></pre></td></tr></table></figure>
+
+<p>对super的调用必须是构造方法中第一个语句</p>
+<p>注意：this()和super()不能共存，他们都只能出现在构造方法的第一行</p>
+<p>无论怎样，父类的构造方法一定执行</p>
+<p>练习</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTest02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> C();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        System.out.println(<span class="string">&quot;B类的有参数构造方法执行（String）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的无参数构造方法执行&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的有参数构造方法执行（String）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">C</span><span class="params">(String name,<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">        System.out.println(<span class="string">&quot;C类的有参数构造方法执行（String，age）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A类的无参数构造方法执行</span><br><span class="line">B类的无参数构造方法执行</span><br><span class="line">C类的有参数构造方法执行（String）</span><br><span class="line">C类的无参数构造方法执行</span><br></pre></td></tr></table></figure>
+
+<p>例子：银行输入查找账户，余额，信誉度</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankSeek</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CreditAccount act01=<span class="keyword">new</span> CreditAccount();</span><br><span class="line">        System.out.println(<span class="string">&quot;账户&quot;</span>+act01.getActno()+<span class="string">&quot;  余额&quot;</span>+act01.getBalance()+<span class="string">&quot;  信誉度&quot;</span>+act01.getCredit());</span><br><span class="line">        CreditAccount act02=<span class="keyword">new</span> CreditAccount(<span class="string">&quot;1111&quot;</span>,<span class="number">10000.0</span>,<span class="number">0.99</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;账户&quot;</span>+act02.getActno()+<span class="string">&quot;  余额&quot;</span>+act02.getBalance()+<span class="string">&quot;  信誉度&quot;</span>+act02.getCredit());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String actno;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> balance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        <span class="comment">//actno=null;</span></span><br><span class="line">        <span class="comment">//balance=0.0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">(String actno,<span class="keyword">double</span> balance)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno=actno;</span><br><span class="line">        <span class="keyword">this</span>.balance=balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getActno</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setActno</span><span class="params">(String actno)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.actno = actno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getBalance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> balance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBalance</span><span class="params">(<span class="keyword">double</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = balance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreditAccount</span> <span class="keyword">extends</span> <span class="title">Account</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> credit;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CreditAccount</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//super();</span></span><br><span class="line">        <span class="comment">//credit=0.0;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CreditAccount</span><span class="params">(String actno,<span class="keyword">double</span> balance, <span class="keyword">double</span> credit)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(actno,balance);<span class="comment">//可以通过super()来调用父类的构建方法进行赋值。</span></span><br><span class="line">        <span class="keyword">this</span>.credit=credit;</span><br><span class="line">        <span class="comment">//在这里不能用同样的方法给actno，balance赋值，因为这两个变量是父类中的私有变量</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCredit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> credit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCredit</span><span class="params">(<span class="keyword">double</span> credit)</span> </span>&#123;</span><br><span class="line">        credit = credit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上程序在JVM中：</p>
+<p><img src="/2021/07/02/Day%20011%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81super%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89/Users\樊飞扬\AppData\Roaming\Typora\typora-user-images\image-20210117142547227.png" alt="image-20210117142547227"></p>
+<p>注意：父类中有，子类中有 ，如果想在子类中访问“父类的特征”，super，不能省略</p>
+<p>super.属性名  【访问父类的属性】</p>
+<p>super.方法名(实参)   【访问父类的方法】</p>
+<p>super(实参)       【调用父类的构造方法】</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
       </categories>
   </entry>
   <entry>
@@ -1127,6 +1127,75 @@
       </categories>
   </entry>
   <entry>
+    <title>Linux权限</title>
+    <url>/2021/07/16/Linux%E6%9D%83%E9%99%90/</url>
+    <content><![CDATA[<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><span id="more"></span>
+
+<p>![ls -l示意图](./Linux权限/ls -l示意图.PNG)</p>
+<p>显示的内容如下：<code>-rwxrw-r--1 root root  4096 7月   9 15:21 animal </code></p>
+<p>第一个root代表所有者，第二个root代表所属组，4096代表文件大小（字节）， 7月 9 15：21代表最后修改日期，animal代表文件名。</p>
+<p><strong>0~9位说明：</strong></p>
+<p>1、第0位确定文件类型（d,-,l,c,b）</p>
+<ul>
+<li><code>l</code>是链接</li>
+<li><code>d</code>是目录</li>
+<li><code>c</code>是字符设备文件，鼠标，键盘</li>
+<li><code>b</code>是块设备</li>
+<li><code>-</code>是普通文件</li>
+</ul>
+<p>2、第1~3位确定所有者拥有该文件的权限</p>
+<p>3、第4~6位确定所属组拥有该文件的权限</p>
+<p>4、第7~9位确定其他用户拥有该文件的权限</p>
+<h2 id="rwx权限"><a href="#rwx权限" class="headerlink" title="rwx权限"></a>rwx权限</h2><h3 id="rwx作用到文件"><a href="#rwx作用到文件" class="headerlink" title="rwx作用到文件"></a>rwx作用到文件</h3><p>1、<code>r</code>：代表可读（read），读取，查看</p>
+<p>2、<code>w</code>：代表可写（write），可以修改文件内容，但是不代表可以删除该文件，删除一个文件的前提条件是对该文件所在目录有写权限</p>
+<p>3、<code>x</code>：代表可执行（execute），可以被执行</p>
+<h3 id="rwx作用到目录"><a href="#rwx作用到目录" class="headerlink" title="rwx作用到目录"></a>rwx作用到目录</h3><p>1、<code>r</code>：代表可读（read），可以读取，ls查看目录内容</p>
+<p>2、<code>w</code>：代表可写（write），可以修改，对目录内创建，删除，重命名目录</p>
+<p>3、<code>x</code>：代表可执行（execute），可以进入该目录</p>
+<h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2><h3 id="修改文件或目录权限"><a href="#修改文件或目录权限" class="headerlink" title="修改文件或目录权限"></a>修改文件或目录权限</h3><p><code>chmod</code>：修改文件或者目录权限</p>
+<table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>所有者权限</th>
+<th>所属组权限</th>
+<th>其他用户权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d</td>
+<td>rwx</td>
+<td>rwx</td>
+<td>r-x</td>
+</tr>
+</tbody></table>
+<p>u：所有者，g：所有组，o：其他用户，a：所有用户（u，g，o的总和）</p>
+<p>第一种方式：+，-，=变更权限</p>
+<ul>
+<li><code>chmod u=rwx,g=rx,o=x 文件/目录</code></li>
+<li><code>chmod o+w 文件/目录</code></li>
+<li><code>chmod a-x 文件/目录</code></li>
+</ul>
+<p>第二种方式：通过数字变更权限，r=4,w=2,x=1</p>
+<ul>
+<li> <code>chmod u=rwx,g=rwx,o=x 文件/目录</code>相当于<code>chmod 751</code></li>
+</ul>
+<h3 id="修改文件所有者"><a href="#修改文件所有者" class="headerlink" title="修改文件所有者"></a>修改文件所有者</h3><p><code>chown</code>：修改文件所有者</p>
+<ul>
+<li> <code>chown newowner 文件/目录</code>：改变所有者</li>
+<li><code>chown newowner:newgroup 文件/目录</code>：改变所有者和所在组</li>
+<li><code>-R</code>：如果是目录，则使其下所有者子文件或目录递归生效</li>
+</ul>
+<h3 id="修改文件所在组"><a href="#修改文件所在组" class="headerlink" title="修改文件所在组"></a>修改文件所在组</h3><p><code>chgrp</code>：修改文件所在组</p>
+<ul>
+<li><code>chgrp newgroup 文件/目录</code>：改变所有组</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>时间日期类，搜索查找类</title>
     <url>/2021/07/10/Linux%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB%EF%BC%8C%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB/</url>
     <content><![CDATA[<h2 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h2><p><code>date</code>：显示当前日期</p>
@@ -1200,75 +1269,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Linux权限</title>
-    <url>/2021/07/16/Linux%E6%9D%83%E9%99%90/</url>
-    <content><![CDATA[<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><span id="more"></span>
-
-<p>![ls -l示意图](./Linux权限/ls -l示意图.PNG)</p>
-<p>显示的内容如下：<code>-rwxrw-r--1 root root  4096 7月   9 15:21 animal </code></p>
-<p>第一个root代表所有者，第二个root代表所属组，4096代表文件大小（字节）， 7月 9 15：21代表最后修改日期，animal代表文件名。</p>
-<p><strong>0~9位说明：</strong></p>
-<p>1、第0位确定文件类型（d,-,l,c,b）</p>
-<ul>
-<li><code>l</code>是链接</li>
-<li><code>d</code>是目录</li>
-<li><code>c</code>是字符设备文件，鼠标，键盘</li>
-<li><code>b</code>是块设备</li>
-<li><code>-</code>是普通文件</li>
-</ul>
-<p>2、第1~3位确定所有者拥有该文件的权限</p>
-<p>3、第4~6位确定所属组拥有该文件的权限</p>
-<p>4、第7~9位确定其他用户拥有该文件的权限</p>
-<h2 id="rwx权限"><a href="#rwx权限" class="headerlink" title="rwx权限"></a>rwx权限</h2><h3 id="rwx作用到文件"><a href="#rwx作用到文件" class="headerlink" title="rwx作用到文件"></a>rwx作用到文件</h3><p>1、<code>r</code>：代表可读（read），读取，查看</p>
-<p>2、<code>w</code>：代表可写（write），可以修改文件内容，但是不代表可以删除该文件，删除一个文件的前提条件是对该文件所在目录有写权限</p>
-<p>3、<code>x</code>：代表可执行（execute），可以被执行</p>
-<h3 id="rwx作用到目录"><a href="#rwx作用到目录" class="headerlink" title="rwx作用到目录"></a>rwx作用到目录</h3><p>1、<code>r</code>：代表可读（read），可以读取，ls查看目录内容</p>
-<p>2、<code>w</code>：代表可写（write），可以修改，对目录内创建，删除，重命名目录</p>
-<p>3、<code>x</code>：代表可执行（execute），可以进入该目录</p>
-<h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2><h3 id="修改文件或目录权限"><a href="#修改文件或目录权限" class="headerlink" title="修改文件或目录权限"></a>修改文件或目录权限</h3><p><code>chmod</code>：修改文件或者目录权限</p>
-<table>
-<thead>
-<tr>
-<th>文件类型</th>
-<th>所有者权限</th>
-<th>所属组权限</th>
-<th>其他用户权限</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>d</td>
-<td>rwx</td>
-<td>rwx</td>
-<td>r-x</td>
-</tr>
-</tbody></table>
-<p>u：所有者，g：所有组，o：其他用户，a：所有用户（u，g，o的总和）</p>
-<p>第一种方式：+，-，=变更权限</p>
-<ul>
-<li><code>chmod u=rwx,g=rx,o=x 文件/目录</code></li>
-<li><code>chmod o+w 文件/目录</code></li>
-<li><code>chmod a-x 文件/目录</code></li>
-</ul>
-<p>第二种方式：通过数字变更权限，r=4,w=2,x=1</p>
-<ul>
-<li> <code>chmod u=rwx,g=rwx,o=x 文件/目录</code>相当于<code>chmod 751</code></li>
-</ul>
-<h3 id="修改文件所有者"><a href="#修改文件所有者" class="headerlink" title="修改文件所有者"></a>修改文件所有者</h3><p><code>chown</code>：修改文件所有者</p>
-<ul>
-<li> <code>chown newowner 文件/目录</code>：改变所有者</li>
-<li><code>chown newowner:newgroup 文件/目录</code>：改变所有者和所在组</li>
-<li><code>-R</code>：如果是目录，则使其下所有者子文件或目录递归生效</li>
-</ul>
-<h3 id="修改文件所在组"><a href="#修改文件所在组" class="headerlink" title="修改文件所在组"></a>修改文件所在组</h3><p><code>chgrp</code>：修改文件所在组</p>
-<ul>
-<li><code>chgrp newgroup 文件/目录</code>：改变所有组</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Linux概述</title>
     <url>/2021/07/08/Linux%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<h1 id="Linux入门"><a href="#Linux入门" class="headerlink" title="Linux入门"></a>Linux入门</h1><h2 id="Linux介绍"><a href="#Linux介绍" class="headerlink" title="Linux介绍"></a>Linux介绍</h2><p>1、Linux是一块操作系统（免费、开源、安全、高效、稳定、处理高并发非常强悍）</p>
@@ -1330,6 +1330,55 @@
 <p>2、Linux的各个目录存放的内容是有规定的</p>
 <p>3、Linux是以文件的形式来管理设备的（Linux系统中一切皆为文件）</p>
 <p>4、了解Linux的各个文件内的内容和作用</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux网络配置</title>
+    <url>/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><span id="more"></span>
+<p>原理图：<img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/NAT%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE.png"></p>
+<h3 id="查看网络IP和网关"><a href="#查看网络IP和网关" class="headerlink" title="查看网络IP和网关"></a>查看网络IP和网关</h3><p><code>ifconfig</code>：查看网络配置（Linux）</p>
+<p><code>ipconfig</code>：查看网络配置（Windows）</p>
+<p><code>ping 目的主机</code>：测试当前服务器是否可以连接目的主机</p>
+<h3 id="网络环境配置"><a href="#网络环境配置" class="headerlink" title="网络环境配置"></a>网络环境配置</h3><p>第一种：自动获取，登陆后，通过界面来设置自动获取ip，Linux启动后会自动获取ip，但每次自动获取的ip地址可能不一样。</p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF.png"></p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96ip%E5%9C%B0%E5%9D%80.png"></p>
+<p>第二种方法：指定IP，直接修改配置文件来指定IP，并可以连接到外网。编辑<code>vi  /etc/sysconfig/network-scripts/ifcfg-ens33</code></p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png"></p>
+<p>文件说明：</p>
+<ul>
+<li><p><code>DEVICE=eth0</code>：接口名（设备：网卡）</p>
+</li>
+<li><p><code>HWADDR=……</code>：MAC地址</p>
+</li>
+<li><p><code>TYPE=Ethernet</code>：网络类型（通常是Ethernet）</p>
+</li>
+<li><p><code>UUID=&quot;be18edbb-aea5-4cd4-9839-c765ced61bf3&quot;</code>(随机id)</p>
+</li>
+<li><p><code>ONBOOT=&quot;yes&quot;</code>：系统启动时网络接口是否有效</p>
+</li>
+<li><p>IP的配置方法<code>[none][static][bootp][dhcp]</code>（引导时不使用协议|静态分配IP|BOOTP协议|DHCP协议）</p>
+<ul>
+<li><code>BOOTPROTO=static</code></li>
+<li><code>IPADDR=……</code>：IP地址</li>
+<li><code>GATEWAY=……</code>：网关</li>
+<li><code>DNS1=……</code>：域名解析器</li>
+</ul>
+</li>
+</ul>
+<p>配置完成后，再在虚拟网络编辑器中进行相应的编辑</p>
+<h3 id="设置主机名和hosts映射"><a href="#设置主机名和hosts映射" class="headerlink" title="设置主机名和hosts映射"></a>设置主机名和hosts映射</h3><h4 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h4><p>1、为了方便记忆，可以给Linux系统设置主机名，也可以根据需求更改主机名</p>
+<p>2、指令<code>hostname</code>：查看主机名</p>
+<p>3、修改文件在<code>/etc/hostname</code>指定</p>
+<p>4、修改后，重启生效</p>
+<h4 id="设置hosts映射"><a href="#设置hosts映射" class="headerlink" title="设置hosts映射"></a>设置hosts映射</h4><p>Hosts文件是一个文本文件，用来记录IP和Hostname（主机名）的映射关系。可以通过主机名找到Linux系统。</p>
+<ul>
+<li> Windows：在<code>C:\Windows\System32\drivers\etc\hosts</code>文件指定即可</li>
+<li>Linux：在<code>/etc/hosts</code>文件指定</li>
+</ul>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -1625,6 +1674,32 @@
       </categories>
   </entry>
   <entry>
+    <title>视图</title>
+    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
+<span id="more"></span>
+<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
+<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
+<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
+<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
+<p>使用视图：</p>
+<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
+<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
+<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
+<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
+<p>１、SELECT子句中未使用DISTINCT</p>
+<p>２、FROM子句中只有一张表</p>
+<p>３、未使用GROUP BY子句</p>
+<p>４、未使用HAVING 子句</p>
+<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
+<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
     <title>对表进行聚合查询</title>
     <url>/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/</url>
     <content><![CDATA[<h2 id="对表进行聚合查询"><a href="#对表进行聚合查询" class="headerlink" title="对表进行聚合查询"></a>对表进行聚合查询</h2><h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><ul>
@@ -1676,32 +1751,6 @@
       </categories>
   </entry>
   <entry>
-    <title>视图</title>
-    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
-<span id="more"></span>
-<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
-<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
-<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
-<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
-<p>使用视图：</p>
-<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
-<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
-<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
-<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
-<p>１、SELECT子句中未使用DISTINCT</p>
-<p>２、FROM子句中只有一张表</p>
-<p>３、未使用GROUP BY子句</p>
-<p>４、未使用HAVING 子句</p>
-<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
-<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
-<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
     <title>数据更新</title>
     <url>/2021/07/06/%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/</url>
     <content><![CDATA[<h2 id="数据更新"><a href="#数据更新" class="headerlink" title="数据更新"></a>数据更新</h2><h3 id="数据的插入"><a href="#数据的插入" class="headerlink" title="数据的插入"></a>数据的插入</h3><p><code>INSERT INTO &lt;表名&gt; (列1,列2,列3,……) VALUES (值1,值2,值3,……);</code></p>
@@ -1741,96 +1790,6 @@
 ]]></content>
       <categories>
         <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>final关键字、抽象类和接口的区别</title>
-    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20%20Day%20012%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%BB%A5%E5%8F%8A%E4%B8%A4%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h2><p>1、final是java语言中第一个关键字，<br>       2、final表示最终的，不可变的<br>       3、final可以修饰变量以及方法，还有类等<br>       4、fianl修饰的类，则该类无法继承。（绝育）</p>
-<span id="more"></span>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="comment">//B类继承A类，相当于对A类的功能进行扩展，如果你不希望别人对A类进行拓展，可以给A类加final关键字，如果给A类添加final关键字，则没有类可以继承A类</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">以上编译出错</span><br></pre></td></tr></table></figure>
-
-<p>5、final修饰的方法，无法被覆盖，被重写</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;C.doSome&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> <span class="keyword">extends</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;D.doSome&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">以上编译出错</span><br></pre></td></tr></table></figure>
-
-<p>6、final修饰的变量，一旦赋值（定义后允许第一次赋值）则不能重新赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest01</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] agrs)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> i =<span class="number">100</span>;</span><br><span class="line">        i=<span class="number">200</span>;<span class="comment">//出错</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>7、final修饰引用，该引用只能指向一个对象，并且不能更改</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest02</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Person p1=<span class="keyword">new</span> Person(<span class="number">20</span>);</span><br><span class="line">        System.out.println(p1.age);</span><br><span class="line">        <span class="keyword">final</span> Person p2=<span class="keyword">new</span> Person(<span class="number">30</span>);</span><br><span class="line">        p=<span class="keyword">new</span> Person(<span class="number">30</span>);<span class="comment">//出错，p只能赋值一次</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age=age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>8、final修饰实例变量，系统不管赋默认值，要求程序员必须手动赋值，在定义变量时可以，也能在构造方法中赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mian</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> age=<span class="number">10</span>;<span class="comment">//final修饰的变量只能赋值一次，如果不在此处赋值，那么在主程序调用的话，系统就赋默认值，且不能修改。所以必须在此处手动赋值</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">double</span> weight;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.weight=<span class="number">80</span>;<span class="comment">//不会报错</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>fianl修饰的实例变量一般添加static修饰</p>
-<p><strong>static final联合修饰的变量称为“常量”</strong>，变量名建议大写</p>
-<h2 id="抽象类和接口以及两者的区别"><a href="#抽象类和接口以及两者的区别" class="headerlink" title="抽象类和接口以及两者的区别"></a>抽象类和接口以及两者的区别</h2><h3 id="抽象类和接口之间的区别"><a href="#抽象类和接口之间的区别" class="headerlink" title="抽象类和接口之间的区别"></a>抽象类和接口之间的区别</h3><p>1、抽象类是半抽象的    接口是完全抽象的</p>
-<p>2、抽象类中有构造方法   接口中没有构造方法</p>
-<p>3、接口和接口之间支持多继承    类和类之间只能单继承</p>
-<p>4、一个类可以同时实现多个接口    一个抽象类只能继承一个类</p>
-<p>5、接口中只允许出现常量和抽象方法</p>
-<h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><p>1、抽象类是类和类之间有共同特征，将这些具有共同特征的类再进一步抽象形成了抽象类，由于基本类本身是不存在的，所以抽象类无法创建对象。</p>
-<p>2、抽象类和抽象类实际上可能还会有共同特征，还可以进一步再抽象</p>
-<p>3、抽象类也属于引用数据类型</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> 类名</span>&#123;</span><br><span class="line">    类体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>4、抽象类是无法实例化，无法创建对象，<strong>所以抽象类是用来被子类继承的</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Account01 act01=<span class="keyword">new</span> Account01();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Error:(<span class="number">3</span>, <span class="number">25</span>) java: Account01是抽象的; 无法实例化</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CreditAccount01 act01=<span class="keyword">new</span> CreditAccount01();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//子类继承抽象类，子类可以实例化对象</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreditAccount01</span> <span class="keyword">extends</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意：abstract和final是非法的修饰符组合</strong></p>
-<p>5、抽象类的子类也可以是抽象类</p>
-<p>6、抽象类虽然无法实例化，但抽象类有构造方法，这个构造方法是让子类使用的</p>
-<p>7、抽象类关联到一个概念：抽象方法</p>
-<p>抽象方法表示没有实现的方法，没有方法体的方法。 </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>特点：没有方法体，以分号结尾，前修饰符列表中有abstract</p>
-<p>8、抽象类中不一定有抽象方法。但抽象方法一定在抽象类中。</p>
-<h4 id="非抽象类继承抽象类"><a href="#非抽象类继承抽象类" class="headerlink" title="非抽象类继承抽象类"></a><strong>非抽象类继承抽象类</strong></h4><p>当非抽象类子类继承抽象父类的抽象方法时，需要将抽象方法进行覆盖/重写（一个非抽象类的继承抽象类，要求将抽象类中的抽象方法覆盖/重写。如果一个抽象类继承了一个抽象类，则抽象方法不用覆盖/重写）</p>
-<p>1、父类型引用指向子类型对象，向上转型，使用多态</p>
-<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p> 1、接口也是一种引用数据类型</p>
-<p>2、接口是完全抽象的。（抽象类是半抽象）</p>
-<p>3、语法结构</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="class"><span class="keyword">interface</span> 接口名</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>4、接口支持多继承，一个接口可以继承多个接口</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个接口可以继承多个接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">C1</span> <span class="keyword">extends</span> <span class="title">A1</span>,<span class="title">B1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>5、接口中有常量和抽象方法，当定义抽象方法时，在编写代码时， public abstract 可以省略。接口中的抽象方法同样不能带有方法体。</p>
-<p>6、接口中定义一个变量，则认定为是常量</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>接口</title>
-    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20013%EF%BC%88%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
-    <content><![CDATA[<p>1、类和类之间叫做继承，类和接口之间叫做实现。继承使用extends关键字完成，实现使用implements关键字完成</p>
-<p>2、当一个非抽象的类实现接口的话，必须将接口中所有的抽象方法全部实现（覆盖/重写）</p>
-<span id="more"></span>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> PI=<span class="number">3.1415926</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个抽象类中可以有抽象方法</span></span><br><span class="line"><span class="keyword">abstract</span>  <span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl01</span> <span class="keyword">implements</span>  <span class="title">MyMath</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个普通的类，则需要实现（重写/覆盖)接口里的方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl</span> <span class="keyword">implements</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>3、接口中的方法都是public，所以实现（重写/覆盖）时必须加public</p>
-<p>4、可以使用多态</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyMath mm=<span class="keyword">new</span> MyMathImpl();</span><br><span class="line">        <span class="keyword">int</span> result_sum=mm.sum(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">int</span> result_sub=mm.sub(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;sum &quot;</span>+result_sum+<span class="string">&quot;   sub &quot;</span>+result_sub);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>5、一个类可以实现多个接口,但必须重写接口中所有抽象方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">B2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D3</span> <span class="keyword">implements</span> <span class="title">A2</span>,<span class="title">B2</span>,<span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    B2 b1=(B2) a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>6、接口和接口之间在进行强制类型转换的时候，没有继承关系，也可以强转，（但运行时可能会出现ClassCastException异常）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        M m=<span class="keyword">new</span> E();</span><br><span class="line">        <span class="keyword">if</span>(m <span class="keyword">instanceof</span> K)&#123;</span><br><span class="line">            K k=(K) m;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">K</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span> <span class="keyword">implements</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意：接口之间没有继承关系也可以强转</strong></p>
-<p>7、继承和实现同时存在，extends关键字在前，implements在后</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test04</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flyable f=<span class="keyword">new</span> Cat01();</span><br><span class="line">        f.fly();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat01</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="keyword">implements</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;cat fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="接口在开发中的作用"><a href="#接口在开发中的作用" class="headerlink" title="接口在开发中的作用"></a>接口在开发中的作用</h4><p>接口在开发中的作用类似于多态在开发中的作用。</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
       </categories>
   </entry>
   <entry>
@@ -2056,6 +2015,96 @@
 ]]></content>
       <categories>
         <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>final关键字、抽象类和接口的区别</title>
+    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20%20Day%20012%EF%BC%88final%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%BB%A5%E5%8F%8A%E4%B8%A4%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h2><p>1、final是java语言中第一个关键字，<br>       2、final表示最终的，不可变的<br>       3、final可以修饰变量以及方法，还有类等<br>       4、fianl修饰的类，则该类无法继承。（绝育）</p>
+<span id="more"></span>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="comment">//B类继承A类，相当于对A类的功能进行扩展，如果你不希望别人对A类进行拓展，可以给A类加final关键字，如果给A类添加final关键字，则没有类可以继承A类</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">以上编译出错</span><br></pre></td></tr></table></figure>
+
+<p>5、final修饰的方法，无法被覆盖，被重写</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;C.doSome&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> <span class="keyword">extends</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;D.doSome&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">以上编译出错</span><br></pre></td></tr></table></figure>
+
+<p>6、final修饰的变量，一旦赋值（定义后允许第一次赋值）则不能重新赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest01</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] agrs)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> i =<span class="number">100</span>;</span><br><span class="line">        i=<span class="number">200</span>;<span class="comment">//出错</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>7、final修饰引用，该引用只能指向一个对象，并且不能更改</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest02</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Person p1=<span class="keyword">new</span> Person(<span class="number">20</span>);</span><br><span class="line">        System.out.println(p1.age);</span><br><span class="line">        <span class="keyword">final</span> Person p2=<span class="keyword">new</span> Person(<span class="number">30</span>);</span><br><span class="line">        p=<span class="keyword">new</span> Person(<span class="number">30</span>);<span class="comment">//出错，p只能赋值一次</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age=age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>8、final修饰实例变量，系统不管赋默认值，要求程序员必须手动赋值，在定义变量时可以，也能在构造方法中赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mian</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> age=<span class="number">10</span>;<span class="comment">//final修饰的变量只能赋值一次，如果不在此处赋值，那么在主程序调用的话，系统就赋默认值，且不能修改。所以必须在此处手动赋值</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">double</span> weight;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.weight=<span class="number">80</span>;<span class="comment">//不会报错</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>fianl修饰的实例变量一般添加static修饰</p>
+<p><strong>static final联合修饰的变量称为“常量”</strong>，变量名建议大写</p>
+<h2 id="抽象类和接口以及两者的区别"><a href="#抽象类和接口以及两者的区别" class="headerlink" title="抽象类和接口以及两者的区别"></a>抽象类和接口以及两者的区别</h2><h3 id="抽象类和接口之间的区别"><a href="#抽象类和接口之间的区别" class="headerlink" title="抽象类和接口之间的区别"></a>抽象类和接口之间的区别</h3><p>1、抽象类是半抽象的    接口是完全抽象的</p>
+<p>2、抽象类中有构造方法   接口中没有构造方法</p>
+<p>3、接口和接口之间支持多继承    类和类之间只能单继承</p>
+<p>4、一个类可以同时实现多个接口    一个抽象类只能继承一个类</p>
+<p>5、接口中只允许出现常量和抽象方法</p>
+<h3 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h3><p>1、抽象类是类和类之间有共同特征，将这些具有共同特征的类再进一步抽象形成了抽象类，由于基本类本身是不存在的，所以抽象类无法创建对象。</p>
+<p>2、抽象类和抽象类实际上可能还会有共同特征，还可以进一步再抽象</p>
+<p>3、抽象类也属于引用数据类型</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> 类名</span>&#123;</span><br><span class="line">    类体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4、抽象类是无法实例化，无法创建对象，<strong>所以抽象类是用来被子类继承的</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Account01 act01=<span class="keyword">new</span> Account01();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Error:(<span class="number">3</span>, <span class="number">25</span>) java: Account01是抽象的; 无法实例化</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CreditAccount01 act01=<span class="keyword">new</span> CreditAccount01();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//子类继承抽象类，子类可以实例化对象</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreditAccount01</span> <span class="keyword">extends</span> <span class="title">Account01</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：abstract和final是非法的修饰符组合</strong></p>
+<p>5、抽象类的子类也可以是抽象类</p>
+<p>6、抽象类虽然无法实例化，但抽象类有构造方法，这个构造方法是让子类使用的</p>
+<p>7、抽象类关联到一个概念：抽象方法</p>
+<p>抽象方法表示没有实现的方法，没有方法体的方法。 </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>特点：没有方法体，以分号结尾，前修饰符列表中有abstract</p>
+<p>8、抽象类中不一定有抽象方法。但抽象方法一定在抽象类中。</p>
+<h4 id="非抽象类继承抽象类"><a href="#非抽象类继承抽象类" class="headerlink" title="非抽象类继承抽象类"></a><strong>非抽象类继承抽象类</strong></h4><p>当非抽象类子类继承抽象父类的抽象方法时，需要将抽象方法进行覆盖/重写（一个非抽象类的继承抽象类，要求将抽象类中的抽象方法覆盖/重写。如果一个抽象类继承了一个抽象类，则抽象方法不用覆盖/重写）</p>
+<p>1、父类型引用指向子类型对象，向上转型，使用多态</p>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p> 1、接口也是一种引用数据类型</p>
+<p>2、接口是完全抽象的。（抽象类是半抽象）</p>
+<p>3、语法结构</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="class"><span class="keyword">interface</span> 接口名</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4、接口支持多继承，一个接口可以继承多个接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个接口可以继承多个接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">C1</span> <span class="keyword">extends</span> <span class="title">A1</span>,<span class="title">B1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5、接口中有常量和抽象方法，当定义抽象方法时，在编写代码时， public abstract 可以省略。接口中的抽象方法同样不能带有方法体。</p>
+<p>6、接口中定义一个变量，则认定为是常量</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>接口</title>
+    <url>/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20013%EF%BC%88%E6%8E%A5%E5%8F%A3%EF%BC%89/</url>
+    <content><![CDATA[<p>1、类和类之间叫做继承，类和接口之间叫做实现。继承使用extends关键字完成，实现使用implements关键字完成</p>
+<p>2、当一个非抽象的类实现接口的话，必须将接口中所有的抽象方法全部实现（覆盖/重写）</p>
+<span id="more"></span>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> PI=<span class="number">3.1415926</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个抽象类中可以有抽象方法</span></span><br><span class="line"><span class="keyword">abstract</span>  <span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl01</span> <span class="keyword">implements</span>  <span class="title">MyMath</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//一个普通的类，则需要实现（重写/覆盖)接口里的方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMathImpl</span> <span class="keyword">implements</span> <span class="title">MyMath</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、接口中的方法都是public，所以实现（重写/覆盖）时必须加public</p>
+<p>4、可以使用多态</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyMath mm=<span class="keyword">new</span> MyMathImpl();</span><br><span class="line">        <span class="keyword">int</span> result_sum=mm.sum(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">int</span> result_sub=mm.sub(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;sum &quot;</span>+result_sum+<span class="string">&quot;   sub &quot;</span>+result_sub);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5、一个类可以实现多个接口,但必须重写接口中所有抽象方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">B2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span>  <span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D3</span> <span class="keyword">implements</span> <span class="title">A2</span>,<span class="title">B2</span>,<span class="title">C2</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    B2 b1=(B2) a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6、接口和接口之间在进行强制类型转换的时候，没有继承关系，也可以强转，（但运行时可能会出现ClassCastException异常）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        M m=<span class="keyword">new</span> E();</span><br><span class="line">        <span class="keyword">if</span>(m <span class="keyword">instanceof</span> K)&#123;</span><br><span class="line">            K k=(K) m;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">K</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span> <span class="keyword">implements</span> <span class="title">M</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：接口之间没有继承关系也可以强转</strong></p>
+<p>7、继承和实现同时存在，extends关键字在前，implements在后</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test04</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flyable f=<span class="keyword">new</span> Cat01();</span><br><span class="line">        f.fly();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal01</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat01</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="keyword">implements</span> <span class="title">Flyable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;cat fly&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="接口在开发中的作用"><a href="#接口在开发中的作用" class="headerlink" title="接口在开发中的作用"></a>接口在开发中的作用</h4><p>接口在开发中的作用类似于多态在开发中的作用。</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
       </categories>
   </entry>
   <entry>
@@ -2659,28 +2708,6 @@
       </categories>
   </entry>
   <entry>
-    <title>随机数练习，异常概述</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20028%EF%BC%88%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%AD%97%E7%BB%83%E4%B9%A0%E3%80%81%E5%BC%82%E5%B8%B8%E6%A6%82%E8%BF%B0%E3%80%81java%E5%AF%B9%E5%BC%82%E5%B8%B8%E7%9A%84%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%EF%BC%89/</url>
-    <content><![CDATA[<p>生成5个不重复的随机数字</p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Random random=<span class="keyword">new</span> Random();</span><br><span class="line">        <span class="keyword">int</span>[] arr=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            arr[i]=-<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> index=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(index &lt; arr.length)&#123;</span><br><span class="line">            <span class="keyword">int</span> num= random.nextInt(<span class="number">5</span>);</span><br><span class="line">            <span class="keyword">if</span> (!contants(arr,num))&#123;</span><br><span class="line">                arr[index++]=num;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt; arr.length;i++)&#123;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">contants</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[i] == key)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="异常概述"><a href="#异常概述" class="headerlink" title="异常概述"></a>异常概述</h2><p>程序执行过程中发生了不正常的情况，而这种不正常的情况叫做：异常</p>
-<p>当程序执行过程中出现异常时，java把该异常信息打印到控制台，供程序员参考</p>
-<p>这个信息被称为异常信息，为jdk打印的</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 通过“异常类”实例化“异常对象”</span></span><br><span class="line">        NumberFormatException nfe= <span class="keyword">new</span> NumberFormatException(<span class="string">&quot;数字格式化异常&quot;</span>);</span><br><span class="line">        System.out.println(nfe);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">java.lang.NumberFormatException: 数字格式化异常</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>1、可以通过异常来创建异常对象，说明异常在java中以类的形式存在</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a =<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> c=a/b;<span class="comment">//实际上jvm在执行到此处时，会new异常对象：new ArithmeticException(&quot;/by zero&quot;);</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>2、异常对应日常生活中：火灾(异常类)：2020年1月4日，小明家着火(异常对象)，2020年1月5日，小红家着火(异常对象)</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Integer常用方法及类型互换，java对日期的处理，System类相关的属性方法，数字格式化</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20027%EF%BC%88Integer%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81String%20%20int%20Integer%E7%B1%BB%E5%9E%8B%E4%BA%92%E8%BD%AC%E3%80%81java%E5%AF%B9%E6%97%A5%E6%9C%9F%E7%9A%84%E5%A4%84%E7%90%86%E3%80%81System%E7%B1%BB%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E3%80%81%E6%95%B0%E5%AD%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6BigDecimal%E3%80%81%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0%EF%BC%89/</url>
     <content><![CDATA[<h2 id="Integer常用方法"><a href="#Integer常用方法" class="headerlink" title="Integer常用方法"></a>Integer常用方法</h2><span id="more"></span>
@@ -2743,6 +2770,28 @@
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Random random=<span class="keyword">new</span> Random();</span><br><span class="line"><span class="keyword">int</span> num=random.nextInt(<span class="number">101</span>);<span class="comment">//随机产生一个小于101的数字</span></span><br><span class="line">System.out.println(num);</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>随机数练习，异常概述</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20028%EF%BC%88%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%AD%97%E7%BB%83%E4%B9%A0%E3%80%81%E5%BC%82%E5%B8%B8%E6%A6%82%E8%BF%B0%E3%80%81java%E5%AF%B9%E5%BC%82%E5%B8%B8%E7%9A%84%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%EF%BC%89/</url>
+    <content><![CDATA[<p>生成5个不重复的随机数字</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Random random=<span class="keyword">new</span> Random();</span><br><span class="line">        <span class="keyword">int</span>[] arr=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            arr[i]=-<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> index=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(index &lt; arr.length)&#123;</span><br><span class="line">            <span class="keyword">int</span> num= random.nextInt(<span class="number">5</span>);</span><br><span class="line">            <span class="keyword">if</span> (!contants(arr,num))&#123;</span><br><span class="line">                arr[index++]=num;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt; arr.length;i++)&#123;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">contants</span><span class="params">(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[i] == key)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="异常概述"><a href="#异常概述" class="headerlink" title="异常概述"></a>异常概述</h2><p>程序执行过程中发生了不正常的情况，而这种不正常的情况叫做：异常</p>
+<p>当程序执行过程中出现异常时，java把该异常信息打印到控制台，供程序员参考</p>
+<p>这个信息被称为异常信息，为jdk打印的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 通过“异常类”实例化“异常对象”</span></span><br><span class="line">        NumberFormatException nfe= <span class="keyword">new</span> NumberFormatException(<span class="string">&quot;数字格式化异常&quot;</span>);</span><br><span class="line">        System.out.println(nfe);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">java.lang.NumberFormatException: 数字格式化异常</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>1、可以通过异常来创建异常对象，说明异常在java中以类的形式存在</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a =<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> c=a/b;<span class="comment">//实际上jvm在执行到此处时，会new异常对象：new ArithmeticException(&quot;/by zero&quot;);</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2、异常对应日常生活中：火灾(异常类)：2020年1月4日，小明家着火(异常对象)，2020年1月5日，小红家着火(异常对象)</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
