@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="一维数组概述1、java语言中的数组是一种引用数据类型，数组的父类是Object。 2、因为数组是引用类型，所以数组对象是堆内存当中。 3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）">
+  <meta name="description" content="rpm包的管理rpm用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中，它生成具有.RPM扩展名的文件，RPM是RedHat Package Manage(RedHat软件包管理工具)的缩写，类似Windows的setup.exe，这一文件格式名称虽然打上了RedHat的标志，但理念是通用的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一维数组">
-<meta property="og:url" content="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/index.html">
+<meta property="og:title" content="rpm包的管理">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
-<meta property="og:description" content="一维数组概述1、java语言中的数组是一种引用数据类型，数组的父类是Object。 2、因为数组是引用类型，所以数组对象是堆内存当中。 3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）">
+<meta property="og:description" content="rpm包的管理rpm用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中，它生成具有.RPM扩展名的文件，RPM是RedHat Package Manage(RedHat软件包管理工具)的缩写，类似Windows的setup.exe，这一文件格式名称虽然打上了RedHat的标志，但理念是通用的。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-02T11:44:27.846Z">
-<meta property="article:modified_time" content="2021-07-02T11:45:09.779Z">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/rpm%E7%AE%A1%E7%90%86%EF%BC%88firefox%EF%BC%89.png">
+<meta property="article:published_time" content="2021-07-25T01:23:12.000Z">
+<meta property="article:modified_time" content="2021-07-25T01:24:39.983Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/rpm%E7%AE%A1%E7%90%86%EF%BC%88firefox%EF%BC%89.png">
 
-<link rel="canonical" href="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/">
 
 
 <script id="page-configurations">
@@ -45,7 +47,7 @@
   };
 </script>
 
-  <title>一维数组 | ffy's blog</title>
+  <title>rpm包的管理 | ffy's blog</title>
   
 
 
@@ -156,7 +158,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20018%EF%BC%88%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +171,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一维数组
+          rpm包的管理
         </h1>
 
         <div class="post-meta">
@@ -180,7 +182,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-02 19:44:27 / 修改时间：19:45:09" itemprop="dateCreated datePublished" datetime="2021-07-02T19:44:27+08:00">2021-07-02</time>
+              <time title="创建时间：2021-07-25 09:23:12 / 修改时间：09:24:39" itemprop="dateCreated datePublished" datetime="2021-07-25T09:23:12+08:00">2021-07-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -188,7 +190,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
                 </span>
             </span>
 
@@ -203,28 +205,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="一维数组概述"><a href="#一维数组概述" class="headerlink" title="一维数组概述"></a>一维数组概述</h2><p>1、java语言中的数组是一种<strong>引用数据类型</strong>，数组的父类是Object。</p>
-<p>2、因为数组是引用类型，所以数组对象是堆内存当中。</p>
-<p>3、数组当中如果存储的为“对象”时，实际上存储的为对象的“引用”（内存地址）</p>
+        <h2 id="rpm包的管理"><a href="#rpm包的管理" class="headerlink" title="rpm包的管理"></a>rpm包的管理</h2><p>rpm用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中，它生成具有<code>.RPM</code>扩展名的文件，RPM是RedHat Package Manage(RedHat软件包管理工具)的缩写，类似Windows的setup.exe，这一文件格式名称虽然打上了RedHat的标志，但理念是通用的。</p>
 <span id="more"></span>
-
-<p>4、数组一旦创建，长度不可变</p>
-<p>5、数组分为：一维数组，二维数组，多维数组……</p>
-<p>6、所有的数组对象都哟length属性，用来获取数组中元素的个数</p>
-<p>7、java的数组要求数组中元素的类型统一</p>
-<p>8、数组在内存方面存储的时候，数组中的元素内存地址时连续的</p>
-<p>9、数组都是拿第一个元素的内存地址作为整个数组的内存地址</p>
-<p>10、下标从0开始，最后一个元素的下标是“length-1”</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array1;</span><br><span class="line"><span class="keyword">double</span>[] array2;</span><br><span class="line"><span class="keyword">boolean</span>[] array3;</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<p>11、初始化一个一维数组，包括两种方式：静态初始化一维数组，动态初始化一维数组</p>
-<p>静态初始化语法格式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>动态初始化语法格式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];<span class="comment">//5表示数组的元素个数</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="对数组内元素的访问"><a href="#对数组内元素的访问" class="headerlink" title="对数组内元素的访问"></a>对数组内元素的访问</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Array</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] array01=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;;</span><br><span class="line">        System.out.println(array01.length);</span><br><span class="line">        System.out.println(array01[<span class="number">0</span>]);</span><br><span class="line">        System.out.println(array01[array01.length-<span class="number">1</span>]);</span><br><span class="line">        array01[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        System.out.println(array01[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>Linux的分发版本都有采用（suse，redhat，centos等等），可以算是公认的行业标准了</p>
+<ul>
+<li><code>rpm -qa | grep xx</code>：查询已安装的rpm列表，</li>
+</ul>
+<p><strong>rpm包名基本格式</strong></p>
+<p>例如：<code>firefox-52.2.0-2.el7.centos.x86_64</code></p>
+<p><img src="/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/rpm%E7%AE%A1%E7%90%86%EF%BC%88firefox%EF%BC%89.png"></p>
+<ul>
+<li><p>名称：firefox</p>
+</li>
+<li><p>版本号：52.2.0-2</p>
+</li>
+<li><p>使用操作系统：el7.centos.x86_64</p>
+</li>
+<li><p>表示centos7.x的64位系统</p>
+</li>
+<li><p>如果是i686、i386表示32位系统，noarch表示通用</p>
+</li>
+<li><p><code>rpm -qa</code>：查询所安装的所有rpm软件包</p>
+</li>
+<li><p><code>rpm -qa | more</code></p>
+</li>
+<li><p><code>rpm -qa | grep XX</code></p>
+</li>
+<li><p><code>rpm -q 软件包名</code>：查询软件包是否安装</p>
+</li>
+<li><p><code>rpm -qi 软件包名</code>：查询软件包信息</p>
+</li>
+<li><p><code>rpm -ql 软件包名</code>：查询软件包中的文件</p>
+</li>
+<li><p><code>rpm -qf 文件全路径名</code>：查询文件所属的软件包</p>
+</li>
+</ul>
+<p><strong>卸载rpm包</strong></p>
+<p><code>rpm -e rpm包的名称</code></p>
+<p>注意：如果其他软件包依赖于要卸载的软件包，卸载时则会产生错误信息。可以增加参数<code>--nodeps</code>强制删除，但依赖于该软件包的程序可能无法正常运行</p>
+<p><strong>安装rpm包</strong></p>
+<p><code>rpm -ivh rpm包全路径名称</code></p>
+<p>参数说明：</p>
+<ul>
+<li><code>i</code>: install 安装</li>
+<li><code>v</code>: verbose 提示</li>
+<li><code>h</code>: hash进度条</li>
+</ul>
+<h3 id="yum"><a href="#yum" class="headerlink" title="yum"></a>yum</h3><p><code>yum</code>是一个Shell前端软件包管理器，基于RPM包管理，能够从指定的服务器自动下载RPM包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软件包。</p>
+<p><code>yum list|grep xx</code>：查询yum服务器是否有需要安装的软件</p>
+<p><code>yum install xxx</code>：下载安装</p>
 
     </div>
 
@@ -260,13 +289,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/02/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20017%EF%BC%88equals%E6%96%B9%E6%B3%95%E6%B7%B1%E5%B1%82%E6%AC%A1%E7%90%86%E8%A7%A3%E3%80%81Object%E7%B1%BB%E4%B8%AD%E7%9A%84hashCode%E6%96%B9%E6%B3%95%E3%80%81%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%EF%BC%89/" rel="prev" title="equals方法、Object类中的hashCode方法、匿名内部类">
-      <i class="fa fa-chevron-left"></i> equals方法、Object类中的hashCode方法、匿名内部类
+    <a href="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/" rel="prev" title="线性表以及顺序存储结构">
+      <i class="fa fa-chevron-left"></i> 线性表以及顺序存储结构
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20019%EF%BC%88%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E6%98%AF%E6%95%B0%E7%BB%84%EF%BC%89/" rel="next" title="方法的参数是数组">
-      方法的参数是数组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -325,7 +351,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一维数组概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%95%B0%E7%BB%84%E5%86%85%E5%85%83%E7%B4%A0%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.</span> <span class="nav-text">对数组内元素的访问</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">rpm包的管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yum"><span class="nav-number">1.1.</span> <span class="nav-text">yum</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
