@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="shell编程1、Linux运维工程师在进行服务器集群管理时，需要编写shell程序进行服务器管理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell编程">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="shell编程1、Linux运维工程师在进行服务器集群管理时，需要编写shell程序进行服务器管理。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/hello_world.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E6%89%A7%E8%A1%8C.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%98%E9%87%8F%E7%BB%83%E4%B9%A0.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%98%E9%87%8F%E7%BB%83%E4%B9%A0%E6%89%A7%E8%A1%8C.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%82%E6%95%B0%E6%9F%A5%E7%9C%8B.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%82%E6%95%B0%E6%9F%A5%E7%9C%8B%E7%BB%83%E4%B9%A0.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E9%A2%84%E5%AE%9A%E4%B9%89%E7%BB%83%E4%B9%A00.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E9%A2%84%E5%AE%9A%E4%B9%89%E7%BB%83%E4%B9%A01.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E8%BF%90%E7%AE%97%E7%AC%A6%E7%BB%83%E4%B9%A01.png">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E8%BF%90%E7%AE%97%E7%AC%A6%E7%AD%94%E6%A1%88.png">
+<meta property="article:published_time" content="2021-07-29T02:25:01.000Z">
+<meta property="article:modified_time" content="2021-07-29T02:28:34.845Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/hello_world.png">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>shell编程 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          shell编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-29 10:25:01 / 修改时间：10:28:34" itemprop="dateCreated datePublished" datetime="2021-07-29T10:25:01+08:00">2021-07-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h2><p>1、Linux运维工程师在进行服务器集群管理时，需要编写shell程序进行服务器管理。</p>
+<span id="more"></span>
+<p>2、对于javaEE和Python程序员来说，有时也会需要用shell脚本进行一些工作。</p>
+<p>3、对于大数据程序员来说，需要编写shell程序来管理集群。</p>
+<h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><p>shell是一个命令行解释器，它为用户提供了一个向Linux内核发送请求以便运行程序的界面系统级程序，用户可以用shell来启动，挂起，停止甚至是编写一些程序。</p>
+<h3 id="格式要求"><a href="#格式要求" class="headerlink" title="格式要求"></a>格式要求</h3><p>1、脚本以<code>#!/bin/bash</code>开头</p>
+<p>2、脚本需要有可执行权限</p>
+<h4 id="常用执行方式"><a href="#常用执行方式" class="headerlink" title="常用执行方式"></a>常用执行方式</h4><p>1、输入脚本的绝对路径或相对路径（首先要赋予脚本的+x权限）</p>
+<p>2、sh+脚本（不用赋予+x权限，直接执行即可）</p>
+<p>例如：</p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/hello_world.png"></p>
+<p>执行命令：</p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E6%89%A7%E8%A1%8C.png"></p>
+<p>可以是相对路径也可以是绝对路径</p>
+<h2 id="shell变量"><a href="#shell变量" class="headerlink" title="shell变量"></a>shell变量</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>1、Linux shell中的变量分为：系统变量和用户自定义变量</p>
+<p>2、系统变量：$HOME,$PWD,$SHELL,#USER等等，</p>
+<p>3、显示当前shell中所有变量：set</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>1、定义变量：变量=值</p>
+<p>2、撤销变量：unset 变量</p>
+<p>3、声明静态变量：readonly 变量，注意：不能unset</p>
+<p>4、输出变量，前要加<code>$</code></p>
+<p>5、单行注释：<code>#</code></p>
+<p>6、多行注释：<code>:&lt;&lt;!</code></p>
+<p><strong>例如</strong>：</p>
+<p>1、定义变量A</p>
+<p>2、撤销变量A</p>
+<p>3、声明静态的变量B=2，不能unset</p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%98%E9%87%8F%E7%BB%83%E4%B9%A0.png"></p>
+<p>执行：</p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%98%E9%87%8F%E7%BB%83%E4%B9%A0%E6%89%A7%E8%A1%8C.png"></p>
+<h3 id="变量的定义规则"><a href="#变量的定义规则" class="headerlink" title="变量的定义规则"></a>变量的定义规则</h3><p>1、变量名称可以由字母、数字和下划线组成，但不能以数字开头</p>
+<p>2、等号两侧不能有空格</p>
+<p>3、变量名称一般习惯为大写</p>
+<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><ul>
+<li><code>export 变量名=变量值</code>：将shell变量输出为环境变量</li>
+<li><code>source 配置文件</code>：让修改后的配置信息立即生效</li>
+<li><code>echo $变量名</code>：查询环境变量的值</li>
+</ul>
+<h2 id="位置参数变量"><a href="#位置参数变量" class="headerlink" title="位置参数变量"></a>位置参数变量</h2><p>当我们执行一个shell脚本时，如果希望获取到命令行的参数信息，就可以使用到位置参数变量。</p>
+<p>例如：<code>./myshell.sh 100 200</code>这个就是也给执行shell的命令行，可以在myshell脚本中获取到参数信息</p>
+<p>基本语法：</p>
+<ul>
+<li><code>$n</code>：n为数字，$0代表命令本身，$1~$9代表第一到第九个参数，十以上的参数，十以上的参数需要用大括号包括，如${10}</li>
+<li><code>$*</code>：这个变量代表命令行中所有的参数，$*把所有参数看成一个整体</li>
+<li><code>$@</code>：这个变量也代表命令行中所有参数，不过$@把每个参数区分对待</li>
+<li><code>$#</code>：这个变量代表命令行在所有参数的个数</li>
+</ul>
+<p>例如：</p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%82%E6%95%B0%E6%9F%A5%E7%9C%8B.png"></p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E5%8F%82%E6%95%B0%E6%9F%A5%E7%9C%8B%E7%BB%83%E4%B9%A0.png"></p>
+<h2 id="预变量定义"><a href="#预变量定义" class="headerlink" title="预变量定义"></a>预变量定义</h2><p>为shell设计者事先已经定义好的变量，可以直接在shell脚本中使用</p>
+<p><strong>基本语法</strong>：</p>
+<ul>
+<li><code>$$</code>：当前进程的进程号（PID）</li>
+<li><code>$!</code>：后台运行的最后一个进程的进程号(PID)</li>
+<li><code>$?</code>：最后一次执行的命令的返回状态，如果这个变量的值为0，证明上一个命令正确执行，如果这个变量的值为非0，则证明上一个命令执行不正确。</li>
+</ul>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E9%A2%84%E5%AE%9A%E4%B9%89%E7%BB%83%E4%B9%A00.png"></p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E9%A2%84%E5%AE%9A%E4%B9%89%E7%BB%83%E4%B9%A01.png"></p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><ul>
+<li><code>&quot;$((运算式))&quot;</code>或<code>&quot;$[运算式]&quot;</code>或者<code>expr m + n</code></li>
+<li>注意expr运算符间要有空格，如果希望expr的结果付给某个变量，使用``</li>
+<li><code>expr m - n</code></li>
+<li><code>expr \* / % 乘 除 取余 </code></li>
+</ul>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E8%BF%90%E7%AE%97%E7%AC%A6%E7%BB%83%E4%B9%A01.png"></p>
+<p><img src="/2021/07/29/shell%E7%BC%96%E7%A8%8B/%E8%BF%90%E7%AE%97%E7%AC%A6%E7%AD%94%E6%A1%88.png"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>你可以对我打赏了哦.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="ffy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="ffy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/26/javaEE%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="prev" title="javaEE环境配置">
+      <i class="fa fa-chevron-left"></i> javaEE环境配置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell%E7%BC%96%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">shell编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell"><span class="nav-number">1.1.</span> <span class="nav-text">shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">格式要求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">常用执行方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">shell变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99"><span class="nav-number">2.3.</span> <span class="nav-text">变量的定义规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">设置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">位置参数变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89"><span class="nav-number">5.</span> <span class="nav-text">预变量定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">6.</span> <span class="nav-text">运算符</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
