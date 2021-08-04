@@ -20,28 +20,34 @@
     var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ffy&#39;s blog">
-<meta property="og:url" content="http://ffyzsl.github.io/index.html">
+  <meta name="description" content="集合接口与实现分离以队列（queue）为例，说明接口与实现分离 队列接口指出可以在队列的尾部添加元素，在队列的头部删除元素，并且可以查找队列中元素的个数，并按照“先进先出”方式检索对象。 12345678public interface Queue&lt;E&gt; extends Collection&lt;E&gt; &amp;#123;    boolean add(E e);    boolean">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java集合框架，具体集合及映射">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/08/04/java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%8C%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88%E5%8F%8A%E6%98%A0%E5%B0%84/index.html">
 <meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="集合接口与实现分离以队列（queue）为例，说明接口与实现分离 队列接口指出可以在队列的尾部添加元素，在队列的头部删除元素，并且可以查找队列中元素的个数，并按照“先进先出”方式检索对象。 12345678public interface Queue&lt;E&gt; extends Collection&lt;E&gt; &amp;#123;    boolean add(E e);    boolean">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ffyzsl.github.io/2021/08/04/java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%8C%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88%E5%8F%8A%E6%98%A0%E5%B0%84/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E7%9A%84%E6%8E%A5%E5%8F%A3.png">
+<meta property="article:published_time" content="2021-08-04T02:22:01.885Z">
+<meta property="article:modified_time" content="2021-08-04T02:31:02.944Z">
 <meta property="article:author" content="ffy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ffyzsl.github.io/2021/08/04/java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%8C%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88%E5%8F%8A%E6%98%A0%E5%B0%84/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E7%9A%84%E6%8E%A5%E5%8F%A3.png">
 
-<link rel="canonical" href="http://ffyzsl.github.io/">
+<link rel="canonical" href="http://ffyzsl.github.io/2021/08/04/java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%8C%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88%E5%8F%8A%E6%98%A0%E5%B0%84/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>ffy's blog</title>
+  <title>java集合框架，具体集合及映射 | ffy's blog</title>
   
 
 
@@ -145,9 +151,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -163,10 +170,9 @@
       <meta itemprop="name" content="ffy's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/04/java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%8C%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88%E5%8F%8A%E6%98%A0%E5%B0%84/" class="post-title-link" itemprop="url">java集合框架，具体集合及映射</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          java集合框架，具体集合及映射
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -199,7 +205,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="集合接口与实现分离"><a href="#集合接口与实现分离" class="headerlink" title="集合接口与实现分离"></a>集合接口与实现分离</h2><p>以队列（queue）为例，说明接口与实现分离</p>
+        <h2 id="集合接口与实现分离"><a href="#集合接口与实现分离" class="headerlink" title="集合接口与实现分离"></a>集合接口与实现分离</h2><p>以队列（queue）为例，说明接口与实现分离</p>
 <p><code>队列接口</code>指出可以在队列的尾部添加元素，在队列的头部删除元素，并且可以查找队列中元素的个数，并按照“先进先出”方式检索对象。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;</span><br><span class="line">    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -405,707 +411,51 @@
 
 <h4 id="标识散列映射"><a href="#标识散列映射" class="headerlink" title="标识散列映射"></a>标识散列映射</h4><p>该映射的键的散列值不是用hashCode方法计算的，而是用System.identityHashCode方法计算的，这是Object.hashCode根据对象的内存地址计算散列码时使用的方法。且在比较对象时，使用的是“==”，而不是equals，这说明即使两个对象的内容相同，也被视为不同的对象，通常被用于实现对象遍历算法，跟踪哪些对象已经被遍历过。</p>
 
-      
     </div>
 
     
     
     
+        <div class="reward-container">
+  <div>你可以对我打赏了哦.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="ffy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="ffy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/08/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E8%A1%A5%E5%85%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E8%A1%A5%E5%85%85/" class="post-title-link" itemprop="url">异常处理的补充</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-01 14:59:25 / 修改时间：15:00:24" itemprop="dateCreated datePublished" datetime="2021-08-01T14:59:25+08:00">2021-08-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="异常继承结构"><a href="#异常继承结构" class="headerlink" title="异常继承结构"></a>异常继承结构</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E8%A1%A5%E5%85%85/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/08/01/var/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/01/var/" class="post-title-link" itemprop="url">var介绍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-01 10:16:41 / 修改时间：10:16:34" itemprop="dateCreated datePublished" datetime="2021-08-01T10:16:41+08:00">2021-08-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javaSE/" itemprop="url" rel="index"><span itemprop="name">javaSE</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="var"><a href="#var" class="headerlink" title="var"></a>var</h2><p>var是Java10 版本新出的特性，用来定义局部变量</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/01/var/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E8%A1%A5%E5%85%85/" rel="prev" title="异常处理的补充">
+      <i class="fa fa-chevron-left"></i> 异常处理的补充
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/29/%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/29/%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">定时备份数据库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-29 10:39:06 / 修改时间：10:40:31" itemprop="dateCreated datePublished" datetime="2021-07-29T10:39:06+08:00">2021-07-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="定时备份数据库"><a href="#定时备份数据库" class="headerlink" title="定时备份数据库"></a>定时备份数据库</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/29/%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/29/%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%EF%BC%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%E4%BB%A5%E5%8F%8A%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/29/%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%EF%BC%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%E4%BB%A5%E5%8F%8A%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">条件判断，循环语句以及函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-29 10:34:13 / 修改时间：10:36:22" itemprop="dateCreated datePublished" datetime="2021-07-29T10:34:13+08:00">2021-07-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><ul>
-<li><p>[condition]（注意condition前后要有空格）非空返回true，可使用<code>$?</code>验证（0为true，&gt;1为false）</p></li></ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/29/%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%EF%BC%8C%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%E4%BB%A5%E5%8F%8A%E5%87%BD%E6%95%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/29/shell%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/29/shell%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">shell编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-29 10:25:01 / 修改时间：10:28:34" itemprop="dateCreated datePublished" datetime="2021-07-29T10:25:01+08:00">2021-07-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h2><p>1、Linux运维工程师在进行服务器集群管理时，需要编写shell程序进行服务器管理。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/29/shell%E7%BC%96%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/26/javaEE%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/26/javaEE%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">javaEE环境配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-26 15:57:59 / 修改时间：15:57:38" itemprop="dateCreated datePublished" datetime="2021-07-26T15:57:59+08:00">2021-07-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/26/javaEE%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">rpm包的管理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-25 09:23:12 / 修改时间：09:24:39" itemprop="dateCreated datePublished" datetime="2021-07-25T09:23:12+08:00">2021-07-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="rpm包的管理"><a href="#rpm包的管理" class="headerlink" title="rpm包的管理"></a>rpm包的管理</h2><p>rpm用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中，它生成具有<code>.RPM</code>扩展名的文件，RPM是RedHat Package Manage(RedHat软件包管理工具)的缩写，类似Windows的setup.exe，这一文件格式名称虽然打上了RedHat的标志，但理念是通用的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/25/rpm%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">线性表以及顺序存储结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-22 15:15:09" itemprop="dateCreated datePublished" datetime="2021-07-22T15:15:09+08:00">2021-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-25 10:01:20" itemprop="dateModified" datetime="2021-07-25T10:01:20+08:00">2021-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>同一个问题可以有不同的表示（存储）方法</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/07/22/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/22/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">Linux进程管理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-22 09:49:31 / 修改时间：10:02:37" itemprop="dateCreated datePublished" datetime="2021-07-22T09:49:31+08:00">2021-07-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p>在Linux中，每个执行的程序都称为一个进程，每一个进程都分配一个ID号（pid，进程号）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/22/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -1157,6 +507,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AE%9E%E7%8E%B0%E5%88%86%E7%A6%BB"><span class="nav-number">1.</span> <span class="nav-text">集合接口与实现分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection"><span class="nav-number">2.</span> <span class="nav-text">Collection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.</span> <span class="nav-text">集合框架中的接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E9%9B%86%E5%90%88"><span class="nav-number">5.</span> <span class="nav-text">具体集合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8"><span class="nav-number">5.1.</span> <span class="nav-text">链表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%88%97%E8%A1%A8"><span class="nav-number">5.2.</span> <span class="nav-text">数组列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%A3%E5%88%97%E8%A1%A8"><span class="nav-number">5.2.1.</span> <span class="nav-text">散列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Comparable"><span class="nav-number">5.2.2.</span> <span class="nav-text">Comparable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Comparator%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.2.3.</span> <span class="nav-text">Comparator接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%91%E9%9B%86"><span class="nav-number">5.2.4.</span> <span class="nav-text">树集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E4%B8%8E%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97"><span class="nav-number">5.2.5.</span> <span class="nav-text">队列与双端队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%A0%E5%B0%84"><span class="nav-number">5.3.</span> <span class="nav-text">映射</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%98%A0%E5%B0%84%E6%93%8D%E4%BD%9C"><span class="nav-number">5.3.1.</span> <span class="nav-text">基本映射操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%98%A0%E5%B0%84%E6%9D%A1%E7%9B%AE"><span class="nav-number">5.3.2.</span> <span class="nav-text">更新映射条目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%A0%E5%B0%84%E8%A7%86%E5%9B%BE"><span class="nav-number">5.3.3.</span> <span class="nav-text">映射视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%B1%E6%95%A3%E5%88%97%E6%98%A0%E5%B0%84"><span class="nav-number">5.3.4.</span> <span class="nav-text">弱散列映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E6%95%A3%E5%88%97%E9%9B%86%E4%B8%8E%E6%98%A0%E5%B0%84"><span class="nav-number">5.3.5.</span> <span class="nav-text">链接散列集与映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E9%9B%86%E4%B8%8E%E6%98%A0%E5%B0%84"><span class="nav-number">5.3.6.</span> <span class="nav-text">枚举集与映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AF%86%E6%95%A3%E5%88%97%E6%98%A0%E5%B0%84"><span class="nav-number">5.3.7.</span> <span class="nav-text">标识散列映射</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
