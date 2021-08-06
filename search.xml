@@ -189,60 +189,6 @@
       </categories>
   </entry>
   <entry>
-    <title>运算符以及if语句</title>
-    <url>/2021/07/02/Day%20003%EF%BC%88%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BB%A5%E5%8F%8Aif%E8%AF%AD%E5%8F%A5%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="一、运算符"><a href="#一、运算符" class="headerlink" title="一、运算符"></a>一、运算符</h2><h3 id="算术运算符：-–"><a href="#算术运算符：-–" class="headerlink" title="算术运算符：+  -  *  /  ++ –  %"></a>算术运算符：+  -  *  /  ++ –  %</h3><span id="more"></span>
-
-<p>注：（不确定优先级的，加小括号）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> a;</span><br><span class="line">        a=i%<span class="number">2</span>;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>++ 或–  出现在变量<strong>前</strong>，先加后用<br>       ++或–  出现在变量<strong>后</strong>，先用后加</p>
-<h3 id="关系运算符-gt-gt-lt-lt"><a href="#关系运算符-gt-gt-lt-lt" class="headerlink" title="关系运算符     &gt;   &gt;=   &lt;   &lt;=   ==   !="></a>关系运算符     &gt;   &gt;=   &lt;   &lt;=   ==   !=</h3><h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p><strong>&amp; 逻辑与</strong>（两边的算子都是true，结果才是true）<br>        <strong>| 逻辑或</strong>（两边的算子只要有一个是true，结果就是true）<br>       <strong>！逻辑非</strong>（取反，!false就是true,!true就是false）<br>       **^ 逻辑异或 **  (两边的算子只要不一样，就是true)<br>       <strong>&amp;&amp;  短路与</strong><br>       <strong>|| 短路或</strong><br>1、逻辑运算符要求两边的算子都是布尔类型，并且逻辑运算符最终的运算结果也是一个布尔类型。<br>2、短路与和逻辑与最终的运算结果相同，只不过短路与存在短路现象。<br>3、短路或和逻辑或最终的运算结果相同，只不过短路或存在短路现象。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> y=<span class="number">11</span>;</span><br><span class="line">        System.out.println(<span class="keyword">false</span> &amp; ++x&lt;y);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="number">11</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> y=<span class="number">11</span>;</span><br><span class="line">        System.out.println(<span class="keyword">false</span> &amp;&amp; ++x&lt;y);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
-
-<p>当<strong>短路与</strong>在第一个表达式时的结果是false，导致最终结果必然是false，所以后面的表达式没必要执行。而逻辑与不管第一个表达式为false还是true，他会把所有表达式全部执行。<br>当<strong>短路或</strong>在第一个表达式的结果为true，导致最终结果必然是true，所以后面的表达式没必要执行，而逻辑或不管第一个表达式为false还是true，他会把所有表达式全部执行。<br>注：（从某个方面而言，短语与，短路或更加智能，执行效率更高，但在实际应用中，还是要看情况逻辑）</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p><strong>基本的赋值运算符  =</strong><br>       *<em>拓展的赋值运算符  +=   -=  <em>=   /=    %=  (可以翻译成“追加/累加”)</em></em></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> b=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> s;</span><br><span class="line">        s=a+b;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">        s=<span class="number">10</span>;</span><br><span class="line">        s*=a+b;<span class="comment">//s=s*(a+b);</span></span><br><span class="line">        System.out.println(s);</span><br><span class="line">        s/=<span class="number">4</span>;<span class="comment">//s=s/4    </span></span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">30</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">byte</span> b =<span class="number">10</span>;</span><br><span class="line">b=b+<span class="number">5</span>;<span class="comment">//报错  编译器只检查语法，不运行程序 ，编译器发现b+5的类型为int，b变量的类型为byte</span></span><br><span class="line">b=<span class="keyword">byte</span>(b+<span class="number">5</span>);<span class="comment">//正确</span></span><br><span class="line">b+=<span class="number">5</span>;<span class="comment">//正确  等同于b=byte(b=5);不等同与b=b+5;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> k=<span class="number">10</span>;</span><br><span class="line">k+=<span class="number">5</span>;<span class="comment">//等同于k=(int)(k+5);</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>注：（byte的取值范围为-128至127，损失精度，超过溢出）</p>
-<p><em><strong>拓展类的赋值运算符不改变运算结果类型，假设最初这个变量的类型是byte类型，无论怎么进行追加或追减，不改变最初变量类型</strong></em></p>
-<h3 id="字符串连接运算符"><a href="#字符串连接运算符" class="headerlink" title="字符串连接运算符"></a>字符串连接运算符</h3><p><strong>+</strong>   加法运算，字符串连接运算</p>
-<p>1、当“+“运算符两边的数据都是数字的话，一定是进行加法运算<br>       2、当”+“运算符两边的数据只要有一个数据是字符串，一定会进行字符串连接运算，并且，连接运算之后的结果还是一个字符串类型。<br>       3、在一个式子中有多个”+“号时，且没有小括号的前提下，遵循自左向右的顺序执行。 </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">20</span>;</span><br><span class="line">System.out.println(a+<span class="string">&quot;+&quot;</span>+b+”=“+（a+b));</span><br><span class="line"></span><br><span class="line"><span class="number">10</span>+<span class="number">20</span>=<span class="number">30</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//引用类型String</span></span><br><span class="line">        <span class="comment">//String时SUN在JAVASE当中提供的字符串类型</span></span><br><span class="line">        <span class="comment">//String.class字节码文件</span></span><br><span class="line">        <span class="comment">//int时基本数据类型，i是变量名，10是int类型的字面值</span></span><br><span class="line">        <span class="comment">//String s=&quot;abc&quot;;</span></span><br><span class="line">        String unername=<span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;登陆成功，欢迎&quot;</span>+unername+<span class="string">&quot;回来！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">登陆成功，欢迎zhangsan回来！</span><br></pre></td></tr></table></figure>
-
-<h3 id="三元运算符-三目运算符-条件运算符"><a href="#三元运算符-三目运算符-条件运算符" class="headerlink" title="三元运算符/三目运算符/条件运算符"></a>三元运算符/三目运算符/条件运算符</h3><p>1、语法规则  <strong>布尔表达式？表达式1：表达式2</strong><br> 布尔表达式为true，执行结果为表达式1的执行结果<br> 布尔表达式为false，执行结果为表达式2的执行结果</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">boolean</span> sex = <span class="keyword">false</span>;</span><br><span class="line"><span class="keyword">char</span> c1= sex? <span class="string">&quot;n&quot;</span>:<span class="string">&quot;y&quot;</span>;<span class="comment">//报错，类型不兼容   char c1=sex?&#x27;n&#x27;:&#x27;y&#x27;;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Boolean sex=<span class="keyword">false</span>;</span><br><span class="line">String s = sex?<span class="string">&quot;男的&quot;</span>;<span class="string">&quot;女的&quot;</span>;<span class="comment">//不报错</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h2><h3 id="选择结构"><a href="#选择结构" class="headerlink" title="选择结构"></a>选择结构</h3><h4 id="if语句和if-else-语句"><a href="#if语句和if-else-语句" class="headerlink" title="if语句和if else 语句"></a>if语句和if else 语句</h4><p>1、if语句的语法结构</p>
-<p>第一种：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">   java语句</span><br><span class="line">   ……</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二种</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">   java语句</span><br><span class="line">   ……</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">   java语句</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>嵌套</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;  </span><br><span class="line">    java语句   </span><br><span class="line">    ……  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;   </span><br><span class="line">    java语句 </span><br><span class="line">    ……</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">    java语句</span><br><span class="line">     ……</span><br><span class="line">……</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;  </span><br><span class="line">    java语句   </span><br><span class="line">    ……  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;   </span><br><span class="line">    java语句 </span><br><span class="line">    ……</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">    java语句</span><br><span class="line">     ……</span><br><span class="line">……&#123;</span><br><span class="line">     </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-<p><strong>练习</strong><br>需求：判断当前的天气：当外边下雨的时候：带雨伞，判断性别，当性别为男，带一把大黑伞，当性别为女，带一把小花伞，当外边是晴天的时候，判断天气的温度，超过30度以上，当性别为男，戴墨镜，当性别为女，擦防晒霜。<br>天气状况、温度、性别需要从键盘输入<br>温度直接用数字即可<br>性别，1为男，0为女</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">iftest2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        java.util.Scanner s=<span class="keyword">new</span> java.util.Scanner(System.in);</span><br><span class="line">        <span class="keyword">int</span> weather=s.nextInt();</span><br><span class="line">        <span class="keyword">int</span> temperature=s.nextInt();</span><br><span class="line">        <span class="keyword">int</span> sex=s.nextInt();</span><br><span class="line">        <span class="keyword">if</span> (weather==<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (sex == <span class="number">1</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;带一把大黑伞&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sex == <span class="number">0</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;带一把小花伞&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (weather==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (temperature&gt;<span class="number">30</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span> (sex==<span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;戴墨镜&quot;</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span> (sex==<span class="number">0</span>)&#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;擦防晒霜&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>switch语句、循环语句以及循环控制语句</title>
     <url>/2021/07/02/Day%20004%EF%BC%88switch%E8%AF%AD%E5%8F%A5%E3%80%81%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%E4%BB%A5%E5%8F%8A%E5%BE%AA%E7%8E%AF%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5%EF%BC%89/</url>
     <content><![CDATA[<h3 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h3><span id="more"></span>
@@ -294,6 +240,60 @@
 
 <h3 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h3><p>1、主要出现在循环语句中，用来控制循环的执行。</p>
 <p>2、表示直接进入下一次循环，和break一样，可以跳出任意一层循环。</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>运算符以及if语句</title>
+    <url>/2021/07/02/Day%20003%EF%BC%88%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BB%A5%E5%8F%8Aif%E8%AF%AD%E5%8F%A5%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="一、运算符"><a href="#一、运算符" class="headerlink" title="一、运算符"></a>一、运算符</h2><h3 id="算术运算符：-–"><a href="#算术运算符：-–" class="headerlink" title="算术运算符：+  -  *  /  ++ –  %"></a>算术运算符：+  -  *  /  ++ –  %</h3><span id="more"></span>
+
+<p>注：（不确定优先级的，加小括号）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> a;</span><br><span class="line">        a=i%<span class="number">2</span>;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>++ 或–  出现在变量<strong>前</strong>，先加后用<br>       ++或–  出现在变量<strong>后</strong>，先用后加</p>
+<h3 id="关系运算符-gt-gt-lt-lt"><a href="#关系运算符-gt-gt-lt-lt" class="headerlink" title="关系运算符     &gt;   &gt;=   &lt;   &lt;=   ==   !="></a>关系运算符     &gt;   &gt;=   &lt;   &lt;=   ==   !=</h3><h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p><strong>&amp; 逻辑与</strong>（两边的算子都是true，结果才是true）<br>        <strong>| 逻辑或</strong>（两边的算子只要有一个是true，结果就是true）<br>       <strong>！逻辑非</strong>（取反，!false就是true,!true就是false）<br>       **^ 逻辑异或 **  (两边的算子只要不一样，就是true)<br>       <strong>&amp;&amp;  短路与</strong><br>       <strong>|| 短路或</strong><br>1、逻辑运算符要求两边的算子都是布尔类型，并且逻辑运算符最终的运算结果也是一个布尔类型。<br>2、短路与和逻辑与最终的运算结果相同，只不过短路与存在短路现象。<br>3、短路或和逻辑或最终的运算结果相同，只不过短路或存在短路现象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> y=<span class="number">11</span>;</span><br><span class="line">        System.out.println(<span class="keyword">false</span> &amp; ++x&lt;y);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="number">11</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> y=<span class="number">11</span>;</span><br><span class="line">        System.out.println(<span class="keyword">false</span> &amp;&amp; ++x&lt;y);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<p>当<strong>短路与</strong>在第一个表达式时的结果是false，导致最终结果必然是false，所以后面的表达式没必要执行。而逻辑与不管第一个表达式为false还是true，他会把所有表达式全部执行。<br>当<strong>短路或</strong>在第一个表达式的结果为true，导致最终结果必然是true，所以后面的表达式没必要执行，而逻辑或不管第一个表达式为false还是true，他会把所有表达式全部执行。<br>注：（从某个方面而言，短语与，短路或更加智能，执行效率更高，但在实际应用中，还是要看情况逻辑）</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p><strong>基本的赋值运算符  =</strong><br>       *<em>拓展的赋值运算符  +=   -=  <em>=   /=    %=  (可以翻译成“追加/累加”)</em></em></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> b=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> s;</span><br><span class="line">        s=a+b;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">        s=<span class="number">10</span>;</span><br><span class="line">        s*=a+b;<span class="comment">//s=s*(a+b);</span></span><br><span class="line">        System.out.println(s);</span><br><span class="line">        s/=<span class="number">4</span>;<span class="comment">//s=s/4    </span></span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">30</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">byte</span> b =<span class="number">10</span>;</span><br><span class="line">b=b+<span class="number">5</span>;<span class="comment">//报错  编译器只检查语法，不运行程序 ，编译器发现b+5的类型为int，b变量的类型为byte</span></span><br><span class="line">b=<span class="keyword">byte</span>(b+<span class="number">5</span>);<span class="comment">//正确</span></span><br><span class="line">b+=<span class="number">5</span>;<span class="comment">//正确  等同于b=byte(b=5);不等同与b=b+5;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> k=<span class="number">10</span>;</span><br><span class="line">k+=<span class="number">5</span>;<span class="comment">//等同于k=(int)(k+5);</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注：（byte的取值范围为-128至127，损失精度，超过溢出）</p>
+<p><em><strong>拓展类的赋值运算符不改变运算结果类型，假设最初这个变量的类型是byte类型，无论怎么进行追加或追减，不改变最初变量类型</strong></em></p>
+<h3 id="字符串连接运算符"><a href="#字符串连接运算符" class="headerlink" title="字符串连接运算符"></a>字符串连接运算符</h3><p><strong>+</strong>   加法运算，字符串连接运算</p>
+<p>1、当“+“运算符两边的数据都是数字的话，一定是进行加法运算<br>       2、当”+“运算符两边的数据只要有一个数据是字符串，一定会进行字符串连接运算，并且，连接运算之后的结果还是一个字符串类型。<br>       3、在一个式子中有多个”+“号时，且没有小括号的前提下，遵循自左向右的顺序执行。 </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">20</span>;</span><br><span class="line">System.out.println(a+<span class="string">&quot;+&quot;</span>+b+”=“+（a+b));</span><br><span class="line"></span><br><span class="line"><span class="number">10</span>+<span class="number">20</span>=<span class="number">30</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//引用类型String</span></span><br><span class="line">        <span class="comment">//String时SUN在JAVASE当中提供的字符串类型</span></span><br><span class="line">        <span class="comment">//String.class字节码文件</span></span><br><span class="line">        <span class="comment">//int时基本数据类型，i是变量名，10是int类型的字面值</span></span><br><span class="line">        <span class="comment">//String s=&quot;abc&quot;;</span></span><br><span class="line">        String unername=<span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;登陆成功，欢迎&quot;</span>+unername+<span class="string">&quot;回来！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">登陆成功，欢迎zhangsan回来！</span><br></pre></td></tr></table></figure>
+
+<h3 id="三元运算符-三目运算符-条件运算符"><a href="#三元运算符-三目运算符-条件运算符" class="headerlink" title="三元运算符/三目运算符/条件运算符"></a>三元运算符/三目运算符/条件运算符</h3><p>1、语法规则  <strong>布尔表达式？表达式1：表达式2</strong><br> 布尔表达式为true，执行结果为表达式1的执行结果<br> 布尔表达式为false，执行结果为表达式2的执行结果</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">boolean</span> sex = <span class="keyword">false</span>;</span><br><span class="line"><span class="keyword">char</span> c1= sex? <span class="string">&quot;n&quot;</span>:<span class="string">&quot;y&quot;</span>;<span class="comment">//报错，类型不兼容   char c1=sex?&#x27;n&#x27;:&#x27;y&#x27;;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Boolean sex=<span class="keyword">false</span>;</span><br><span class="line">String s = sex?<span class="string">&quot;男的&quot;</span>;<span class="string">&quot;女的&quot;</span>;<span class="comment">//不报错</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h2><h3 id="选择结构"><a href="#选择结构" class="headerlink" title="选择结构"></a>选择结构</h3><h4 id="if语句和if-else-语句"><a href="#if语句和if-else-语句" class="headerlink" title="if语句和if else 语句"></a>if语句和if else 语句</h4><p>1、if语句的语法结构</p>
+<p>第一种：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">   java语句</span><br><span class="line">   ……</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二种</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">   java语句</span><br><span class="line">   ……</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">   java语句</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>嵌套</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;  </span><br><span class="line">    java语句   </span><br><span class="line">    ……  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;   </span><br><span class="line">    java语句 </span><br><span class="line">    ……</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">    java语句</span><br><span class="line">     ……</span><br><span class="line">……</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(布尔表达式)&#123;  </span><br><span class="line">    java语句   </span><br><span class="line">    ……  </span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;   </span><br><span class="line">    java语句 </span><br><span class="line">    ……</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(布尔表达式)&#123;</span><br><span class="line">    java语句</span><br><span class="line">     ……</span><br><span class="line">……&#123;</span><br><span class="line">     </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p><strong>练习</strong><br>需求：判断当前的天气：当外边下雨的时候：带雨伞，判断性别，当性别为男，带一把大黑伞，当性别为女，带一把小花伞，当外边是晴天的时候，判断天气的温度，超过30度以上，当性别为男，戴墨镜，当性别为女，擦防晒霜。<br>天气状况、温度、性别需要从键盘输入<br>温度直接用数字即可<br>性别，1为男，0为女</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">iftest2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        java.util.Scanner s=<span class="keyword">new</span> java.util.Scanner(System.in);</span><br><span class="line">        <span class="keyword">int</span> weather=s.nextInt();</span><br><span class="line">        <span class="keyword">int</span> temperature=s.nextInt();</span><br><span class="line">        <span class="keyword">int</span> sex=s.nextInt();</span><br><span class="line">        <span class="keyword">if</span> (weather==<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (sex == <span class="number">1</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;带一把大黑伞&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sex == <span class="number">0</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;带一把小花伞&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (weather==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (temperature&gt;<span class="number">30</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span> (sex==<span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;戴墨镜&quot;</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span> (sex==<span class="number">0</span>)&#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;擦防晒霜&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -979,6 +979,79 @@
       </categories>
   </entry>
   <entry>
+    <title>时间日期类，搜索查找类</title>
+    <url>/2021/07/10/Linux%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB%EF%BC%8C%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h2><p><code>date</code>：显示当前日期</p>
+<span id="more"></span>
+<ul>
+<li><p><code>date</code>：显示当前时间</p>
+</li>
+<li><p><code>date +%Y</code>：显示当前年份</p>
+</li>
+<li><p><code>date +%m</code>：显示当前月份</p>
+</li>
+<li><p><code>date +%d</code>：显示当前哪一天</p>
+</li>
+<li><p><code>date &quot;+%Y-%m-%d %H:%M:%S&quot;</code>：显示年月日时分秒</p>
+</li>
+<li><p> <code>date -s 字符串时间</code>：设置系统当前时间</p>
+</li>
+</ul>
+<h2 id="搜索查找类"><a href="#搜索查找类" class="headerlink" title="搜索查找类"></a>搜索查找类</h2><p><code>find</code>指令：从指定目录向下递归地遍历其各个子目录，将满足条件的文件或者目录显示在终端。</p>
+<p><code>find [搜索范围] [选项]</code></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-name &lt;查询方式&gt;</td>
+<td>按照指定的文件名查找模式查找文件</td>
+</tr>
+<tr>
+<td>-user &lt;用户名&gt;</td>
+<td>查找属于指定用户名所有的文件</td>
+</tr>
+<tr>
+<td>-size &lt;文件大小&gt;</td>
+<td>按照指定的文件大小查找文件</td>
+</tr>
+</tbody></table>
+<ul>
+<li>例如： <code>find /home -name hello,world.txt</code>(在home目录下搜索文件名为hello,world的文件)。<code>find /home -user ffyzsl</code>（在home目录下搜索属于用户名为ffyzsl的文件）<code>find /home -size +/-200M</code>（在home目录下搜索大小为200M的文件，+200M代表大于200M的文件，-200M代表小于200M的文件，200M代表等于200M的文件）</li>
+</ul>
+<p><code>locate</code>指令：可以快速定位文件路径，locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。locate指令无需遍历整个文件系统，查询速度较快，为了保证查询结果的准确度，管理员必须定期更新locate时刻。</p>
+<ul>
+<li><code>locate 搜索文件</code>：由于locate指令基于数据库进行查询，所以第一次运行前，必须使用<code>updatedb</code>指令创建locate数据库。</li>
+</ul>
+<p><code>grep</code>指令和管道符号：<code>grep</code>过滤查找，管道符<code>|</code>,表示将前一个命令的处理结果输出传递给后面的命令处理。</p>
+<ul>
+<li><code>grep [选项] 查找内容 源文件</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>显示匹配行及行号</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>忽略字母大小写</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>文件目录类</title>
     <url>/2021/07/10/Linux%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%B1%BB/</url>
     <content><![CDATA[<p><code>pwd</code> ：显示当前工作目录的绝对路径</p>
@@ -1121,79 +1194,6 @@
 <li><code>history</code>：查看所有执行过的历史命令</li>
 <li><code>history [数字]</code>：查看最近使用过的“数字”个指令</li>
 </ul>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>时间日期类，搜索查找类</title>
-    <url>/2021/07/10/Linux%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB%EF%BC%8C%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h2 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h2><p><code>date</code>：显示当前日期</p>
-<span id="more"></span>
-<ul>
-<li><p><code>date</code>：显示当前时间</p>
-</li>
-<li><p><code>date +%Y</code>：显示当前年份</p>
-</li>
-<li><p><code>date +%m</code>：显示当前月份</p>
-</li>
-<li><p><code>date +%d</code>：显示当前哪一天</p>
-</li>
-<li><p><code>date &quot;+%Y-%m-%d %H:%M:%S&quot;</code>：显示年月日时分秒</p>
-</li>
-<li><p> <code>date -s 字符串时间</code>：设置系统当前时间</p>
-</li>
-</ul>
-<h2 id="搜索查找类"><a href="#搜索查找类" class="headerlink" title="搜索查找类"></a>搜索查找类</h2><p><code>find</code>指令：从指定目录向下递归地遍历其各个子目录，将满足条件的文件或者目录显示在终端。</p>
-<p><code>find [搜索范围] [选项]</code></p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-name &lt;查询方式&gt;</td>
-<td>按照指定的文件名查找模式查找文件</td>
-</tr>
-<tr>
-<td>-user &lt;用户名&gt;</td>
-<td>查找属于指定用户名所有的文件</td>
-</tr>
-<tr>
-<td>-size &lt;文件大小&gt;</td>
-<td>按照指定的文件大小查找文件</td>
-</tr>
-</tbody></table>
-<ul>
-<li>例如： <code>find /home -name hello,world.txt</code>(在home目录下搜索文件名为hello,world的文件)。<code>find /home -user ffyzsl</code>（在home目录下搜索属于用户名为ffyzsl的文件）<code>find /home -size +/-200M</code>（在home目录下搜索大小为200M的文件，+200M代表大于200M的文件，-200M代表小于200M的文件，200M代表等于200M的文件）</li>
-</ul>
-<p><code>locate</code>指令：可以快速定位文件路径，locate指令利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件。locate指令无需遍历整个文件系统，查询速度较快，为了保证查询结果的准确度，管理员必须定期更新locate时刻。</p>
-<ul>
-<li><code>locate 搜索文件</code>：由于locate指令基于数据库进行查询，所以第一次运行前，必须使用<code>updatedb</code>指令创建locate数据库。</li>
-</ul>
-<p><code>grep</code>指令和管道符号：<code>grep</code>过滤查找，管道符<code>|</code>,表示将前一个命令的处理结果输出传递给后面的命令处理。</p>
-<ul>
-<li><code>grep [选项] 查找内容 源文件</code></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-n</td>
-<td>显示匹配行及行号</td>
-</tr>
-<tr>
-<td>-i</td>
-<td>忽略字母大小写</td>
-</tr>
-</tbody></table>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -2020,6 +2020,39 @@
       </categories>
   </entry>
   <entry>
+    <title>SQL概要，表的创建、删除、更新</title>
+    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
+    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
+<span id="more"></span>
+<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
+<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
+<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
+<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
+<p>2、SQL语句不区分大小写</p>
+<p>3、常数的书写方式是固定的</p>
+<p>4、单词需要用半角空格或者换行来分隔</p>
+<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
+<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
+<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
+<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
+<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
+<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
+<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
+<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
+<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
+<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
+<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
+<p>注意：已经删除的表是无法恢复的！</p>
+<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
+<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
     <title>构造方法、参数传递</title>
     <url>/2021/07/02/day-eigth/</url>
     <content><![CDATA[<h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p><strong>1、创建对象</strong></p>
@@ -2055,39 +2088,6 @@
 ]]></content>
       <categories>
         <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>SQL概要，表的创建、删除、更新</title>
-    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
-    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
-<span id="more"></span>
-<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
-<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
-<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
-<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
-<p>2、SQL语句不区分大小写</p>
-<p>3、常数的书写方式是固定的</p>
-<p>4、单词需要用半角空格或者换行来分隔</p>
-<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
-<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
-<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
-<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
-<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
-<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
-<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
-<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
-<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
-<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
-<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
-<p>注意：已经删除的表是无法恢复的！</p>
-<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
-<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
-<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -2387,6 +2387,69 @@
       </categories>
   </entry>
   <entry>
+    <title>单元测试，Maven快照</title>
+    <url>/2021/08/06/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%8CMaven%E5%BF%AB%E7%85%A7/</url>
+    <content><![CDATA[<h2 id="单元测试junit"><a href="#单元测试junit" class="headerlink" title="单元测试junit"></a>单元测试junit</h2><p>junit是一个测试的框架（工具）。junit测试的内容为类中的方法，每一个方法都是独立测试的。方法是测试的基本单位。</p>
+<p>maven借助单元测试，批量的测试编写的类中的方法是否符合预期。</p>
+<h3 id="举例："><a href="#举例：" class="headerlink" title="举例："></a>举例：</h3><p>首先要在pom.xml中加入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>推荐写法：</p>
+<ul>
+<li>测试类的名称为：Test+”需要测试的类名”</li>
+<li>测试方法名称为：Test+”方法名称”</li>
+</ul>
+<p>**测试方法(注意)**：</p>
+<ul>
+<li>方法是public修饰</li>
+<li>方法没有返回值</li>
+<li>方法名称为自定义</li>
+<li>方法上写上 @Test</li>
+</ul>
+<p>当前目录结构：</p>
+<p><img src="/2021/08/06/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%8CMaven%E5%BF%AB%E7%85%A7/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84junit.png"></p>
+<p>在java的com.ffyzsl.junitTest下编写Caculate类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.ffyzsl.junitTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Caculate</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">plus</span><span class="params">(<span class="keyword">int</span> a ,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minus</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在test的java中编写测试类TestCaculate类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.ffyzsl.junitTest.Caculate;</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCaculate</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Testpuls</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Caculate caculate = <span class="keyword">new</span> Caculate();</span><br><span class="line">        <span class="keyword">int</span> result =caculate.plus(<span class="number">3</span>,<span class="number">2</span>);</span><br><span class="line">        <span class="comment">//assertEquals（期望值，实际值）</span></span><br><span class="line">        <span class="comment">//如果两个值相同，则正确，如果不相等，就抛异常</span></span><br><span class="line">        Assert.assertEquals(<span class="number">5</span>,result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">Testminus</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Caculate caculate = <span class="keyword">new</span> Caculate();</span><br><span class="line">        <span class="keyword">int</span> result =caculate.minus(<span class="number">3</span>,<span class="number">2</span>);</span><br><span class="line">        Assert.assertEquals(<span class="number">4</span>,result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后进入当前项目存在pom的目录。进入cmd命令行窗口，输入<code>mvn test</code></p>
+<h1 id="Maven快照"><a href="#Maven快照" class="headerlink" title="Maven快照"></a>Maven快照</h1><p>（转自：<a href="https://www.cnblogs.com/EasonJim/p/6852840.html%EF%BC%89">https://www.cnblogs.com/EasonJim/p/6852840.html）</a></p>
+<h2 id="一、场景"><a href="#一、场景" class="headerlink" title="一、场景"></a>一、场景</h2><p>一个大型的软件应用通常包含多个模块，并且通常的场景是多个团队开发同一应用的不同模块。举个例子，设想一个团队开发应用的前端，项目为<strong>app-ui（app-ui.jar:1.0）</strong>，而另一个团队开发应用的后台，使用的项目是<strong>data-service（data-service.jar:1.0）</strong>。</p>
+<p>现在可能出现的情况是开发<strong>data-service</strong>的团队正在进行快节奏的bug修复或者项目改进，并且他们几乎每隔一天就要发布库到远程仓库。</p>
+<p>现在如果<strong>data-service</strong>团队每隔一天上传一个新版本，那么将会出现下面的问题：</p>
+<ul>
+<li><strong>data-service</strong>团队每次发布更新的代码时都要告知<strong>app-ui</strong>团队。</li>
+<li><strong>app-ui</strong>团队需要经常地更新他们<strong>pom.xml</strong>文件到最新版本。</li>
+</ul>
+<p>为了解决这种情况， <strong>快照（SNAPSHOT）</strong>的概念派上了用场。</p>
+<h2 id="二、什么是快照（SNAPSHOT）"><a href="#二、什么是快照（SNAPSHOT）" class="headerlink" title="二、什么是快照（SNAPSHOT）?"></a>二、什么是快照（SNAPSHOT）?</h2><p>**快照**（SNAPSHOT）*<em><strong>是一种特殊的版本，</strong></em>*指定了某个当前的开发进度的副本*<em><strong>。不同于常规的版本，</strong>Maven每次构建都会在远程仓库中检查新的快照。</em>*</p>
+<p>现在<strong>data-service</strong>团队会每次发布更新代码的快照到仓库中，比如说<strong>data-service:1.0-SNAPSHOT</strong>来替代旧的快照jar包。</p>
+<p>注意：每次更新jar包时，版本号不变，且后缀必须带上-SNAPSHOT。</p>
+<h2 id="三、项目快照（SNAPSHOT）VS-版本（Version）"><a href="#三、项目快照（SNAPSHOT）VS-版本（Version）" class="headerlink" title="三、项目快照（SNAPSHOT）VS 版本（Version）"></a>三、项目快照（SNAPSHOT）VS 版本（Version）</h2><p><strong>版本（Version）</strong>的情况下，如果Maven以前下载过指定的版本文件，比如说<strong>data-service:1.0</strong>，Maven将不会再从仓库下载新的可用的1.0文件。若要下载更新的代码，data-service的版本需要升到1.1。</p>
+<p><strong>快照（Snapshot）</strong>的情况下，每次<strong>app-ui</strong>团队构建他们的项目时，<strong>Maven</strong>将自动获取最新的快照(<strong>data-service:1.0-SNAPSHOT</strong>)。</p>
+<p>备注：<strong>版本（Version）</strong>存放在Release发布仓库。<strong>快照（Snapshot）</strong>存放在Snapshot快照仓库。</p>
+<p>注意：<strong>版本（Version）</strong>的概念，只要不带有**-SNAPSHOT<strong>的关键字时，都会认为这是一个在</strong>Release发布仓库<strong>的jar包。其中在</strong>Release发布仓库**的jar包命名除了具体的版本号之后还可以带上比如：1.0-Release、1.0-rc1等等的字样。</p>
+<h2 id="四、原理详解"><a href="#四、原理详解" class="headerlink" title="四、原理详解"></a>四、原理详解</h2><p><strong>Maven</strong>中的仓库分为两种，<strong>Snapshot快照仓库</strong>和<strong>Release发布仓库</strong>。<strong>Snapshot快照仓库</strong>用于保存开发过程中的不稳定版本，<strong>Release正式仓库</strong>则是用来保存稳定的发行版本。定义一个组件/模块为<strong>快照版本</strong>，只需要在<strong>pom.xml</strong>文件中在该模块的版本号后加上**-SNAPSHOT**即可（注意这里必须是大写），如下所示：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.jsoft.test<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testcommon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Maven</strong>会根据模块的版本号（<strong>pom.xml</strong>文件中的<strong>version）</strong>中是否带有**-SNAPSHOT<strong>来判断是</strong>快照版本<strong>还是</strong>正式版本<strong>。如果是</strong>快照版本<strong>，那么在</strong>mvn deploy<strong>时会自动发布到</strong>快照版本库<strong>中，而使用</strong>快照版本<strong>的模块，在</strong>不更改版本号<strong>的情况下，直接编译打包时，</strong>Maven<strong>会</strong>自动从镜像服务器上下载最新的快照版本<strong>。如果是</strong>正式发布版本<strong>，那么在</strong>mvn deploy<strong>时会自动发布到</strong>正式版本库<strong>中，而使用</strong>正式版本<strong>的模块，在</strong>不更改版本号<strong>的情况下，编译打包时如果本地已经存在该版本的模块则</strong>不会主动去镜像服务器上下载**。</p>
+<p>所以，我们在开发阶段，可以将公用库的版本设置为快照版本，而被依赖组件则引用快照版本进行开发，在公用库的快照版本更新后，我们也不需要修改<strong>pom.xml</strong>文件提示版本号来下载新的版本，直接<strong>Maven</strong>执行相关编译、打包命令即可重新下载最新的快照库了，从而也方便了我们进行开发。</p>
+<p>虽然，<strong>快照</strong>的情况下，<strong>Maven</strong>在日常工作中会自动获取最新的快照，你也可以在任何<strong>Maven</strong>命令中使用**-U参数<strong>强制</strong>Maven**下载最新的快照构建。命令如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">mvn clean package -U</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、其他"><a href="#五、其他" class="headerlink" title="五、其他"></a>五、其他</h2><p>如果在pom.xml文件中，声明了${project.version} ，代表的就是当前pom 的版本。</p>
+<p><strong>也即：maven中的${project.groupId} 和 ${project.version} 表示当前项目的groupId和版本。</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.damai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>park<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.2-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>park-guard<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.damai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>park-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;project.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>比如，上面的<version>${project.version}</version> 表示的就是 0.0.2-SNAPSHOT</p>
+]]></content>
+      <categories>
+        <category>Maven</category>
+      </categories>
+  </entry>
+  <entry>
     <title>反射</title>
     <url>/2021/08/04/%E5%8F%8D%E5%B0%84/</url>
     <content><![CDATA[<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射库提供了一个丰富而精巧的工具集，用来编写能够动态操纵java代码的程序。能够分析类能力的程序称为反射。其可以用来：</p>
@@ -2432,6 +2495,32 @@
 ]]></content>
       <categories>
         <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>视图</title>
+    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
+    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
+<span id="more"></span>
+<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
+<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
+<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
+<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
+<p>使用视图：</p>
+<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
+<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
+<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
+<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
+<p>１、SELECT子句中未使用DISTINCT</p>
+<p>２、FROM子句中只有一张表</p>
+<p>３、未使用GROUP BY子句</p>
+<p>４、未使用HAVING 子句</p>
+<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
+<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -2545,32 +2634,6 @@
       </categories>
   </entry>
   <entry>
-    <title>视图</title>
-    <url>/2021/07/08/%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>在创建表时，并把数据插入到表中，这些数据实际上会被保存在计算机的存储设备上，当我们通过SELECT语句进行查询时，实际上就是从存储设备中读取数据，在通过各种计算之后，再将结果返回给用户。但使用视图时并不会将数据保存在存储设备中，而且也不会将数据保存到其他任何地方。</p>
-<span id="more"></span>
-<p>视图的优点：1、视图无需保存数据，因此可以节省存储设备的容量。</p>
-<p>​                      2、可以将频繁使用的SELECT语句保存成视图，这样就不同每次都重新书写了。</p>
-<h3 id="创建视图的方法"><a href="#创建视图的方法" class="headerlink" title="创建视图的方法"></a>创建视图的方法</h3><p><code>CREATE VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;,……) AS &lt;SELECT语句&gt;</code></p>
-<p>例如：<code>CREATE VIEW productSum(product_type,cnt_product) AS SELECT product_type,COUNT(*) FROM product GROUP BY product_type;</code></p>
-<p>使用视图：</p>
-<p><code>SELECT product_type,cnt_product FROM prouctSum;</code>(把FROM后面的表名替换为视图名)</p>
-<p>可以通过视图为基础创建视图，称为多重视图，多重试图会降低SQL的性能，应该避免在视图的基础上创建视图。</p>
-<p>注意：定义视图时不能使用ORDER BY子句<br>###　视图的更新</p>
-<p>对视图的更新有着严格的限制，但某些时候也可以对视图进行更新。</p>
-<p>１、SELECT子句中未使用DISTINCT</p>
-<p>２、FROM子句中只有一张表</p>
-<p>３、未使用GROUP BY子句</p>
-<p>４、未使用HAVING 子句</p>
-<p>视图和表需要同时进行更新，因此通过汇总得到的视图无法更新。</p>
-<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p>　<code>DROP VIEW 视图名称(&lt;视图列名1&gt;,&lt;视图列名2&gt;，……)</code></p>
-<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询就是将用来定义视图的SELECT语句直接用于FROM子句当中。</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
     <title>对表进行聚合查询</title>
     <url>/2021/07/06/%E5%AF%B9%E8%A1%A8%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2/</url>
     <content><![CDATA[<h2 id="对表进行聚合查询"><a href="#对表进行聚合查询" class="headerlink" title="对表进行聚合查询"></a>对表进行聚合查询</h2><h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><ul>
@@ -2616,6 +2679,48 @@
 <p>在ORDER BY子句中可以使用SELECT子句中定义的别名。</p>
 <p>在ORDER BY子句中可以使用SELECT子句中未使用的列和聚合函数。</p>
 <p>注意：在ORDER BY子句中可以使用SELECT子句中列所对应的编号，但不建议这样使用</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数据更新</title>
+    <url>/2021/07/06/%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[<h2 id="数据更新"><a href="#数据更新" class="headerlink" title="数据更新"></a>数据更新</h2><h3 id="数据的插入"><a href="#数据的插入" class="headerlink" title="数据的插入"></a>数据的插入</h3><p><code>INSERT INTO &lt;表名&gt; (列1,列2,列3,……) VALUES (值1,值2,值3,……);</code></p>
+<span id="more"></span>
+<p>表名后面的列清单和VALUES子句中的值清单的列数必须保持一致，否则无法插入数据。</p>
+<p>原则上，执行一次INSERT语句会插入一行数据。</p>
+<p>对表进行全列INSERT时，可以省略表名后的列清单，这时VALUES子句的值会默认按照从左到右的顺序赋给每一列。</p>
+<p>想给某一列赋NULL时，可以直接在VALUES子句的清单中写入NULL。（想插入NULL的列一定不能设置NOT NULL约束）</p>
+<h4 id="插入默认值"><a href="#插入默认值" class="headerlink" title="插入默认值"></a>插入默认值</h4><p>在CREATE TBALE语句中设置DEFAULT约束来设置默认值。</p>
+<h5 id="显示方式"><a href="#显示方式" class="headerlink" title="显示方式"></a>显示方式</h5><p>例如：<code>INSERT INTO Product(product_id,product_name,prouduct_type,sale_price) VALUES (&#39;007&#39;, &#39;A&#39;,&#39;B&#39;,DEFAULT);</code></p>
+<h5 id="隐式方式"><a href="#隐式方式" class="headerlink" title="隐式方式"></a>隐式方式</h5><p>例如：<code>INSERT INTO Product(product_id,product_name,prouduct_type,sale_price) VALUES (&#39;007&#39;, &#39;A&#39;,&#39;B&#39;);</code></p>
+<p>注意：省略INSERT语句中的列名，就会自动设定为该列的默认值（没有默认值会设定为NULL）</p>
+<h4 id="从其他表中复制数据"><a href="#从其他表中复制数据" class="headerlink" title="从其他表中复制数据"></a>从其他表中复制数据</h4><p>例如：创建一个原表：<code>CREATE TABLE product(product_id CHAR(4) NOT NULL,product_name VARCHAR(100) NOT NULL,product_type VARCHAR(100) NOT NULL,sale_price) INTEGER,PRIMARY KEY(product_Id));</code></p>
+<p>在创建一个复制表：<code>CREATE TABLE productCopy(product_id CHAR(4) NOT NULL,product_name VARCHAR(100) NOT NULL,product_type VARCHAR(100) NOT NULL,sale_price) INTEGER,PRIMARY KEY(product_Id));</code></p>
+<p>执行：<code>INSERT INTO productCopy(product_id,product_name,product_type,sale_price) SELECT product_id,product_name,product_type,sale_price FROM product;</code></p>
+<p>执行INSERT……SELECT语句，也可以使用WHERE子句或者GROUP BY子句等。</p>
+<h3 id="数据的删除"><a href="#数据的删除" class="headerlink" title="数据的删除"></a>数据的删除</h3><p>使用DROP TABLE语句会将表完全删除，使用DELETE语句只会删除数据，留下表。</p>
+<p><code>DELETE FROM &lt;表名&gt; WHERE &lt;条件&gt;;</code></p>
+<h3 id="数据的更新"><a href="#数据的更新" class="headerlink" title="数据的更新"></a>数据的更新</h3><p>`UPDATE &lt;表名&gt; SET &lt;列名&gt;=&lt;表达式&gt; WHERE &lt;条件&gt;;</p>
+<p>使用UPDATE也可以将列更新为NULL（此更新俗称为NULL清空）（只限于未设置NOT NULL约束的列）</p>
+<h4 id="多列更新"><a href="#多列更新" class="headerlink" title="多列更新"></a>多列更新</h4><p>例如：<code>UPDATE Product SET sale_price=sale_price*2,purchase_price=purchase_price/2 WHERE product_type=&#39;B&#39;;</code></p>
+<p><code>UPDATE Product SET (sale_price,purchase_price)=(sale_price*2,purchase_price/2) WHERE product_type=&#39;B&#39;;</code></p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事物就是<strong>需要在同一个处理单元中执行的一系列更新处理的集合</strong></p>
+<h4 id="创建事务"><a href="#创建事务" class="headerlink" title="创建事务"></a>创建事务</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">事务开始语句;</span><br><span class="line">    DML语句1;</span><br><span class="line">    DML语句2;</span><br><span class="line">    DML语句3;</span><br><span class="line">    ……</span><br><span class="line">事务结束语句（COMMIT或者ROLLBACK);</span><br></pre></td></tr></table></figure>
+
+<p>使用事务开始语句和事务结束语句，将一系列DML语句（INSERT/UPDATE/DELETE）括起来，就实现了一个事务处理。</p>
+<p>在标准SQL中并没有定义事务的开始语句，而是由各个DBMS自己来定义的</p>
+<p>MySQL:<code>START TRANSACTION</code></p>
+<p>COMMIT：提交处理，一旦提交，就无法恢复到事务开始前的状态了。虽然我们可以不清楚事务开始的时间点，但是在事务结束时一定要仔细进行确认。</p>
+<p>ROLLBACK：取消处理，取消事务包含的全部更新处理的结束指令，相当于文件处理中的放弃保存，一旦回滚，数据库就会恢复到事务开始之前的状态</p>
+<h3 id="ACID特性"><a href="#ACID特性" class="headerlink" title="ACID特性"></a>ACID特性</h3><ul>
+<li>原子性（Atomicity）</li>
+<li>一致性（Consistency）</li>
+<li>隔离性（Isolation）</li>
+<li>持久性（Durability）</li>
+</ul>
 ]]></content>
       <categories>
         <category>MySQL</category>
@@ -2689,48 +2794,6 @@
 ]]></content>
       <categories>
         <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>数据更新</title>
-    <url>/2021/07/06/%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/</url>
-    <content><![CDATA[<h2 id="数据更新"><a href="#数据更新" class="headerlink" title="数据更新"></a>数据更新</h2><h3 id="数据的插入"><a href="#数据的插入" class="headerlink" title="数据的插入"></a>数据的插入</h3><p><code>INSERT INTO &lt;表名&gt; (列1,列2,列3,……) VALUES (值1,值2,值3,……);</code></p>
-<span id="more"></span>
-<p>表名后面的列清单和VALUES子句中的值清单的列数必须保持一致，否则无法插入数据。</p>
-<p>原则上，执行一次INSERT语句会插入一行数据。</p>
-<p>对表进行全列INSERT时，可以省略表名后的列清单，这时VALUES子句的值会默认按照从左到右的顺序赋给每一列。</p>
-<p>想给某一列赋NULL时，可以直接在VALUES子句的清单中写入NULL。（想插入NULL的列一定不能设置NOT NULL约束）</p>
-<h4 id="插入默认值"><a href="#插入默认值" class="headerlink" title="插入默认值"></a>插入默认值</h4><p>在CREATE TBALE语句中设置DEFAULT约束来设置默认值。</p>
-<h5 id="显示方式"><a href="#显示方式" class="headerlink" title="显示方式"></a>显示方式</h5><p>例如：<code>INSERT INTO Product(product_id,product_name,prouduct_type,sale_price) VALUES (&#39;007&#39;, &#39;A&#39;,&#39;B&#39;,DEFAULT);</code></p>
-<h5 id="隐式方式"><a href="#隐式方式" class="headerlink" title="隐式方式"></a>隐式方式</h5><p>例如：<code>INSERT INTO Product(product_id,product_name,prouduct_type,sale_price) VALUES (&#39;007&#39;, &#39;A&#39;,&#39;B&#39;);</code></p>
-<p>注意：省略INSERT语句中的列名，就会自动设定为该列的默认值（没有默认值会设定为NULL）</p>
-<h4 id="从其他表中复制数据"><a href="#从其他表中复制数据" class="headerlink" title="从其他表中复制数据"></a>从其他表中复制数据</h4><p>例如：创建一个原表：<code>CREATE TABLE product(product_id CHAR(4) NOT NULL,product_name VARCHAR(100) NOT NULL,product_type VARCHAR(100) NOT NULL,sale_price) INTEGER,PRIMARY KEY(product_Id));</code></p>
-<p>在创建一个复制表：<code>CREATE TABLE productCopy(product_id CHAR(4) NOT NULL,product_name VARCHAR(100) NOT NULL,product_type VARCHAR(100) NOT NULL,sale_price) INTEGER,PRIMARY KEY(product_Id));</code></p>
-<p>执行：<code>INSERT INTO productCopy(product_id,product_name,product_type,sale_price) SELECT product_id,product_name,product_type,sale_price FROM product;</code></p>
-<p>执行INSERT……SELECT语句，也可以使用WHERE子句或者GROUP BY子句等。</p>
-<h3 id="数据的删除"><a href="#数据的删除" class="headerlink" title="数据的删除"></a>数据的删除</h3><p>使用DROP TABLE语句会将表完全删除，使用DELETE语句只会删除数据，留下表。</p>
-<p><code>DELETE FROM &lt;表名&gt; WHERE &lt;条件&gt;;</code></p>
-<h3 id="数据的更新"><a href="#数据的更新" class="headerlink" title="数据的更新"></a>数据的更新</h3><p>`UPDATE &lt;表名&gt; SET &lt;列名&gt;=&lt;表达式&gt; WHERE &lt;条件&gt;;</p>
-<p>使用UPDATE也可以将列更新为NULL（此更新俗称为NULL清空）（只限于未设置NOT NULL约束的列）</p>
-<h4 id="多列更新"><a href="#多列更新" class="headerlink" title="多列更新"></a>多列更新</h4><p>例如：<code>UPDATE Product SET sale_price=sale_price*2,purchase_price=purchase_price/2 WHERE product_type=&#39;B&#39;;</code></p>
-<p><code>UPDATE Product SET (sale_price,purchase_price)=(sale_price*2,purchase_price/2) WHERE product_type=&#39;B&#39;;</code></p>
-<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事物就是<strong>需要在同一个处理单元中执行的一系列更新处理的集合</strong></p>
-<h4 id="创建事务"><a href="#创建事务" class="headerlink" title="创建事务"></a>创建事务</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">事务开始语句;</span><br><span class="line">    DML语句1;</span><br><span class="line">    DML语句2;</span><br><span class="line">    DML语句3;</span><br><span class="line">    ……</span><br><span class="line">事务结束语句（COMMIT或者ROLLBACK);</span><br></pre></td></tr></table></figure>
-
-<p>使用事务开始语句和事务结束语句，将一系列DML语句（INSERT/UPDATE/DELETE）括起来，就实现了一个事务处理。</p>
-<p>在标准SQL中并没有定义事务的开始语句，而是由各个DBMS自己来定义的</p>
-<p>MySQL:<code>START TRANSACTION</code></p>
-<p>COMMIT：提交处理，一旦提交，就无法恢复到事务开始前的状态了。虽然我们可以不清楚事务开始的时间点，但是在事务结束时一定要仔细进行确认。</p>
-<p>ROLLBACK：取消处理，取消事务包含的全部更新处理的结束指令，相当于文件处理中的放弃保存，一旦回滚，数据库就会恢复到事务开始之前的状态</p>
-<h3 id="ACID特性"><a href="#ACID特性" class="headerlink" title="ACID特性"></a>ACID特性</h3><ul>
-<li>原子性（Atomicity）</li>
-<li>一致性（Consistency）</li>
-<li>隔离性（Isolation）</li>
-<li>持久性（Durability）</li>
-</ul>
-]]></content>
-      <categories>
-        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -3784,6 +3847,50 @@
       </categories>
   </entry>
   <entry>
+    <title>StringBuffer,包装类</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
+
+<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
+<p>2、StringBuffer是一个类</p>
+<p>3、底层是一个byte[ ] 数组</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
+
+<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
+<p>byte                              java.Lang.Byte （父类Number）         </p>
+<p>short                            java.Lang.Short（父类Number）</p>
+<p>int                                 java.Lang.Integer（父类Number）</p>
+<p>Long                             java.Lang.Long（父类Number）</p>
+<p>float                              java.Lang.Float（父类Number）</p>
+<p>double                         java.Lang.Double（父类Number）</p>
+<p>boolean                       java.Lang.Boolean（父类Object）</p>
+<p>char                              java.Lang.Character（父类Object）</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>装箱、拆箱，Integer的构造方法，自动装箱和自动拆箱</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20026%EF%BC%88%E8%A3%85%E7%AE%B1%E5%92%8C%E6%8B%86%E7%AE%B1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81Integer%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E3%80%81%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%EF%BC%89/</url>
     <content><![CDATA[<h2 id="装箱和拆箱的概念"><a href="#装箱和拆箱的概念" class="headerlink" title="装箱和拆箱的概念"></a>装箱和拆箱的概念</h2><p>八种包装类中其中6个都是数字对应的包装类，他们的父类都是Number，为抽象类，无法实例化</p>
@@ -3856,50 +3963,6 @@
 
 <p>java中为了提高程序的执行效率，将-128至127之间所有的包装对象提前创建好，放到了一个方法区的“整数型常量池”中，目的是只要使用这个区间内的数据不需要再new了，直接从整数型常量池中取出来</p>
 <p>“==”永远判断的都是对象的内存地址</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>StringBuffer,包装类</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
-
-<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
-<p>2、StringBuffer是一个类</p>
-<p>3、底层是一个byte[ ] 数组</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
-
-<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
-<p>byte                              java.Lang.Byte （父类Number）         </p>
-<p>short                            java.Lang.Short（父类Number）</p>
-<p>int                                 java.Lang.Integer（父类Number）</p>
-<p>Long                             java.Lang.Long（父类Number）</p>
-<p>float                              java.Lang.Float（父类Number）</p>
-<p>double                         java.Lang.Double（父类Number）</p>
-<p>boolean                       java.Lang.Boolean（父类Object）</p>
-<p>char                              java.Lang.Character（父类Object）</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -3990,6 +4053,28 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a =<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> c=a/b;<span class="comment">//实际上jvm在执行到此处时，会new异常对象：new ArithmeticException(&quot;/by zero&quot;);</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>2、异常对应日常生活中：火灾(异常类)：2020年1月4日，小明家着火(异常对象)，2020年1月5日，小红家着火(异常对象)</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>try catch深入，异常对象的常用方法</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20030%EF%BC%88try%20catch%E6%B7%B1%E5%85%A5%E3%80%81%E5%BC%82%E5%B8%B8%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="try-catch深入"><a href="#try-catch深入" class="headerlink" title="try catch深入"></a>try catch深入</h2><span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            FileInputStream fis= <span class="keyword">new</span> FileInputStream(<span class="string">&quot;D:\\game 盗版\\文明.txt&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(FileNotFoundException e)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;file not found&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            FileInputStream fis= <span class="keyword">new</span> FileInputStream(<span class="string">&quot;D:\\game 盗版\\文明.txt&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException e)&#123;<span class="comment">//多态：IOException e =new FileNotFoundException();或者Exception e =new FileNotFoundException();</span></span><br><span class="line">            System.out.println(<span class="string">&quot;file not found&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>1、catch后面的小括号里的类型可以是具体的异常类型，也可以是该异常的父类型</p>
+<p>2、catch可以写多个，建议catch的时候，精确的一个一个处理，这样有利于程序的调适</p>
+<p>3、catch写多个的时候，从上到下，必须遵守从小到大</p>
+<h2 id="异常对象的常用方法"><a href="#异常对象的常用方法" class="headerlink" title="异常对象的常用方法"></a>异常对象的常用方法</h2><h3 id="getMessage-和-printStackTrace"><a href="#getMessage-和-printStackTrace" class="headerlink" title="getMessage 和 printStackTrace()"></a>getMessage 和 printStackTrace()</h3><p>1、 String s = exception.getMessage();   获取异常简单的描述信息</p>
+<p>2、exception.printStackTrace();    打印异常追踪的堆栈信息</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test06</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NullPointerException e=<span class="keyword">new</span> NullPointerException(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">        String npe =e.getMessage();<span class="comment">//获取异常简单描述信息，这个信息实际上是构造方法上面String参数</span></span><br><span class="line">        System.out.println(npe);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">空指针异常</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test07</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NullPointerException e=<span class="keyword">new</span> NullPointerException(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        System.out.println(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">java.lang.NullPointerException: 空指针异常</span><br><span class="line">	at ExceptionTest01.Test07.main(Test07.java:<span class="number">5</span>)</span><br><span class="line">hello world!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -4088,28 +4173,6 @@
       </categories>
   </entry>
   <entry>
-    <title>try catch深入，异常对象的常用方法</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20030%EF%BC%88try%20catch%E6%B7%B1%E5%85%A5%E3%80%81%E5%BC%82%E5%B8%B8%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="try-catch深入"><a href="#try-catch深入" class="headerlink" title="try catch深入"></a>try catch深入</h2><span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            FileInputStream fis= <span class="keyword">new</span> FileInputStream(<span class="string">&quot;D:\\game 盗版\\文明.txt&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(FileNotFoundException e)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;file not found&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            FileInputStream fis= <span class="keyword">new</span> FileInputStream(<span class="string">&quot;D:\\game 盗版\\文明.txt&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException e)&#123;<span class="comment">//多态：IOException e =new FileNotFoundException();或者Exception e =new FileNotFoundException();</span></span><br><span class="line">            System.out.println(<span class="string">&quot;file not found&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>1、catch后面的小括号里的类型可以是具体的异常类型，也可以是该异常的父类型</p>
-<p>2、catch可以写多个，建议catch的时候，精确的一个一个处理，这样有利于程序的调适</p>
-<p>3、catch写多个的时候，从上到下，必须遵守从小到大</p>
-<h2 id="异常对象的常用方法"><a href="#异常对象的常用方法" class="headerlink" title="异常对象的常用方法"></a>异常对象的常用方法</h2><h3 id="getMessage-和-printStackTrace"><a href="#getMessage-和-printStackTrace" class="headerlink" title="getMessage 和 printStackTrace()"></a>getMessage 和 printStackTrace()</h3><p>1、 String s = exception.getMessage();   获取异常简单的描述信息</p>
-<p>2、exception.printStackTrace();    打印异常追踪的堆栈信息</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test06</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NullPointerException e=<span class="keyword">new</span> NullPointerException(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">        String npe =e.getMessage();<span class="comment">//获取异常简单描述信息，这个信息实际上是构造方法上面String参数</span></span><br><span class="line">        System.out.println(npe);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">空指针异常</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test07</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NullPointerException e=<span class="keyword">new</span> NullPointerException(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        System.out.println(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">java.lang.NullPointerException: 空指针异常</span><br><span class="line">	at ExceptionTest01.Test07.main(Test07.java:<span class="number">5</span>)</span><br><span class="line">hello world!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>集合概述</title>
     <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
     <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
@@ -4137,6 +4200,109 @@
 <p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
 <p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
 <p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>List接口的方法，ArrayList集合初始化容量扩容</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20034%EF%BC%88list%E6%8E%A5%E5%8F%A3%E7%89%B9%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%81ArrayList%E9%9B%86%E5%90%88%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E9%87%8F%E6%89%A9%E5%AE%B9%E3%80%81ArrayList%E9%9B%86%E5%90%88%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="list接口特有的方法"><a href="#list接口特有的方法" class="headerlink" title="list接口特有的方法"></a>list接口特有的方法</h2><p>1、list集合存储元素特点：有序可重复，每个元素都有下标。</p>
+<span id="more"></span>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>void add(int index,<pre><code>     E element)
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      将指定的元素插入此列表中的指定位置（可选操作）。  将当前位于该位置的元素（如果有）和任何后续元素（向其索引添加一个）移动。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要插入指定元素的索引 </span><br><span class="line"></span><br><span class="line">        `element` - 要插入的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `add`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果指定元素的类阻止将其添加到此列表中 </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素 </span><br><span class="line"></span><br><span class="line">        `IllegalArgumentException`  - 如果指定元素的某些属性阻止其添加到此列表中 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果指数超出范围（ `index &lt; 0 || index &gt; size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.List;</span><br><span class="line">public class Test01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List l1=new ArrayList();</span><br><span class="line">        l1.add(&#x27;A&#x27;);</span><br><span class="line">        l1.add(&#x27;B&#x27;);</span><br><span class="line">        l1.add(&#x27;C&#x27;);</span><br><span class="line">        l1.add(&#x27;D&#x27;);</span><br><span class="line">        l1.add(1,&quot;E&quot;);</span><br><span class="line">        Iterator it=l1.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Object o1 =it.next();</span><br><span class="line">            System.out.print(o1+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">A E B C D </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>```<br>E get(int index)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此列表中指定位置的元素。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要返回的元素的索引 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该列表中指定位置的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果索引超出范围（ `index &lt; 0 || index &gt;= size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">System.out.println(l1.get(1));</span><br><span class="line">E</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>int indexOf(Object o)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">返回此列表中指定元素的第一次出现的索引，如果此列表不包含元素，则返回-1。  更正式地，返回最低指数`i`  ，使`(o==null ? get(i)==null : o.equals(get(i)))` ，或-1如果没有这样的指数。 </span><br><span class="line"></span><br><span class="line">- 参数 </span><br><span class="line"></span><br><span class="line">  `o` - 要搜索的元素 </span><br><span class="line"></span><br><span class="line">- 结果 </span><br><span class="line"></span><br><span class="line">  此列表中指定元素的首次出现的索引，如果此列表不包含元素，则为-1 </span><br><span class="line"></span><br><span class="line">- 异常 </span><br><span class="line"></span><br><span class="line">  `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">  `NullPointerException`  - 如果指定的元素为空，并且此列表不允许空元素（ [optional](Collection.html#optional-restrictions) ）  </span><br><span class="line"></span><br><span class="line">  - - - ```</span><br><span class="line">        int lastIndexOf(Object o)</span><br></pre></td></tr></table></figure>
+
+<pre><code>    返回此列表中指定元素的最后一次出现的索引，如果此列表不包含元素，则返回-1。  更正式地，返回最高指数`i`使得`(o==null ? get(i)==null : o.equals(get(i)))`  ，或-1如果没有这样的索引。 
+
+    - 参数 
+
+      `o` - 要搜索的元素 
+
+    - 结果 
+
+      此列表中指定元素的最后一次出现的索引，如果此列表不包含元素，则为-1 
+
+    - 异常 
+
+      `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） 
+
+      `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素（ [optional](Collection.html#optional-restrictions) ） 
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(l1.indexOf(<span class="string">&#x27;C&#x27;</span>));</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        System.out.println(l1.indexOf(<span class="string">&#x27;A&#x27;</span>));</span><br><span class="line">        l1.add(<span class="string">&#x27;A&#x27;</span>);</span><br><span class="line">        System.out.println(l1.lastIndexOf(<span class="string">&#x27;A&#x27;</span>));</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>E remove(int index)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      删除该列表中指定位置的元素（可选操作）。  将任何后续元素移动到左侧（从其索引中减去一个元素）。 返回从列表中删除的元素。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要删除的元素的索引 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该元素以前在指定的位置 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `remove`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果索引超出范围（ `index &lt; 0 || index &gt;= size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">l1.remove(5);</span><br><span class="line">        Iterator it1 =l1.iterator();</span><br><span class="line">        while(it1.hasNext())&#123;</span><br><span class="line">            Object o1 =it1.next();</span><br><span class="line">            System.out.print(o1+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">A E B C D </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><p>```<br>boolean remove(Object o)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      **从列表中删除指定元素的第一个出现（如果存在）**（可选操作）。  如果此列表不包含该元素，则它将保持不变。  更正式地，删除具有最低索引`i`的元素，使得`(o==null ? get(i)==null : o.equals(get(i)))`  （如果这样的元素存在）。 如果此列表包含指定的元素（或等效地，如果此列表作为调用的结果而更改），则返回`true`  。 </span><br><span class="line"></span><br><span class="line">      - Specified by: </span><br><span class="line"></span><br><span class="line">        `remove`在接口  `Collection&lt;E&gt;` </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `o` - 要从此列表中删除的元素（如果存在） </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`如果此列表包含指定的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `remove`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      E set(int index,</span><br><span class="line">            E element)</span><br></pre></td></tr></table></figure>
+
+<p>用指定的元素（可选操作）替换此列表中指定位置的元素。 </p>
+<ul>
+<li><p>参数 </p>
+<p><code>index</code> - 要替换的元素的索引 </p>
+<p><code>element</code> - 要存储在指定位置的元素 </p>
+</li>
+<li><p>结果 </p>
+<p>该元素以前在指定的位置 </p>
+</li>
+<li><p>异常 </p>
+<p><code>UnsupportedOperationException</code>  -如果 <code>set</code>操作不受此列表支持 </p>
+<p><code>ClassCastException</code> -  如果指定元素的类阻止将其添加到此列表中 </p>
+<p><code>NullPointerException</code>  - 如果指定的元素为空，并且该列表不允许空元素 </p>
+<p><code>IllegalArgumentException</code>  - 如果指定元素的某些属性阻止将其添加到此列表中 </p>
+<p><code>IndexOutOfBoundsException</code>  - 如果指数超出范围（ <code>index &lt; 0 || index &gt;= size()</code> ） </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ArrayList集合初始化容量扩容"><a href="#ArrayList集合初始化容量扩容" class="headerlink" title="ArrayList集合初始化容量扩容"></a>ArrayList集合初始化容量扩容</h2><p>1、ArrayList集合初始化是10</p>
+<p>2、ArrayList集合底层是Object类型的数组Object[ ]</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List list1=<span class="keyword">new</span> ArrayList();</span><br><span class="line">        List list2=<span class="keyword">new</span> ArrayList(<span class="number">20</span>);</span><br><span class="line">        System.out.println(list1.size());</span><br><span class="line">        System.out.println(list2.size());<span class="comment">//size方法是获取当前集合中元素的个数，不是获取集合的容量</span></span><br><span class="line">         &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="二进制位运算"><a href="#二进制位运算" class="headerlink" title="二进制位运算"></a>二进制位运算</h2><p>1、位运算符：&gt;&gt;</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="number">10</span>&gt;&gt;<span class="number">1</span>);<span class="comment">//右移一位就是除以2</span></span><br><span class="line">        System.out.println(<span class="number">10</span>&lt;&lt;<span class="number">1</span>);<span class="comment">//左移一位，乘2</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ArrayList集合中一个构造方法"><a href="#ArrayList集合中一个构造方法" class="headerlink" title="ArrayList集合中一个构造方法"></a>ArrayList集合中一个构造方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List myList1=<span class="keyword">new</span> ArrayList();</span><br><span class="line">        List myList2=<span class="keyword">new</span> ArrayList(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">        Collection c=<span class="keyword">new</span> HashSet();</span><br><span class="line">        c.add(<span class="number">100</span>);</span><br><span class="line">        c.add(<span class="number">200</span>);</span><br><span class="line">        c.add(<span class="number">300</span>);</span><br><span class="line">        c.add(<span class="number">23</span>);</span><br><span class="line">        List myList3=<span class="keyword">new</span> ArrayList(c);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;myList3.size();i++)&#123;</span><br><span class="line">            System.out.println(myList3.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">100</span></span><br><span class="line"><span class="number">23</span></span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="number">300</span></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -4290,109 +4456,6 @@
 <p>注意：添加元素也意味着集合结构的改变</p>
 <p><strong>所以删除元素时往往使用迭代器来删除</strong></p>
 <p>重点：在迭代元素的过程当中，一定要使用迭代器Iterator的remove方法删除元素</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>List接口的方法，ArrayList集合初始化容量扩容</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20034%EF%BC%88list%E6%8E%A5%E5%8F%A3%E7%89%B9%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%81ArrayList%E9%9B%86%E5%90%88%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E9%87%8F%E6%89%A9%E5%AE%B9%E3%80%81ArrayList%E9%9B%86%E5%90%88%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="list接口特有的方法"><a href="#list接口特有的方法" class="headerlink" title="list接口特有的方法"></a>list接口特有的方法</h2><p>1、list集合存储元素特点：有序可重复，每个元素都有下标。</p>
-<span id="more"></span>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>void add(int index,<pre><code>     E element)
-</code></pre>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      将指定的元素插入此列表中的指定位置（可选操作）。  将当前位于该位置的元素（如果有）和任何后续元素（向其索引添加一个）移动。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要插入指定元素的索引 </span><br><span class="line"></span><br><span class="line">        `element` - 要插入的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `add`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果指定元素的类阻止将其添加到此列表中 </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素 </span><br><span class="line"></span><br><span class="line">        `IllegalArgumentException`  - 如果指定元素的某些属性阻止其添加到此列表中 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果指数超出范围（ `index &lt; 0 || index &gt; size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.List;</span><br><span class="line">public class Test01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List l1=new ArrayList();</span><br><span class="line">        l1.add(&#x27;A&#x27;);</span><br><span class="line">        l1.add(&#x27;B&#x27;);</span><br><span class="line">        l1.add(&#x27;C&#x27;);</span><br><span class="line">        l1.add(&#x27;D&#x27;);</span><br><span class="line">        l1.add(1,&quot;E&quot;);</span><br><span class="line">        Iterator it=l1.iterator();</span><br><span class="line">        while(it.hasNext())&#123;</span><br><span class="line">            Object o1 =it.next();</span><br><span class="line">            System.out.print(o1+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">A E B C D </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li>```<br>E get(int index)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      返回此列表中指定位置的元素。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要返回的元素的索引 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该列表中指定位置的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果索引超出范围（ `index &lt; 0 || index &gt;= size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">System.out.println(l1.get(1));</span><br><span class="line">E</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><p>```<br>int indexOf(Object o)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">返回此列表中指定元素的第一次出现的索引，如果此列表不包含元素，则返回-1。  更正式地，返回最低指数`i`  ，使`(o==null ? get(i)==null : o.equals(get(i)))` ，或-1如果没有这样的指数。 </span><br><span class="line"></span><br><span class="line">- 参数 </span><br><span class="line"></span><br><span class="line">  `o` - 要搜索的元素 </span><br><span class="line"></span><br><span class="line">- 结果 </span><br><span class="line"></span><br><span class="line">  此列表中指定元素的首次出现的索引，如果此列表不包含元素，则为-1 </span><br><span class="line"></span><br><span class="line">- 异常 </span><br><span class="line"></span><br><span class="line">  `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">  `NullPointerException`  - 如果指定的元素为空，并且此列表不允许空元素（ [optional](Collection.html#optional-restrictions) ）  </span><br><span class="line"></span><br><span class="line">  - - - ```</span><br><span class="line">        int lastIndexOf(Object o)</span><br></pre></td></tr></table></figure>
-
-<pre><code>    返回此列表中指定元素的最后一次出现的索引，如果此列表不包含元素，则返回-1。  更正式地，返回最高指数`i`使得`(o==null ? get(i)==null : o.equals(get(i)))`  ，或-1如果没有这样的索引。 
-
-    - 参数 
-
-      `o` - 要搜索的元素 
-
-    - 结果 
-
-      此列表中指定元素的最后一次出现的索引，如果此列表不包含元素，则为-1 
-
-    - 异常 
-
-      `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） 
-
-      `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素（ [optional](Collection.html#optional-restrictions) ） 
-</code></pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(l1.indexOf(<span class="string">&#x27;C&#x27;</span>));</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        System.out.println(l1.indexOf(<span class="string">&#x27;A&#x27;</span>));</span><br><span class="line">        l1.add(<span class="string">&#x27;A&#x27;</span>);</span><br><span class="line">        System.out.println(l1.lastIndexOf(<span class="string">&#x27;A&#x27;</span>));</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>E remove(int index)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      删除该列表中指定位置的元素（可选操作）。  将任何后续元素移动到左侧（从其索引中减去一个元素）。 返回从列表中删除的元素。 </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `index` - 要删除的元素的索引 </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        该元素以前在指定的位置 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `remove`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">        `IndexOutOfBoundsException`  - 如果索引超出范围（ `index &lt; 0 || index &gt;= size()` ） </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">l1.remove(5);</span><br><span class="line">        Iterator it1 =l1.iterator();</span><br><span class="line">        while(it1.hasNext())&#123;</span><br><span class="line">            Object o1 =it1.next();</span><br><span class="line">            System.out.print(o1+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">A E B C D </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><p>```<br>boolean remove(Object o)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      **从列表中删除指定元素的第一个出现（如果存在）**（可选操作）。  如果此列表不包含该元素，则它将保持不变。  更正式地，删除具有最低索引`i`的元素，使得`(o==null ? get(i)==null : o.equals(get(i)))`  （如果这样的元素存在）。 如果此列表包含指定的元素（或等效地，如果此列表作为调用的结果而更改），则返回`true`  。 </span><br><span class="line"></span><br><span class="line">      - Specified by: </span><br><span class="line"></span><br><span class="line">        `remove`在接口  `Collection&lt;E&gt;` </span><br><span class="line"></span><br><span class="line">      - 参数 </span><br><span class="line"></span><br><span class="line">        `o` - 要从此列表中删除的元素（如果存在） </span><br><span class="line"></span><br><span class="line">      - 结果 </span><br><span class="line"></span><br><span class="line">        `true`如果此列表包含指定的元素 </span><br><span class="line"></span><br><span class="line">      - 异常 </span><br><span class="line"></span><br><span class="line">        `ClassCastException` -  如果指定元素的类型与此列表不兼容（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `NullPointerException`  - 如果指定的元素为空，并且该列表不允许空元素（ [optional](Collection.html#optional-restrictions) ） </span><br><span class="line"></span><br><span class="line">        `UnsupportedOperationException`  -如果 `remove`操作不受此列表支持 </span><br><span class="line"></span><br><span class="line">- - - ```</span><br><span class="line">      E set(int index,</span><br><span class="line">            E element)</span><br></pre></td></tr></table></figure>
-
-<p>用指定的元素（可选操作）替换此列表中指定位置的元素。 </p>
-<ul>
-<li><p>参数 </p>
-<p><code>index</code> - 要替换的元素的索引 </p>
-<p><code>element</code> - 要存储在指定位置的元素 </p>
-</li>
-<li><p>结果 </p>
-<p>该元素以前在指定的位置 </p>
-</li>
-<li><p>异常 </p>
-<p><code>UnsupportedOperationException</code>  -如果 <code>set</code>操作不受此列表支持 </p>
-<p><code>ClassCastException</code> -  如果指定元素的类阻止将其添加到此列表中 </p>
-<p><code>NullPointerException</code>  - 如果指定的元素为空，并且该列表不允许空元素 </p>
-<p><code>IllegalArgumentException</code>  - 如果指定元素的某些属性阻止将其添加到此列表中 </p>
-<p><code>IndexOutOfBoundsException</code>  - 如果指数超出范围（ <code>index &lt; 0 || index &gt;= size()</code> ） </p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="ArrayList集合初始化容量扩容"><a href="#ArrayList集合初始化容量扩容" class="headerlink" title="ArrayList集合初始化容量扩容"></a>ArrayList集合初始化容量扩容</h2><p>1、ArrayList集合初始化是10</p>
-<p>2、ArrayList集合底层是Object类型的数组Object[ ]</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List list1=<span class="keyword">new</span> ArrayList();</span><br><span class="line">        List list2=<span class="keyword">new</span> ArrayList(<span class="number">20</span>);</span><br><span class="line">        System.out.println(list1.size());</span><br><span class="line">        System.out.println(list2.size());<span class="comment">//size方法是获取当前集合中元素的个数，不是获取集合的容量</span></span><br><span class="line">         &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="二进制位运算"><a href="#二进制位运算" class="headerlink" title="二进制位运算"></a>二进制位运算</h2><p>1、位运算符：&gt;&gt;</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="number">10</span>&gt;&gt;<span class="number">1</span>);<span class="comment">//右移一位就是除以2</span></span><br><span class="line">        System.out.println(<span class="number">10</span>&lt;&lt;<span class="number">1</span>);<span class="comment">//左移一位，乘2</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ArrayList集合中一个构造方法"><a href="#ArrayList集合中一个构造方法" class="headerlink" title="ArrayList集合中一个构造方法"></a>ArrayList集合中一个构造方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List myList1=<span class="keyword">new</span> ArrayList();</span><br><span class="line">        List myList2=<span class="keyword">new</span> ArrayList(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">        Collection c=<span class="keyword">new</span> HashSet();</span><br><span class="line">        c.add(<span class="number">100</span>);</span><br><span class="line">        c.add(<span class="number">200</span>);</span><br><span class="line">        c.add(<span class="number">300</span>);</span><br><span class="line">        c.add(<span class="number">23</span>);</span><br><span class="line">        List myList3=<span class="keyword">new</span> ArrayList(c);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;myList3.size();i++)&#123;</span><br><span class="line">            System.out.println(myList3.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">100</span></span><br><span class="line"><span class="number">23</span></span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="number">300</span></span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>javaSE</category>
