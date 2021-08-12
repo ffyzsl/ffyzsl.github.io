@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Servlet运行在Servlet容器中，能够为各种各样的客户请求提供相应的服务。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Servlet技术（一）">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/08/12/Servlet%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="Servlet运行在Servlet容器中，能够为各种各样的客户请求提供相应的服务。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-12T01:55:57.410Z">
+<meta property="article:modified_time" content="2021-08-12T01:55:49.039Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/08/12/Servlet%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Servlet技术（一） | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/08/12/Servlet%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Servlet技术（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-12 09:55:57 / 修改时间：09:55:49" itemprop="dateCreated datePublished" datetime="2021-08-12T09:55:57+08:00">2021-08-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Servlet/" itemprop="url" rel="index"><span itemprop="name">Servlet</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Servlet运行在Servlet容器中，能够为各种各样的客户请求提供相应的服务。</p>
+<span id="more"></span>
+<p>Servlet能够完成以下工作：</p>
+<ul>
+<li>动态生成HTML文档</li>
+<li>把请求转发给同一个Web应用的其他Servlet组件</li>
+<li>把请求转发给其他Web应用中的Servlet组件</li>
+<li>读取客户端的 Cookie，以及向客户端写入 Cookie </li>
+<li>访问其他服务器资源</li>
+</ul>
+<p>1、请求对象（ServletRequest 和 HttpServletRequest）：Servlet从该对象中获取来自客户端的请求信息</p>
+<p>2、响应对象（ServletResponse 和 HttpServletResponse）：Servlet通过该对象来生成响应结果</p>
+<p>3、Servlet配置对象（ServletConfig）：当容器初始化一个 Servlet 对象时，会向 Servlet 提供一个 ServletConfig 对象， Servlet通过该对象来获取初始化参数信息以及 ServletContext 对象。</p>
+<p>4、Servlet上下文对象（ServletContext）：Servlet 通过该对象来访问容器为当前 Web 应用提供的各种资源</p>
+<h3 id="Servlet-API"><a href="#Servlet-API" class="headerlink" title="Servlet API"></a>Servlet API</h3><h4 id="Servlet接口"><a href="#Servlet接口" class="headerlink" title="Servlet接口"></a>Servlet接口</h4><p>是其核心，所有Servlet类都必须实现这一接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig var1)</span> <span class="keyword">throws</span> ServletException</span>;<span class="comment">//该方法负责初始化 Servlet对象，容器在创建好Servlet对象后，就会调用该方法</span></span><br><span class="line"></span><br><span class="line">    <span class="function">ServletConfig <span class="title">getServletConfig</span><span class="params">()</span></span>;<span class="comment">//返回一个ServletConfig对象，其中包含了 Servlet的初始化参数信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest var1, ServletResponse var2)</span> <span class="keyword">throws</span> ServletException, IOException</span>;<span class="comment">//负责响应客户的请求，当容器接收到来自客户端要求访问特定Servlet对象的请求时，就会调用</span></span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getServletInfo</span><span class="params">()</span></span>;<span class="comment">//返回一个字符串，该字符串中包含了 Servlet的创建者，版本和版权等信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>;<span class="comment">//负责释放Servlet对象占用的资源，当Servlet对象结束生命周期时，会调用该方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中定义了五个方法，其中有三个都是由Servlet容器来调用的，容器会在Servlet的生命周期不同阶段调用不同方法。</p>
+<p>在Servlet中，<code>GenericServlet</code>抽象类实现了<code>Servlet接口</code>，而<code>HttpServlet抽象类</code>又继承了<code>GenericServlet抽象类</code>，当用户开发自己的Servlet时，可以选择继承<code>GenericServlet</code>或<code>HttpServlet</code></p>
+<h4 id="GenericServlet抽象类"><a href="#GenericServlet抽象类" class="headerlink" title="GenericServlet抽象类"></a>GenericServlet抽象类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.config = config;</span><br><span class="line">        <span class="keyword">this</span>.init();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类实现了 Servlet接口中的 init(ServletConfig config)  初始化方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> ServletConfig config;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类有一个 ServletConfig类型的私有实例变量 config，当Servlet容器调用 GenericServlet的 init(ServletConfig config)  方法时，该方法使得私有实例变量config引用由容器传入的 ServletConfig对象，即使的 GenericServlet对象与一个 ServletConfig对象关联。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类还自定义了一个不带参数的 init() 方法。init(ServletConfig config) 方法会调用此方法，对于 GenericServlet类的子类，如果希望覆盖父类的初始化方法，又两种方法：</p>
+<p>1）、覆盖父类的不带参数的 init() 方法</p>
+<p>2）、覆盖父类的带参数的 init(ServletConfig config) 方法，而如果希望当前 Servlet对象与 ServletConfig 对象关联，应该在该方法中先调用 super.init(config) 方法</p>
+<p>GenericServlet没有实现 service() 方法，并且其虽然实现了 destroy() 方法，但实际上什么也没有做，如果编写继承GenericServlet类的子类的话，必须实现 service() 方法，且覆盖 destroy() 方法，为待销毁的当前Servlet对象释放所占用的各种资源。</p>
+<p>GenericServlet实现了ServletConfig接口的所有方法，因此，编写继承GenericServlet类的子类，可以直接调用 ServletConfig接口中的所有方法。</p>
+<h4 id="HttpServlet类"><a href="#HttpServlet类" class="headerlink" title="HttpServlet类"></a>HttpServlet类</h4><p>HttpServlet 是 GenericServlet 类的子类，HttpServlet 类为 Servlet 接口提供了与 HTTP 协议相关的通用实现。</p>
+<p>HTTP 协议把客户请求分为多种方法，如 GET , POST 或 Delete 等。针对每种方式， HttpServlet 类都提供了响应的服务方法，如 doGet() , doPost() , doDelete() 方法等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String method = req.getMethod();<span class="comment">// service在此获得客户端的请求方式，然后依次匹配</span></span><br><span class="line">        <span class="keyword">long</span> lastModified; </span><br><span class="line">        <span class="keyword">if</span> (method.equals(<span class="string">&quot;GET&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">if</span> (lastModified == -<span class="number">1L</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">long</span> ifModifiedSince = req.getDateHeader(<span class="string">&quot;If-Modified-Since&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (ifModifiedSince &lt; lastModified) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">                    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resp.setStatus(<span class="number">304</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;HEAD&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">            <span class="keyword">this</span>.doHead(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPost(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;PUT&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPut(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;DELETE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doDelete(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;OPTIONS&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doOptions(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;TRACE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doTrace(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            String errMsg = lStrings.getString(<span class="string">&quot;http.method_not_implemented&quot;</span>);</span><br><span class="line">            Object[] errArgs = <span class="keyword">new</span> Object[]&#123;method&#125;;</span><br><span class="line">            errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line">            resp.sendError(<span class="number">501</span>, errMsg);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest req, ServletResponse res)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (req <span class="keyword">instanceof</span> HttpServletRequest &amp;&amp; res <span class="keyword">instanceof</span> HttpServletResponse) &#123;</span><br><span class="line">           HttpServletRequest request = (HttpServletRequest)req;</span><br><span class="line">           HttpServletResponse response = (HttpServletResponse)res;</span><br><span class="line">           <span class="keyword">this</span>.service(request, response);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> ServletException(<span class="string">&quot;non-HTTP request or response&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>HttpServlet 类实现了 Servlet 接口中的 service(ServletRequest req, ServletResponse res)，该方法实际上调用的是它的重载方法  service(HttpServletRequest req, HttpServletResponse resp) ，</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String protocol = req.getProtocol();</span><br><span class="line">        String msg = lStrings.getString(<span class="string">&quot;http.method_get_not_supported&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (protocol.endsWith(<span class="string">&quot;1.1&quot;</span>)) &#123;</span><br><span class="line">            resp.sendError(<span class="number">405</span>, msg);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            resp.sendError(<span class="number">400</span>, msg);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>HttpServlet 类实现了所有的请求方法，但默认的实现中，都会向客户端返回一个错误，所以在实际开发中，一般会针对客户端的特定请求方法来覆盖 HttpServlet 类中的方法。</p>
+<h4 id="ServletRequest接口"><a href="#ServletRequest接口" class="headerlink" title="ServletRequest接口"></a>ServletRequest接口</h4><p>ServletRequest 类表示来自客户端的请求，在容器接收到客户端的请求时，会把它包装成一个 ServletRequest 对象。ServletRequest 类中包含着大量的客户端请求信息，同时 ServletRequest 接口还提供了一系列方法来获取 对象中的客户端访问信息。</p>
+<p>同时，ServletRequest 接口还定义了一组用于在请求范围内获取共享数据的方法。</p>
+<h4 id="HttpServletRequest-接口"><a href="#HttpServletRequest-接口" class="headerlink" title="HttpServletRequest 接口"></a>HttpServletRequest 接口</h4><p>HttpServletRequest 接口是 ServletRequest 接口的子接口。HttpServletRequest 接口提供了用于读取 HTTP请求中相关信息的方法。</p>
+<p>解析原始 HTTP请求的工作完全由 Servlet 容器来代劳。 Servlet 容器把 HTTP请求包装成 HttpServletRequest 对象，Servlet 只需调用该对象的各种方法，就可以获取 HTTP请求中的各种数据。</p>
+<h4 id="ServletResponse-接口"><a href="#ServletResponse-接口" class="headerlink" title="ServletResponse 接口"></a>ServletResponse 接口</h4><p>Servlet 通过 ServletResponse 对象来生成响应结果。</p>
+<ul>
+<li>getOutputStream() 方法返回一个 ServletOutputStream 对象，可以用其来输出二进制的正文数据</li>
+<li>getWriter() 方法返回一个 PrintWriter 对象，用其来输出字符串形式的正文数据</li>
+</ul>
+<h4 id="HttpServletResponse-接口"><a href="#HttpServletResponse-接口" class="headerlink" title="HttpServletResponse 接口"></a>HttpServletResponse 接口</h4><p>HttpServletResponse 接口是 ServletResponse 接口的子接口。HttpServletResponse 接口提供了与 HTTP 相关的一些方法，可以用其来设置 HTTP 响应头或向客户端写 Cookie。HttpServletResponse 接口中还定义了一些代表 HTTP响应状态代码的静态常量。</p>
+<h4 id="ServletConfig-接口"><a href="#ServletConfig-接口" class="headerlink" title="ServletConfig 接口"></a>ServletConfig 接口</h4><p>当 Servlet 容器初始化一个 Servlet 对象时，会为这个 Servlet 对象创建一个 ServletConfig 对象。其中包含了 Servlet 的初始化参数信息。Servlet 容器调用 Servlet 对象的<code>init( ServletConfig config)</code>会把 ServletConfig 对象作为参数传给 Servlet 对象，使得当前 Servlet 对象和 ServletConfig 对象建立联系。</p>
+<h4 id="ServletContext-接口"><a href="#ServletContext-接口" class="headerlink" title="ServletContext 接口"></a>ServletContext 接口</h4><p>ServletContext 是 Servlet 与 Servlet 容器 之间的进行过通信的接口。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>你可以对我打赏了哦.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="ffy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="ffy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/09/Tomcat%E5%8A%9F%E8%83%BD%EF%BC%8C%E7%BB%93%E6%9E%84%E5%8F%8A%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/" rel="prev" title="Tomcat功能，结构及工作模式">
+      <i class="fa fa-chevron-left"></i> Tomcat功能，结构及工作模式
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet-API"><span class="nav-number">1.</span> <span class="nav-text">Servlet API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Servlet%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">Servlet接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GenericServlet%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">GenericServlet抽象类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HttpServlet%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">HttpServlet类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletRequest%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.4.</span> <span class="nav-text">ServletRequest接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HttpServletRequest-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.5.</span> <span class="nav-text">HttpServletRequest 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletResponse-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.6.</span> <span class="nav-text">ServletResponse 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HttpServletResponse-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.7.</span> <span class="nav-text">HttpServletResponse 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletConfig-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.8.</span> <span class="nav-text">ServletConfig 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletContext-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.9.</span> <span class="nav-text">ServletContext 接口</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
