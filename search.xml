@@ -300,67 +300,6 @@
       </categories>
   </entry>
   <entry>
-    <title>方法（函数）</title>
-    <url>/2021/07/02/Day%20005%EF%BC%88%E6%96%B9%E6%B3%95(%E5%87%BD%E6%95%B0)%EF%BC%89/</url>
-    <content><![CDATA[<p>练习，循环找出1-10000中所有的素数</p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">prime_number</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">10000</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">2</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (i%j==<span class="number">0</span>) &#123;</span><br><span class="line">                    flag=<span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">                System.out.println(i+<span class="string">&quot;是素数！&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="方法-函数"><a href="#方法-函数" class="headerlink" title="方法(函数)"></a>方法(函数)</h2><p>方法定义在类体当中，在一个类当中可以定义多个方法，方法没有编写顺序，可以随意。</p>
-<p>方法体中不能定义方法。</p>
-<p>方法体由java语句构成，自上而下执行。</p>
-<p>1、定义语法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">【修饰符列表】 返回值类型 方法名(形式参数列表)&#123;</span><br><span class="line">    方法体</span><br><span class="line">    <span class="keyword">return</span> 返回值;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2、方法的修饰符列表当中有static关键字的话，**-  类名.方法名（实际参数列表）;**</p>
-<p>3、一个方法的返回值，为定义的返回值类型。</p>
-<p>4、也可能这个方法执行结束后不返回任何数据，当一个方法执行结束后，不返回任何数据的话，返回值类型位置必须写<strong>void关键字</strong></p>
-<p>5、返回值类型若不是void，表示这个方法执行结束之后必须返回一个具体的数值。 </p>
-<p>6、当返回值类型为void时，方法体中<strong>不能出现”return值“</strong>这样的语句，但要注意可以编写“return”这样的语句。</p>
-<p>7、当在方法体中遇到“return”语句时，return语句所在的<strong>方法</strong>就结束</p>
-<p>8、方法名首字母小写，后面的每个单词首字母大写</p>
-<p>9、方法体必须由大括号括起来，由java语句构成。</p>
-<p>10、形参为局部变量，形参之间用逗号隔开，形参中决定性作用的是形参的数据类型。实参类型与形参数据类型必须一致。</p>
-<p>调用：   <strong>类名.方法名(实参列表)；</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//public 表示公开的，class表示定义类，method是一个类名</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">method</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*public表示公开的，static表示静态的，void表示方法执行结束之后不返回任何数据，main是方法名，主方法</span></span><br><span class="line"><span class="comment">    (String[] args) 形式参数列表，其中String[]是一种引用数据类型，args是一个局部变量的变量名</span></span><br><span class="line"><span class="comment">    主方法就需要这样固定编写，这是程序的入口</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>,b=<span class="number">2</span>;</span><br><span class="line">        method.sum(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c=x+y;</span><br><span class="line">        System.out.println(c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">在方法中输出</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>,b=<span class="number">2</span>,x;</span><br><span class="line">        x=method.sum(a,b);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c=x+y;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">在主方法中输出</span><br></pre></td></tr></table></figure>
-
-<p>在方法调用中，存在自动类型转换。</p>
-<p>11、方法的修饰符列表当中static关键字，完整的调用方式是；<strong>类名.方法名(实参列表);</strong></p>
-<p>对于方法的修饰符列表当中有static关键字是，”类名.”可以省略不写。<strong>如果不写类，那就在当前类中寻找方法。</strong></p>
-<p>12、调用可以不接收返回值</p>
-<p>13、</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">if</span>(a&gt;<span class="number">3</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;<span class="comment">//编译报错，编译器无法保证一定有返回值</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>14、return下不能编写代码。</p>
-<p>15、返回值为void类型的方法，return的作用为终止方法执行。</p>
-<h3 id="方法执行时，内存分配"><a href="#方法执行时，内存分配" class="headerlink" title="方法执行时，内存分配"></a>方法执行时，内存分配</h3><p>方法在执行过程中，在JVM中的内存分配</p>
-<p>方法只定义，不调用，是不会执行的，并且在JVM中不会给该方法分配“运行所属”的内存空间，只有在调用这个方法是，才会动态的给这个方法分配所需的内存空间。</p>
-<p>17、在JVM内存划分上有这样三块主要内存空间。</p>
-<p>方法区内存，堆内存，栈内存</p>
-<p>18、栈数据结构</p>
-<p>​         栈：stack，是一种数据结构</p>
-<p>​          数据结构反应的是数据的存储形态</p>
-<p>19、方法代码片段属于.class字节码文件的一部分，字节码文件在类加载的时候，将其放到了方法区当中，所以JVM中的三块主要的内存空间中方法区内存最先有数据，其中存放代码片段。</p>
-<p>代码片段虽然在方法区内存中只有一份，但可以被重复调用。每一次调用这个方法时，需要给该方法在栈内存中分配独立的活动场所。</p>
-<p>方法在调用的瞬间，会给该方法分配内存空间，会在栈中发生<strong>压栈</strong>动作，方法执行结束后，分配的内存空间全部释放，此时发生<strong>弹栈</strong>动作。</p>
-<p>局部变量在栈中存储，局部变量在“方法体”中声明。</p>
-<h3 id="方法的重载机制-overload"><a href="#方法的重载机制-overload" class="headerlink" title="方法的重载机制/overload"></a>方法的重载机制/overload</h3><p>当几个方法功能不同，但功能相似，比如都是求和，对于起了三个名字的方法而言，记忆复杂，不方便。</p>
-<p>方法重载机制可以让使用这些方法像使用一个方法一样</p>
-<p>用法：把方法名定义一样，<strong>调用方法时根据实参类型和形参类型来判断使用哪一个方法。</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">method2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(sum(<span class="number">1</span>,<span class="number">2</span>));</span><br><span class="line">        System.out.println(sum(<span class="number">1L</span>,<span class="number">2L</span>));</span><br><span class="line">        System.out.println(sum(<span class="number">1.0</span>,<span class="number">2.0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">sum</span><span class="params">(<span class="keyword">long</span> x,<span class="keyword">long</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">sum</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>1、方法重载又称为；overload</p>
-<p>2、方法名一样，形参列表不同（数量不同，顺序不同，类型不同）</p>
-<p>3、方法重载和修饰符列表无关</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>OOP三大特征、类和对象的概念和创建，JVM内存简单分析</title>
     <url>/2021/07/02/Day%20006%EF%BC%88%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%B8%89%E5%A4%A7%E7%89%B9%E5%BE%81%E3%80%81%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%92%8CJVM%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%EF%BC%89/</url>
     <content><![CDATA[<h3 id="方法的递归调用"><a href="#方法的递归调用" class="headerlink" title="方法的递归调用"></a>方法的递归调用</h3><p>可以不用递归，尽量别用</p>
@@ -453,6 +392,67 @@
 <p>4、静态变量存储在方法区内存中。</p>
 <p>5、三块内存当中变化最频繁的是栈内存，最先有数据的为方法区内存，垃圾回收器主要针对的是堆内存。</p>
 <p>6、当堆内存当中的java对象成为垃圾数据的时候 ，会被垃圾回收器回收。（没有更多的引用指向它的时候），这个对象无法被访问，因为访问对象只能通过引用的方式访问。</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>方法（函数）</title>
+    <url>/2021/07/02/Day%20005%EF%BC%88%E6%96%B9%E6%B3%95(%E5%87%BD%E6%95%B0)%EF%BC%89/</url>
+    <content><![CDATA[<p>练习，循环找出1-10000中所有的素数</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">prime_number</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">10000</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">2</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (i%j==<span class="number">0</span>) &#123;</span><br><span class="line">                    flag=<span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">                System.out.println(i+<span class="string">&quot;是素数！&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法-函数"><a href="#方法-函数" class="headerlink" title="方法(函数)"></a>方法(函数)</h2><p>方法定义在类体当中，在一个类当中可以定义多个方法，方法没有编写顺序，可以随意。</p>
+<p>方法体中不能定义方法。</p>
+<p>方法体由java语句构成，自上而下执行。</p>
+<p>1、定义语法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">【修饰符列表】 返回值类型 方法名(形式参数列表)&#123;</span><br><span class="line">    方法体</span><br><span class="line">    <span class="keyword">return</span> 返回值;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、方法的修饰符列表当中有static关键字的话，**-  类名.方法名（实际参数列表）;**</p>
+<p>3、一个方法的返回值，为定义的返回值类型。</p>
+<p>4、也可能这个方法执行结束后不返回任何数据，当一个方法执行结束后，不返回任何数据的话，返回值类型位置必须写<strong>void关键字</strong></p>
+<p>5、返回值类型若不是void，表示这个方法执行结束之后必须返回一个具体的数值。 </p>
+<p>6、当返回值类型为void时，方法体中<strong>不能出现”return值“</strong>这样的语句，但要注意可以编写“return”这样的语句。</p>
+<p>7、当在方法体中遇到“return”语句时，return语句所在的<strong>方法</strong>就结束</p>
+<p>8、方法名首字母小写，后面的每个单词首字母大写</p>
+<p>9、方法体必须由大括号括起来，由java语句构成。</p>
+<p>10、形参为局部变量，形参之间用逗号隔开，形参中决定性作用的是形参的数据类型。实参类型与形参数据类型必须一致。</p>
+<p>调用：   <strong>类名.方法名(实参列表)；</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//public 表示公开的，class表示定义类，method是一个类名</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">method</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*public表示公开的，static表示静态的，void表示方法执行结束之后不返回任何数据，main是方法名，主方法</span></span><br><span class="line"><span class="comment">    (String[] args) 形式参数列表，其中String[]是一种引用数据类型，args是一个局部变量的变量名</span></span><br><span class="line"><span class="comment">    主方法就需要这样固定编写，这是程序的入口</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>,b=<span class="number">2</span>;</span><br><span class="line">        method.sum(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c=x+y;</span><br><span class="line">        System.out.println(c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">在方法中输出</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">1</span>,b=<span class="number">2</span>,x;</span><br><span class="line">        x=method.sum(a,b);</span><br><span class="line">        System.out.println(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c=x+y;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">在主方法中输出</span><br></pre></td></tr></table></figure>
+
+<p>在方法调用中，存在自动类型转换。</p>
+<p>11、方法的修饰符列表当中static关键字，完整的调用方式是；<strong>类名.方法名(实参列表);</strong></p>
+<p>对于方法的修饰符列表当中有static关键字是，”类名.”可以省略不写。<strong>如果不写类，那就在当前类中寻找方法。</strong></p>
+<p>12、调用可以不接收返回值</p>
+<p>13、</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">m</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">if</span>(a&gt;<span class="number">3</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;<span class="comment">//编译报错，编译器无法保证一定有返回值</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>14、return下不能编写代码。</p>
+<p>15、返回值为void类型的方法，return的作用为终止方法执行。</p>
+<h3 id="方法执行时，内存分配"><a href="#方法执行时，内存分配" class="headerlink" title="方法执行时，内存分配"></a>方法执行时，内存分配</h3><p>方法在执行过程中，在JVM中的内存分配</p>
+<p>方法只定义，不调用，是不会执行的，并且在JVM中不会给该方法分配“运行所属”的内存空间，只有在调用这个方法是，才会动态的给这个方法分配所需的内存空间。</p>
+<p>17、在JVM内存划分上有这样三块主要内存空间。</p>
+<p>方法区内存，堆内存，栈内存</p>
+<p>18、栈数据结构</p>
+<p>​         栈：stack，是一种数据结构</p>
+<p>​          数据结构反应的是数据的存储形态</p>
+<p>19、方法代码片段属于.class字节码文件的一部分，字节码文件在类加载的时候，将其放到了方法区当中，所以JVM中的三块主要的内存空间中方法区内存最先有数据，其中存放代码片段。</p>
+<p>代码片段虽然在方法区内存中只有一份，但可以被重复调用。每一次调用这个方法时，需要给该方法在栈内存中分配独立的活动场所。</p>
+<p>方法在调用的瞬间，会给该方法分配内存空间，会在栈中发生<strong>压栈</strong>动作，方法执行结束后，分配的内存空间全部释放，此时发生<strong>弹栈</strong>动作。</p>
+<p>局部变量在栈中存储，局部变量在“方法体”中声明。</p>
+<h3 id="方法的重载机制-overload"><a href="#方法的重载机制-overload" class="headerlink" title="方法的重载机制/overload"></a>方法的重载机制/overload</h3><p>当几个方法功能不同，但功能相似，比如都是求和，对于起了三个名字的方法而言，记忆复杂，不方便。</p>
+<p>方法重载机制可以让使用这些方法像使用一个方法一样</p>
+<p>用法：把方法名定义一样，<strong>调用方法时根据实参类型和形参类型来判断使用哪一个方法。</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">method2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(sum(<span class="number">1</span>,<span class="number">2</span>));</span><br><span class="line">        System.out.println(sum(<span class="number">1L</span>,<span class="number">2L</span>));</span><br><span class="line">        System.out.println(sum(<span class="number">1.0</span>,<span class="number">2.0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">sum</span><span class="params">(<span class="keyword">long</span> x,<span class="keyword">long</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">sum</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x+y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1、方法重载又称为；overload</p>
+<p>2、方法名一样，形参列表不同（数量不同，顺序不同，类型不同）</p>
+<p>3、方法重载和修饰符列表无关</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -1755,39 +1755,6 @@
       </categories>
   </entry>
   <entry>
-    <title>SQL概要，表的创建、删除、更新</title>
-    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
-    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
-<span id="more"></span>
-<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
-<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
-<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
-<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
-<p>2、SQL语句不区分大小写</p>
-<p>3、常数的书写方式是固定的</p>
-<p>4、单词需要用半角空格或者换行来分隔</p>
-<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
-<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
-<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
-<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
-<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
-<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
-<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
-<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
-<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
-<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
-<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
-<p>注意：已经删除的表是无法恢复的！</p>
-<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
-<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
-<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Maven简介，POM及生命周期</title>
     <url>/2021/08/05/Maven%E7%AE%80%E4%BB%8B%EF%BC%8CPOM%E5%8F%8A%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
     <content><![CDATA[<h2 id="Maven简介"><a href="#Maven简介" class="headerlink" title="Maven简介"></a>Maven简介</h2><p>Maven项目对象模型（POM），可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。</p>
@@ -2112,6 +2079,39 @@
 ]]></content>
       <categories>
         <category>Servlet</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>SQL概要，表的创建、删除、更新</title>
+    <url>/2021/07/05/SQL%E6%A6%82%E8%A6%81/</url>
+    <content><![CDATA[<h2 id="SQL概要"><a href="#SQL概要" class="headerlink" title="SQL概要"></a>SQL概要</h2><p>SQL用关键字、表明、列名等组合而成的一条语句来描述操作的内容。</p>
+<span id="more"></span>
+<p><strong>DDL(Data Definition Language，数据定义语言)</strong><br>            CREATE：创建数据库和表等对象<br>            DROP：删除数据库和表等对象<br>            ALTER：修改数据库和表等对象的结构</p>
+<p><strong>DML(Data Manipulation Language，数据操作语言)</strong><br>             SELECT：查询表中的数据<br>             INSERT：向表中插入新的数据<br>             UPDATE：更新表中的数据<br>             DELETE：删除表中的数据</p>
+<p><strong>DCL(Data Control Language，数据控制语言)</strong><br>            COMMIT：确认对数据库中的数据进行的变更<br>            ROLLBACK：取消对数据库中的数据进行的变更<br>            GRANT：赋予用户操作权限<br>            REVOKE：取消用户的操作权限</p>
+<h3 id="书写规则"><a href="#书写规则" class="headerlink" title="书写规则"></a>书写规则</h3><p>1、SQL语句要以分号结尾</p>
+<p>2、SQL语句不区分大小写</p>
+<p>3、常数的书写方式是固定的</p>
+<p>4、单词需要用半角空格或者换行来分隔</p>
+<h2 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h2><h3 id="数据库的创建"><a href="#数据库的创建" class="headerlink" title="数据库的创建"></a>数据库的创建</h3><p><code>CREATE DATABASE &lt;数据库名称&gt;;</code></p>
+<p>在创建表之前，一定要先创建用来存储表的数据库。</p>
+<h3 id="表的创建-1"><a href="#表的创建-1" class="headerlink" title="表的创建"></a>表的创建</h3><p><code>CREATE TABLE &lt;表名&gt; (&lt;列名1&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名2&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,&lt;列名3&gt; &lt;数据类型&gt; &lt;该列所需约束&gt;,……)</code></p>
+<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><p>只能使用半角英文字母、数字、下划线作为数据库、表和列的名称。名称必须以半角英文字母作为开头。名称不能重复</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>INTEGER型：用来指定存储整数的列的数据类型（数字型），不能存储小数</p>
+<p>CHAR型：为CHARACTER（字符）的缩写，用来指定存储字符串的列的数据类型（字符型）。可以用CHAR(10)或CHAR(10)指定该列可以存储的字符串的长度（最大长度）。字符串以<code>定长字符串</code>的形式存储在被指定的CHAR型的列中，所谓定长字符串，就是当列中存储的字符串长度达不到最大长度时，用半角空格补足。</p>
+<p>VARCHAR型：同CHAR类型一样，其可以指定存储字符串的列的数据类型（字符串类型），也可以通过括号内的数字来指定字符串的长度（最大长度）。该类型的列时以<code>可变长字符串</code>的形式来保存字符串的。其存储的字符串未达到最大长度时，不会使用半角空格补足。</p>
+<p>DATE型：用来指定存储日期（年月日）的列的数据类型（日期型）</p>
+<h2 id="约束的设置"><a href="#约束的设置" class="headerlink" title="约束的设置"></a>约束的设置</h2><p><code>约束</code>是除了数据类型之外，对列中存储的数据进行限制或者追加条件的功能。</p>
+<p>如<code>product_id CHAR(4) NOT NULL,product_name VARCHAR(100)</code>其中，数据类型右侧设置了NOT NULL约束。NULL是空白（无记录）的关键字。所以该列设置了不能输入空白，必须输入数据的约束。</p>
+<p>如<code>PRIMARY KEY(product_id)</code>，其设置主键约束的，表示此列的数据必须唯一。</p>
+<h2 id="表的删除和更新"><a href="#表的删除和更新" class="headerlink" title="表的删除和更新"></a>表的删除和更新</h2><h3 id="表的删除"><a href="#表的删除" class="headerlink" title="表的删除"></a>表的删除</h3><p><code>DROP TABLE &lt;表名&gt;;</code></p>
+<p>注意：已经删除的表是无法恢复的！</p>
+<h3 id="表定义的更新"><a href="#表定义的更新" class="headerlink" title="表定义的更新"></a>表定义的更新</h3><h4 id="添加列"><a href="#添加列" class="headerlink" title="添加列"></a>添加列</h4><p><code>ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;;</code></p>
+<h4 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h4><p><code>ALTER TBALE &lt;表名&gt; DROP COLUMN &lt;列名&gt;;</code></p>
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p><code>INSERT INTO &lt;表名&gt; VALUES (列1,列2,……);</code></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
       </categories>
   </entry>
   <entry>
@@ -2992,6 +2992,54 @@
       </categories>
   </entry>
   <entry>
+    <title>反射</title>
+    <url>/2021/08/04/%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射库提供了一个丰富而精巧的工具集，用来编写能够动态操纵java代码的程序。能够分析类能力的程序称为反射。其可以用来：</p>
+<span id="more"></span>
+<ul>
+<li>在运行时分析类的能力</li>
+<li>在运行时检查对象，例如：编写一个适用于所有类的toString方法</li>
+<li>实现泛型数组操作代码</li>
+<li>利用Method对象</li>
+</ul>
+<h3 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h3><p>在程序运行期间，java始终为所有对象维护一个运行时类型标识，这个信息会跟踪每个对象所属的类，虚拟机利用运行时类型信息选择要执行的正确的方法。</p>
+<p>使用一个特殊的java类可以访问这些信息，保存这个信息的类名为Class，Object类中的getClass()方法将会返回一个Class类型的实例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> reflectionTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test001</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str1 =<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        Class c1 = str1.getClass();</span><br><span class="line">        System.out.println(c1);</span><br><span class="line">        System.out.println(c1.getName());</span><br><span class="line">        String className =<span class="string">&quot;java.lang.String&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(Class.forName(className));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在使用静态方法forName时，如果类名保存在一个字符串中，这个字符串会在运行时变化，就可以使用这个方法。如果className是一个类名或接口名，这个方法可以正常执行，否则，forName方法将抛出一个检查型异常。</p>
+<p>Class已经重写了toString方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (isInterface() ? <span class="string">&quot;interface &quot;</span> : (isPrimitive() ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;class &quot;</span>))</span><br><span class="line">            + getName();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用反射分析类的能力"><a href="#利用反射分析类的能力" class="headerlink" title="利用反射分析类的能力"></a>利用反射分析类的能力</h3><p>在java.lang.reflect包中有三个类：Field，Method和Constructor分别用于描述类的字段，方法和构造器。这三个类都有一个叫做getName的方法，用来返回字段，方法或构造器的名称。</p>
+<p>Field类有一个getType()方法，用来返回描述字段类型的一个Class对象。这三个类都有一个getModifiers的方法，它将返回一个整数，用不同的0/1位描述所使用的修饰符。另外，利用java.lang.reflect包中Modifier类的静态方法分析getModifiers返回的这个整数。</p>
+<h3 id="通过反射创建类对象"><a href="#通过反射创建类对象" class="headerlink" title="通过反射创建类对象"></a>通过反射创建类对象</h3><p>第一种方式：通过Class对象的newInstance()方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class c1 = Apple.class;</span><br><span class="line">Apple apple = (Apple)c1.newInstance();</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式：通过Constructor对象的newInstance()方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class c1 = Apple.class;</span><br><span class="line">Constructor constructor = c1.getConstructor();</span><br><span class="line">Apple apple = (Apple)constructor.newInstance();</span><br></pre></td></tr></table></figure>
+
+<p>通过 Constructor 对象创建类对象可以选择特定构造方法，而通过 Class 对象则只能使用默认的无参数构造方法。下面的代码就调用了一个有参数的构造方法进行了类对象的初始化。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Constructor constructor = clz.getConstructor(String.class, int.class);</span><br><span class="line">Apple apple = (Apple)constructor.newInstance(&quot;红富士&quot;, 15);</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过反射获取类属性，方法，构造器"><a href="#通过反射获取类属性，方法，构造器" class="headerlink" title="通过反射获取类属性，方法，构造器"></a>通过反射获取类属性，方法，构造器</h3><p>我们通过 Class 对象的 getFields() 方法可以获取 Class 类的属性，但无法获取私有属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Field[] fields = clz.getFields();</span><br><span class="line">for (Field field : fields) &#123;</span><br><span class="line">    System.out.println(field.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">price</span><br></pre></td></tr></table></figure>
+
+<p>而如果使用 Class 对象的 getDeclaredFields() 方法则可以获取包括私有属性在内的所有属性：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Field[] fields = clz.getDeclaredFields();</span><br><span class="line">for (Field field : fields) &#123;</span><br><span class="line">    System.out.println(field.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name</span><br><span class="line">price</span><br></pre></td></tr></table></figure>
+
+<p>与获取类属性一样，当我们去获取类方法、类构造器时，如果要获取私有方法或私有构造器，则必须使用有 declared 关键字的方法</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>单元测试，Maven快照</title>
     <url>/2021/08/06/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%8CMaven%E5%BF%AB%E7%85%A7/</url>
     <content><![CDATA[<h2 id="单元测试junit"><a href="#单元测试junit" class="headerlink" title="单元测试junit"></a>单元测试junit</h2><p>junit是一个测试的框架（工具）。junit测试的内容为类中的方法，每一个方法都是独立测试的。方法是测试的基本单位。</p>
@@ -3079,54 +3127,6 @@
 ]]></content>
       <categories>
         <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>反射</title>
-    <url>/2021/08/04/%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射库提供了一个丰富而精巧的工具集，用来编写能够动态操纵java代码的程序。能够分析类能力的程序称为反射。其可以用来：</p>
-<span id="more"></span>
-<ul>
-<li>在运行时分析类的能力</li>
-<li>在运行时检查对象，例如：编写一个适用于所有类的toString方法</li>
-<li>实现泛型数组操作代码</li>
-<li>利用Method对象</li>
-</ul>
-<h3 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h3><p>在程序运行期间，java始终为所有对象维护一个运行时类型标识，这个信息会跟踪每个对象所属的类，虚拟机利用运行时类型信息选择要执行的正确的方法。</p>
-<p>使用一个特殊的java类可以访问这些信息，保存这个信息的类名为Class，Object类中的getClass()方法将会返回一个Class类型的实例。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> reflectionTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test001</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str1 =<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        Class c1 = str1.getClass();</span><br><span class="line">        System.out.println(c1);</span><br><span class="line">        System.out.println(c1.getName());</span><br><span class="line">        String className =<span class="string">&quot;java.lang.String&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(Class.forName(className));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br></pre></td></tr></table></figure>
-
-<p>在使用静态方法forName时，如果类名保存在一个字符串中，这个字符串会在运行时变化，就可以使用这个方法。如果className是一个类名或接口名，这个方法可以正常执行，否则，forName方法将抛出一个检查型异常。</p>
-<p>Class已经重写了toString方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (isInterface() ? <span class="string">&quot;interface &quot;</span> : (isPrimitive() ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;class &quot;</span>))</span><br><span class="line">            + getName();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="利用反射分析类的能力"><a href="#利用反射分析类的能力" class="headerlink" title="利用反射分析类的能力"></a>利用反射分析类的能力</h3><p>在java.lang.reflect包中有三个类：Field，Method和Constructor分别用于描述类的字段，方法和构造器。这三个类都有一个叫做getName的方法，用来返回字段，方法或构造器的名称。</p>
-<p>Field类有一个getType()方法，用来返回描述字段类型的一个Class对象。这三个类都有一个getModifiers的方法，它将返回一个整数，用不同的0/1位描述所使用的修饰符。另外，利用java.lang.reflect包中Modifier类的静态方法分析getModifiers返回的这个整数。</p>
-<h3 id="通过反射创建类对象"><a href="#通过反射创建类对象" class="headerlink" title="通过反射创建类对象"></a>通过反射创建类对象</h3><p>第一种方式：通过Class对象的newInstance()方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class c1 = Apple.class;</span><br><span class="line">Apple apple = (Apple)c1.newInstance();</span><br></pre></td></tr></table></figure>
-
-<p>第二种方式：通过Constructor对象的newInstance()方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class c1 = Apple.class;</span><br><span class="line">Constructor constructor = c1.getConstructor();</span><br><span class="line">Apple apple = (Apple)constructor.newInstance();</span><br></pre></td></tr></table></figure>
-
-<p>通过 Constructor 对象创建类对象可以选择特定构造方法，而通过 Class 对象则只能使用默认的无参数构造方法。下面的代码就调用了一个有参数的构造方法进行了类对象的初始化。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Constructor constructor = clz.getConstructor(String.class, int.class);</span><br><span class="line">Apple apple = (Apple)constructor.newInstance(&quot;红富士&quot;, 15);</span><br></pre></td></tr></table></figure>
-
-<h3 id="通过反射获取类属性，方法，构造器"><a href="#通过反射获取类属性，方法，构造器" class="headerlink" title="通过反射获取类属性，方法，构造器"></a>通过反射获取类属性，方法，构造器</h3><p>我们通过 Class 对象的 getFields() 方法可以获取 Class 类的属性，但无法获取私有属性。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Field[] fields = clz.getFields();</span><br><span class="line">for (Field field : fields) &#123;</span><br><span class="line">    System.out.println(field.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">price</span><br></pre></td></tr></table></figure>
-
-<p>而如果使用 Class 对象的 getDeclaredFields() 方法则可以获取包括私有属性在内的所有属性：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Class clz = Apple.class;</span><br><span class="line">Field[] fields = clz.getDeclaredFields();</span><br><span class="line">for (Field field : fields) &#123;</span><br><span class="line">    System.out.println(field.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name</span><br><span class="line">price</span><br></pre></td></tr></table></figure>
-
-<p>与获取类属性一样，当我们去获取类方法、类构造器时，如果要获取私有方法或私有构造器，则必须使用有 declared 关键字的方法</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
       </categories>
   </entry>
   <entry>
@@ -3325,6 +3325,149 @@
 ]]></content>
       <categories>
         <category>设计模式</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>序章</title>
+    <url>/2021/10/10/%E5%BA%8F%E7%AB%A0/</url>
+    <content><![CDATA[<h2 id="系统结构"><a href="#系统结构" class="headerlink" title="系统结构"></a>系统结构</h2><p><strong>B/S架构：</strong></p>
+<p>Browser/Server （浏览器/服务器的交互形式）</p>
+<p>Browser支持：HTML.CSS.JavaScript</p>
+<p><strong>C/S架构</strong></p>
+<p>Client/Server （客户端/服务器端的交互形式）</p>
+<h2 id="第一个HTML"><a href="#第一个HTML" class="headerlink" title="第一个HTML"></a>第一个HTML</h2><p>1、HTML（Hyper Text Markup Language（超文本标记语言））</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&lt;标签&gt;</span><br><span class="line"></span><br><span class="line">​    &lt;标签&gt;</span><br><span class="line"></span><br><span class="line">​        &lt;标签 属性名=“属性值” 属性名=“属性值”&gt;</span><br><span class="line"></span><br><span class="line">​        &lt;/标签&gt;</span><br><span class="line"></span><br><span class="line">​    &lt;/标签&gt;</span><br><span class="line"></span><br><span class="line">&lt;/标签&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意：HTML大小写不敏感，而且语法不严格</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--这是html的注释</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">加上以下代码的第一行就表示是HTML5的语法，去掉表示HTML4.0</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--根--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--头--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	     <span class="comment">&lt;!--网页的标题，显示在网页左上角--&gt;</span></span><br><span class="line">	     <span class="tag">&lt;<span class="name">title</span>&gt;</span>网页的标题<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--体--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	     网页的主体内容，欢迎学习HTML!</span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="基本标签"><a href="#基本标签" class="headerlink" title="基本标签"></a>基本标签</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTML的基本标签<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	     <span class="comment">&lt;!--段落标记--&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">p</span>&gt;</span>东胜神州傲来国海边有一花果山，山顶一石，秉受日月精华，产下一个石猴。石猴在花果山做了众猴之王，为求长生，</span><br><span class="line">		出海求仙，在西牛贺州拜菩提祖师为师。祖师为其取法名孙悟空，并授与七十二般变化及翻筋斗云之法。孙悟空回到花果山，占山</span><br><span class="line">		为王，号为美猴王。苦于无兵刃，<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>遂去东海龙宫求取，龙王及兄弟送他一支如意金箍棒及一身披挂。孙悟空又去幽冥界把自己的名字从生死簿</span><br><span class="line">		上勾掉。龙王，地藏王上天庭告状，太白金星建议招安孙悟空，玉帝准奏。东胜神州傲来国海边有一花果山，山顶一石，秉受日月精华，产</span><br><span class="line">		下一个石猴。石猴在花果山做了众猴之王，为求长生，出海求仙，在西牛贺州拜菩提祖师为师。祖师为其取法名孙悟空，并授</span><br><span class="line">		与七十二般变化及翻筋斗云之法。孙悟空<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>回到花果山，占山为王，号为美猴王。苦</span><br><span class="line">		于无兵刃，遂去东海龙宫求取，龙王及兄弟送他<span class="tag">&lt;/<span class="name">P</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>一支如意金箍棒及一身披挂。孙悟空又去幽冥界把</span><br><span class="line">		自己的名字从生死簿上勾掉。龙王，地藏王上天庭告状，太白金星建议招安孙悟空，玉帝准奏。东胜神州傲来</span><br><span class="line">		国海边有一花果山，山顶一石，秉受日月精华，产下一<span class="tag">&lt;/<span class="name">p</span>&gt;</span>个石猴。石猴在花果山做了众猴之王，为求长生，出海求仙，在西牛贺州拜菩</span><br><span class="line">		提祖师为师。祖师为其取法名孙悟空，并授与七十二般变化及翻筋斗云之法。孙悟空回到花果山，占山为王，号为美猴王。苦于无兵刃，</span><br><span class="line">		遂去东海龙宫求取，龙王及兄弟送他一支如意金箍棒及一身披挂。孙悟空又去幽冥界把自己的名字从生死簿上勾掉。龙王，地藏王上天庭告</span><br><span class="line">		状，太白金星建议招安孙悟空，玉帝准奏。</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--标题字--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h1</span>&gt;</span>一级标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h2</span>&gt;</span>二级标题<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h3</span>&gt;</span>三级标题<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h4</span>&gt;</span>四级标题<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h5</span>&gt;</span>五级标题<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h6</span>&gt;</span>六级标题<span class="tag">&lt;/<span class="name">h6</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--换行标签，br标签是一个独目标记--&gt;</span></span><br><span class="line">		hello</span><br><span class="line">		world!</span><br><span class="line">		hello<span class="tag">&lt;<span class="name">br</span>&gt;</span>world!</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--横线,color和width都是hr标签的属性--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">hr</span> <span class="attr">color</span>=<span class="string">&quot;red&quot;</span> <span class="attr">width</span>=<span class="string">50%</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--预留格式--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">pre</span>&gt;</span></span><br><span class="line">		for(int i=0;i&lt;10;i++)&#123;</span><br><span class="line">		    System.out.println(i);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="tag">&lt;<span class="name">del</span>&gt;</span>删除字<span class="tag">&lt;/<span class="name">del</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">ins</span>&gt;</span>插入字<span class="tag">&lt;/<span class="name">ins</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">b</span>&gt;</span>粗体字<span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">i</span>&gt;</span>斜体字<span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		10<span class="tag">&lt;<span class="name">sup</span>&gt;</span>2<span class="tag">&lt;/<span class="name">sup</span>&gt;</span></span><br><span class="line">		10<span class="tag">&lt;<span class="name">sub</span>&gt;</span>m<span class="tag">&lt;/<span class="name">sub</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--字体标签--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">&quot;red&quot;</span> <span class="attr">size</span>=<span class="string">&quot;50&quot;</span>&gt;</span>字体标签<span class="tag">&lt;/<span class="name">font</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span>	</span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML的实体符号"><a href="#HTML的实体符号" class="headerlink" title="HTML的实体符号"></a>HTML的实体符号</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>实体符号<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	    b<span class="tag">&lt;<span class="name">a</span>&gt;</span>c</span><br><span class="line">		<span class="comment">&lt;!--所有实体符号的特点：以&amp;开始，以;结束；&amp;lt是小于号，&amp;gt;是大于号--&gt;</span></span><br><span class="line">		</span><br><span class="line">		b<span class="symbol">&amp;lt;</span>a<span class="symbol">&amp;gt;</span>c</span><br><span class="line">		</span><br><span class="line">		abc         def</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--&amp;nbsp;表示空格--&gt;</span></span><br><span class="line">		abc<span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;nbsp;</span>def</span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML的表格"><a href="#HTML的表格" class="headerlink" title="HTML的表格"></a>HTML的表格</h2><!doctype html>
+<html>
+    <head>
+        <title>表格</title>
+    </head>
+    <body>
+        <!--table表示表格-->
+        <!--<table border="1px" width="300px">-->
+        <table align="center" border="1px" width="60%" height="150px">
+            <!--tr表示行，td表示单元格-->
+            <tr align="center">
+                <td>a</td>
+                <td>b</td>
+                <td>c</td>
+            </tr>
+            <tr>
+                <td align="center">d</td>
+                <td>e</td>
+                <td>f</td>
+            </tr>
+            <tr>
+                <td>x</td>
+                <td>y</td>
+                <td>z</td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>表格<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="comment">&lt;!--table表示表格--&gt;</span></span><br><span class="line">	    <span class="comment">&lt;!--&lt;table border=&quot;1px&quot; width=&quot;300px&quot;&gt;--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">table</span>  <span class="attr">align</span>=<span class="string">&quot;center&quot;</span> <span class="attr">border</span>=<span class="string">&quot;1px&quot;</span> <span class="attr">width</span>=<span class="string">&quot;60%&quot;</span> <span class="attr">height</span>=<span class="string">&quot;150px&quot;</span>&gt;</span></span><br><span class="line">		    <span class="comment">&lt;!--tr表示行，td表示单元格--&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">tr</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">		        <span class="tag">&lt;<span class="name">td</span>&gt;</span>a<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>b<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>c<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">	        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">		        <span class="tag">&lt;<span class="name">td</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span>d<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>e<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>f<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">	        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">		        <span class="tag">&lt;<span class="name">td</span>&gt;</span>x<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>y<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>z<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">	        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="HTML单元格合并"><a href="#HTML单元格合并" class="headerlink" title="HTML单元格合并"></a>HTML单元格合并</h3><!doctype html>
+<html>
+    <head>
+        <title>HTML表格-单元格合并</title>
+    </head>
+    <body>
+        <table border="1px" width="50%" height="150px">
+            <!--上下单元格合并的时候，使用rowspan，并且删除“下面"的单元-->
+            <!--左右单元格合并的时候，使用colspan,删除左右任意一个单元格-->
+            <tr>
+                <td colspan="2">1</td>
+                <!--<td>2</td>-->
+                <td>3</td> 
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td rowspan="2">3</td> 
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <!--<td>3</td>-->
+            </tr>
+        </table>
+    </body>
+</html>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTML表格-单元格合并<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">&quot;1px&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span> <span class="attr">height</span>=<span class="string">&quot;150px&quot;</span>&gt;</span></span><br><span class="line">		    <span class="comment">&lt;!--上下单元格合并的时候，使用rowspan，并且删除“下面&quot;的单元--&gt;</span></span><br><span class="line">			<span class="comment">&lt;!--左右单元格合并的时候，使用colspan,删除左右任意一个单元格--&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="comment">&lt;!--&lt;td&gt;2&lt;/td&gt;--&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span> <span class="attr">rowspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="comment">&lt;!--&lt;td&gt;3&lt;/td&gt;--&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="HTML表格中th标签"><a href="#HTML表格中th标签" class="headerlink" title="HTML表格中th标签"></a>HTML表格中th标签</h4><!doctype html>
+<html>
+    <head>
+        <title>HTML中th标签</title>
+    <head>
+    </head></head><body>
+        <table border="1px" width="50%">
+            <tr>
+                <!-- th标签也单元格标签-->
+                <th>员工编号</th>
+                <th>员工薪资</th>
+                <th>部门名称</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+
+<pre><code>    &lt;/table&gt;
+&lt;/body&gt;
+</code></pre>
+</table></body></html>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTML中th标签<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">&quot;1px&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span> &gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="comment">&lt;!-- th标签也单元格标签--&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">th</span>&gt;</span>员工编号<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">th</span>&gt;</span>员工薪资<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">th</span>&gt;</span>部门名称<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			</span><br><span class="line">		<span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="HTML的表格—thead-tbody-tfoot"><a href="#HTML的表格—thead-tbody-tfoot" class="headerlink" title="HTML的表格—thead tbody tfoot"></a>HTML的表格—thead tbody tfoot</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>thead tbody tfoot,在table中不是必须的，只是为了后期js代码编写<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">&quot;1px&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span> &gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="comment">&lt;!-- th标签也单元格标签--&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">th</span>&gt;</span>员工编号<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">th</span>&gt;</span>员工薪资<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">th</span>&gt;</span>部门名称<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">			</span><br><span class="line">			<span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">			</span><br><span class="line">			<span class="tag">&lt;<span class="name">tfoot</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tfoot</span>&gt;</span>		</span><br><span class="line">			</span><br><span class="line">		<span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML中背景颜色和背景图片"><a href="#HTML中背景颜色和背景图片" class="headerlink" title="HTML中背景颜色和背景图片"></a>HTML中背景颜色和背景图片</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;uft-8&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">title</span>&gt;</span>背景颜色和背景图片<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--&lt;body bgcolor=&quot;blue&quot;&gt;  bgcolor:设置背景色，background：设置背景图片--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span> <span class="attr">bgcolor</span>=<span class="string">&quot;blue&quot;</span> <span class="attr">background</span>=<span class="string">&quot;E:\picture\1572336762708.jpeg&quot;</span>&gt;</span></span><br><span class="line">	    </span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML中图片"><a href="#HTML中图片" class="headerlink" title="HTML中图片"></a>HTML中图片</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf=8&quot;</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>图片img<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">	   1、设置图片宽度和高度的时候，只设置宽度，高度会进行等比例缩放</span></span><br><span class="line"><span class="comment">	   2、img标签就是图片标签</span></span><br><span class="line"><span class="comment">	   3、src属性是图片路径</span></span><br><span class="line"><span class="comment">	   4、width设置宽度，heigth设置高度</span></span><br><span class="line"><span class="comment">	   5、title设置鼠标悬停时的信息</span></span><br><span class="line"><span class="comment">	   6、alt设置图片加载失败时显示的提示信息</span></span><br><span class="line"><span class="comment">	--&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;E:\picture\1572336762708.jpeg&quot;</span> <span class="attr">width</span>=<span class="string">&quot;600xp&quot;</span> <span class="attr">title</span>=<span class="string">&quot;克苏鲁&quot;</span> <span class="attr">alt</span>=<span class="string">“图片找不到”</span> /&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;E:\picture\1572336762708.jpeg&quot;</span> /&gt;</span></span><br><span class="line">		</span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML超链接"><a href="#HTML超链接" class="headerlink" title="HTML超链接"></a>HTML超链接</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTML的超链接、热链接<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    </span><br><span class="line">		<span class="comment">&lt;!--href:hot references 热引用,其路径可以是绝对的，也可以是相对的--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://www.baidu.com&quot;</span>&gt;</span>百度<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;file:///E:/study/study%20note/web%E5%89%8D%E7%AB%AF/HTML/prictice/008-HTML%E4%B8%AD%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%E5%92%8C%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87.html&quot;</span>&gt;</span>008<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--图片超链接--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://www.baidu.com&quot;</span>&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;E:\picture\1572336762708.jpeg&quot;</span> <span class="attr">width</span>=<span class="string">&quot;600xp&quot;</span> <span class="attr">title</span>=<span class="string">&quot;百度&quot;</span> /&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--超链接的target属性：可取_blank,表示在一个新的窗口打开，</span></span><br><span class="line"><span class="comment">		   可取_self,表示在当前窗口打开（默认）</span></span><br><span class="line"><span class="comment">		   可取_top,顶级窗口</span></span><br><span class="line"><span class="comment">		   可取_parent，父窗口--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://www.baidu.com&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span>&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;E:\picture\1572336762708.jpeg&quot;</span> <span class="attr">width</span>=<span class="string">&quot;600xp&quot;</span> <span class="attr">title</span>=<span class="string">&quot;百度&quot;</span> /&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="超链接的作用"><a href="#超链接的作用" class="headerlink" title="超链接的作用"></a>超链接的作用</h3><p>通过超链接可以从浏览器向服务器发送请求</p>
+<p>浏览器向服务器发送数据（请求：request）</p>
+<p>服务器向浏览器发送数据（响应：response）</p>
+<p>B/S结构的系统，每一个请求都会对应一个响应。</p>
+<h2 id="HTML列表"><a href="#HTML列表" class="headerlink" title="HTML列表"></a>HTML列表</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">title</span>&gt;</span>列表<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="comment">&lt;!--有序列表--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;A&quot;</span>&gt;</span></span><br><span class="line">	        <span class="tag">&lt;<span class="name">li</span>&gt;</span>水果</span><br><span class="line">			    <span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;a&quot;</span>&gt;</span></span><br><span class="line">				    <span class="tag">&lt;<span class="name">li</span>&gt;</span>苹果<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">					    <span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">						    <span class="tag">&lt;<span class="name">li</span>&gt;</span>好苹果<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">							    <span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;I&quot;</span>&gt;</span></span><br><span class="line">								    <span class="tag">&lt;<span class="name">li</span>&gt;</span>好吃<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">									<span class="tag">&lt;<span class="name">li</span>&gt;</span>不好吃<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">								<span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line">							<span class="tag">&lt;<span class="name">li</span>&gt;</span>烂苹果<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">li</span>&gt;</span>香蕉<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">li</span>&gt;</span>蔬菜<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">li</span>&gt;</span>people<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--无序列表--&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">type</span>=<span class="string">“circle</span>&quot;&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">li</span>&gt;</span>中国<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">type</span>=<span class="string">&quot;square&quot;</span>&gt;</span></span><br><span class="line">				    <span class="tag">&lt;<span class="name">li</span>&gt;</span>河南<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">li</span>&gt;</span>河北</span><br><span class="line">					    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">type</span>=<span class="string">&quot;disc&quot;</span>&gt;</span></span><br><span class="line">						    <span class="tag">&lt;<span class="name">li</span>&gt;</span>石家庄<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">							    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">								    <span class="tag">&lt;<span class="name">li</span>&gt;</span>邯郸<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">									    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">										    <span class="tag">&lt;<span class="name">li</span>&gt;</span>邢台<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">										<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">       							<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">							<span class="tag">&lt;<span class="name">li</span>&gt;</span>张家口<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">				</span><br><span class="line">			<span class="tag">&lt;<span class="name">li</span>&gt;</span>美国<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">li</span>&gt;</span>日本<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTML表单"><a href="#HTML表单" class="headerlink" title="HTML表单"></a>HTML表单</h2><p>1、表单用来收集用户信息，表单展现后，用户填写表单，填写完毕后提交数据到服务器</p>
+<p>2、使用form标签来画表单</p>
+<p>3、一个网页中可以有多个表单form</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">title</span>&gt;</span>表单<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	    <span class="comment">&lt;!--action属性写服务器地址（url）--&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;……&quot;</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">&lt;!--submit 表示提交按钮，具有提交数据的功能，默认value值为”提交“--&gt;</span></span><br><span class="line">		    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;sb&quot;</span> /&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--button 普通按钮，不具备提交信息的功能--&gt;</span>	</span><br><span class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">value</span>=<span class="string">&quot;该按钮上的文本信息&quot;</span>/&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/jd/login&quot;</span>&gt;</span></span><br><span class="line">		    用户名<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> /&gt;</span></span><br><span class="line">			密码<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;userpwd&quot;</span> /&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;登录&quot;</span>/&gt;</span></span><br><span class="line">		    </span><br><span class="line">		<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">	    <span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">	        <span class="tag">&lt;<span class="name">table</span>  <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span>&gt;</span></span><br><span class="line">		        <span class="tag">&lt;<span class="name">tr</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">			        <span class="tag">&lt;<span class="name">td</span>&gt;</span>用户名<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			        <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">”text</span>&quot; <span class="attr">name</span>=<span class="string">&quot;username&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;<span class="name">tr</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">			        <span class="tag">&lt;<span class="name">td</span>&gt;</span>密码<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				    <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">typt</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;userpwd&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span>	</span><br><span class="line">			    <span class="tag">&lt;<span class="name">tr</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">			        <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;登录&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				    <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;reset&quot;</span> <span class="attr">value</span>=<span class="string">&quot;清空&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>HTML</category>
       </categories>
   </entry>
   <entry>
@@ -3854,71 +3997,6 @@
       </categories>
   </entry>
   <entry>
-    <title>线性表以及顺序存储结构</title>
-    <url>/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[<p>同一个问题可以有不同的表示（存储）方法</p>
-<span id="more"></span>
-<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E7%BA%BF%E6%80%A7%E8%A1%A8.png"></p>
-<p>线性表(List)：具有相同特征的数据元素的一个有限序列。</p>
-<ul>
-<li>表中的元素个数称为线性表的长度</li>
-<li>线性表没有元素时，称为空表</li>
-<li>表的起始位置称为表头，表结束位置称为表尾</li>
-</ul>
-<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E7%BA%BF%E6%80%A7%E8%A1%A8%E9%80%BB%E8%BE%91%E9%A1%BA%E5%BA%8F.png"></p>
-<p>线性表的抽象数据类型：</p>
-<p>基本操作如下：</p>
-<p><code>InitList(&amp;L)</code>：初始化线性表，构造一个空的线性表L。</p>
-<p><code>DestroyList(&amp;L)</code>：销毁线性表，释放其占用的空间。</p>
-<p><code>ListEmpty(L)</code>：判断线性表L是否为空表。</p>
-<p><code>ListLength(L)</code>：返回线性表长度，等于线性表中元素的个数。</p>
-<p><code>DispList(L)</code>：输出线性表，当线性表L不为空时顺序显示L中各节点的值域。</p>
-<p><code>GetElem(L,i,&amp;e)</code>：求线性表中某个数据元素值，用e返回L中第i个元素的值。</p>
-<p><code>LocatElem(L,e)</code>：按元素值查找，返回L中第一个值域与e相等的元素的序号，若这个元素不存在，则返回0。</p>
-<p><code>ListInsert(&amp;L,i,e)</code>：插入数据元素，在L的第i个位置插入一个新的元素e，L的长度增加一。</p>
-<p><code>ListDelete(&amp;L,i,&amp;e)</code>：删除数据元素，删除L的第i个元素，并用e返回其值，L的长度减一。</p>
-<h3 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h3><p>线性表的顺序存储结构简称为顺序表。</p>
-<p>利用数组的连续存储空间顺序存放线性表的各元素。</p>
-<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E6%95%B0%E7%BB%84%E5%AD%98%E6%94%BE%E7%BA%BF%E6%80%A7%E8%A1%A8.png"></p>
-<p>数组大小MaxSize一般定义为一个整型常量。注意：顺序表的表长在刚开始确定后就无法更改。</p>
-<p>静态分配：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxSize 50;<span class="comment">//定义最大长度</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> ElemType;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType data[MaxSize];<span class="comment">//用静态的“数组”存放数据元素</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的当前长度</span></span><br><span class="line">&#125;SqList;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitList</span><span class="params">(SqList &amp;L)</span></span>&#123;</span><br><span class="line">    L=(SqList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MaxSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;MaxSize;i++)&#123;</span><br><span class="line">        L-&gt;date[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;<span class="comment">//赋默认值可以省略，但分配的空间内可能残留着其他数据</span></span><br><span class="line">    L-&gt;length=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DestroyList</span><span class="params">(SqList &amp;L)</span></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(L);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ListEmpty</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (L-&gt;length==<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ListLength</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (L-&gt;length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DispList</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;L-&gt;length;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,L-&gt;data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>按位查找</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">GetElem</span><span class="params">(SqList *L,<span class="keyword">int</span> i,ElemType &amp;e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    e=L-&gt;data[i<span class="number">-1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>按值查找</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">LocateElem</span><span class="params">(SqList *L,ElemType e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&lt;L-&gt;length &amp;&amp; L-&gt;data[i] != e)</span><br><span class="line">        i++;</span><br><span class="line">    <span class="keyword">if</span>(i&gt;=L-&gt;length)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> i+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ListInsert</span><span class="params">(SqList *&amp; L,<span class="keyword">int</span> i,ElemType e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length+<span class="number">1</span> || L-&gt;length == MaxSize)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    i--;</span><br><span class="line">    <span class="keyword">for</span>(j=L-&gt;length;j&gt;i;j--)&#123;</span><br><span class="line">        L-&gt;data[j]=L-&gt;data[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    L-&gt;data[i]=e;</span><br><span class="line">    L-&gt;length++;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ListDelete</span><span class="params">(SqList *&amp;L,<span class="keyword">int</span> i,ElemType &amp;e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    i--;</span><br><span class="line">    e=L-&gt;data[i];</span><br><span class="line">    <span class="keyword">for</span>(j=i;j&lt;L-&gt;length<span class="number">-1</span>;j++)&#123;</span><br><span class="line">        L-&gt;data[j]=L-&gt;data[j+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    L-&gt;length<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>动态分配以及扩展线性表的长度：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">define</span> InitSize 10<span class="comment">//顺序表的初始长度</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    ElemType *data;<span class="comment">//指示动态分配数组的指针</span></span><br><span class="line">    <span class="keyword">int</span> MaxSize;<span class="comment">//顺序表的最大容量</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的当前长度</span></span><br><span class="line">&#125;SeqList;<span class="comment">//顺序表的类型定义（动态分配方式）</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> InitSize 10</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> *data;</span><br><span class="line">	<span class="keyword">int</span> MaxSize;</span><br><span class="line">	<span class="keyword">int</span> length;</span><br><span class="line">&#125;SeqList;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitList</span><span class="params">(SeqList &amp;L)</span></span>&#123;</span><br><span class="line">	L.data=(<span class="keyword">int</span> *)<span class="built_in">malloc</span>(InitSize*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    L.length=<span class="number">0</span>;</span><br><span class="line">    L.MaxSize=InitSize;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">IncreaseSize</span><span class="params">(SeqList &amp;L，<span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> *p=L.data;</span><br><span class="line">	L.data=(<span class="keyword">int</span> *)<span class="built_in">malloc</span>(L.MaxSize + len)*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;L.length;i++)&#123;</span><br><span class="line">		L.data[i]=p[i];</span><br><span class="line">	&#125;</span><br><span class="line">	L.MaxSize=L.MaxSize+len;</span><br><span class="line">	<span class="built_in">free</span>(p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	SeqList L;</span><br><span class="line">	InitList(L);</span><br><span class="line">	IncreaseSize(L,<span class="number">5</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-  </entry>
-  <entry>
     <title>绪论</title>
     <url>/2021/07/20/%E7%BB%AA%E8%AE%BA/</url>
     <content><![CDATA[<p>数据结构通常包括以下几个方面：</p>
@@ -3994,6 +4072,71 @@
 <h4 id="算法的空间复杂度"><a href="#算法的空间复杂度" class="headerlink" title="算法的空间复杂度"></a>算法的空间复杂度</h4><p>一个算法的存储量包括输入数据所占的空间、程序本身所占的空间和临时变量所占的空间。</p>
 <p>算法空间复杂度是对一个算法在运行过程中临时占用的存储空间大小的量度。<code>S(n)=O(g(n))</code></p>
 <p>若所需临时空间相对于问题规模来说是常数，则称算法为原地工作算法或就地工作算法。</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>线性表以及顺序存储结构</title>
+    <url>/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/</url>
+    <content><![CDATA[<p>同一个问题可以有不同的表示（存储）方法</p>
+<span id="more"></span>
+<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E7%BA%BF%E6%80%A7%E8%A1%A8.png"></p>
+<p>线性表(List)：具有相同特征的数据元素的一个有限序列。</p>
+<ul>
+<li>表中的元素个数称为线性表的长度</li>
+<li>线性表没有元素时，称为空表</li>
+<li>表的起始位置称为表头，表结束位置称为表尾</li>
+</ul>
+<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E7%BA%BF%E6%80%A7%E8%A1%A8%E9%80%BB%E8%BE%91%E9%A1%BA%E5%BA%8F.png"></p>
+<p>线性表的抽象数据类型：</p>
+<p>基本操作如下：</p>
+<p><code>InitList(&amp;L)</code>：初始化线性表，构造一个空的线性表L。</p>
+<p><code>DestroyList(&amp;L)</code>：销毁线性表，释放其占用的空间。</p>
+<p><code>ListEmpty(L)</code>：判断线性表L是否为空表。</p>
+<p><code>ListLength(L)</code>：返回线性表长度，等于线性表中元素的个数。</p>
+<p><code>DispList(L)</code>：输出线性表，当线性表L不为空时顺序显示L中各节点的值域。</p>
+<p><code>GetElem(L,i,&amp;e)</code>：求线性表中某个数据元素值，用e返回L中第i个元素的值。</p>
+<p><code>LocatElem(L,e)</code>：按元素值查找，返回L中第一个值域与e相等的元素的序号，若这个元素不存在，则返回0。</p>
+<p><code>ListInsert(&amp;L,i,e)</code>：插入数据元素，在L的第i个位置插入一个新的元素e，L的长度增加一。</p>
+<p><code>ListDelete(&amp;L,i,&amp;e)</code>：删除数据元素，删除L的第i个元素，并用e返回其值，L的长度减一。</p>
+<h3 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h3><p>线性表的顺序存储结构简称为顺序表。</p>
+<p>利用数组的连续存储空间顺序存放线性表的各元素。</p>
+<p><img src="/2021/07/22/%E7%BA%BF%E6%80%A7%E8%A1%A8%E4%BB%A5%E5%8F%8A%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E6%95%B0%E7%BB%84%E5%AD%98%E6%94%BE%E7%BA%BF%E6%80%A7%E8%A1%A8.png"></p>
+<p>数组大小MaxSize一般定义为一个整型常量。注意：顺序表的表长在刚开始确定后就无法更改。</p>
+<p>静态分配：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxSize 50;<span class="comment">//定义最大长度</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> ElemType;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType data[MaxSize];<span class="comment">//用静态的“数组”存放数据元素</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的当前长度</span></span><br><span class="line">&#125;SqList;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitList</span><span class="params">(SqList &amp;L)</span></span>&#123;</span><br><span class="line">    L=(SqList*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(MaxSize));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;MaxSize;i++)&#123;</span><br><span class="line">        L-&gt;date[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;<span class="comment">//赋默认值可以省略，但分配的空间内可能残留着其他数据</span></span><br><span class="line">    L-&gt;length=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DestroyList</span><span class="params">(SqList &amp;L)</span></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(L);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ListEmpty</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (L-&gt;length==<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ListLength</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (L-&gt;length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DispList</span><span class="params">(SqList *L)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;L-&gt;length;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,L-&gt;data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按位查找</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">GetElem</span><span class="params">(SqList *L,<span class="keyword">int</span> i,ElemType &amp;e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    e=L-&gt;data[i<span class="number">-1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>按值查找</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">LocateElem</span><span class="params">(SqList *L,ElemType e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&lt;L-&gt;length &amp;&amp; L-&gt;data[i] != e)</span><br><span class="line">        i++;</span><br><span class="line">    <span class="keyword">if</span>(i&gt;=L-&gt;length)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> i+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ListInsert</span><span class="params">(SqList *&amp; L,<span class="keyword">int</span> i,ElemType e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length+<span class="number">1</span> || L-&gt;length == MaxSize)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    i--;</span><br><span class="line">    <span class="keyword">for</span>(j=L-&gt;length;j&gt;i;j--)&#123;</span><br><span class="line">        L-&gt;data[j]=L-&gt;data[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    L-&gt;data[i]=e;</span><br><span class="line">    L-&gt;length++;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ListDelete</span><span class="params">(SqList *&amp;L,<span class="keyword">int</span> i,ElemType &amp;e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i&gt;L-&gt;length)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    i--;</span><br><span class="line">    e=L-&gt;data[i];</span><br><span class="line">    <span class="keyword">for</span>(j=i;j&lt;L-&gt;length<span class="number">-1</span>;j++)&#123;</span><br><span class="line">        L-&gt;data[j]=L-&gt;data[j+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    L-&gt;length<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>动态分配以及扩展线性表的长度：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">define</span> InitSize 10<span class="comment">//顺序表的初始长度</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    ElemType *data;<span class="comment">//指示动态分配数组的指针</span></span><br><span class="line">    <span class="keyword">int</span> MaxSize;<span class="comment">//顺序表的最大容量</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的当前长度</span></span><br><span class="line">&#125;SeqList;<span class="comment">//顺序表的类型定义（动态分配方式）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> InitSize 10</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> *data;</span><br><span class="line">	<span class="keyword">int</span> MaxSize;</span><br><span class="line">	<span class="keyword">int</span> length;</span><br><span class="line">&#125;SeqList;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitList</span><span class="params">(SeqList &amp;L)</span></span>&#123;</span><br><span class="line">	L.data=(<span class="keyword">int</span> *)<span class="built_in">malloc</span>(InitSize*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    L.length=<span class="number">0</span>;</span><br><span class="line">    L.MaxSize=InitSize;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">IncreaseSize</span><span class="params">(SeqList &amp;L，<span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> *p=L.data;</span><br><span class="line">	L.data=(<span class="keyword">int</span> *)<span class="built_in">malloc</span>(L.MaxSize + len)*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;L.length;i++)&#123;</span><br><span class="line">		L.data[i]=p[i];</span><br><span class="line">	&#125;</span><br><span class="line">	L.MaxSize=L.MaxSize+len;</span><br><span class="line">	<span class="built_in">free</span>(p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	SeqList L;</span><br><span class="line">	InitList(L);</span><br><span class="line">	IncreaseSize(L,<span class="number">5</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>数据结构</category>
@@ -5183,6 +5326,83 @@
       </categories>
   </entry>
   <entry>
+    <title>字符串首尾去空格，关于前面的补充</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20035%EF%BC%88%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81java%E5%8C%85%E6%9C%BA%E5%88%B6%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81classpath%20%E5%92%8C%20jar%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8E%BB%E9%99%A4%E9%A6%96%E5%B0%BE%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="抽象类和接口的补充"><a href="#抽象类和接口的补充" class="headerlink" title="抽象类和接口的补充"></a>抽象类和接口的补充</h2><p>因为抽象类本身被审计成只能用于被继承，因此，抽象类可以强迫子类实现其定义的抽象方法，否则编译会报错，因此，抽象方法实际上相当于定义了“规范”。而继承抽象类的子类必须实现其抽象方法，否则会报错。</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">abstract class</th>
+<th>interface</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">继承</td>
+<td align="left">只能extends一个class</td>
+<td>可以implements多个interface</td>
+</tr>
+<tr>
+<td align="center">字段</td>
+<td align="left">可以定义实例字段</td>
+<td>不能定义实例字段</td>
+</tr>
+<tr>
+<td align="center">抽象方法</td>
+<td align="left">可以定义抽象方法</td>
+<td>可以定义抽象方法</td>
+</tr>
+<tr>
+<td align="center">非抽象方法</td>
+<td align="left">可以定义非抽象方法</td>
+<td>可以定义default方法</td>
+</tr>
+</tbody></table>
+<p>在接口中，可以定义default方法。例如：把Person接口的run()方法改为default方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Person p = <span class="keyword">new</span> Student(<span class="string">&quot;Xiao Ming&quot;</span>);</span><br><span class="line">        p.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(getName() + <span class="string">&quot; run&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现类可以不必覆写<code>default</code>方法。<code>default</code>方法的目的是，当我们需要给接口新增一个方法时，会涉及到修改全部子类。如果新增的是<code>default</code>方法，那么子类就不必全部修改，只需要在需要覆写的地方去覆写新增方法。</p>
+<p><code>default</code>方法和抽象类的普通方法是有所不同的。因为<code>interface</code>没有字段，<code>default</code>方法无法访问字段，而抽象类的普通方法可以访问实例字段。</p>
+<p>因为interface是一个纯抽象类，所以它不能定义实例字段，但是，interface是可以有静态字段的，并且静态字段必须为final类型，简单来说，interface定义的字段只能是常量。实际上，因为<code>interface</code>的字段只能是<code>public static final</code>类型，所以我们可以把这些修饰符都去掉，上述代码可以简写为：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MALE =<span class="number">1</span>;</span><br><span class="line">    INT FEMALE =<span class="number">2</span>;<span class="comment">//常量变量名最好全用大写字母来表示</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="java包机制的补充"><a href="#java包机制的补充" class="headerlink" title="java包机制的补充"></a>java包机制的补充</h2><p>在写<code>import</code>的时候，可以使用<strong>“*”</strong>，表示把这个包下面的所有class都导入进来（但不包括子包的class）</p>
+<p>注意：不推荐使用该写法，因为在导入多个包后，很难看出要使用的类输入哪个包</p>
+<p>还有一种import static 的语法，他可以导入一个类的静态字段和静态方法（很少使用）</p>
+<p>在编写class的时候，编译器会自动帮我们做两个import动作：</p>
+<p>1、默认自动import当前package的其他class</p>
+<p>2、默认自动<code>import java.lang.*</code></p>
+<p>注意：自动导入的是<code>java.lang</code>包，但类似<code>java.lang.reflect</code>这些包仍需要手动导入</p>
+<h2 id="classpath-和-jar"><a href="#classpath-和-jar" class="headerlink" title="classpath 和 jar"></a><code>classpath 和 jar</code></h2><p>1、<code>classpath</code>是一个JVM用到的一个环境变量，它用来指示JVM如何搜索<code>class</code></p>
+<p>2、因为java是编译型语言，源码文件<code>.java</code>需要编译成<code>.class</code>文件才能真正可以被JVM执行的字节码，因此，JVM需要知道，如果要加载一个类，应该去哪搜索对应的文件。</p>
+<p>3、<code>classpath</code>是一组目录的集合，它设置的搜索路径与操作系统相关，（windows和Linux系统上不一样）</p>
+<p>现在我们假设<code>classpath</code>是<code>.;C:\work\project1\bin;C:\shared</code>，当JVM在加载<code>abc.xyz.Hello</code>这个类时，会依次查找：</p>
+<ul>
+<li><code>&lt;当前目录&gt;\abc\xyz\Hello.class</code></li>
+<li><code>C:\work\project1\bin\abc\xyz\Hello.class</code></li>
+<li><code>C:\shared\abc\xyz\Hello.class</code></li>
+</ul>
+<p>注意到<code>.</code>代表当前目录。如果JVM在某个路径下找到了对应的<code>class</code>文件，就不再往后继续搜索。如果所有路径下都没有找到，就报错。</p>
+<p> 注意：不要把任何Java核心库添加到<code>classpath</code>中！JVM根本不依赖<code>classpath</code>加载核心库！</p>
+<h3 id="jar包"><a href="#jar包" class="headerlink" title="jar包"></a>jar包</h3><p>如果有很多<code>.class</code>文件，散落在各层目录中，肯定不便于管理。如果能把目录打一个包，变成一个文件，就方便多了。</p>
+<p>jar包就是用来干这个事的，它可以把<code>package</code>组织的目录层级，以及各个目录下的所有文件（包括<code>.class</code>文件和其他文件）都打成一个jar文件，这样一来，无论是备份，还是发给客户，就简单多了。</p>
+<h2 id="字符串去除首尾空白字符"><a href="#字符串去除首尾空白字符" class="headerlink" title="字符串去除首尾空白字符"></a>字符串去除首尾空白字符</h2><p>使用<code>trim()</code>方法可以移除字符串首尾空白字符串。<em><strong>空白字符串包括：<code>\t</code>,<code>\r</code>,<code>\n</code>。</strong></em></p>
+<p>注意：<code>trim()</code>并没有改变字符串的内容，而是返回一个新字符串。</p>
+<p><code>String</code>还提供了<code>isEmpty()</code>和<code>isBlank()</code>来判断字符串是否为空和空白字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">        String s2=<span class="string">&quot;name&quot;</span>;</span><br><span class="line">        System.out.println(s1.replace(<span class="string">&quot;l&quot;</span>,<span class="string">&quot;w&quot;</span>));</span><br><span class="line">        System.out.println(s2.replace(<span class="string">&quot;m&quot;</span>,<span class="string">&quot;&quot;</span>));</span><br><span class="line">        String s=<span class="string">&quot;A,B;C,D&quot;</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另一种是通过正则表达式替换：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">String s = &quot;A,,B;C ,D&quot;;</span><br><span class="line">s.replaceAll(&quot;[\\,\\;\\s]+&quot;, &quot;,&quot;); // &quot;A,B,C,D&quot;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码通过正则表达式，把匹配的子串统一替换为<code>&quot;,&quot;</code>。关于正则表达式的用法我们会在后面详细讲解。</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>泛型机制，自定义泛型，Map接口中的常用方法</title>
     <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20036%EF%BC%88%E6%B3%9B%E5%9E%8B%E6%9C%BA%E5%88%B6%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%9B%E5%9E%8B%E3%80%81%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E3%80%81Map%E6%8E%A5%E5%8F%A3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%89/</url>
     <content><![CDATA[<h2 id="泛型机制"><a href="#泛型机制" class="headerlink" title="泛型机制"></a>泛型机制</h2><span id="more"></span>
@@ -5302,83 +5522,6 @@
 </ul>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>字符串首尾去空格，关于前面的补充</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20035%EF%BC%88%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81java%E5%8C%85%E6%9C%BA%E5%88%B6%E7%9A%84%E8%A1%A5%E5%85%85%E3%80%81classpath%20%E5%92%8C%20jar%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8E%BB%E9%99%A4%E9%A6%96%E5%B0%BE%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="抽象类和接口的补充"><a href="#抽象类和接口的补充" class="headerlink" title="抽象类和接口的补充"></a>抽象类和接口的补充</h2><p>因为抽象类本身被审计成只能用于被继承，因此，抽象类可以强迫子类实现其定义的抽象方法，否则编译会报错，因此，抽象方法实际上相当于定义了“规范”。而继承抽象类的子类必须实现其抽象方法，否则会报错。</p>
-<span id="more"></span>
-
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="left">abstract class</th>
-<th>interface</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">继承</td>
-<td align="left">只能extends一个class</td>
-<td>可以implements多个interface</td>
-</tr>
-<tr>
-<td align="center">字段</td>
-<td align="left">可以定义实例字段</td>
-<td>不能定义实例字段</td>
-</tr>
-<tr>
-<td align="center">抽象方法</td>
-<td align="left">可以定义抽象方法</td>
-<td>可以定义抽象方法</td>
-</tr>
-<tr>
-<td align="center">非抽象方法</td>
-<td align="left">可以定义非抽象方法</td>
-<td>可以定义default方法</td>
-</tr>
-</tbody></table>
-<p>在接口中，可以定义default方法。例如：把Person接口的run()方法改为default方法：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Person p = <span class="keyword">new</span> Student(<span class="string">&quot;Xiao Ming&quot;</span>);</span><br><span class="line">        p.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(getName() + <span class="string">&quot; run&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实现类可以不必覆写<code>default</code>方法。<code>default</code>方法的目的是，当我们需要给接口新增一个方法时，会涉及到修改全部子类。如果新增的是<code>default</code>方法，那么子类就不必全部修改，只需要在需要覆写的地方去覆写新增方法。</p>
-<p><code>default</code>方法和抽象类的普通方法是有所不同的。因为<code>interface</code>没有字段，<code>default</code>方法无法访问字段，而抽象类的普通方法可以访问实例字段。</p>
-<p>因为interface是一个纯抽象类，所以它不能定义实例字段，但是，interface是可以有静态字段的，并且静态字段必须为final类型，简单来说，interface定义的字段只能是常量。实际上，因为<code>interface</code>的字段只能是<code>public static final</code>类型，所以我们可以把这些修饰符都去掉，上述代码可以简写为：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MALE =<span class="number">1</span>;</span><br><span class="line">    INT FEMALE =<span class="number">2</span>;<span class="comment">//常量变量名最好全用大写字母来表示</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="java包机制的补充"><a href="#java包机制的补充" class="headerlink" title="java包机制的补充"></a>java包机制的补充</h2><p>在写<code>import</code>的时候，可以使用<strong>“*”</strong>，表示把这个包下面的所有class都导入进来（但不包括子包的class）</p>
-<p>注意：不推荐使用该写法，因为在导入多个包后，很难看出要使用的类输入哪个包</p>
-<p>还有一种import static 的语法，他可以导入一个类的静态字段和静态方法（很少使用）</p>
-<p>在编写class的时候，编译器会自动帮我们做两个import动作：</p>
-<p>1、默认自动import当前package的其他class</p>
-<p>2、默认自动<code>import java.lang.*</code></p>
-<p>注意：自动导入的是<code>java.lang</code>包，但类似<code>java.lang.reflect</code>这些包仍需要手动导入</p>
-<h2 id="classpath-和-jar"><a href="#classpath-和-jar" class="headerlink" title="classpath 和 jar"></a><code>classpath 和 jar</code></h2><p>1、<code>classpath</code>是一个JVM用到的一个环境变量，它用来指示JVM如何搜索<code>class</code></p>
-<p>2、因为java是编译型语言，源码文件<code>.java</code>需要编译成<code>.class</code>文件才能真正可以被JVM执行的字节码，因此，JVM需要知道，如果要加载一个类，应该去哪搜索对应的文件。</p>
-<p>3、<code>classpath</code>是一组目录的集合，它设置的搜索路径与操作系统相关，（windows和Linux系统上不一样）</p>
-<p>现在我们假设<code>classpath</code>是<code>.;C:\work\project1\bin;C:\shared</code>，当JVM在加载<code>abc.xyz.Hello</code>这个类时，会依次查找：</p>
-<ul>
-<li><code>&lt;当前目录&gt;\abc\xyz\Hello.class</code></li>
-<li><code>C:\work\project1\bin\abc\xyz\Hello.class</code></li>
-<li><code>C:\shared\abc\xyz\Hello.class</code></li>
-</ul>
-<p>注意到<code>.</code>代表当前目录。如果JVM在某个路径下找到了对应的<code>class</code>文件，就不再往后继续搜索。如果所有路径下都没有找到，就报错。</p>
-<p> 注意：不要把任何Java核心库添加到<code>classpath</code>中！JVM根本不依赖<code>classpath</code>加载核心库！</p>
-<h3 id="jar包"><a href="#jar包" class="headerlink" title="jar包"></a>jar包</h3><p>如果有很多<code>.class</code>文件，散落在各层目录中，肯定不便于管理。如果能把目录打一个包，变成一个文件，就方便多了。</p>
-<p>jar包就是用来干这个事的，它可以把<code>package</code>组织的目录层级，以及各个目录下的所有文件（包括<code>.class</code>文件和其他文件）都打成一个jar文件，这样一来，无论是备份，还是发给客户，就简单多了。</p>
-<h2 id="字符串去除首尾空白字符"><a href="#字符串去除首尾空白字符" class="headerlink" title="字符串去除首尾空白字符"></a>字符串去除首尾空白字符</h2><p>使用<code>trim()</code>方法可以移除字符串首尾空白字符串。<em><strong>空白字符串包括：<code>\t</code>,<code>\r</code>,<code>\n</code>。</strong></em></p>
-<p>注意：<code>trim()</code>并没有改变字符串的内容，而是返回一个新字符串。</p>
-<p><code>String</code>还提供了<code>isEmpty()</code>和<code>isBlank()</code>来判断字符串是否为空和空白字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">        String s2=<span class="string">&quot;name&quot;</span>;</span><br><span class="line">        System.out.println(s1.replace(<span class="string">&quot;l&quot;</span>,<span class="string">&quot;w&quot;</span>));</span><br><span class="line">        System.out.println(s2.replace(<span class="string">&quot;m&quot;</span>,<span class="string">&quot;&quot;</span>));</span><br><span class="line">        String s=<span class="string">&quot;A,B;C,D&quot;</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>另一种是通过正则表达式替换：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">String s = &quot;A,,B;C ,D&quot;;</span><br><span class="line">s.replaceAll(&quot;[\\,\\;\\s]+&quot;, &quot;,&quot;); // &quot;A,B,C,D&quot;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码通过正则表达式，把匹配的子串统一替换为<code>&quot;,&quot;</code>。关于正则表达式的用法我们会在后面详细讲解。</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
