@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML">
+<meta property="og:url" content="http://ffyzsl.github.io/2021/10/29/HTML/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="HTML">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-29T08:54:03.000Z">
+<meta property="article:modified_time" content="2021-10-29T08:55:13.998Z">
+<meta property="article:author" content="ffy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2021/10/29/HTML/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HTML | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/10/29/HTML/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-29 16:54:03 / 修改时间：16:55:13" itemprop="dateCreated datePublished" datetime="2021-10-29T16:54:03+08:00">2021-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HTML/" itemprop="url" rel="index"><span itemprop="name">HTML</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><span id="more"></span>
+<table>
+<thead>
+<tr>
+<th>标签名</th>
+<th>定义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;html&gt;&lt;/html&gt;</code></td>
+<td>HTML标签</td>
+<td>页面中最大的标签，称为 根标签</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;&lt;/head&gt;</code></td>
+<td>文档的头部</td>
+<td>在 head 标签中必须要设置的标签是 title</td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;&lt;/title&gt;</code></td>
+<td>文档的标题</td>
+<td>让页面拥有一个网页标题</td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;&lt;/body&gt;</code></td>
+<td>文档的主体</td>
+<td>元素包含文档的所有内容，页面内容基本都是放到body里面的</td>
+</tr>
+</tbody></table>
+<h3 id="默认生成的代码"><a href="#默认生成的代码" class="headerlink" title="默认生成的代码"></a>默认生成的代码</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;!DOCTYPE html&gt;</code>：文档类型声明标签，作用就是告诉浏览器使用哪种HTML版本</li>
+<li><code>&lt;html lang=&quot;en&quot;&gt;</code>：en 定义语言为应为，zh-CN 定义语言为中文。</li>
+<li><code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code>：通过 <code>&lt;meta&gt;</code>标签的 charset 属性来规定 HTML 文档使用哪种字符编码</li>
+</ul>
+<h2 id="常用标签"><a href="#常用标签" class="headerlink" title="常用标签"></a>常用标签</h2><h3 id="标题标签"><a href="#标题标签" class="headerlink" title="标题标签"></a>标题标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>一级标签<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>二级标签<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>三级标签<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>四级标签<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h5</span>&gt;</span>五级标签<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h6</span>&gt;</span>六级标签<span class="tag">&lt;/<span class="name">h6</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>标题一共六级，标题独占一行，无法在标题后增加内容</p>
+<h3 id="段落和换行标签"><a href="#段落和换行标签" class="headerlink" title="段落和换行标签"></a>段落和换行标签</h3><h4 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>鲁智深扯出戒刀，把索子都割断了，便扶起林冲叫：“兄弟，俺自从和你买那相别之后，</span><br><span class="line">洒家忧得你苦。自从你受官司，俺又无处去救你。打听得你配沧州，洒家在开封府前又寻不见</span><br><span class="line">，却听得人说监在使臣房内；又见酒保来请两个公人，说道，“店里一位官寻说话∶“以此，洒家疑心，</span><br><span class="line">放你不下。恐这厮们路上害你，俺特地跟将来。见这两个撮鸟带你入店里去，洒家也在那店里歇。夜间</span><br><span class="line">听得那厮两个，做神做鬼，把滚汤赚了你脚，那时俺便要杀这两个撮鸟；却被客店里人多，恐防救了。</span><br><span class="line">洒家见这厮们不怀好心，<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>越放你不下。你五更里出门时，洒家先投奔这林子里来等杀这厮两个撮鸟。他</span><br><span class="line">倒来这里害你，正好杀这两个！”林冲劝道：“既然师兄救了我，你休害他两个性命。”鲁智深喝道：“你</span><br><span class="line">这两个撮鸟！洒家不看兄弟面时，把你这两个都剁做肉酱！且看兄弟面皮，饶你两个性命！”就那里插</span><br><span class="line">了戒刀，喝道：“你们这两个撮鸟，快搀兄弟，都跟洒家来！”提了禅杖先走。两个公人那里敢回话，只</span><br><span class="line">叫“林教头救俺两个！”依前背上包裹，<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>拾了水火棍，扶着林冲，又替他拿了包裹，一同跟出林子来。行</span><br><span class="line">得三四里路程，见一座小酒店在村口。深，冲，超，霸，四人入来坐下，唤酒保买五七斤肉，打两角酒</span><br><span class="line">来吃，回些面来打饼。酒保一面把酒来筛。两个公人道：“不敢拜师父在那个寺里住持？”智深笑道：“</span><br><span class="line">你两个撮鸟，问俺住处做甚么？莫不去教高俅做甚么奈何洒家？别人怕他，俺不怕他！洒家若撞着那厮</span><br><span class="line">，教他吃三百禅杖！”两个公人那里敢再开口。吃了些酒肉，收拾了行李，还了酒钱，出离了村口。林</span><br><span class="line">冲问道：“师兄今投那里去？”鲁智深道：““杀人须见血，救人须救彻；“洒家放你不下，直送兄弟到沧州。”<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>文本在一个段落中会根据浏览器窗口的大小自动换行,段落和段落之间保有空隙</p>
+<h4 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h4><p>在HTML中，段落的文字会一直排列至浏览器窗口的左端，然后自动换行，但如果想要某段文本强制换行，就需要使用 <code>&lt;br/&gt;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>鲁智深扯出戒刀，把索子都割断了，<span class="tag">&lt;<span class="name">br</span>/&gt;</span>便扶起林冲叫：“兄弟，俺自从和你买那相别之后，</span><br><span class="line">  洒家忧得你苦。自从你受官司，俺又无处去救你。打听得你配沧州，洒家在开封府前又寻不见</span><br><span class="line">  ，却听得人说监在使臣房内；又见酒保来请两个公人，说道，“店里一位官寻说话∶“以此，洒家疑心，</span><br><span class="line">  放你不下。恐这厮们路上害你，俺特地跟将来。见这两个撮鸟带你入店里去，洒家也在那店里歇。夜间</span><br><span class="line">  听得那厮两个，做神做鬼，把滚汤赚了你脚，那时俺便要杀这两个撮鸟；却被客店里人多，恐防救了。</span><br><span class="line">  洒家见这厮们不怀好心，<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>水浒传<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>简介<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>《水浒传》，作者施耐庵，是中国四大名著之一，&lt;br全书描写北宋末年以宋江为首的108位好汉在梁山起义，以及聚义之后接受招安、四处征战的故事。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>第八回 柴进门招天下客 林冲棒打洪教头<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>话说当时薛霸双手举起棍来望林冲脑袋上便劈下来。<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        说时迟，那时快；薛霸的棍恰举起来，只见松树背后，雷鸣也似一声，那条铁禅杖飞将来，把这水火棍一隔，丢去九霄云外，跳出一个胖大和尚来，喝道：“洒家在林子里听你多时！”<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文本格式化标签"><a href="#文本格式化标签" class="headerlink" title="文本格式化标签"></a>文本格式化标签</h2><p>粗体，斜体或下划线</p>
+<table>
+<thead>
+<tr>
+<th>语义</th>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加粗</td>
+<td><code>&lt;strong&gt;&lt;/strong&gt;</code>或者<code>&lt;b&gt;&lt;/b&gt;</code></td>
+<td>推荐使用前者</td>
+</tr>
+<tr>
+<td>倾斜</td>
+<td><code>&lt;em&gt;&lt;/em&gt;</code>或者<code>&lt;i&gt;&lt;/i&gt;</code></td>
+<td>推荐使用前者</td>
+</tr>
+<tr>
+<td>删除线</td>
+<td><code>&lt;del&gt;&lt;/del&gt;</code>或者<code>&lt;s&gt;&lt;/s&gt;</code></td>
+<td>推荐使用前者</td>
+</tr>
+<tr>
+<td>下划线</td>
+<td><code>&lt;ins&gt;&lt;/ins&gt;</code>或者<code>&lt;u&gt;&lt;/u&gt;</code></td>
+<td>推荐使用前者</td>
+</tr>
+</tbody></table>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>水浒传<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>简介<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>《水浒传》，作者施耐庵，是中国四大名著之一，&lt;br全书描写北宋末年以宋江为首的108位好汉在梁山起义，以及聚义之后接受招安、四处征战的故事。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>第八回 柴进门招天下客 林冲棒打洪教头<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>话说当时<span class="tag">&lt;<span class="name">strong</span>&gt;</span>薛霸<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>双手举起棍来望<span class="tag">&lt;<span class="name">b</span>&gt;</span>林冲<span class="tag">&lt;/<span class="name">b</span>&gt;</span>脑袋上便劈下来。<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">em</span>&gt;</span>说时迟，那时快<span class="tag">&lt;/<span class="name">em</span>&gt;</span>；薛霸的棍<span class="tag">&lt;<span class="name">i</span>&gt;</span>恰举<span class="tag">&lt;/<span class="name">i</span>&gt;</span>起来，只见松树背后，<span class="tag">&lt;<span class="name">del</span>&gt;</span>删除线<span class="tag">&lt;/<span class="name">del</span>&gt;</span>雷鸣也似一声<span class="tag">&lt;<span class="name">s</span>&gt;</span>删除线<span class="tag">&lt;/<span class="name">s</span>&gt;</span>，那条铁禅杖飞将来，</span><br><span class="line">        把这水火棍一隔，<span class="tag">&lt;<span class="name">u</span>&gt;</span>丢去九霄云外<span class="tag">&lt;/<span class="name">u</span>&gt;</span>，跳出一个胖大和尚来，喝道：“<span class="tag">&lt;<span class="name">ins</span>&gt;</span>洒家在林子里听你多时！”<span class="tag">&lt;/<span class="name">ins</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="lt-div-gt-和-lt-span-gt-标签"><a href="#lt-div-gt-和-lt-span-gt-标签" class="headerlink" title="&lt;div&gt;和&lt;span&gt;标签"></a><code>&lt;div&gt;</code>和<code>&lt;span&gt;</code>标签</h3><p><code>&lt;div&gt;</code>和<code>&lt;span&gt;</code>是没有语义的，它们就是一个盒子，用来装内容</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div标签独占一行<span class="tag">&lt;/<span class="name">div</span>&gt;</span>123</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div标签独占一行<span class="tag">&lt;/<span class="name">div</span>&gt;</span>123</span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>谷歌<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;div&gt;</code>标签和<code>&lt;span&gt;</code>都是用来布局的，但<code>&lt;div&gt;</code>标签独占一行（大盒子），<code>&lt;span&gt;</code>可以在一行上显示多个（小盒子）</p>
+<h3 id="图像标签和路径"><a href="#图像标签和路径" class="headerlink" title="图像标签和路径"></a>图像标签和路径</h3><p><code>&lt;img&gt;</code>标签定义图像</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src-</span>&quot;路径&quot;/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>属性值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>src</td>
+<td>图片路径</td>
+<td>必写</td>
+</tr>
+<tr>
+<td>alt</td>
+<td>文本</td>
+<td>替换文本。图像不能显示的文字</td>
+</tr>
+<tr>
+<td>title</td>
+<td>文本</td>
+<td>提示文本，当鼠标落在图像上显示的文字</td>
+</tr>
+<tr>
+<td>width</td>
+<td>像素</td>
+<td>设置图像的宽度</td>
+</tr>
+<tr>
+<td>height</td>
+<td>像素</td>
+<td>设置图像的高度</td>
+</tr>
+<tr>
+<td>border</td>
+<td>像素</td>
+<td>图像的边框粗细</td>
+</tr>
+</tbody></table>
+<p>修改宽度或者高度时，图像是按比例缩放的</p>
+<h3 id="超链接标签"><a href="#超链接标签" class="headerlink" title="超链接标签"></a>超链接标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;目标&quot;</span> <span class="attr">target</span>=<span class="string">&quot;弹出方式&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>href</td>
+<td>用于指定链接目标的url地址</td>
+</tr>
+<tr>
+<td>target</td>
+<td>用于指定链接页面的打开方式，其中<code>_self </code>为默认值，<code>_blank</code>为在新窗口打开</td>
+</tr>
+</tbody></table>
+<h3 id="链接分类"><a href="#链接分类" class="headerlink" title="链接分类"></a>链接分类</h3><p>外部链接：如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://www.baidu.com&quot;</span>&gt;</span>百度<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>内部链接：如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;index.html&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>下载链接：如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;下载文件&quot;</span>&gt;</span>下载文件<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其他元素链接：如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;http://baidu.com&quot;</span>&gt;</span>百度<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;03-HTML.html&quot;</span>&gt;</span>03-HTML<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;03-HTML.html&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;01.jpg&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;03-HTML.html&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">h1</span>&gt;</span>03-HTML<span class="tag">&lt;/<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p> 锚点链接：当我们点击链接时，可以快速定位到页面的某个位置</p>
+<ul>
+<li><p>在链接文本的 href 属性中，设置属性值为 #名字 的形式，如：<code>&lt;a href=&quot;#two&quot;&gt;two&lt;/a&gt;a</code> </p>
+</li>
+<li><p>找到目标位置标签，里面添加一个 id 属性=刚才的名字 ，如：<code>&lt;h3 id=&quot;two&quot;&gt;two&lt;/h3&gt;</code></p>
+</li>
+</ul>
+<h3 id="注释和特殊字符"><a href="#注释和特殊字符" class="headerlink" title="注释和特殊字符"></a>注释和特殊字符</h3><h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--注释</span></span><br><span class="line"><span class="comment">124</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>快捷键：<code>ctrl + /</code></p>
+<h4 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">空<span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;nbsp;</span>格</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>HTML 原代码</th>
+<th>显示结果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&lt;</td>
+<td>&lt;</td>
+<td>小于号或显示标记</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>&gt;</td>
+<td>大于号或显示标记</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>&amp;</td>
+<td>可用于显示其它特殊字符</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>“</td>
+<td>引号</td>
+</tr>
+<tr>
+<td>&reg;</td>
+<td>®</td>
+<td>已注册</td>
+</tr>
+<tr>
+<td>&copy;</td>
+<td>©</td>
+<td>版权</td>
+</tr>
+<tr>
+<td>&trade;</td>
+<td>™</td>
+<td>商标</td>
+</tr>
+<tr>
+<td><code>&amp;ensp;</code></td>
+<td></td>
+<td>半个空白位</td>
+</tr>
+<tr>
+<td><code>&amp;emsp;</code></td>
+<td></td>
+<td>一个空白位</td>
+</tr>
+<tr>
+<td><code>&amp;nbsp;</code></td>
+<td></td>
+<td>不断行的空白</td>
+</tr>
+</tbody></table>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>唐朝<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>唐朝<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--目录--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#one&quot;</span>&gt;</span>简介<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#two&quot;</span>&gt;</span>国号<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#three&quot;</span>&gt;</span>历史<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#four&quot;</span>&gt;</span>开国统一<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#five&quot;</span>&gt;</span>贞观之治<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#six&quot;</span>&gt;</span>永徽之治<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#seven&quot;</span>&gt;</span>武周代唐<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#eight&quot;</span>&gt;</span>开元盛世<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#nine&quot;</span>&gt;</span>安史之乱<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--正文--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">&quot;one&quot;</span>&gt;</span>简介<span class="tag">&lt;/<span class="name">h3</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝（618年—907年），是继隋朝之后的大一统中原王朝，</span><br><span class="line">        共历二十一帝，享国二百八十九年。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        隋末天下群雄并起，617年唐国公李渊于晋阳起兵，次年称帝建立唐朝，</span><br><span class="line">        定都长安。唐太宗继位后开创贞观之治，为盛唐奠定基础。唐高宗承贞</span><br><span class="line">        观遗风开创“永徽之治”，并于657年建东都洛阳 [3-7]  。690年，武则</span><br><span class="line">        天改国号为周， [8]  705年神龙革命后，恢复唐国号。 [9-10]  唐玄</span><br><span class="line">        宗即位后缔造全盛的开元盛世， [2]  [11]  天宝末全国人口达八千万</span><br><span class="line">        左右。 [12-15]  安史之乱后藩镇割据、宦官专权导致国力渐衰；中后</span><br><span class="line">        期经唐宪宗元和中兴、唐武宗会昌中兴、唐宣宗大中之治国势复振。</span><br><span class="line">        878年爆发黄巢起义破坏了唐朝统治根基，907年朱温篡唐，唐朝覆亡。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝时万国来朝，疆域空前辽阔，极盛时东起日本海、南据安南、</span><br><span class="line">        西抵咸海、北逾贝加尔湖，是中国自秦以来第一个未修拒胡长城的</span><br><span class="line">        大一统王朝。 [17-21]  唐朝攻灭东突厥、薛延陀后，唐太宗被四</span><br><span class="line">        夷各族尊为天可汗 [22-25]  。又借羁縻制度征调突厥、回鹘、铁</span><br><span class="line">        勒、契丹、靺鞨、室韦等民族攻伐敌国，并让日本、南诏、新罗、渤</span><br><span class="line">        海国等藩属国学习自身的文化与制度</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝接纳各国交流学习，经济、社会、文化、艺术呈现出多元化、开</span><br><span class="line">        放性等特点 [27-28]  ，诗、书、画、乐等方面涌现出大量名家，如</span><br><span class="line">        诗仙李白、诗圣杜甫、诗魔白居易，书法家颜真卿，画圣吴道子，音乐家李龟年等。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝是当时世界上最强盛的国家之一，声誉远播，与亚欧国家均有往来。</span><br><span class="line">         [30]  唐以后海外多称中国人为“唐人”。 [2]  [31-32]  女性地位明</span><br><span class="line">         显提高，人们可自由结婚和离婚。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">&quot;two&quot;</span>&gt;</span>国号<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝的国号为“唐”，曾是晋的古地名。唐高祖李渊的祖父李虎为西魏八</span><br><span class="line">    柱国之一，被追封为“唐国公”，其后，爵位传至李渊。 [36]  李渊是</span><br><span class="line">    隋朝时行宫居晋阳留守，以尊“隋”为名起兵，每战必克，直入长安，在</span><br><span class="line">    隋恭帝杨侑禅让后便以“唐”为国号，定都长安。因国君姓李，故称李唐</span><br><span class="line">    ，尊称为大唐。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">&quot;three&quot;</span>&gt;</span>历史<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;four&quot;</span>&gt;</span>开国统一<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        三年（公元617年）五月，唐国公李渊于晋阳以尊隋之名起兵，一路势如破竹，</span><br><span class="line">        同年十一月占领长安，拥立代王杨侑为帝，改元义宁，即隋恭帝。李渊自任大丞相，</span><br><span class="line">        进封唐王。义宁二年（公元618年）三月，隋炀帝死，五月，杨侑禅位于李渊，李渊</span><br><span class="line">        称帝，建立唐朝，国号“唐”，改元武德，定都长安，隋朝灭亡。杨侑降为酅国公，置</span><br><span class="line">        居长安，次年五月去世。此后，李渊册长子李建成为太子，次子李世民为秦王，四子</span><br><span class="line">        李元吉为齐王。 [44]  [47] </span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐朝初期，由于经历了长期战乱，国家经济遭到严重的破坏，人口也从隋朝大业初年的</span><br><span class="line">        八百万户骤降至二百余万户 [48]  。此外，唐朝的北方边境也受到了来自东突厥的威胁</span><br><span class="line">        ——当时的突厥势力空前强大，包括契丹、室韦、吐谷浑、高昌等国，甚至是中原地区的窦</span><br><span class="line">        建德、薛举、梁师都、李轨、王世充等地方割据势力都臣服于突厥。 [48]  [49-52] </span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        李渊入主关中前，先派人吹捧瓦岗军领袖李密，使其成为中原的屏障。入主关中后他又派李</span><br><span class="line">        世民平定西北金城的薛举、薛仁杲，派唐使安兴贵、安修仁生擒武威的李轨。武德三年（公</span><br><span class="line">        元620年），派李世民击败入侵河东的刘武周、宋金刚，而后洛阳郑帝王世充与河北夏王窦建</span><br><span class="line">        德联合抗唐。武德四年（公元621年），割据江陵的萧铣被李靖、李孝恭率军平定。武德五年（</span><br><span class="line">        公元621年），李世民击溃联军，俘窦建德，王世充投降。 [224]  窦建德的余部刘黑闼也被李</span><br><span class="line">        建成击溃，河北至此平定。同年，岭南地区冯盎降服，又虔州林士弘死，至此唐朝初期基本统一</span><br><span class="line">        汉地。武德六年（公元623年），辅公祏率杜伏威余部在丹阳反唐，隔年被唐军俘杀。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;five&quot;</span>&gt;</span>贞观之治<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐初局势平定后，秦王李世民与太子李建成为了争夺皇位而展开了内部斗争。武德九年（公元626年）</span><br><span class="line">        李世民发动玄武门之变，击杀李建成与齐王李元吉，控制长安。李渊深知形势，于是禅让帝位，成为太</span><br><span class="line">        上皇。李世民继位，是为唐太宗。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐太宗从隋末民变中认识到群众的力量，吸取隋灭教训，重视百姓生活；留心吏治，选贤任能，知人善用，</span><br><span class="line">        从谏如流，重用魏征等诤臣；采取了以农为本，厉行节约，休养生息，文教复兴，完善科举制度等一系列治</span><br><span class="line">        世政策，使得社会出现了较为安定的局面；并大力平定外患，尊重边族风俗，促进了民族融合，稳固边疆，</span><br><span class="line">        唐太宗则被四方诸国尊为“天可汗”。 [57]  在其执政的贞观年间（公元627年-649年），</span><br><span class="line">        在君臣的共同努力之下，出现了一个政治较为清明、经济快速发展、社会安定、武功兴盛的局面，史称“贞观</span><br><span class="line">        之治”，是为唐朝的第一个治世，为后来的开元盛世奠定了厚实的经济基础。 [58] </span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;six&quot;</span>&gt;</span>永徽之治<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐太宗晚年，太子李承乾与魏王李泰争夺帝位，结果都被废掉，立第九子晋王李治为太子。贞观二十三年（公元649年），唐高宗李治即位。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        李治即位后对群臣宣布：“事有不便于百姓者，悉宜陈，不尽者更封奏。 [59]  并日引刺史入阁，问以百姓疾苦；太宗训令崇俭，唐高宗即召令：“自京官及外州有献鹰隼及犬马者罪之。” [59]  [60]  唐高宗君臣们萧规曹随，照唐太宗时法令执行，故永徽年间，边陲安定，百姓阜安，有贞观之遗风，史称“永徽之治”。 [61-62]  其在位期间，唐朝的疆域最广，人口也从贞观年间的不满三百万户，增加到三百八十万户。 [2] </span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;seven&quot;</span>&gt;</span>武周代唐<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐高宗中期后，朝廷实权逐渐由武则天掌握。武则天原为唐太宗的才人，太宗死后被高宗召入宫中，在权力斗争中获胜，被立为皇后，史称“素多智计，兼涉文史” [63]  。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">P</span>&gt;</span></span><br><span class="line">        显庆五年（公元660年），李治因身体原因让她处理朝政，因此与唐高宗并称为“二圣”。 [54]  683年唐高宗驾崩于紫微宫贞观殿，太子李显即位，是为唐中宗。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">P</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        公元684年，武则天因李显与之不合，将他废为庐陵王，另立四子李旦为帝，是为唐睿宗；同时改元光宅，并将东都洛阳（唐太宗时营建洛阳宫， [65]  高宗改之为东都） [6]  更名为神都。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        公元690年，武则天平定徐敬业反叛，废唐睿宗，御则天门（紫微城正南门）即皇帝位，改国号为周（史称“武周”），定都洛阳，降李旦为皇嗣，成为中国历史上唯一的女皇帝。 [67-70]  692年增设北都太原为陪都。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        武则天掌权与称帝期间，科举制度得到进一步完善；她开创殿试和武举， [72]  打击关陇集团，大力提拔科举出身的官员，时称“北门学士”，很多是来自中原、关东与江南等地的士人得到提拔，如狄仁杰、张柬之、张仁愿、姚崇等名臣。 [73]  武则天称帝期间，社会文化艺术亦有所进步，当时佛教大兴，该时期佛寺兴建频繁，扩建的龙门石窟为其代表。 [74]  史称“上承贞观，下启开元”或“政启开元，治宏贞观”。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        神龙元年（公元705年），敬珲和宰相张柬之等发动神龙政变，逼迫武则天退位，李显复位，恢复了大唐国号，社稷、宗庙等恢复永淳以前旧制，将神都改回东都，废北都，恢复了两京并重的格局。 [71]  李旦被立为相王。唐中宗却一直受到韦皇后、女儿安乐公主和武则天的旧有党羽武三思等人的影响，张柬之和敬珲等人先后被流放或诛杀。韦皇后有意成为第二个武则天，安乐公主则曾要求被立为皇太女。在景龙四年（710年）韦皇后和安乐公主合谋毒杀唐中宗，韦皇后立温王李重茂为帝，是为唐殇帝，并欲加害相王李旦。李旦之子，当时是临淄王的李隆基，在太平公主协助下发动唐隆政变，诛杀韦皇后、安乐公主及武氏残余势力，拥立李旦复位。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;eight&quot;</span>&gt;</span>开元盛世<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐睿宗李旦复位后，其妹太平公主与太子李隆基发生权力之争。延和元年（公元712年），唐睿宗让位于李隆基，是为唐玄宗。次年，唐玄宗将太平公主赐死，党羽或杀或逐，结束了朝廷内斗。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        李隆基登基以后整顿诸多弊政，在政治上提拔姚崇、宋璟、张嘉贞、张说、李元纮、韩休、张九龄等贤臣为相，整饬腐败的吏治，并建立了一套监察制度，精简官僚，裁减冗官，设采访使发展节度使制度，导致地方权力增大。 [87-89]  经济上推崇节俭、抑制佛教，并几近荒废的义仓制度，又通过括户等手段缓解土地兼并导致的逃户问题。 [90-91]  军事上改府兵制为募兵制，并兴复马政，对外收复了辽西营州及唐睿宗时期赐给吐蕃的河西九曲之地，并再次降服契丹、奚、室韦、靺鞨等政权。 [92-97]  西域方面吞并大小勃律并且攻灭突骑施，塞北政权方面降服复国的后突厥，后又扶持回鹘剪灭后突厥。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        开元十一年（公元723年）置北都太原，然而“三都留守，两京每月一日起居，北都每季一起居。”可见北都与长安洛阳两京的地位不等，是为陪都。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐玄宗统治下，唐朝国力空前强盛逐渐步入盛世，史称“开元盛世”。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">id</span>=<span class="string">&quot;nine&quot;</span>&gt;</span>安史之乱<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐玄宗改元天宝后，承平日久，国家无事，统治者逐步丧失向上求治的意志，志得意满，开始放纵享乐，从此忽视国事。在纳杨玉环为贵妃后，更加沉溺酒色。唐玄宗任用有“口蜜腹剑”恶名的李林甫为宰相长达十八年，使朝政日益败坏。李林甫死后，杨国忠为相，出现了宦官干政的局面，高力士的权势炙手可热。 [110]  [111]  唐玄宗后期好大喜功，为此边境将领经常挑起对异族的战事，以邀战功。当时兵制由府兵制改为募兵制，从而使得节度使与军镇上的士兵结合在一起，导致边将专军的局面，其中以掌握重兵的胡人安禄山最为著名。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        天宝十四载（公元755年）十一月，安禄山趁唐朝政治腐败、军事空虚之机，和史思明发动叛乱，次年十二月叛军攻入东都洛阳，唐玄宗率众逃至成都，史称“安史之乱”。 [85]  太子李亨在灵武称帝，是为唐肃宗，唐玄宗被遥尊为太上皇。安禄山则在东都洛阳自称大燕皇帝，年号圣武。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        至德二载（公元757年）正月，河南节度副使张巡、睢阳太守许远等人率领军民坚守隋唐大运河咽喉、江淮屏障睢阳（今河南商丘），在睢阳之战，叛将尹子奇为报屡败损目之仇，使安庆绪前后大军几十万人被睢阳城四千名守将所牵制。此次睢阳之战长达十个月之久，如此方使唐朝能够反攻，使郭子仪能够从容收复两京。 [79]  [113]  同年增设凤翔、成都两座陪都而形成五京制格局，762年后结束五都制。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        长达八年时间的安史之乱使得唐朝元气大伤，从此由盛转衰。此后，中央的权力大大削弱，节度使的权势越来越大。此时均田制已经逐步瓦解，土地兼并现象日趋严重，租庸调制也无法实行。安史之乱战后人丁锐减，土地大量荒芜，藩镇割据的现象形成。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        唐代宗时，刘晏改革盐法，改善了国家的财政，唐德宗任用杨炎为相，于建中元年（780年）开始实行两税法，一年分夏、秋两季依土地征税。唐德宗还力图平藩，但是引起朱滔、李希烈、朱泚叛乱，发生了持续5年的奉天之难战争。最后虽叛将败死，但是唐朝却与其余藩镇妥协，条件是取消王号，朝廷承认他们在当地的统治权，从此割据局面进一步深化。</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="表格标签"><a href="#表格标签" class="headerlink" title="表格标签"></a>表格标签</h2><h3 id="表格的基本语法"><a href="#表格的基本语法" class="headerlink" title="表格的基本语法"></a>表格的基本语法</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>单元格<span class="tag">&lt;/<span class="name">td</span>&gt;</span>、</span><br><span class="line">        ……</span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    ……</span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;table&gt;&lt;/table&gt;</code>用来定义表格</li>
+<li><code>&lt;tr&gt;&lt;/tr&gt;</code>用来定义表格的行</li>
+<li><code>&lt;td&gt;&lt;/td&gt;</code>用来定义表格中的单元格</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>一般表头单元格位于表格的第一行或第一列，表头单元格里面的文本内容加粗居中显示</p>
+<ul>
+<li><code>&lt;th&gt;</code>标签</li>
+</ul>
+<h3 id="表格的属性"><a href="#表格的属性" class="headerlink" title="表格的属性"></a>表格的属性</h3><p>表格的属性在开发中不常用，一般用 CSS 来设置</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>属性值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>align</td>
+<td>left，center，right</td>
+<td>规定表格相对周围元素的对齐方式</td>
+</tr>
+<tr>
+<td>border</td>
+<td>1 或 “”</td>
+<td>规定表格单元是否拥有边框</td>
+</tr>
+<tr>
+<td>cellpadding</td>
+<td>像素值</td>
+<td>规定单元边沿与其内容之间的空白，默认为 1</td>
+</tr>
+<tr>
+<td>cellspacing</td>
+<td>像素值</td>
+<td>规定单元格之间的空白 ，默认 2 像素</td>
+</tr>
+<tr>
+<td>width</td>
+<td>像素值或百分比</td>
+<td>规定表格的宽度</td>
+</tr>
+</tbody></table>
+<h3 id="表格结构标签"><a href="#表格结构标签" class="headerlink" title="表格结构标签"></a>表格结构标签</h3><p>当表格长度过大时，为了更好的表示表格的语义，可以将表格分割成表格头部和表格主体两大部分。</p>
+<p>在表格标签中，分别用：<code>&lt;thead&gt;</code>标签 表格的头部区域。<code>&lt;tbody&gt;</code>标签 表格的主体区域。这样可以更好的分清表格结构</p>
+<h3 id="合并单元格"><a href="#合并单元格" class="headerlink" title="合并单元格"></a>合并单元格</h3><ul>
+<li>跨行合并：<code>rowspan=&quot;合并单元格的个数&quot;</code></li>
+<li>跨列合并：<code>colspan=&quot;合并单元格的个数&quot;</code></li>
+</ul>
+<h4 id="目标单元格（写合并代码）"><a href="#目标单元格（写合并代码）" class="headerlink" title="目标单元格（写合并代码）"></a>目标单元格（写合并代码）</h4><ul>
+<li>跨行：最上侧单元格为目标单元格，写合并代码</li>
+<li>跨列：最左侧单元格为目标单元格，写合并代码</li>
+</ul>
+<h2 id="列表标签"><a href="#列表标签" class="headerlink" title="列表标签"></a>列表标签</h2><p>表格是用来显示数据的，那么列表就是用来布局的</p>
+<p>列表最大的特点就是整齐，整洁，有序，他作为布局会更加自由和方便</p>
+<ul>
+<li>无序列表</li>
+<li>有序列表</li>
+<li>自定义列表</li>
+</ul>
+<h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p><code>&lt;ul&gt;</code>标签表示 HTML 页面中项目的无序列表，一般会以项目符号呈现列表项，而列表项使用 <code>&lt;li&gt;</code>标签定义</p>
+<p><code>&lt;ul&gt;</code>标签的子标签只能是 <code>&lt;li&gt;</code>，而<code>&lt;li&gt;</code>标签可以出现多种其他标签</p>
+<h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>有序列表即为有排列顺序的列表，其各个列表项会按照一定的顺序排列定义</p>
+<p><code>&lt;ol&gt;</code>标签用于定义有序列表，列表飘絮以数字来显示，并且使用 <code>&lt;li&gt;</code>标签来定义列表项</p>
+<p><code>&lt;ol&gt;</code>标签的子标签只能是 <code>&lt;li&gt;</code>，而<code>&lt;li&gt;</code>标签可以出现多种其他标签</p>
+<h3 id="自定义列表"><a href="#自定义列表" class="headerlink" title="自定义列表"></a>自定义列表</h3><p>自定义列表常用于对术语或名词进行解释和描述，定义列表的列表项前没有任何项目符号</p>
+<p><code>&lt;dl&gt;</code>标签用于定义描述列表，该标签会与<code>&lt;dt&gt;</code>和<code>&lt;dd&gt;</code>一起使用</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dt</span>&gt;</span>1<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dd</span>&gt;</span>1(1)<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dd</span>&gt;</span>1(2)<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><p>表单是为了收集用户数据</p>
+<p>在 HTML 中，一个完整的表单通常由 表单域，表单控件和提示信息3个部分构成</p>
+<h3 id="表单域"><a href="#表单域" class="headerlink" title="表单域"></a>表单域</h3><p>表单域 是一个包含表单元素的区域</p>
+<p>在 HTML 标签中，<code>&lt;form&gt;</code>标签用于定义表单域，以实现用户信息的收集和传递</p>
+<p><code>&lt;form&gt;</code>会把它范围内的表单元素信息提交给服务器</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;url地址&quot;</span> <span class="attr">method</span>=<span class="string">&quot;提交方式&quot;</span> <span class="attr">name</span>=<span class="string">&quot;表单域名称&quot;</span>&gt;</span></span><br><span class="line">    表单元素控件</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>属性值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>action</td>
+<td>url地址</td>
+<td>用于指定接收并处理表单数据的服务器程序的url地址</td>
+</tr>
+<tr>
+<td>method</td>
+<td>get/post</td>
+<td>用于设置表单数据的提交方式，其取值为get 或 post</td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td>用于指定表单的名称 ，以区分同一页面中的多个表单域</td>
+</tr>
+</tbody></table>
+<h4 id="lt-input-gt-表单元素"><a href="#lt-input-gt-表单元素" class="headerlink" title="&lt;input&gt;表单元素"></a><code>&lt;input&gt;</code>表单元素</h4><p><code>&lt;input&gt;</code>标签用于收集用户信息</p>
+<p>在 <code>&lt;input&gt;</code>标签中，包含一个 type 属性，根据不同的 type 属性值，输入字段拥有很多种形式（文本字段，复选框，掩码后的文本控件，单选按钮，按钮等）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;属性值&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>button</td>
+<td>定义可点击按钮</td>
+</tr>
+<tr>
+<td>checkbox</td>
+<td>定义复选框</td>
+</tr>
+<tr>
+<td>file</td>
+<td>定义输入字段和“浏览”按钮，供文件上传</td>
+</tr>
+<tr>
+<td>hidden</td>
+<td>定义隐藏的输入字段</td>
+</tr>
+<tr>
+<td>image</td>
+<td>定义图像形式的提交按钮</td>
+</tr>
+<tr>
+<td>password</td>
+<td>定义密码字段，该字段中的字符被掩码</td>
+</tr>
+<tr>
+<td>radio</td>
+<td>定义单选按钮</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>定义重置按钮，重置按钮会清楚表单中的所有数据</td>
+</tr>
+<tr>
+<td>submit</td>
+<td>定义提交按钮，提交按钮会把表单数据发送到服务器</td>
+</tr>
+<tr>
+<td>text</td>
+<td>定义单行的输入字段，用户可在其中输入文本，默认宽度为 20 个字符</td>
+</tr>
+</tbody></table>
+<p>除 type 属性外，<code>&lt;input&gt;</code>其他属性值</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>属性值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>name</td>
+<td>由用户自定义</td>
+<td>定义 input 元素的名称</td>
+</tr>
+<tr>
+<td>value</td>
+<td>由用户自定义</td>
+<td>规定 input 元素的值</td>
+</tr>
+<tr>
+<td>checked</td>
+<td>checked</td>
+<td>规定此 input 元素首次加载时应当被选中</td>
+</tr>
+<tr>
+<td>maxlength</td>
+<td>正整数</td>
+<td>规定输入字段中的字符的最大长度</td>
+</tr>
+</tbody></table>
+<p>单选按钮和复选框 必须有相同的 name 属性、</p>
+<h4 id="lt-label-gt-标签"><a href="#lt-label-gt-标签" class="headerlink" title="&lt;label&gt;标签"></a><code>&lt;label&gt;</code>标签</h4><p><code>&lt;label&gt;</code>标签为 input 元素定义标注</p>
+<p>用于绑定一个表单元素，当点击 <code>&lt;label&gt;</code> 标签内的文本时，浏览器会自动将焦点（光标）转到或者选择对应的表单元素上，用来增加用户体验</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radido&quot;</span><span class="attr">id</span>=<span class="string">&quot;sex&quot;</span>/&gt;</span><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;sex&quot;</span>&gt;</span>男<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="select下拉表单元素"><a href="#select下拉表单元素" class="headerlink" title="select下拉表单元素"></a>select下拉表单元素</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span>&gt;</span>选项1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span>&gt;</span>选项2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span>&gt;</span>选项3<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="textarea-文本域元素"><a href="#textarea-文本域元素" class="headerlink" title="textarea 文本域元素"></a>textarea 文本域元素</h4><p>当用于输入内容较多的情况下，不能使用文本框表单，而是使用<code>&lt;textarea&gt;</code>标签，其用于定义多行文本输入的控件</p>
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">        用户名: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">value</span>=<span class="string">&quot;请输入用户名&quot;</span>/&gt;</span> <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        密码:<span class="symbol">&amp;nbsp;</span> <span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;nbsp;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        性别: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">name</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;男&quot;</span> <span class="attr">id</span>=<span class="string">&quot;男&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;男&quot;</span>&gt;</span>男<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">name</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;女&quot;</span> <span class="attr">id</span>=<span class="string">&quot;女&quot;</span> /&gt;</span><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;女&quot;</span>&gt;</span>女<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        爱好: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">name</span>=<span class="string">&quot;hobby&quot;</span> <span class="attr">value</span>=<span class="string">&quot;唱&quot;</span> /&gt;</span>唱 </span><br><span class="line">             <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">name</span>=<span class="string">&quot;hobby&quot;</span><span class="attr">value</span>=<span class="string">&quot;跳&quot;</span>/&gt;</span>跳 </span><br><span class="line">             <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span><span class="attr">name</span>=<span class="string">&quot;hobby&quot;</span><span class="attr">value</span>=<span class="string">&quot;rap&quot;</span>/&gt;</span>rap </span><br><span class="line">             <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span><span class="attr">name</span>=<span class="string">&quot;hobby&quot;</span><span class="attr">value</span>=<span class="string">&quot;篮球&quot;</span>/&gt;</span>篮球<span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        籍贯：<span class="tag">&lt;<span class="name">select</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">option</span>&gt;</span>河北<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">option</span>&gt;</span>河南<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;/<span class="name">select</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        介绍:<span class="tag">&lt;<span class="name">textarea</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>你可以对我打赏了哦.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="ffy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="ffy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/10/%E5%BA%8F%E7%AB%A0/" rel="prev" title="序章">
+      <i class="fa fa-chevron-left"></i> 序章
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">1.</span> <span class="nav-text">HTML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">默认生成的代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%87%E7%AD%BE"><span class="nav-number">2.</span> <span class="nav-text">常用标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E9%A2%98%E6%A0%87%E7%AD%BE"><span class="nav-number">2.1.</span> <span class="nav-text">标题标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AE%B5%E8%90%BD%E5%92%8C%E6%8D%A2%E8%A1%8C%E6%A0%87%E7%AD%BE"><span class="nav-number">2.2.</span> <span class="nav-text">段落和换行标签</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%B5%E8%90%BD"><span class="nav-number">2.2.1.</span> <span class="nav-text">段落</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8D%A2%E8%A1%8C"><span class="nav-number">2.2.2.</span> <span class="nav-text">换行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">2.3.</span> <span class="nav-text">练习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%A0%87%E7%AD%BE"><span class="nav-number">3.</span> <span class="nav-text">文本格式化标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-div-gt-%E5%92%8C-lt-span-gt-%E6%A0%87%E7%AD%BE"><span class="nav-number">3.1.</span> <span class="nav-text">&lt;div&gt;和&lt;span&gt;标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%A0%87%E7%AD%BE%E5%92%8C%E8%B7%AF%E5%BE%84"><span class="nav-number">3.2.</span> <span class="nav-text">图像标签和路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E9%93%BE%E6%8E%A5%E6%A0%87%E7%AD%BE"><span class="nav-number">3.3.</span> <span class="nav-text">超链接标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%88%86%E7%B1%BB"><span class="nav-number">3.4.</span> <span class="nav-text">链接分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E5%92%8C%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">3.5.</span> <span class="nav-text">注释和特殊字符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">3.5.1.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">3.5.2.</span> <span class="nav-text">特殊字符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC%E6%A0%87%E7%AD%BE"><span class="nav-number">5.</span> <span class="nav-text">表格标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">表格的基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text">表格的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC%E7%BB%93%E6%9E%84%E6%A0%87%E7%AD%BE"><span class="nav-number">5.3.</span> <span class="nav-text">表格结构标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E5%8D%95%E5%85%83%E6%A0%BC"><span class="nav-number">5.4.</span> <span class="nav-text">合并单元格</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%8D%95%E5%85%83%E6%A0%BC%EF%BC%88%E5%86%99%E5%90%88%E5%B9%B6%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="nav-number">5.4.1.</span> <span class="nav-text">目标单元格（写合并代码）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E6%A0%87%E7%AD%BE"><span class="nav-number">6.</span> <span class="nav-text">列表标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E5%BA%8F%E5%88%97%E8%A1%A8"><span class="nav-number">6.1.</span> <span class="nav-text">无序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%BA%8F%E5%88%97%E8%A1%A8"><span class="nav-number">6.2.</span> <span class="nav-text">有序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%97%E8%A1%A8"><span class="nav-number">6.3.</span> <span class="nav-text">自定义列表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95"><span class="nav-number">7.</span> <span class="nav-text">表单</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E5%9F%9F"><span class="nav-number">7.1.</span> <span class="nav-text">表单域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt-input-gt-%E8%A1%A8%E5%8D%95%E5%85%83%E7%B4%A0"><span class="nav-number">7.1.1.</span> <span class="nav-text">&lt;input&gt;表单元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lt-label-gt-%E6%A0%87%E7%AD%BE"><span class="nav-number">7.1.2.</span> <span class="nav-text">&lt;label&gt;标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#select%E4%B8%8B%E6%8B%89%E8%A1%A8%E5%8D%95%E5%85%83%E7%B4%A0"><span class="nav-number">7.1.3.</span> <span class="nav-text">select下拉表单元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#textarea-%E6%96%87%E6%9C%AC%E5%9F%9F%E5%85%83%E7%B4%A0"><span class="nav-number">7.1.4.</span> <span class="nav-text">textarea 文本域元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-1"><span class="nav-number">7.2.</span> <span class="nav-text">案例</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
