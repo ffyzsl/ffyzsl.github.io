@@ -6721,7 +6721,7 @@
     <title>Echarts练习</title>
     <url>/2022/04/02/Echarts%E7%BB%83%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="Echarts-练习"><a href="#Echarts-练习" class="headerlink" title="Echarts 练习"></a>Echarts 练习</h1><h2 id="建立数据库"><a href="#建立数据库" class="headerlink" title="建立数据库"></a>建立数据库</h2><ul>
-<li>打开 MySQL，或者使用 Navicat for MySQL</li>
+<li>打开 MySQL，或者使用 Navicat for MySQL<span id="more"></span></li>
 <li>建立 <code> school_information</code> 数据库<ul>
 <li>MySQL 语句：<code>create database school_information</code></li>
 </ul>
