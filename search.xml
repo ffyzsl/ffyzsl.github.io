@@ -243,104 +243,6 @@
       </categories>
   </entry>
   <entry>
-    <title>OOP三大特征、类和对象的概念和创建，JVM内存简单分析</title>
-    <url>/2021/07/02/Day%20006%EF%BC%88%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%B8%89%E5%A4%A7%E7%89%B9%E5%BE%81%E3%80%81%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%92%8CJVM%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="方法的递归调用"><a href="#方法的递归调用" class="headerlink" title="方法的递归调用"></a>方法的递归调用</h3><p>可以不用递归，尽量别用</p>
-<span id="more"></span>
-
-<h2 id="面向对象（重要）"><a href="#面向对象（重要）" class="headerlink" title="面向对象（重要）"></a>面向对象（重要）</h2><h3 id="面向过程和面向对象的区别"><a href="#面向过程和面向对象的区别" class="headerlink" title="面向过程和面向对象的区别"></a>面向过程和面向对象的区别</h3><p>面向过程：主要关注点是：实现的具体过程，因果关系</p>
-<p>​                   优点：对于业务逻辑比较简单的程序，可以达到快速开发，前期投入成本较低</p>
-<p>​                    缺点：采用面向过程的方式开发很难解决非常复杂的业务逻辑，另外面向过程的方式导致软件元素之间“耦合度”非常高，只要其中一环出问题，整个系统受到影响，导致最终的软件扩展力差，另外，由于没有独立体的概念，所以无法达到组件复用</p>
-<p>面向对象：主要关注点是：主要关注对象【独立体】能完成那些功能</p>
-<p>​                     优点：耦合度低，扩展力强，更容易解决现实世界当中更复杂的业务逻辑，组件复用性强。</p>
-<p>​                      缺点：前期投入成本较高，需要进行独立体的抽取，大量的系统分析与设计。</p>
-<h3 id="面向对象的三大特征"><a href="#面向对象的三大特征" class="headerlink" title="面向对象的三大特征"></a>面向对象的三大特征</h3><p><strong>封装</strong></p>
-<p><strong>继承</strong></p>
-<p><strong>多态</strong></p>
-<p>所有面向对象的编程语言都有这三大特征。</p>
-<p>采用面向对象的方式开发一个软件，生命周期当中：</p>
-<p><strong>1、面向对象的分析(OOA)</strong></p>
-<p><strong>2、面向对象的设计(OOD</strong>)</p>
-<p><strong>3、面向对象的编程(OOP)</strong></p>
-<h3 id="类和对象的概念"><a href="#类和对象的概念" class="headerlink" title="类和对象的概念"></a>类和对象的概念</h3><p><strong>类</strong>在现实世界中不存在，是一个模板，是一个概念，是人类大脑思考抽象的结果</p>
-<p>类代表了一类事物</p>
-<p>在现实世界当中，对象A和B之间具有相同特征，进行抽象总结出一个模板，这个模板被称为类。</p>
-<p>类是对象的抽象</p>
-<p><strong>对象</strong>是实际存在的个体，现实世界当中实际存在，对象是类的实例化</p>
-<h2 id="类的定义"><a href="#类的定义" class="headerlink" title="类的定义"></a>类的定义</h2><p>语法结构</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="class"><span class="keyword">class</span> 类名</span>&#123;</span><br><span class="line">    属性;</span><br><span class="line">    方法;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>属性通常采用一个变量的形式才完成定义。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;  <span class="comment">//类名为Student 代表了所有的学生对象，是一个学生模板</span></span><br><span class="line">    <span class="keyword">int</span> Student_number;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">boolean</span> sex;</span><br><span class="line">    String address;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="对象的创建和使用"><a href="#对象的创建和使用" class="headerlink" title="对象的创建和使用"></a>对象的创建和使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Student_number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>1、类体=属性+方法</p>
-<p>2、由于变量定义在类体当中，这种变量称为成员变量<br>要访问其中的成员变量，要通过对象来访问</p>
-<p>3、学号信息不能直接通过“类”访问，所以这种成员变量又被叫做；实例变量</p>
-<p>4、对象又被成为实例，实例变量又被称为对象变量</p>
-<p>5、不创建对象，这个Student_number变量的内存空间不存在，只有创建了对象，这个Student_number变量内存空间才会创建</p>
-<p>6、成员变量没有手动赋值的话，系统赋默认值</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>byte,short,int ,long</td>
-<td>0</td>
-</tr>
-<tr>
-<td>float,double</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>boolean</td>
-<td>false</td>
-</tr>
-<tr>
-<td>char</td>
-<td>\u0000</td>
-</tr>
-<tr>
-<td>引用数据类型</td>
-<td>null,空值</td>
-</tr>
-</tbody></table>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ootest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s=<span class="keyword">new</span> Student();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>1、实例化对象的语法：new 类名（）；</p>
-<p>2、new是java语言中的一个运算符</p>
-<p>3、new运算符的作用是创建对象，在JVM堆内存中开辟新的内存空间</p>
-<p>4、Student()是一个引用数据类型</p>
-<p>5、s是一个变量名，是局部变量，（在栈内存中存储，存储的为一个地址，指向堆内存中的Student对象）<strong>s称为对象</strong></p>
-<p>6、new Student()是一个学生对象</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">读取数据：引用.变量名;</span><br><span class="line">修改数据：引用.变量名=值;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ootest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s=<span class="keyword">new</span> Student();</span><br><span class="line">        <span class="keyword">int</span> stu_stu_number=s.Student_number;</span><br><span class="line">        <span class="keyword">int</span> stu_age=s.age;</span><br><span class="line">        String stu_address=s.address;</span><br><span class="line">        System.out.println(stu_stu_number);<span class="comment">// System.out.println(s.Student_number);</span></span><br><span class="line">        System.out.println(stu_age);<span class="comment">// System.out.println(s.age);</span></span><br><span class="line">        System.out.println(stu_address);<span class="comment">// System.out.println(s.address);</span></span><br><span class="line">        s.address=<span class="string">&quot;北京&quot;</span>;</span><br><span class="line">        s.age=<span class="number">12</span>;</span><br><span class="line">        System.out.println(s.address);</span><br><span class="line">        System.out.println(s.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="keyword">null</span></span><br><span class="line">北京</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">School</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> no;</span><br><span class="line">    String name;</span><br><span class="line">    Student addr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>addr是一个实例变量，也是一个引用。（在栈内存中保存一个地址，指向堆内存中的对象）</p>
-<p>name是一个实例变量，也是一个引用。</p>
-<h3 id="JVM的内存分析"><a href="#JVM的内存分析" class="headerlink" title="JVM的内存分析"></a>JVM的内存分析</h3><p>JVM主要包括三块内存空间：栈内存，堆内存，方法区内存</p>
-<p>1、堆内存和栈内存各有一个，一个线程一个栈内存</p>
-<p>2、在程序运行中，用new运算符创建的java对象，存储在堆内存中，当对象内部有实例变量，所以实例变量存储在堆内存当中</p>
-<p>3、局部变量：方法体中声明</p>
-<p>​     成员变量：方法体外声明</p>
-<p>​                      实例变量：前边修饰符没有static</p>
-<p>​                      静态变量：前面修饰符中有static</p>
-<p>4、静态变量存储在方法区内存中。</p>
-<p>5、三块内存当中变化最频繁的是栈内存，最先有数据的为方法区内存，垃圾回收器主要针对的是堆内存。</p>
-<p>6、当堆内存当中的java对象成为垃圾数据的时候 ，会被垃圾回收器回收。（没有更多的引用指向它的时候），这个对象无法被访问，因为访问对象只能通过引用的方式访问。</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>switch语句、循环语句以及循环控制语句</title>
     <url>/2021/07/02/Day%20004%EF%BC%88switch%E8%AF%AD%E5%8F%A5%E3%80%81%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%E4%BB%A5%E5%8F%8A%E5%BE%AA%E7%8E%AF%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5%EF%BC%89/</url>
     <content><![CDATA[<h3 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h3><span id="more"></span>
@@ -453,6 +355,104 @@
 <p>1、方法重载又称为；overload</p>
 <p>2、方法名一样，形参列表不同（数量不同，顺序不同，类型不同）</p>
 <p>3、方法重载和修饰符列表无关</p>
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>OOP三大特征、类和对象的概念和创建，JVM内存简单分析</title>
+    <url>/2021/07/02/Day%20006%EF%BC%88%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%B8%89%E5%A4%A7%E7%89%B9%E5%BE%81%E3%80%81%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A6%82%E5%BF%B5%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%92%8CJVM%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="方法的递归调用"><a href="#方法的递归调用" class="headerlink" title="方法的递归调用"></a>方法的递归调用</h3><p>可以不用递归，尽量别用</p>
+<span id="more"></span>
+
+<h2 id="面向对象（重要）"><a href="#面向对象（重要）" class="headerlink" title="面向对象（重要）"></a>面向对象（重要）</h2><h3 id="面向过程和面向对象的区别"><a href="#面向过程和面向对象的区别" class="headerlink" title="面向过程和面向对象的区别"></a>面向过程和面向对象的区别</h3><p>面向过程：主要关注点是：实现的具体过程，因果关系</p>
+<p>​                   优点：对于业务逻辑比较简单的程序，可以达到快速开发，前期投入成本较低</p>
+<p>​                    缺点：采用面向过程的方式开发很难解决非常复杂的业务逻辑，另外面向过程的方式导致软件元素之间“耦合度”非常高，只要其中一环出问题，整个系统受到影响，导致最终的软件扩展力差，另外，由于没有独立体的概念，所以无法达到组件复用</p>
+<p>面向对象：主要关注点是：主要关注对象【独立体】能完成那些功能</p>
+<p>​                     优点：耦合度低，扩展力强，更容易解决现实世界当中更复杂的业务逻辑，组件复用性强。</p>
+<p>​                      缺点：前期投入成本较高，需要进行独立体的抽取，大量的系统分析与设计。</p>
+<h3 id="面向对象的三大特征"><a href="#面向对象的三大特征" class="headerlink" title="面向对象的三大特征"></a>面向对象的三大特征</h3><p><strong>封装</strong></p>
+<p><strong>继承</strong></p>
+<p><strong>多态</strong></p>
+<p>所有面向对象的编程语言都有这三大特征。</p>
+<p>采用面向对象的方式开发一个软件，生命周期当中：</p>
+<p><strong>1、面向对象的分析(OOA)</strong></p>
+<p><strong>2、面向对象的设计(OOD</strong>)</p>
+<p><strong>3、面向对象的编程(OOP)</strong></p>
+<h3 id="类和对象的概念"><a href="#类和对象的概念" class="headerlink" title="类和对象的概念"></a>类和对象的概念</h3><p><strong>类</strong>在现实世界中不存在，是一个模板，是一个概念，是人类大脑思考抽象的结果</p>
+<p>类代表了一类事物</p>
+<p>在现实世界当中，对象A和B之间具有相同特征，进行抽象总结出一个模板，这个模板被称为类。</p>
+<p>类是对象的抽象</p>
+<p><strong>对象</strong>是实际存在的个体，现实世界当中实际存在，对象是类的实例化</p>
+<h2 id="类的定义"><a href="#类的定义" class="headerlink" title="类的定义"></a>类的定义</h2><p>语法结构</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[修饰符列表] <span class="class"><span class="keyword">class</span> 类名</span>&#123;</span><br><span class="line">    属性;</span><br><span class="line">    方法;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>属性通常采用一个变量的形式才完成定义。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;  <span class="comment">//类名为Student 代表了所有的学生对象，是一个学生模板</span></span><br><span class="line">    <span class="keyword">int</span> Student_number;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">boolean</span> sex;</span><br><span class="line">    String address;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="对象的创建和使用"><a href="#对象的创建和使用" class="headerlink" title="对象的创建和使用"></a>对象的创建和使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Student_number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1、类体=属性+方法</p>
+<p>2、由于变量定义在类体当中，这种变量称为成员变量<br>要访问其中的成员变量，要通过对象来访问</p>
+<p>3、学号信息不能直接通过“类”访问，所以这种成员变量又被叫做；实例变量</p>
+<p>4、对象又被成为实例，实例变量又被称为对象变量</p>
+<p>5、不创建对象，这个Student_number变量的内存空间不存在，只有创建了对象，这个Student_number变量内存空间才会创建</p>
+<p>6、成员变量没有手动赋值的话，系统赋默认值</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte,short,int ,long</td>
+<td>0</td>
+</tr>
+<tr>
+<td>float,double</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>char</td>
+<td>\u0000</td>
+</tr>
+<tr>
+<td>引用数据类型</td>
+<td>null,空值</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ootest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s=<span class="keyword">new</span> Student();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1、实例化对象的语法：new 类名（）；</p>
+<p>2、new是java语言中的一个运算符</p>
+<p>3、new运算符的作用是创建对象，在JVM堆内存中开辟新的内存空间</p>
+<p>4、Student()是一个引用数据类型</p>
+<p>5、s是一个变量名，是局部变量，（在栈内存中存储，存储的为一个地址，指向堆内存中的Student对象）<strong>s称为对象</strong></p>
+<p>6、new Student()是一个学生对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">读取数据：引用.变量名;</span><br><span class="line">修改数据：引用.变量名=值;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ootest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student s=<span class="keyword">new</span> Student();</span><br><span class="line">        <span class="keyword">int</span> stu_stu_number=s.Student_number;</span><br><span class="line">        <span class="keyword">int</span> stu_age=s.age;</span><br><span class="line">        String stu_address=s.address;</span><br><span class="line">        System.out.println(stu_stu_number);<span class="comment">// System.out.println(s.Student_number);</span></span><br><span class="line">        System.out.println(stu_age);<span class="comment">// System.out.println(s.age);</span></span><br><span class="line">        System.out.println(stu_address);<span class="comment">// System.out.println(s.address);</span></span><br><span class="line">        s.address=<span class="string">&quot;北京&quot;</span>;</span><br><span class="line">        s.age=<span class="number">12</span>;</span><br><span class="line">        System.out.println(s.address);</span><br><span class="line">        System.out.println(s.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="keyword">null</span></span><br><span class="line">北京</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">School</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> no;</span><br><span class="line">    String name;</span><br><span class="line">    Student addr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>addr是一个实例变量，也是一个引用。（在栈内存中保存一个地址，指向堆内存中的对象）</p>
+<p>name是一个实例变量，也是一个引用。</p>
+<h3 id="JVM的内存分析"><a href="#JVM的内存分析" class="headerlink" title="JVM的内存分析"></a>JVM的内存分析</h3><p>JVM主要包括三块内存空间：栈内存，堆内存，方法区内存</p>
+<p>1、堆内存和栈内存各有一个，一个线程一个栈内存</p>
+<p>2、在程序运行中，用new运算符创建的java对象，存储在堆内存中，当对象内部有实例变量，所以实例变量存储在堆内存当中</p>
+<p>3、局部变量：方法体中声明</p>
+<p>​     成员变量：方法体外声明</p>
+<p>​                      实例变量：前边修饰符没有static</p>
+<p>​                      静态变量：前面修饰符中有static</p>
+<p>4、静态变量存储在方法区内存中。</p>
+<p>5、三块内存当中变化最频繁的是栈内存，最先有数据的为方法区内存，垃圾回收器主要针对的是堆内存。</p>
+<p>6、当堆内存当中的java对象成为垃圾数据的时候 ，会被垃圾回收器回收。（没有更多的引用指向它的时候），这个对象无法被访问，因为访问对象只能通过引用的方式访问。</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -713,61 +713,6 @@
       </categories>
   </entry>
   <entry>
-    <title>压缩和解压类</title>
-    <url>/2021/07/12/Linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%B1%BB/</url>
-    <content><![CDATA[<h2 id="压缩和解压类"><a href="#压缩和解压类" class="headerlink" title="压缩和解压类"></a>压缩和解压类</h2><p><code>gzip/gunzip</code>指令</p>
-<span id="more"></span>
-<ul>
-<li><code>gzip 文件</code>：压缩文件，只能将文件压缩为<code>*.gz</code>文件</li>
-<li><code>gunzip 文件.gz</code>：解压缩文件命令</li>
-</ul>
-<p><code>zip/unzip</code>指令</p>
-<ul>
-<li><p><code>zip [选项] XXX.zip 将要压缩的内容</code>：压缩文件和目录的命令</p>
-</li>
-<li><p><code>unzip [选项] XXX.zip</code>：解压缩文件</p>
-<p>zip常用选项：<code>-r</code>：递归压缩，即压缩目录</p>
-<p>unzip常用选项：<code>-d &lt;目录&gt;</code>：指定解压后的文件的存放目录</p>
-</li>
-</ul>
-<p><code>tar</code>指令：打包/解包指令，最后打包的文件是<code>.tar.gz</code>的文件</p>
-<ul>
-<li><code>tar [选项] XXX.tar.gz 打包的内容</code>：打包目录，压缩后的文件格式<code>.tar.gz</code></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-c</td>
-<td>产生.tar打包文件</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>显示详细信息</td>
-</tr>
-<tr>
-<td>-f</td>
-<td>指定压缩后的文件名</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>打包同时解压</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>解包<code>.tar</code>文件</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>任务调度</title>
     <url>/2021/07/16/Linux%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/</url>
     <content><![CDATA[<h2 id="crontab任务调度"><a href="#crontab任务调度" class="headerlink" title="crontab任务调度"></a>crontab任务调度</h2><p><code>crontab</code>进行定时任务的设置</p>
@@ -918,61 +863,55 @@
       </categories>
   </entry>
   <entry>
-    <title>Linux开机、重启和用户登录注销，用户管理</title>
-    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
-    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
+    <title>压缩和解压类</title>
+    <url>/2021/07/12/Linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="压缩和解压类"><a href="#压缩和解压类" class="headerlink" title="压缩和解压类"></a>压缩和解压类</h2><p><code>gzip/gunzip</code>指令</p>
 <span id="more"></span>
-<p><code>shutdown -h 1</code> 一分钟后关机</p>
-<p><code>shutdown -r now</code> 重启计算机</p>
-<p><code>halt</code> 关机，作用和上面一样</p>
-<p><code>reboot</code> 现在重新启动计算机</p>
-<p><code>sync</code> 把内存的数据同步到磁盘</p>
-<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
-<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
-<p><code>logout</code> 注销用户</p>
-<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
-<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
-<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
-<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
-<p><code>pwd</code> 显示当前用户所在的目录</p>
-<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
-<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
-<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
-</ol>
-<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
-<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
-<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
-<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
-<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
-<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
-<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
-<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
-<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
-<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
-<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
+<ul>
+<li><code>gzip 文件</code>：压缩文件，只能将文件压缩为<code>*.gz</code>文件</li>
+<li><code>gunzip 文件.gz</code>：解压缩文件命令</li>
+</ul>
+<p><code>zip/unzip</code>指令</p>
+<ul>
+<li><p><code>zip [选项] XXX.zip 将要压缩的内容</code>：压缩文件和目录的命令</p>
 </li>
-<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
-<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
+<li><p><code>unzip [选项] XXX.zip</code>：解压缩文件</p>
+<p>zip常用选项：<code>-r</code>：递归压缩，即压缩目录</p>
+<p>unzip常用选项：<code>-d &lt;目录&gt;</code>：指定解压后的文件的存放目录</p>
 </li>
-<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
-<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
-</li>
-</ol>
-<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
-<p>1：单用户（找回丢失密码）</p>
-<p>2：多用户状态没有网络服务</p>
-<p>3：多用户状态有网络服务</p>
-<p>4：系统未使用保留给用户</p>
-<p>5：图形界面</p>
-<p>6：系统重启</p>
-<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
-<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
-<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
-<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
-<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
-<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
-<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
-<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
+</ul>
+<p><code>tar</code>指令：打包/解包指令，最后打包的文件是<code>.tar.gz</code>的文件</p>
+<ul>
+<li><code>tar [选项] XXX.tar.gz 打包的内容</code>：打包目录，压缩后的文件格式<code>.tar.gz</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-c</td>
+<td>产生.tar打包文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>指定压缩后的文件名</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>打包同时解压</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>解包<code>.tar</code>文件</td>
+</tr>
+</tbody></table>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -1127,6 +1066,67 @@
       </categories>
   </entry>
   <entry>
+    <title>Linux开机、重启和用户登录注销，用户管理</title>
+    <url>/2021/07/09/Linux%E5%BC%80%E6%9C%BA%E3%80%81%E9%87%8D%E5%90%AF%E5%92%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E9%94%80%E4%BB%A5%E5%8F%8A%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86md/</url>
+    <content><![CDATA[<h2 id="Linux开机、重启和用户登录注销"><a href="#Linux开机、重启和用户登录注销" class="headerlink" title="Linux开机、重启和用户登录注销"></a>Linux开机、重启和用户登录注销</h2><h3 id="关机和重启"><a href="#关机和重启" class="headerlink" title="关机和重启"></a>关机和重启</h3><p><code>shutdown -h now</code> 立即进行关机</p>
+<span id="more"></span>
+<p><code>shutdown -h 1</code> 一分钟后关机</p>
+<p><code>shutdown -r now</code> 重启计算机</p>
+<p><code>halt</code> 关机，作用和上面一样</p>
+<p><code>reboot</code> 现在重新启动计算机</p>
+<p><code>sync</code> 把内存的数据同步到磁盘</p>
+<p>注意：不管是重启系统还是关闭系统，首先要运行SYNC命令，把内存的数据写到磁盘中</p>
+<h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p><code>su -用户名</code> 切换用户</p>
+<p><code>logout</code> 注销用户</p>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>Linux是一个多用户多任务的系统，想要使用系统资源，必须有一个账务</p>
+<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p><code>useradd 用户名</code>   添加一个名为”用户名“的用户，默认该用户的家目录在<code>/home/用户名</code></p>
+<p><code>useradd -d  指定目录  新的用户名</code>   在指定目录，创建一个<code>新的用户名</code></p>
+<h3 id="指定-修改密码"><a href="#指定-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p><code>passwd 用户名</code></p>
+<p><code>pwd</code> 显示当前用户所在的目录</p>
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><ol>
+<li>删除用户，但保留家目录（<code>userdel 用户名</code>）</li>
+<li>删除用户以及家目录（<code>userdel -r 用户名</code>）</li>
+</ol>
+<h3 id="查询用户信息指令"><a href="#查询用户信息指令" class="headerlink" title="查询用户信息指令"></a>查询用户信息指令</h3><p><code>id 用户名</code></p>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><p><code>su -要切换的用户名</code></p>
+<p>注意：从权限高的用户切换到权限低的用户，不需要密码，反之则需要。当需要返回到原来用户时，使用<code>exit/logout</code>的指令</p>
+<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>系统可以对有共性/权限的多个用户进行统一的管理</p>
+<h3 id="新增组"><a href="#新增组" class="headerlink" title="新增组"></a>新增组</h3><p><code>groupadd 组名</code></p>
+<h3 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h3><p><code>groupdel 组名</code></p>
+<h3 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h3><p><code>useradd -g 用户组 用户名</code></p>
+<p>注意：如果没有写用户组，那么会新增一个以用户名为名字的用户组，并把新增的用户名加到用户组里</p>
+<h3 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h3><p><code>usermod -g 用户组 用户名</code></p>
+<h2 id="用户和组相关的文件"><a href="#用户和组相关的文件" class="headerlink" title="用户和组相关的文件"></a>用户和组相关的文件</h2><ol>
+<li><p><code>/etc/passwd</code>文件，用户（user）的配置文件，记录用户的各种信息<br><strong>意义</strong>：<code>用户名:口令:用户标识号:注释行描述:主目录:登录Shell</code></p>
+</li>
+<li><p><code>/etc/shadow</code>文件，口令的配置文件</p>
+<p><strong>意义</strong>：<code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code>。</p>
+</li>
+<li><p><code>/etc/group</code>文件，组(group)的配置文件，记录Linux包含的组的信息</p>
+<p><strong>意义</strong>：<code>组名:口令:组标识号:组内用户列表</code></p>
+</li>
+</ol>
+<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><h3 id="指定运行级别"><a href="#指定运行级别" class="headerlink" title="指定运行级别"></a>指定运行级别</h3><p>0：关机</p>
+<p>1：单用户（找回丢失密码）</p>
+<p>2：多用户状态没有网络服务</p>
+<p>3：多用户状态有网络服务</p>
+<p>4：系统未使用保留给用户</p>
+<p>5：图形界面</p>
+<p>6：系统重启</p>
+<p>注意：常用运行级别是3和5，也可以指定默认运行级别</p>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>可以通过查看<code>/etc/inittab</code>文件，得知当前运行级别</p>
+<h4 id="切换运行级别"><a href="#切换运行级别" class="headerlink" title="切换运行级别"></a>切换运行级别</h4><p><code>init [级别]</code><br>注意：如果希望一开机就运行指定级别，可以直接修改<code>/etc/inittab</code>文件的级别即可</p>
+<h2 id="找回root密码"><a href="#找回root密码" class="headerlink" title="找回root密码"></a>找回root密码</h2><p>首先，重新启动系统，在界面按“e“，进入编辑界面</p>
+<p>找到Linux16开头的内容所在行数，在行的最后输入：<code>init=/bin/sh</code></p>
+<p>接着，直接按快捷键<code>ctrl+x</code>进入单用户模式</p>
+<p>接着，在光标闪烁位置输入：<code>mount -o remount,rw/</code>,然后按下回车键</p>
+<p>在新的一行最后面输入：<code>passwd</code>，再次按下回车键，输入密码，然后再次确认密码即可</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>时间日期类，搜索查找类</title>
     <url>/2021/07/10/Linux%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB%EF%BC%8C%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E7%B1%BB/</url>
     <content><![CDATA[<h2 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h2><p><code>date</code>：显示当前日期</p>
@@ -1269,6 +1269,73 @@
       </categories>
   </entry>
   <entry>
+    <title>Linux概述</title>
+    <url>/2021/07/08/Linux%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<h1 id="Linux入门"><a href="#Linux入门" class="headerlink" title="Linux入门"></a>Linux入门</h1><h2 id="Linux介绍"><a href="#Linux介绍" class="headerlink" title="Linux介绍"></a>Linux介绍</h2><p>1、Linux是一块操作系统（免费、开源、安全、高效、稳定、处理高并发非常强悍）</p>
+<span id="more"></span>
+<h3 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h3><p>Linux的文件系统采用级层式的树状目录结构，在此结构上的根目录是<code>/</code>,  <img src="/2021/07/08/Linux%E6%A6%82%E8%BF%B0/Linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" alt="Linux目录结构"></p>
+<h2 id="各个目录介绍"><a href="#各个目录介绍" class="headerlink" title="各个目录介绍"></a>各个目录介绍</h2><ul>
+<li><p><strong>/bin</strong>：<br>bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着最经常使用的命令。</p>
+</li>
+<li><p><strong>/boot：</strong><br>这里存放的是启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+</li>
+<li><p><strong>/dev ：</strong><br>dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的外部设备，在 Linux 中访问设备的方式和访问文件的方式是相同的。</p>
+</li>
+<li><p><strong>/etc：</strong><br>etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+</li>
+<li><p><strong>/home</strong>：<br>用户的主目录，在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。</p>
+</li>
+<li><p><strong>/lib</strong>：<br>lib 是 Library(库) 的缩写这个目录里存放着系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。几乎所有的应用程序都需要用到这些共享库。</p>
+</li>
+<li><p><strong>/lost+found</strong>：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+</li>
+<li><p><strong>/media</strong>：<br>linux 系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux 会把识别的设备挂载到这个目录下。</p>
+</li>
+<li><p><strong>/mnt</strong>：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。</p>
+</li>
+<li><p><strong>/opt</strong>：<br>opt 是 optional(可选) 的缩写，这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+</li>
+<li><p><strong>/proc</strong>：<br>proc 是 Processes(进程) 的缩写，/proc 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>/root</strong>：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+</li>
+<li><p><strong>/sbin</strong>：<br>s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统管理员使用的系统管理程序。</p>
+</li>
+<li><p><strong>/selinux</strong>：<br> 这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+</li>
+<li><p><strong>/srv</strong>：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+</li>
+<li><p><strong>/sys</strong>：</p>
+<p>这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs 文件系统集成了下面3种文件系统的信息：针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统。</p>
+<p>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+</li>
+<li><p><strong>/tmp</strong>：<br>tmp 是 temporary(临时) 的缩写这个目录是用来存放一些临时文件的。</p>
+</li>
+<li><p><strong>/usr</strong>：<br> usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。</p>
+</li>
+<li><p><strong>/usr/bin：</strong><br>系统用户使用的应用程序。</p>
+</li>
+<li><p><strong>/usr/sbin：</strong><br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+</li>
+<li><p><strong>/usr/src：</strong><br>内核源代码默认的放置目录。</p>
+</li>
+<li><p><strong>/var</strong>：<br>var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+</li>
+<li><p><strong>/run</strong>：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+</li>
+</ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>1、Linux的目录中有且只有一个根目录</p>
+<p>2、Linux的各个目录存放的内容是有规定的</p>
+<p>3、Linux是以文件的形式来管理设备的（Linux系统中一切皆为文件）</p>
+<p>4、了解Linux的各个文件内的内容和作用</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux磁盘和分区</title>
     <url>/2021/07/18/Linux%E7%A3%81%E7%9B%98%E5%92%8C%E5%88%86%E5%8C%BA/</url>
     <content><![CDATA[<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><p>1、Linux归根到底只有一个根目录，一个独立且唯一的文件结构，Linux中每个分区都是用来组成整个文件系统的一部分</p>
@@ -1347,67 +1414,49 @@
       </categories>
   </entry>
   <entry>
-    <title>Linux概述</title>
-    <url>/2021/07/08/Linux%E6%A6%82%E8%BF%B0/</url>
-    <content><![CDATA[<h1 id="Linux入门"><a href="#Linux入门" class="headerlink" title="Linux入门"></a>Linux入门</h1><h2 id="Linux介绍"><a href="#Linux介绍" class="headerlink" title="Linux介绍"></a>Linux介绍</h2><p>1、Linux是一块操作系统（免费、开源、安全、高效、稳定、处理高并发非常强悍）</p>
-<span id="more"></span>
-<h3 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h3><p>Linux的文件系统采用级层式的树状目录结构，在此结构上的根目录是<code>/</code>,  <img src="/2021/07/08/Linux%E6%A6%82%E8%BF%B0/Linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" alt="Linux目录结构"></p>
-<h2 id="各个目录介绍"><a href="#各个目录介绍" class="headerlink" title="各个目录介绍"></a>各个目录介绍</h2><ul>
-<li><p><strong>/bin</strong>：<br>bin 是 Binaries (二进制文件) 的缩写, 这个目录存放着最经常使用的命令。</p>
+    <title>Linux网络配置</title>
+    <url>/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><span id="more"></span>
+<p>原理图：<img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/NAT%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE.png"></p>
+<h3 id="查看网络IP和网关"><a href="#查看网络IP和网关" class="headerlink" title="查看网络IP和网关"></a>查看网络IP和网关</h3><p><code>ifconfig</code>：查看网络配置（Linux）</p>
+<p><code>ipconfig</code>：查看网络配置（Windows）</p>
+<p><code>ping 目的主机</code>：测试当前服务器是否可以连接目的主机</p>
+<h3 id="网络环境配置"><a href="#网络环境配置" class="headerlink" title="网络环境配置"></a>网络环境配置</h3><p>第一种：自动获取，登陆后，通过界面来设置自动获取ip，Linux启动后会自动获取ip，但每次自动获取的ip地址可能不一样。</p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF.png"></p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96ip%E5%9C%B0%E5%9D%80.png"></p>
+<p>第二种方法：指定IP，直接修改配置文件来指定IP，并可以连接到外网。编辑<code>vi  /etc/sysconfig/network-scripts/ifcfg-ens33</code></p>
+<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png"></p>
+<p>文件说明：</p>
+<ul>
+<li><p><code>DEVICE=eth0</code>：接口名（设备：网卡）</p>
 </li>
-<li><p><strong>/boot：</strong><br>这里存放的是启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<li><p><code>HWADDR=……</code>：MAC地址</p>
 </li>
-<li><p><strong>/dev ：</strong><br>dev 是 Device(设备) 的缩写, 该目录下存放的是 Linux 的外部设备，在 Linux 中访问设备的方式和访问文件的方式是相同的。</p>
+<li><p><code>TYPE=Ethernet</code>：网络类型（通常是Ethernet）</p>
 </li>
-<li><p><strong>/etc：</strong><br>etc 是 Etcetera(等等) 的缩写,这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<li><p><code>UUID=&quot;be18edbb-aea5-4cd4-9839-c765ced61bf3&quot;</code>(随机id)</p>
 </li>
-<li><p><strong>/home</strong>：<br>用户的主目录，在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的，如上图中的 alice、bob 和 eve。</p>
+<li><p><code>ONBOOT=&quot;yes&quot;</code>：系统启动时网络接口是否有效</p>
 </li>
-<li><p><strong>/lib</strong>：<br>lib 是 Library(库) 的缩写这个目录里存放着系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。几乎所有的应用程序都需要用到这些共享库。</p>
-</li>
-<li><p><strong>/lost+found</strong>：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-</li>
-<li><p><strong>/media</strong>：<br>linux 系统会自动识别一些设备，例如U盘、光驱等等，当识别后，Linux 会把识别的设备挂载到这个目录下。</p>
-</li>
-<li><p><strong>/mnt</strong>：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在 /mnt/ 上，然后进入该目录就可以查看光驱里的内容了。</p>
-</li>
-<li><p><strong>/opt</strong>：<br>opt 是 optional(可选) 的缩写，这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-</li>
-<li><p><strong>/proc</strong>：<br>proc 是 Processes(进程) 的缩写，/proc 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>/root</strong>：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-</li>
-<li><p><strong>/sbin</strong>：<br>s 就是 Super User 的意思，是 Superuser Binaries (超级用户的二进制文件) 的缩写，这里存放的是系统管理员使用的系统管理程序。</p>
-</li>
-<li><p><strong>/selinux</strong>：<br> 这个目录是 Redhat/CentOS 所特有的目录，Selinux 是一个安全机制，类似于 windows 的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-</li>
-<li><p><strong>/srv</strong>：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-</li>
-<li><p><strong>/sys</strong>：</p>
-<p>这是 Linux2.6 内核的一个很大的变化。该目录下安装了 2.6 内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs 文件系统集成了下面3种文件系统的信息：针对进程信息的 proc 文件系统、针对设备的 devfs 文件系统以及针对伪终端的 devpts 文件系统。</p>
-<p>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-</li>
-<li><p><strong>/tmp</strong>：<br>tmp 是 temporary(临时) 的缩写这个目录是用来存放一些临时文件的。</p>
-</li>
-<li><p><strong>/usr</strong>：<br> usr 是 unix shared resources(共享资源) 的缩写，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。</p>
-</li>
-<li><p><strong>/usr/bin：</strong><br>系统用户使用的应用程序。</p>
-</li>
-<li><p><strong>/usr/sbin：</strong><br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-</li>
-<li><p><strong>/usr/src：</strong><br>内核源代码默认的放置目录。</p>
-</li>
-<li><p><strong>/var</strong>：<br>var 是 variable(变量) 的缩写，这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-</li>
-<li><p><strong>/run</strong>：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<li><p>IP的配置方法<code>[none][static][bootp][dhcp]</code>（引导时不使用协议|静态分配IP|BOOTP协议|DHCP协议）</p>
+<ul>
+<li><code>BOOTPROTO=static</code></li>
+<li><code>IPADDR=……</code>：IP地址</li>
+<li><code>GATEWAY=……</code>：网关</li>
+<li><code>DNS1=……</code>：域名解析器</li>
+</ul>
 </li>
 </ul>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>1、Linux的目录中有且只有一个根目录</p>
-<p>2、Linux的各个目录存放的内容是有规定的</p>
-<p>3、Linux是以文件的形式来管理设备的（Linux系统中一切皆为文件）</p>
-<p>4、了解Linux的各个文件内的内容和作用</p>
+<p>配置完成后，再在虚拟网络编辑器中进行相应的编辑</p>
+<h3 id="设置主机名和hosts映射"><a href="#设置主机名和hosts映射" class="headerlink" title="设置主机名和hosts映射"></a>设置主机名和hosts映射</h3><h4 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h4><p>1、为了方便记忆，可以给Linux系统设置主机名，也可以根据需求更改主机名</p>
+<p>2、指令<code>hostname</code>：查看主机名</p>
+<p>3、修改文件在<code>/etc/hostname</code>指定</p>
+<p>4、修改后，重启生效</p>
+<h4 id="设置hosts映射"><a href="#设置hosts映射" class="headerlink" title="设置hosts映射"></a>设置hosts映射</h4><p>Hosts文件是一个文本文件，用来记录IP和Hostname（主机名）的映射关系。可以通过主机名找到Linux系统。</p>
+<ul>
+<li> Windows：在<code>C:\Windows\System32\drivers\etc\hosts</code>文件指定即可</li>
+<li>Linux：在<code>/etc/hosts</code>文件指定</li>
+</ul>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -1700,55 +1749,6 @@
 <p>设置文件的行号，取消文件的行号<code>命令行下  :set nu 和 :set nonu</code></p>
 <p>撤销 <code>u</code></p>
 <p>定位到最末行<code>G</code>，定位到首行<code>gg</code>，定位到固定的行号 <code>行号 shift+g</code></p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Linux网络配置</title>
-    <url>/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><span id="more"></span>
-<p>原理图：<img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/NAT%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE.png"></p>
-<h3 id="查看网络IP和网关"><a href="#查看网络IP和网关" class="headerlink" title="查看网络IP和网关"></a>查看网络IP和网关</h3><p><code>ifconfig</code>：查看网络配置（Linux）</p>
-<p><code>ipconfig</code>：查看网络配置（Windows）</p>
-<p><code>ping 目的主机</code>：测试当前服务器是否可以连接目的主机</p>
-<h3 id="网络环境配置"><a href="#网络环境配置" class="headerlink" title="网络环境配置"></a>网络环境配置</h3><p>第一种：自动获取，登陆后，通过界面来设置自动获取ip，Linux启动后会自动获取ip，但每次自动获取的ip地址可能不一样。</p>
-<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF.png"></p>
-<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96ip%E5%9C%B0%E5%9D%80.png"></p>
-<p>第二种方法：指定IP，直接修改配置文件来指定IP，并可以连接到外网。编辑<code>vi  /etc/sysconfig/network-scripts/ifcfg-ens33</code></p>
-<p><img src="/2021/07/19/Linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png"></p>
-<p>文件说明：</p>
-<ul>
-<li><p><code>DEVICE=eth0</code>：接口名（设备：网卡）</p>
-</li>
-<li><p><code>HWADDR=……</code>：MAC地址</p>
-</li>
-<li><p><code>TYPE=Ethernet</code>：网络类型（通常是Ethernet）</p>
-</li>
-<li><p><code>UUID=&quot;be18edbb-aea5-4cd4-9839-c765ced61bf3&quot;</code>(随机id)</p>
-</li>
-<li><p><code>ONBOOT=&quot;yes&quot;</code>：系统启动时网络接口是否有效</p>
-</li>
-<li><p>IP的配置方法<code>[none][static][bootp][dhcp]</code>（引导时不使用协议|静态分配IP|BOOTP协议|DHCP协议）</p>
-<ul>
-<li><code>BOOTPROTO=static</code></li>
-<li><code>IPADDR=……</code>：IP地址</li>
-<li><code>GATEWAY=……</code>：网关</li>
-<li><code>DNS1=……</code>：域名解析器</li>
-</ul>
-</li>
-</ul>
-<p>配置完成后，再在虚拟网络编辑器中进行相应的编辑</p>
-<h3 id="设置主机名和hosts映射"><a href="#设置主机名和hosts映射" class="headerlink" title="设置主机名和hosts映射"></a>设置主机名和hosts映射</h3><h4 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h4><p>1、为了方便记忆，可以给Linux系统设置主机名，也可以根据需求更改主机名</p>
-<p>2、指令<code>hostname</code>：查看主机名</p>
-<p>3、修改文件在<code>/etc/hostname</code>指定</p>
-<p>4、修改后，重启生效</p>
-<h4 id="设置hosts映射"><a href="#设置hosts映射" class="headerlink" title="设置hosts映射"></a>设置hosts映射</h4><p>Hosts文件是一个文本文件，用来记录IP和Hostname（主机名）的映射关系。可以通过主机名找到Linux系统。</p>
-<ul>
-<li> Windows：在<code>C:\Windows\System32\drivers\etc\hosts</code>文件指定即可</li>
-<li>Linux：在<code>/etc/hosts</code>文件指定</li>
-</ul>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -2050,6 +2050,68 @@
 ]]></content>
       <categories>
         <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Servlet技术（一）</title>
+    <url>/2021/08/12/Servlet%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>Servlet运行在Servlet容器中，能够为各种各样的客户请求提供相应的服务。</p>
+<span id="more"></span>
+<p>Servlet能够完成以下工作：</p>
+<ul>
+<li>动态生成HTML文档</li>
+<li>把请求转发给同一个Web应用的其他Servlet组件</li>
+<li>把请求转发给其他Web应用中的Servlet组件</li>
+<li>读取客户端的 Cookie，以及向客户端写入 Cookie </li>
+<li>访问其他服务器资源</li>
+</ul>
+<p>1、请求对象（ServletRequest 和 HttpServletRequest）：Servlet从该对象中获取来自客户端的请求信息</p>
+<p>2、响应对象（ServletResponse 和 HttpServletResponse）：Servlet通过该对象来生成响应结果</p>
+<p>3、Servlet配置对象（ServletConfig）：当容器初始化一个 Servlet 对象时，会向 Servlet 提供一个 ServletConfig 对象， Servlet通过该对象来获取初始化参数信息以及 ServletContext 对象。</p>
+<p>4、Servlet上下文对象（ServletContext）：Servlet 通过该对象来访问容器为当前 Web 应用提供的各种资源</p>
+<h3 id="Servlet-API"><a href="#Servlet-API" class="headerlink" title="Servlet API"></a>Servlet API</h3><h4 id="Servlet接口"><a href="#Servlet接口" class="headerlink" title="Servlet接口"></a>Servlet接口</h4><p>是其核心，所有Servlet类都必须实现这一接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig var1)</span> <span class="keyword">throws</span> ServletException</span>;<span class="comment">//该方法负责初始化 Servlet对象，容器在创建好Servlet对象后，就会调用该方法</span></span><br><span class="line"></span><br><span class="line">    <span class="function">ServletConfig <span class="title">getServletConfig</span><span class="params">()</span></span>;<span class="comment">//返回一个ServletConfig对象，其中包含了 Servlet的初始化参数信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest var1, ServletResponse var2)</span> <span class="keyword">throws</span> ServletException, IOException</span>;<span class="comment">//负责响应客户的请求，当容器接收到来自客户端要求访问特定Servlet对象的请求时，就会调用</span></span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getServletInfo</span><span class="params">()</span></span>;<span class="comment">//返回一个字符串，该字符串中包含了 Servlet的创建者，版本和版权等信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>;<span class="comment">//负责释放Servlet对象占用的资源，当Servlet对象结束生命周期时，会调用该方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中定义了五个方法，其中有三个都是由Servlet容器来调用的，容器会在Servlet的生命周期不同阶段调用不同方法。</p>
+<p>在Servlet中，<code>GenericServlet</code>抽象类实现了<code>Servlet接口</code>，而<code>HttpServlet抽象类</code>又继承了<code>GenericServlet抽象类</code>，当用户开发自己的Servlet时，可以选择继承<code>GenericServlet</code>或<code>HttpServlet</code></p>
+<h4 id="GenericServlet抽象类"><a href="#GenericServlet抽象类" class="headerlink" title="GenericServlet抽象类"></a>GenericServlet抽象类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.config = config;</span><br><span class="line">        <span class="keyword">this</span>.init();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类实现了 Servlet接口中的 init(ServletConfig config)  初始化方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> ServletConfig config;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类有一个 ServletConfig类型的私有实例变量 config，当Servlet容器调用 GenericServlet的 init(ServletConfig config)  方法时，该方法使得私有实例变量config引用由容器传入的 ServletConfig对象，即使的 GenericServlet对象与一个 ServletConfig对象关联。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>GenericServlet类还自定义了一个不带参数的 init() 方法。init(ServletConfig config) 方法会调用此方法，对于 GenericServlet类的子类，如果希望覆盖父类的初始化方法，又两种方法：</p>
+<p>1）、覆盖父类的不带参数的 init() 方法</p>
+<p>2）、覆盖父类的带参数的 init(ServletConfig config) 方法，而如果希望当前 Servlet对象与 ServletConfig 对象关联，应该在该方法中先调用 super.init(config) 方法</p>
+<p>GenericServlet没有实现 service() 方法，并且其虽然实现了 destroy() 方法，但实际上什么也没有做，如果编写继承GenericServlet类的子类的话，必须实现 service() 方法，且覆盖 destroy() 方法，为待销毁的当前Servlet对象释放所占用的各种资源。</p>
+<p>GenericServlet实现了ServletConfig接口的所有方法，因此，编写继承GenericServlet类的子类，可以直接调用 ServletConfig接口中的所有方法。</p>
+<h4 id="HttpServlet类"><a href="#HttpServlet类" class="headerlink" title="HttpServlet类"></a>HttpServlet类</h4><p>HttpServlet 是 GenericServlet 类的子类，HttpServlet 类为 Servlet 接口提供了与 HTTP 协议相关的通用实现。</p>
+<p>HTTP 协议把客户请求分为多种方法，如 GET , POST 或 Delete 等。针对每种方式， HttpServlet 类都提供了响应的服务方法，如 doGet() , doPost() , doDelete() 方法等。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String method = req.getMethod();<span class="comment">// service在此获得客户端的请求方式，然后依次匹配</span></span><br><span class="line">        <span class="keyword">long</span> lastModified; </span><br><span class="line">        <span class="keyword">if</span> (method.equals(<span class="string">&quot;GET&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">if</span> (lastModified == -<span class="number">1L</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">long</span> ifModifiedSince = req.getDateHeader(<span class="string">&quot;If-Modified-Since&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (ifModifiedSince &lt; lastModified) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">                    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resp.setStatus(<span class="number">304</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;HEAD&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">            <span class="keyword">this</span>.doHead(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPost(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;PUT&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPut(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;DELETE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doDelete(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;OPTIONS&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doOptions(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;TRACE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doTrace(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            String errMsg = lStrings.getString(<span class="string">&quot;http.method_not_implemented&quot;</span>);</span><br><span class="line">            Object[] errArgs = <span class="keyword">new</span> Object[]&#123;method&#125;;</span><br><span class="line">            errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line">            resp.sendError(<span class="number">501</span>, errMsg);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest req, ServletResponse res)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (req <span class="keyword">instanceof</span> HttpServletRequest &amp;&amp; res <span class="keyword">instanceof</span> HttpServletResponse) &#123;</span><br><span class="line">           HttpServletRequest request = (HttpServletRequest)req;</span><br><span class="line">           HttpServletResponse response = (HttpServletResponse)res;</span><br><span class="line">           <span class="keyword">this</span>.service(request, response);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> ServletException(<span class="string">&quot;non-HTTP request or response&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>HttpServlet 类实现了 Servlet 接口中的 service(ServletRequest req, ServletResponse res)，该方法实际上调用的是它的重载方法  service(HttpServletRequest req, HttpServletResponse resp) ，</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String protocol = req.getProtocol();</span><br><span class="line">        String msg = lStrings.getString(<span class="string">&quot;http.method_get_not_supported&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (protocol.endsWith(<span class="string">&quot;1.1&quot;</span>)) &#123;</span><br><span class="line">            resp.sendError(<span class="number">405</span>, msg);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            resp.sendError(<span class="number">400</span>, msg);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>HttpServlet 类实现了所有的请求方法，但默认的实现中，都会向客户端返回一个错误，所以在实际开发中，一般会针对客户端的特定请求方法来覆盖 HttpServlet 类中的方法。</p>
+<h4 id="ServletRequest接口"><a href="#ServletRequest接口" class="headerlink" title="ServletRequest接口"></a>ServletRequest接口</h4><p>ServletRequest 类表示来自客户端的请求，在容器接收到客户端的请求时，会把它包装成一个 ServletRequest 对象。ServletRequest 类中包含着大量的客户端请求信息，同时 ServletRequest 接口还提供了一系列方法来获取 对象中的客户端访问信息。</p>
+<p>同时，ServletRequest 接口还定义了一组用于在请求范围内获取共享数据的方法。</p>
+<h4 id="HttpServletRequest-接口"><a href="#HttpServletRequest-接口" class="headerlink" title="HttpServletRequest 接口"></a>HttpServletRequest 接口</h4><p>HttpServletRequest 接口是 ServletRequest 接口的子接口。HttpServletRequest 接口提供了用于读取 HTTP请求中相关信息的方法。</p>
+<p>解析原始 HTTP请求的工作完全由 Servlet 容器来代劳。 Servlet 容器把 HTTP请求包装成 HttpServletRequest 对象，Servlet 只需调用该对象的各种方法，就可以获取 HTTP请求中的各种数据。</p>
+<h4 id="ServletResponse-接口"><a href="#ServletResponse-接口" class="headerlink" title="ServletResponse 接口"></a>ServletResponse 接口</h4><p>Servlet 通过 ServletResponse 对象来生成响应结果。</p>
+<ul>
+<li>getOutputStream() 方法返回一个 ServletOutputStream 对象，可以用其来输出二进制的正文数据</li>
+<li>getWriter() 方法返回一个 PrintWriter 对象，用其来输出字符串形式的正文数据</li>
+</ul>
+<h4 id="HttpServletResponse-接口"><a href="#HttpServletResponse-接口" class="headerlink" title="HttpServletResponse 接口"></a>HttpServletResponse 接口</h4><p>HttpServletResponse 接口是 ServletResponse 接口的子接口。HttpServletResponse 接口提供了与 HTTP 相关的一些方法，可以用其来设置 HTTP 响应头或向客户端写 Cookie。HttpServletResponse 接口中还定义了一些代表 HTTP响应状态代码的静态常量。</p>
+<h4 id="ServletConfig-接口"><a href="#ServletConfig-接口" class="headerlink" title="ServletConfig 接口"></a>ServletConfig 接口</h4><p>当 Servlet 容器初始化一个 Servlet 对象时，会为这个 Servlet 对象创建一个 ServletConfig 对象。其中包含了 Servlet 的初始化参数信息。Servlet 容器调用 Servlet 对象的<code>init( ServletConfig config)</code>会把 ServletConfig 对象作为参数传给 Servlet 对象，使得当前 Servlet 对象和 ServletConfig 对象建立联系。</p>
+<h4 id="ServletContext-接口"><a href="#ServletContext-接口" class="headerlink" title="ServletContext 接口"></a>ServletContext 接口</h4><p>ServletContext 是 Servlet 与 Servlet 容器 之间的进行过通信的接口。</p>
+]]></content>
+      <categories>
+        <category>Servlet</category>
       </categories>
   </entry>
   <entry>
@@ -2382,68 +2444,6 @@
 <td>Tomcat的工作目录，Tomcat 在运行时把生成的一些工作文件存放于此目录下</td>
 </tr>
 </tbody></table>
-]]></content>
-      <categories>
-        <category>Servlet</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Servlet技术（一）</title>
-    <url>/2021/08/12/Servlet%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>Servlet运行在Servlet容器中，能够为各种各样的客户请求提供相应的服务。</p>
-<span id="more"></span>
-<p>Servlet能够完成以下工作：</p>
-<ul>
-<li>动态生成HTML文档</li>
-<li>把请求转发给同一个Web应用的其他Servlet组件</li>
-<li>把请求转发给其他Web应用中的Servlet组件</li>
-<li>读取客户端的 Cookie，以及向客户端写入 Cookie </li>
-<li>访问其他服务器资源</li>
-</ul>
-<p>1、请求对象（ServletRequest 和 HttpServletRequest）：Servlet从该对象中获取来自客户端的请求信息</p>
-<p>2、响应对象（ServletResponse 和 HttpServletResponse）：Servlet通过该对象来生成响应结果</p>
-<p>3、Servlet配置对象（ServletConfig）：当容器初始化一个 Servlet 对象时，会向 Servlet 提供一个 ServletConfig 对象， Servlet通过该对象来获取初始化参数信息以及 ServletContext 对象。</p>
-<p>4、Servlet上下文对象（ServletContext）：Servlet 通过该对象来访问容器为当前 Web 应用提供的各种资源</p>
-<h3 id="Servlet-API"><a href="#Servlet-API" class="headerlink" title="Servlet API"></a>Servlet API</h3><h4 id="Servlet接口"><a href="#Servlet接口" class="headerlink" title="Servlet接口"></a>Servlet接口</h4><p>是其核心，所有Servlet类都必须实现这一接口</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig var1)</span> <span class="keyword">throws</span> ServletException</span>;<span class="comment">//该方法负责初始化 Servlet对象，容器在创建好Servlet对象后，就会调用该方法</span></span><br><span class="line"></span><br><span class="line">    <span class="function">ServletConfig <span class="title">getServletConfig</span><span class="params">()</span></span>;<span class="comment">//返回一个ServletConfig对象，其中包含了 Servlet的初始化参数信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest var1, ServletResponse var2)</span> <span class="keyword">throws</span> ServletException, IOException</span>;<span class="comment">//负责响应客户的请求，当容器接收到来自客户端要求访问特定Servlet对象的请求时，就会调用</span></span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getServletInfo</span><span class="params">()</span></span>;<span class="comment">//返回一个字符串，该字符串中包含了 Servlet的创建者，版本和版权等信息</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>;<span class="comment">//负责释放Servlet对象占用的资源，当Servlet对象结束生命周期时，会调用该方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中定义了五个方法，其中有三个都是由Servlet容器来调用的，容器会在Servlet的生命周期不同阶段调用不同方法。</p>
-<p>在Servlet中，<code>GenericServlet</code>抽象类实现了<code>Servlet接口</code>，而<code>HttpServlet抽象类</code>又继承了<code>GenericServlet抽象类</code>，当用户开发自己的Servlet时，可以选择继承<code>GenericServlet</code>或<code>HttpServlet</code></p>
-<h4 id="GenericServlet抽象类"><a href="#GenericServlet抽象类" class="headerlink" title="GenericServlet抽象类"></a>GenericServlet抽象类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.config = config;</span><br><span class="line">        <span class="keyword">this</span>.init();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>GenericServlet类实现了 Servlet接口中的 init(ServletConfig config)  初始化方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> ServletConfig config;</span><br></pre></td></tr></table></figure>
-
-<p>GenericServlet类有一个 ServletConfig类型的私有实例变量 config，当Servlet容器调用 GenericServlet的 init(ServletConfig config)  方法时，该方法使得私有实例变量config引用由容器传入的 ServletConfig对象，即使的 GenericServlet对象与一个 ServletConfig对象关联。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>GenericServlet类还自定义了一个不带参数的 init() 方法。init(ServletConfig config) 方法会调用此方法，对于 GenericServlet类的子类，如果希望覆盖父类的初始化方法，又两种方法：</p>
-<p>1）、覆盖父类的不带参数的 init() 方法</p>
-<p>2）、覆盖父类的带参数的 init(ServletConfig config) 方法，而如果希望当前 Servlet对象与 ServletConfig 对象关联，应该在该方法中先调用 super.init(config) 方法</p>
-<p>GenericServlet没有实现 service() 方法，并且其虽然实现了 destroy() 方法，但实际上什么也没有做，如果编写继承GenericServlet类的子类的话，必须实现 service() 方法，且覆盖 destroy() 方法，为待销毁的当前Servlet对象释放所占用的各种资源。</p>
-<p>GenericServlet实现了ServletConfig接口的所有方法，因此，编写继承GenericServlet类的子类，可以直接调用 ServletConfig接口中的所有方法。</p>
-<h4 id="HttpServlet类"><a href="#HttpServlet类" class="headerlink" title="HttpServlet类"></a>HttpServlet类</h4><p>HttpServlet 是 GenericServlet 类的子类，HttpServlet 类为 Servlet 接口提供了与 HTTP 协议相关的通用实现。</p>
-<p>HTTP 协议把客户请求分为多种方法，如 GET , POST 或 Delete 等。针对每种方式， HttpServlet 类都提供了响应的服务方法，如 doGet() , doPost() , doDelete() 方法等。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String method = req.getMethod();<span class="comment">// service在此获得客户端的请求方式，然后依次匹配</span></span><br><span class="line">        <span class="keyword">long</span> lastModified; </span><br><span class="line">        <span class="keyword">if</span> (method.equals(<span class="string">&quot;GET&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">if</span> (lastModified == -<span class="number">1L</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">long</span> ifModifiedSince = req.getDateHeader(<span class="string">&quot;If-Modified-Since&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (ifModifiedSince &lt; lastModified) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">                    <span class="keyword">this</span>.doGet(req, resp);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resp.setStatus(<span class="number">304</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;HEAD&quot;</span>)) &#123;</span><br><span class="line">            lastModified = <span class="keyword">this</span>.getLastModified(req);</span><br><span class="line">            <span class="keyword">this</span>.maybeSetLastModified(resp, lastModified);</span><br><span class="line">            <span class="keyword">this</span>.doHead(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPost(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;PUT&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doPut(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;DELETE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doDelete(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;OPTIONS&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doOptions(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;TRACE&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.doTrace(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            String errMsg = lStrings.getString(<span class="string">&quot;http.method_not_implemented&quot;</span>);</span><br><span class="line">            Object[] errArgs = <span class="keyword">new</span> Object[]&#123;method&#125;;</span><br><span class="line">            errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line">            resp.sendError(<span class="number">501</span>, errMsg);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest req, ServletResponse res)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (req <span class="keyword">instanceof</span> HttpServletRequest &amp;&amp; res <span class="keyword">instanceof</span> HttpServletResponse) &#123;</span><br><span class="line">           HttpServletRequest request = (HttpServletRequest)req;</span><br><span class="line">           HttpServletResponse response = (HttpServletResponse)res;</span><br><span class="line">           <span class="keyword">this</span>.service(request, response);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> ServletException(<span class="string">&quot;non-HTTP request or response&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p>HttpServlet 类实现了 Servlet 接口中的 service(ServletRequest req, ServletResponse res)，该方法实际上调用的是它的重载方法  service(HttpServletRequest req, HttpServletResponse resp) ，</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String protocol = req.getProtocol();</span><br><span class="line">        String msg = lStrings.getString(<span class="string">&quot;http.method_get_not_supported&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (protocol.endsWith(<span class="string">&quot;1.1&quot;</span>)) &#123;</span><br><span class="line">            resp.sendError(<span class="number">405</span>, msg);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            resp.sendError(<span class="number">400</span>, msg);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-<p>HttpServlet 类实现了所有的请求方法，但默认的实现中，都会向客户端返回一个错误，所以在实际开发中，一般会针对客户端的特定请求方法来覆盖 HttpServlet 类中的方法。</p>
-<h4 id="ServletRequest接口"><a href="#ServletRequest接口" class="headerlink" title="ServletRequest接口"></a>ServletRequest接口</h4><p>ServletRequest 类表示来自客户端的请求，在容器接收到客户端的请求时，会把它包装成一个 ServletRequest 对象。ServletRequest 类中包含着大量的客户端请求信息，同时 ServletRequest 接口还提供了一系列方法来获取 对象中的客户端访问信息。</p>
-<p>同时，ServletRequest 接口还定义了一组用于在请求范围内获取共享数据的方法。</p>
-<h4 id="HttpServletRequest-接口"><a href="#HttpServletRequest-接口" class="headerlink" title="HttpServletRequest 接口"></a>HttpServletRequest 接口</h4><p>HttpServletRequest 接口是 ServletRequest 接口的子接口。HttpServletRequest 接口提供了用于读取 HTTP请求中相关信息的方法。</p>
-<p>解析原始 HTTP请求的工作完全由 Servlet 容器来代劳。 Servlet 容器把 HTTP请求包装成 HttpServletRequest 对象，Servlet 只需调用该对象的各种方法，就可以获取 HTTP请求中的各种数据。</p>
-<h4 id="ServletResponse-接口"><a href="#ServletResponse-接口" class="headerlink" title="ServletResponse 接口"></a>ServletResponse 接口</h4><p>Servlet 通过 ServletResponse 对象来生成响应结果。</p>
-<ul>
-<li>getOutputStream() 方法返回一个 ServletOutputStream 对象，可以用其来输出二进制的正文数据</li>
-<li>getWriter() 方法返回一个 PrintWriter 对象，用其来输出字符串形式的正文数据</li>
-</ul>
-<h4 id="HttpServletResponse-接口"><a href="#HttpServletResponse-接口" class="headerlink" title="HttpServletResponse 接口"></a>HttpServletResponse 接口</h4><p>HttpServletResponse 接口是 ServletResponse 接口的子接口。HttpServletResponse 接口提供了与 HTTP 相关的一些方法，可以用其来设置 HTTP 响应头或向客户端写 Cookie。HttpServletResponse 接口中还定义了一些代表 HTTP响应状态代码的静态常量。</p>
-<h4 id="ServletConfig-接口"><a href="#ServletConfig-接口" class="headerlink" title="ServletConfig 接口"></a>ServletConfig 接口</h4><p>当 Servlet 容器初始化一个 Servlet 对象时，会为这个 Servlet 对象创建一个 ServletConfig 对象。其中包含了 Servlet 的初始化参数信息。Servlet 容器调用 Servlet 对象的<code>init( ServletConfig config)</code>会把 ServletConfig 对象作为参数传给 Servlet 对象，使得当前 Servlet 对象和 ServletConfig 对象建立联系。</p>
-<h4 id="ServletContext-接口"><a href="#ServletContext-接口" class="headerlink" title="ServletContext 接口"></a>ServletContext 接口</h4><p>ServletContext 是 Servlet 与 Servlet 容器 之间的进行过通信的接口。</p>
 ]]></content>
       <categories>
         <category>Servlet</category>
@@ -4494,50 +4494,6 @@
       </categories>
   </entry>
   <entry>
-    <title>StringBuffer,包装类</title>
-    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
-
-<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
-<p>2、StringBuffer是一个类</p>
-<p>3、底层是一个byte[ ] 数组</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
-
-<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
-<li><ul>
-<li><ul>
-<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
-<p>byte                              java.Lang.Byte （父类Number）         </p>
-<p>short                            java.Lang.Short（父类Number）</p>
-<p>int                                 java.Lang.Integer（父类Number）</p>
-<p>Long                             java.Lang.Long（父类Number）</p>
-<p>float                              java.Lang.Float（父类Number）</p>
-<p>double                         java.Lang.Double（父类Number）</p>
-<p>boolean                       java.Lang.Boolean（父类Object）</p>
-<p>char                              java.Lang.Character（父类Object）</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Arrays工具类，String字符串的存储原理，String类的常用构造方法</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20023%EF%BC%88Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81String%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86%E3%80%81String%E7%B1%BB%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%89/</url>
     <content><![CDATA[<h2 id="Arrays工具类的使用"><a href="#Arrays工具类的使用" class="headerlink" title="Arrays工具类的使用"></a>Arrays工具类的使用</h2><p>SUN公司已经写好了一个数组工具类</p>
@@ -4751,6 +4707,50 @@
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s4=String.valueOf(<span class="keyword">new</span> Sum());</span><br><span class="line">        System.out.println(s4);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sum</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">StringTest.Sum@1b6d3586<span class="comment">//</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>StringBuffer,包装类</title>
+    <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20025%EF%BC%88String%E7%B1%BB%E4%B8%AD%E7%9A%84StringBufffer%E8%BF%9B%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E3%80%81StringBuilder%E5%92%8CStringBuffer%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89%E3%80%81%E5%85%AB%E7%A7%8D%E5%8C%85%E8%A3%85%E7%B1%BB%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="String类中的StringBufffer进行字符串连接"><a href="#String类中的StringBufffer进行字符串连接" class="headerlink" title="String类中的StringBufffer进行字符串连接"></a>String类中的StringBufffer进行字符串连接</h2><span id="more"></span>
+
+<p>1、如果用加号来拼接，因为java中字符串是不可变的，所以每一次拼接都会产生新字符串。会占用大量内存，造成内存空间的浪费</p>
+<p>2、StringBuffer是一个类</p>
+<p>3、底层是一个byte[ ] 数组</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuffer()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串缓冲区，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        StringBuffer StringBuffer01=new StringBuffer(&quot;123&quot;);</span><br><span class="line">        StringBuffer01.append(24);</span><br><span class="line">        StringBuffer01.append(&quot;ffzsl&quot;);</span><br><span class="line">        StringBuffer01.append(true);</span><br><span class="line">        System.out.println(StringBuffer01);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">12324ffzsltrue</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">        StringBuffer s2=<span class="keyword">new</span> StringBuffer(s1);</span><br><span class="line">        s2.append(<span class="string">&quot;ffyzsl&quot;</span>);</span><br><span class="line">        System.out.println(s1);</span><br><span class="line">        System.out.println(s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br><span class="line">123ffyzsl</span><br></pre></td></tr></table></figure>
+
+<h2 id="StringBuilder和StringBuffer的区别"><a href="#StringBuilder和StringBuffer的区别" class="headerlink" title="StringBuilder和StringBuffer的区别"></a>StringBuilder和StringBuffer的区别</h2><ul>
+<li><ul>
+<li><ul>
+<li>```<br>public StringBuilder()<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">      构造一个没有字符的字符串构建器，初始容量为16个字符。 </span><br><span class="line"></span><br><span class="line">StringBuffer中的方法都有：synchronized关键字修饰，表示StringBuffer在多线程环境下运行是安全的</span><br><span class="line"></span><br><span class="line">## 包装类存在的意义</span><br><span class="line"></span><br><span class="line">1、java为8中基本数据类型准备了8中包装类型，8中包装类属于引用数据类型，父类是Object。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    MyInt a=new MyInt(123);</span><br><span class="line">   doSome(a);//因为调用doSome方法时需要传一个数字进去，但数字属于基本数据类型，而doSome()方法参数的类型时Object。所以doSome()方法无法接受基本数据类型，可以传一个数字对应的包装类进去</span><br><span class="line">&#125;</span><br><span class="line">public static void doSome(Object obj)&#123;</span><br><span class="line">    System.out.print(obj);</span><br><span class="line">&#125;</span><br><span class="line">123</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInt</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInt</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value=value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八种包装类"><a href="#八种包装类" class="headerlink" title="八种包装类"></a>八种包装类</h2><p>基本数据类型              包装类型</p>
+<p>byte                              java.Lang.Byte （父类Number）         </p>
+<p>short                            java.Lang.Short（父类Number）</p>
+<p>int                                 java.Lang.Integer（父类Number）</p>
+<p>Long                             java.Lang.Long（父类Number）</p>
+<p>float                              java.Lang.Float（父类Number）</p>
+<p>double                         java.Lang.Double（父类Number）</p>
+<p>boolean                       java.Lang.Boolean（父类Object）</p>
+<p>char                              java.Lang.Character（父类Object）</p>
+]]></content>
       <categories>
         <category>javaSE</category>
       </categories>
@@ -4979,39 +4979,6 @@
       </categories>
   </entry>
   <entry>
-    <title>集合概述</title>
-    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
-<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
-<span id="more"></span>
-
-<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
-
-<p>集合在<code>java.util.*</code></p>
-<p>在java中集合分为两大类：</p>
-<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
-<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
-<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
-<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
-<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
-<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
-<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
-<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
-<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
-<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
-<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
-<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
-<p><code>HashMap</code>：底层是哈希表</p>
-<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
-<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
-<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
-]]></content>
-      <categories>
-        <category>javaSE</category>
-      </categories>
-  </entry>
-  <entry>
     <title>finally子句，自定义异常，更新练习</title>
     <url>/2021/07/03/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20031%EF%BC%88finally%E5%AD%90%E5%8F%A5%E7%9A%84%E4%BD%BF%E7%94%A8%E3%80%81final%E3%80%81finally%E5%92%8Cfinalize%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81java%E4%B8%AD%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E3%80%81%E4%BB%A5%E5%8F%8A%E7%94%A8%E5%BC%82%E5%B8%B8%E6%9D%A5%E6%9B%B4%E6%96%B0%E6%95%B0%E7%BB%84%E6%A8%A1%E6%8B%9F%E6%A0%88%EF%BC%89/</url>
     <content><![CDATA[<h2 id="finally子句的使用"><a href="#finally子句的使用" class="headerlink" title="finally子句的使用"></a>finally子句的使用</h2><p>关于try..catch中的finally子句：</p>
@@ -5065,6 +5032,39 @@
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserService userService =<span class="keyword">new</span> UserService();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.register(<span class="string">&quot;zhangsan&quot;</span>,<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalArgsException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>javaSE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>集合概述</title>
+    <url>/2021/07/04/%E8%BF%9B%E9%98%B6%E7%AF%87%20Day%20032%EF%BC%88%E9%9B%86%E5%90%88%E6%A6%82%E8%BF%B0%E3%80%81%E9%9B%86%E5%90%88%E7%BB%A7%E6%89%BF%E5%9B%BE%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="集合概述"><a href="#集合概述" class="headerlink" title="集合概述"></a>集合概述</h2><p>1、集合实际上就是就是一个 容器，可以来容纳其他类型的数据。</p>
+<p>2、集合不能直接存储基本数据类型和java对象，集合当中存储的都是java对象的内存地址（引用）。</p>
+<span id="more"></span>
+
+<p>3、在java中每一个不同的集合，底层会对应不同 的数据结构，往不同的集合中存储元素，等于将数据放到了不同的数据结构中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> ArrayList();<span class="comment">//创建一个集合，底层是数组结构</span></span><br><span class="line"><span class="keyword">new</span> LinkeList();<span class="comment">//创建一个集合对象，底层是链表</span></span><br><span class="line"><span class="keyword">new</span> TreeSet();<span class="comment">//创建一个集合对象，底层是二叉树</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+
+<p>集合在<code>java.util.*</code></p>
+<p>在java中集合分为两大类：</p>
+<p>一类是单个方式存储元素：这一类集合中超级父接口：<code>java.util.Collection</code>;</p>
+<p>一类是以键值对的方式存储元素：以键值对（key–value）的方式存储元素，这一类集合中超级父接口:<code>java.util.Map</code></p>
+<p><code>java.util</code>包主要提供了以下三种类型的集合：<br>    1、<code>List</code>：一种有序列表的集合<br>    2、<code>Set</code>：一种保证没有重复元素的集合<br>    3、<code>Map</code>：一种通过键值（key-value）查找的映射表集合</p>
+<p>所有集合继承Iterator的含义是，所有集合都是可迭代的</p>
+<p>list集合存储元素的特点：有序可重复，存储的元素有下标。有序实际上是说存进去是这个顺序，取出来还是这个顺序，这里的顺序不是说按照大小顺序，有序是因为list集合有下标，下标从零开始</p>
+<p><code>ArrayList</code>集合底层采用了数组这种数据结构，是非线程安全的 </p>
+<p><code>LinkedList</code>集合底层采用了双向链表式数据结构</p>
+<p><code>Vector</code>集合底层采用了数组这种数据结构，是线程安全的，其所有方法都有<code>synchronzied</code>关键字修饰，所以线程安全，但是效率较低，现在保证线程安全有别的方案，所以Vector使用较少</p>
+<p><code>set</code>集合存储元素的特点：无序不可重复，无序表示存进去和取出来的顺序不一定相等，set集合中元素没有下标，而且set集合中的元素不能重复</p>
+<p><code>HashSet</code>集合在new的时候，底层实际上new了一个<code>HashMap</code>集合，向<code>HashSet</code>集合中存储元素，实际上是存储到<code>HashMap</code>集合中，其是一个哈希表数据结构</p>
+<p><code>SortedSet</code>集合存储元素的特点；由于继承了Set集合，所以他的特点也是无序不可重复，但是放在<code>SortedSet</code>集合中元素可以自动排序，我们称为可排序集合，放到该集合中的元素时自动按照大小排序的</p>
+<p><code>TreeSet</code>，new一个<code>TreeSet</code>集合底层实际上是<code>TreeMap</code>集合，往<code>TreeMap</code>集合存放数据时，实际上是将数据放到了<code>TreeMap</code>集合中，<code>TreeMap</code>集合底层采用了二叉树数据结构</p>
+<p><code>HashMap</code>：底层是哈希表</p>
+<p><code>Hashtable</code>：底层也是哈希表，只不过线程安全的，效率较低，使用较少</p>
+<p><code>Properties</code>：线程安全的，并且<code>key</code>和<code>value</code>只能存储字符串String</p>
+<p><code>TreeMap</code>：底层是二叉树，<code>TreeMap</code>集合的<code>key</code>可以自动按照大小顺序排序</p>
 ]]></content>
       <categories>
         <category>javaSE</category>
@@ -6720,8 +6720,10 @@
   <entry>
     <title>Echarts练习</title>
     <url>/2022/04/02/Echarts%E7%BB%83%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="Echarts-练习"><a href="#Echarts-练习" class="headerlink" title="Echarts 练习"></a>Echarts 练习</h1><h2 id="建立数据库"><a href="#建立数据库" class="headerlink" title="建立数据库"></a>建立数据库</h2><ul>
-<li>打开 MySQL，或者使用 Navicat for MySQL<span id="more"></span></li>
+    <content><![CDATA[<h1 id="Echarts-练习"><a href="#Echarts-练习" class="headerlink" title="Echarts 练习"></a>Echarts 练习</h1><h2 id="建立数据库"><a href="#建立数据库" class="headerlink" title="建立数据库"></a>建立数据库</h2><span id="more"></span>
+
+<ul>
+<li>打开 MySQL，或者使用 Navicat for MySQL</li>
 <li>建立 <code> school_information</code> 数据库<ul>
 <li>MySQL 语句：<code>create database school_information</code></li>
 </ul>
