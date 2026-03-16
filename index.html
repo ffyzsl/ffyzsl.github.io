@@ -151,6 +151,305 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/03/16/Go-%E9%9B%86%E5%90%88-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/16/Go-%E9%9B%86%E5%90%88-3/" class="post-title-link" itemprop="url">Go 集合(3)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-03-16 18:51:31" itemprop="dateCreated datePublished" datetime="2026-03-16T18:51:31+08:00">2026-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/03/16/Go-%E9%9B%86%E5%90%88-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/16/Go-%E9%9B%86%E5%90%88-2/" class="post-title-link" itemprop="url">Go 集合(2)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-03-16 18:48:39 / 修改时间：18:50:55" itemprop="dateCreated datePublished" datetime="2026-03-16T18:48:39+08:00">2026-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-Range"><a href="#1-Range" class="headerlink" title="1. Range"></a>1. Range</h2><p><code>range</code> 是Go语言中用于遍历数组、切片、Map、字符串和通道（Channel）的关键字。看似简单，但这里藏着Go语言最经典的面试坑。</p>
+<h3 id="核心机制"><a href="#核心机制" class="headerlink" title="核心机制"></a>核心机制</h3><ul>
+<li>  <strong>值拷贝</strong>：<code>for i, v := range slice</code> 中，这个 <code>v</code> 是切片元素的<strong>副本</strong>。</li>
+<li>  <strong>地址复用</strong>（Go 1.22之前）：在Go 1.22版本之前，<code>v</code> 的内存地址在整个循环中是不变的。虽然Go 1.22修复了闭包捕获的问题，但<strong>值拷贝</strong>的特性依然存在。</li>
+</ul>
+<h3 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    nums := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 坑：试图通过 v 修改原数组</span></span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        v = v + <span class="number">100</span> <span class="comment">// 只是修改了副本 v，原切片 nums 纹丝不动</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;After modify v:&quot;</span>, nums) <span class="comment">// 输出 [10 20 30]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正确做法：通过索引修改</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        nums[i] = nums[i] + <span class="number">100</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;After modify index:&quot;</span>, nums) <span class="comment">// 输出 [110 120 130]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>面试官爱问</strong>：<br>Q: 在 range 遍历切片时，我向切片 append 元素，循环会死循环吗？<br>A: 不会。因为 range 在开始遍历前，会先获取切片的长度 len，循环次数在开始时就已经决定了。</p>
+</blockquote>
+<hr>
+<h2 id="2-多维切片-Multi-dimensional-Slice"><a href="#2-多维切片-Multi-dimensional-Slice" class="headerlink" title="2. 多维切片 (Multi-dimensional Slice)"></a>2. 多维切片 (Multi-dimensional Slice)</h2><p>和多维数组不同，多维切片是“切片的切片”。这意味着每一行的长度可以不一样（锯齿状）。</p>
+<h3 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 声明一个二维切片</span></span><br><span class="line">    board := [][]<span class="keyword">string</span>&#123;</span><br><span class="line">        &#123;<span class="string">&quot;_&quot;</span>, <span class="string">&quot;_&quot;</span>, <span class="string">&quot;_&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;_&quot;</span>, <span class="string">&quot;_&quot;</span>, <span class="string">&quot;_&quot;</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改元素</span></span><br><span class="line">    board[<span class="number">0</span>][<span class="number">0</span>] = <span class="string">&quot;X&quot;</span></span><br><span class="line">    board[<span class="number">1</span>][<span class="number">2</span>] = <span class="string">&quot;O&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 每一行其实是一个独立的切片</span></span><br><span class="line">    board = <span class="built_in">append</span>(board, []<span class="keyword">string</span>&#123;<span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>&#125;) <span class="comment">// 第三行只有2个元素</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(board)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-Map-映射-哈希表"><a href="#3-Map-映射-哈希表" class="headerlink" title="3. Map (映射/哈希表)"></a>3. Map (映射/哈希表)</h2><p>Map是Go语言中最强大的键值对结构。它是<strong>引用类型</strong>。</p>
+<h3 id="核心规则（背下来！）"><a href="#核心规则（背下来！）" class="headerlink" title="核心规则（背下来！）"></a>核心规则（背下来！）</h3><ol>
+<li> <strong>无序性</strong>：Map的遍历顺序是<strong>随机的</strong>！不要依赖遍历顺序。</li>
+<li> <strong>Key的限制</strong>：Key必须是<strong>可比较</strong>的类型（如int, string, bool, 指针, 结构体）。<strong>切片、函数、Map不能做Key</strong>。</li>
+<li> <strong>零值陷阱</strong>：声明但未初始化的Map是 <code>nil</code>。<strong>读取 nil map 返回零值（安全），但向 nil map 写入会导致 panic（崩溃）</strong>。</li>
+</ol>
+<h3 id="代码演示-2"><a href="#代码演示-2" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1. 初始化 (推荐用 make)</span></span><br><span class="line">    m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>) </span><br><span class="line">    m[<span class="string">&quot;age&quot;</span>] = <span class="number">18</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 字面量初始化</span></span><br><span class="line">    m2 := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Go&quot;</span>,</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;Language&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 这里的坑：nil map</span></span><br><span class="line">    <span class="keyword">var</span> mNil <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line">    <span class="comment">// mNil[&quot;key&quot;] = 1 // 报错：panic: assignment to entry in nil map</span></span><br><span class="line">    </span><br><span class="line">    fmt.Println(m, m2, mNil)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 查找键是否存在 (Comma-ok 模式)</span></span><br><span class="line">    score, ok := m[<span class="string">&quot;score&quot;</span>]</span><br><span class="line">    <span class="keyword">if</span> ok &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;存在，分数是:&quot;</span>, score)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;不存在，score是默认零值:&quot;</span>, score) <span class="comment">// 0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-遍历-Map"><a href="#4-遍历-Map" class="headerlink" title="4. 遍历 Map"></a>4. 遍历 Map</h2><p>记住：每次运行，输出的顺序可能都不一样。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: <span class="string">&quot;apple&quot;</span>,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: <span class="string">&quot;banana&quot;</span>,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: <span class="string">&quot;cherry&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> k, v := <span class="keyword">range</span> m &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Key: %s, Value: %s\n&quot;</span>, k, v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-Map-的删除和清空"><a href="#5-Map-的删除和清空" class="headerlink" title="5. Map 的删除和清空"></a>5. Map 的删除和清空</h2><h3 id="删除单个键值对"><a href="#删除单个键值对" class="headerlink" title="删除单个键值对"></a>删除单个键值对</h3><p>使用内置函数 <code>delete(map, key)</code>。</p>
+<ul>
+<li>  如果 key 存在，删除之。</li>
+<li>  如果 key 不存在，<strong>什么都不发生，也不会报错</strong>。</li>
+</ul>
+<h3 id="清空-Map"><a href="#清空-Map" class="headerlink" title="清空 Map"></a>清空 Map</h3><ul>
+<li>  <strong>Go 1.21 之前</strong>：没有直接清空的函数。通常做法是 <code>m = make(map[...])</code> 创建一个新的，旧的交给GC回收；或者遍历删除（效率低）。</li>
+<li>  <strong>Go 1.21 之后</strong>：新增了内置函数 <code>clear(m)</code>，效率极高。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>&#123;<span class="string">&quot;a&quot;</span>: <span class="number">1</span>, <span class="string">&quot;b&quot;</span>: <span class="number">2</span>, <span class="string">&quot;c&quot;</span>: <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除</span></span><br><span class="line">    <span class="built_in">delete</span>(m, <span class="string">&quot;a&quot;</span>)</span><br><span class="line">    <span class="built_in">delete</span>(m, <span class="string">&quot;z&quot;</span>) <span class="comment">// 删除不存在的key，安全</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(<span class="string">&quot;Deleted:&quot;</span>, m)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清空 (Go 1.21+)</span></span><br><span class="line">    <span class="comment">// clear(m) </span></span><br><span class="line">    <span class="comment">// fmt.Println(&quot;Cleared:&quot;, m) // map[]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-Map-的多键索引-Multi-key"><a href="#6-Map-的多键索引-Multi-key" class="headerlink" title="6. Map 的多键索引 (Multi-key)"></a>6. Map 的多键索引 (Multi-key)</h2><p>Go不支持 <code>map[k1, k2]val</code> 这种语法。如果你需要用两个ID来确定一个值，怎么办？</p>
+<h3 id="方案一：嵌套-Map-不推荐"><a href="#方案一：嵌套-Map-不推荐" class="headerlink" title="方案一：嵌套 Map (不推荐)"></a>方案一：嵌套 Map (不推荐)</h3><p><code>map[string]map[string]int</code>。初始化麻烦，每一层都要检查 nil。</p>
+<h3 id="方案二：结构体作为-Key-推荐"><a href="#方案二：结构体作为-Key-推荐" class="headerlink" title="方案二：结构体作为 Key (推荐)"></a>方案二：结构体作为 Key (推荐)</h3><p>这是Go语言的一个妙招。因为结构体只要字段可比较，它本身就是可比较的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个结构体作为 Key</span></span><br><span class="line"><span class="keyword">type</span> Key <span class="keyword">struct</span> &#123;</span><br><span class="line">    Region <span class="keyword">string</span></span><br><span class="line">    ID     <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 直接用结构体做 Key</span></span><br><span class="line">    data := <span class="built_in">make</span>(<span class="keyword">map</span>[Key]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">    data[Key&#123;<span class="string">&quot;CN&quot;</span>, <span class="number">1001</span>&#125;] = <span class="string">&quot;张三&quot;</span></span><br><span class="line">    data[Key&#123;<span class="string">&quot;US&quot;</span>, <span class="number">1001</span>&#125;] = <span class="string">&quot;John&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询</span></span><br><span class="line">    fmt.Println(data[Key&#123;<span class="string">&quot;CN&quot;</span>, <span class="number">1001</span>&#125;])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="7-sync-Map-并发安全-Map"><a href="#7-sync-Map-并发安全-Map" class="headerlink" title="7. sync.Map (并发安全 Map)"></a>7. sync.Map (并发安全 Map)</h2><p>这是面试的高频考点。</p>
+<h3 id="为什么需要它？"><a href="#为什么需要它？" class="headerlink" title="为什么需要它？"></a>为什么需要它？</h3><p>标准的 <code>map</code> <strong>不是并发安全的</strong>！<br>如果在多个 goroutine 中，一个在读，一个在写（或者两个都在写），程序会直接 <strong>Panic</strong> 崩溃（<code>fatal error: concurrent map writes</code>）。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><ol>
+<li> <strong>加锁</strong>：使用 <code>sync.RWMutex</code> 保护标准 map（最常用）。</li>
+<li> <strong>sync.Map</strong>：Go语言自带的并发安全 map。</li>
+</ol>
+<h3 id="sync-Map-特点"><a href="#sync-Map-特点" class="headerlink" title="sync.Map 特点"></a>sync.Map 特点</h3><ul>
+<li>  <strong>开箱即用</strong>：不用 make，直接 <code>var m sync.Map</code>。</li>
+<li>  <strong>性能场景</strong>：适合<strong>读多写少</strong>的场景。如果写操作非常频繁，性能不如“标准Map + 锁”。</li>
+<li>  <strong>操作方式</strong>：不能用 <code>m[k]</code>，必须用特定方法。</li>
+</ul>
+<h3 id="代码演示-3"><a href="#代码演示-3" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> sm sync.Map</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 存储 Store</span></span><br><span class="line">    sm.Store(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;Go大师&quot;</span>)</span><br><span class="line">    sm.Store(<span class="string">&quot;age&quot;</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 读取 Load</span></span><br><span class="line">    val, ok := sm.Load(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> ok &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;Name:&quot;</span>, val) <span class="comment">// 返回的是 interface&#123;&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 删除 Delete</span></span><br><span class="line">    sm.Delete(<span class="string">&quot;age&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 遍历 Range (需要传入一个回调函数)</span></span><br><span class="line">    sm.Range(<span class="function"><span class="keyword">func</span><span class="params">(key, value <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Key: %v, Val: %v\n&quot;</span>, key, value)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span> <span class="comment">// 返回 true 继续遍历，false 停止</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>面试官总结</strong>：</p>
+<ul>
+<li>  普通 Map 读写不安全，并发写必死。</li>
+<li>  解决并发：首选 <code>Mutex</code> + <code>map</code>（通用性好），特定场景（读多写少、键值对不相交）用 <code>sync.Map</code>。</li>
+<li>  Map 的 Key 不能是切片。</li>
+<li>  Map 遍历顺序是随机的。</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/03/16/Go-%E9%9B%86%E5%90%88-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/16/Go-%E9%9B%86%E5%90%88-1/" class="post-title-link" itemprop="url">Go 集合(1)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-03-16 18:43:25 / 修改时间：18:45:35" itemprop="dateCreated datePublished" datetime="2026-03-16T18:43:25+08:00">2026-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-数组-Array"><a href="#1-数组-Array" class="headerlink" title="1. 数组 (Array)"></a>1. 数组 (Array)</h2><p>在Go中，数组是<strong>值类型</strong>（Value Type），这一点至关重要。</p>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<li>  <strong>长度固定</strong>：声明时长度是多少，就是多少，不能动态扩容。</li>
+<li>  <strong>类型包含长度</strong>：<code>[3]int</code> 和 <code>[4]int</code> 是完全不同的两种数据类型，不能互相赋值。</li>
+<li>  <strong>值传递</strong>：当你把一个数组传递给函数时，Go会<strong>拷贝整个数组</strong>。如果数组很大，这会非常消耗内存。</li>
+</ul>
+<h3 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1. 声明方式</span></span><br><span class="line">    <span class="keyword">var</span> a [<span class="number">3</span>]<span class="keyword">int</span>             <span class="comment">// 默认初始化为 [0 0 0]</span></span><br><span class="line">    b := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;     <span class="comment">// 指定值</span></span><br><span class="line">    c := [...]<span class="keyword">int</span>&#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;   <span class="comment">// 让编译器自动推断长度</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(a, b, c)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 数组是值类型（面试重点！）</span></span><br><span class="line">    original := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;</span><br><span class="line">    copyArr := original <span class="comment">// 这里发生了内存拷贝</span></span><br><span class="line">    copyArr[<span class="number">0</span>] = <span class="number">999</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(<span class="string">&quot;Original:&quot;</span>, original) <span class="comment">// 输出: [1 1 1] -&gt; 原数组没变！</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Copy:&quot;</span>, copyArr)      <span class="comment">// 输出: [999 1 1]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>面试官爱问</strong>：<br>Q: 我把一个大数组传给函数处理，为什么性能很差？<br>A: 因为数组是值传递，传参时发生了全量拷贝。应该改用切片（Slice）或者传递数组指针。</p>
+</blockquote>
+<hr>
+<h2 id="2-多维数组"><a href="#2-多维数组" class="headerlink" title="2. 多维数组"></a>2. 多维数组</h2><p>Go的多维数组语法比较直观，但在实际开发（尤其是Web开发）中用得不多，通常用于算法题或矩阵运算。</p>
+<h3 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 声明一个 2x3 的二维数组</span></span><br><span class="line">    <span class="keyword">var</span> grid [<span class="number">2</span>][<span class="number">3</span>]<span class="keyword">int</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化</span></span><br><span class="line">    points := [<span class="number">2</span>][<span class="number">2</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">        &#123;<span class="number">1</span>, <span class="number">2</span>&#125;,</span><br><span class="line">        &#123;<span class="number">3</span>, <span class="number">4</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(grid)</span><br><span class="line">    fmt.Println(points)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 遍历</span></span><br><span class="line">    <span class="keyword">for</span> i, row := <span class="keyword">range</span> points &#123;</span><br><span class="line">        <span class="keyword">for</span> j, val := <span class="keyword">range</span> row &#123;</span><br><span class="line">            fmt.Printf(<span class="string">&quot;(%d, %d) = %d\n&quot;</span>, i, j, val)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-切片-Slice-——-重中之重"><a href="#3-切片-Slice-——-重中之重" class="headerlink" title="3. 切片 (Slice) —— 重中之重"></a>3. 切片 (Slice) —— 重中之重</h2><p>切片是Go中最常用的数据结构。它本质上是对数组的一个<strong>引用（Reference）</strong>。</p>
+<h3 id="核心结构（背下来！）"><a href="#核心结构（背下来！）" class="headerlink" title="核心结构（背下来！）"></a>核心结构（背下来！）</h3><p>切片在运行时是一个结构体，包含三个字段：</p>
+<ol>
+<li> <strong>Pointer</strong>: 指向底层数组中切片开始位置的指针。</li>
+<li> <strong>Length (len)</strong>: 切片当前包含的元素个数。</li>
+<li> <strong>Capacity (cap)</strong>: 从切片开始位置到底层数组末尾的元素个数。</li>
+</ol>
+<h3 id="代码演示-2"><a href="#代码演示-2" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1. 使用 make 创建 (类型, len, cap)</span></span><br><span class="line">    s1 := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">3</span>, <span class="number">5</span>) </span><br><span class="line">    fmt.Printf(<span class="string">&quot;s1: len=%d cap=%d val=%v\n&quot;</span>, <span class="built_in">len</span>(s1), <span class="built_in">cap</span>(s1), s1)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 从数组切分</span></span><br><span class="line">    arr := [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>&#125;</span><br><span class="line">    s2 := arr[<span class="number">1</span>:<span class="number">3</span>] <span class="comment">// 左闭右开区间，取索引1和2</span></span><br><span class="line">    <span class="comment">// s2 的值是 [20, 30]</span></span><br><span class="line">    <span class="comment">// s2 的 len 是 2</span></span><br><span class="line">    <span class="comment">// s2 的 cap 是 4 (从索引1开始，到数组末尾：20, 30, 40, 50)</span></span><br><span class="line">    </span><br><span class="line">    fmt.Printf(<span class="string">&quot;s2: len=%d cap=%d\n&quot;</span>, <span class="built_in">len</span>(s2), <span class="built_in">cap</span>(s2))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 坑：修改切片会影响底层数组</span></span><br><span class="line">    s2[<span class="number">0</span>] = <span class="number">999</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Arr changed:&quot;</span>, arr) <span class="comment">// arr 变成了 [10, 999, 30, 40, 50]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>面试官爱问</strong>：<br>Q: <code>nil</code> 切片和空切片（Empty Slice）有什么区别？<br>A: </p>
+<ul>
+<li>  <code>var s []int</code> 是 nil 切片（底层指针为 nil）。</li>
+<li>  <code>s := []int&#123;&#125;</code> 或 <code>make([]int, 0)</code> 是空切片（底层指针不为 nil，指向一个zerobase地址）。</li>
+<li>  但在JSON序列化时，nil切片变成 <code>null</code>，空切片变成 <code>[]</code>。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="4-append-与-扩容机制"><a href="#4-append-与-扩容机制" class="headerlink" title="4. append() 与 扩容机制"></a>4. append() 与 扩容机制</h2><p><code>append</code> 用于向切片追加元素。当底层数组容量不够时，Go会创建一个新的、更大的数组，并将旧数据拷贝过去。</p>
+<h3 id="扩容策略（面试必问）"><a href="#扩容策略（面试必问）" class="headerlink" title="扩容策略（面试必问）"></a>扩容策略（面试必问）</h3><ul>
+<li>  <strong>Go 1.18之前</strong>：容量 &lt; 1024 时，每次翻倍；&gt;= 1024 时，每次增加 25%。</li>
+<li>  <strong>Go 1.18之后</strong>：算法变得更平滑，不再是严格的翻倍，但大致逻辑依然是：<strong>小切片翻倍，大切片渐进式增长</strong>。</li>
+</ul>
+<h3 id="代码演示-3"><a href="#代码演示-3" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> s []<span class="keyword">int</span> <span class="comment">// nil 切片</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 1. 基本追加</span></span><br><span class="line">    s = <span class="built_in">append</span>(s, <span class="number">1</span>)       <span class="comment">// 必须把结果赋值回 s，因为可能会发生扩容导致地址变化</span></span><br><span class="line">    s = <span class="built_in">append</span>(s, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) <span class="comment">// 追加多个</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 追加另一个切片 (注意那个 ...)</span></span><br><span class="line">    s2 := []<span class="keyword">int</span>&#123;<span class="number">100</span>, <span class="number">200</span>&#125;</span><br><span class="line">    s = <span class="built_in">append</span>(s, s2...) </span><br><span class="line">    </span><br><span class="line">    fmt.Println(s)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 扩容观察</span></span><br><span class="line">    s3 := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>, <span class="number">2</span>)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Addr: %p, Cap: %d\n&quot;</span>, s3, <span class="built_in">cap</span>(s3))</span><br><span class="line">    </span><br><span class="line">    s3 = <span class="built_in">append</span>(s3, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Addr: %p, Cap: %d\n&quot;</span>, s3, <span class="built_in">cap</span>(s3)) <span class="comment">// 地址可能不变</span></span><br><span class="line">    </span><br><span class="line">    s3 = <span class="built_in">append</span>(s3, <span class="number">3</span>) <span class="comment">// 此时容量不够(2-&gt;3)，触发扩容</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Addr: %p, Cap: %d\n&quot;</span>, s3, <span class="built_in">cap</span>(s3)) <span class="comment">// 地址一定变了，Cap通常变成4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-切片复制-Copy"><a href="#5-切片复制-Copy" class="headerlink" title="5. 切片复制 (Copy)"></a>5. 切片复制 (Copy)</h2><p>由于切片是引用，简单的 <code>s1 = s2</code> 只是拷贝了指针、长度和容量，它们依然共享底层数组。如果你想彻底分离，必须用 <code>copy</code>。</p>
+<h3 id="核心规则"><a href="#核心规则" class="headerlink" title="核心规则"></a>核心规则</h3><p><code>copy(dst, src)</code> 只会复制 <code>min(len(dst), len(src))</code> 个元素。也就是说，<strong>目标切片必须先分配好足够的长度</strong>。</p>
+<h3 id="代码演示-4"><a href="#代码演示-4" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    src := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 错误做法：dst 长度为0，什么都拷不进去</span></span><br><span class="line">    dstFail := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">copy</span>(dstFail, src)</span><br><span class="line">    fmt.Println(<span class="string">&quot;Fail:&quot;</span>, dstFail) <span class="comment">// []</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正确做法</span></span><br><span class="line">    dstOk := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="built_in">len</span>(src)) <span class="comment">// 提前分配好空间</span></span><br><span class="line">    n := <span class="built_in">copy</span>(dstOk, src)</span><br><span class="line">    </span><br><span class="line">    dstOk[<span class="number">0</span>] = <span class="number">999</span> <span class="comment">// 修改副本</span></span><br><span class="line">    </span><br><span class="line">    fmt.Println(<span class="string">&quot;Copied count:&quot;</span>, n)</span><br><span class="line">    fmt.Println(<span class="string">&quot;Src:&quot;</span>, src)   <span class="comment">// [1 2 3] 原封不动</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Dst:&quot;</span>, dstOk) <span class="comment">// [999 2 3]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-从切片删除元素"><a href="#6-从切片删除元素" class="headerlink" title="6. 从切片删除元素"></a>6. 从切片删除元素</h2><p>Go语言没有专门的 <code>delete</code> 关键字用于切片（Map才有）。我们需要利用 <code>append</code> 的特性来“拼凑”出删除的效果。</p>
+<h3 id="核心技巧"><a href="#核心技巧" class="headerlink" title="核心技巧"></a>核心技巧</h3><p>利用切片的截取和 <code>append</code> 的变长参数，将“要删除元素后面的部分”追加到“要删除元素前面的部分”。</p>
+<h3 id="代码演示-5"><a href="#代码演示-5" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 假设我们要删除索引为 2 的元素 (即数字 30)</span></span><br><span class="line">    s := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>&#125;</span><br><span class="line">    index := <span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 公式：s = append(s[:i], s[i+1:]...)</span></span><br><span class="line">    s = <span class="built_in">append</span>(s[:index], s[index+<span class="number">1</span>:]...)</span><br><span class="line">    </span><br><span class="line">    fmt.Println(s) <span class="comment">// [10 20 40 50]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 内存泄漏警告（高阶面试题）：</span></span><br><span class="line">    <span class="comment">// 如果切片里存的是指针（比如 []*Struct），</span></span><br><span class="line">    <span class="comment">// 仅仅这样做，底层数组的末尾可能还持有被删除对象的引用，导致GC无法回收。</span></span><br><span class="line">    <span class="comment">// 严谨的做法是将末尾元素置为 nil，再缩减长度。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结：面试避坑指南"><a href="#总结：面试避坑指南" class="headerlink" title="总结：面试避坑指南"></a>总结：面试避坑指南</h2><ol>
+<li> <strong>数组是值，切片是引用</strong>：这是万恶之源，一定要分清。</li>
+<li> <strong>append 必须赋值</strong>：<code>s = append(s, x)</code>，不要只写 <code>append(s, x)</code>。</li>
+<li> <strong>切片截取不拷贝</strong>：<code>subSlice := s[1:3]</code>，修改 <code>subSlice</code> 会影响 <code>s</code>。如果不想影响，请用 <code>copy</code>。</li>
+<li> <strong>大数组的小切片</strong>：如果你有一个很大的数组，但只切片引用了其中一小段，整个大数组都会被留在内存中无法释放。解决方法是 <code>copy</code> 那一小段出来，让大数组去死（被GC回收）。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/03/15/Go-%E8%AF%AD%E6%B3%95-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -657,235 +956,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/10/08/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/08/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/" class="post-title-link" itemprop="url">单一职责原则</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-10-08 10:31:49 / 修改时间：10:31:27" itemprop="dateCreated datePublished" datetime="2021-10-08T10:31:49+08:00">2021-10-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h2><p>就一个类而言，应该仅有一个引起它变化的原因。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/08/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/10/08/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/08/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">策略模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-10-08 10:25:03 / 修改时间：10:30:00" itemprop="dateCreated datePublished" datetime="2021-10-08T10:25:03+08:00">2021-10-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>定义一组算法，将每一个算法都封装起来，并且使它们之间可以互换，策略模式让算法独立于使用它的客户而变化，也称为政策模式</p>
-<p>策略模式（Strategy）：它定义了算法家族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化，不会影响到使用算法的客户</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/08/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2021/09/27/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ffy">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ffy's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/27/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">简单工厂模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-09-27 20:24:01 / 修改时间：20:26:47" itemprop="dateCreated datePublished" datetime="2021-09-27T20:24:01+08:00">2021-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><h3 id="面向对象设计的基本原则"><a href="#面向对象设计的基本原则" class="headerlink" title="面向对象设计的基本原则"></a>面向对象设计的基本原则</h3><ul>
-<li><p>OCP（开闭原则，Open-Closed Principle）：一个软件的实体应当对扩展开放，对修改关闭</p>
-</li>
-<li><p>DIP（依赖倒转原则，Dependence Inversion Principle）：要针对接口编程，不要针对实现编程</p></li></ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/27/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -955,7 +1025,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -964,7 +1034,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
