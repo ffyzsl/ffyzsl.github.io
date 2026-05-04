@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="RAG 菜谱检索与生成系统 — 技术文档一、项目概述本项目是一个基于 RAG（Retrieval-Augmented Generation，检索增强生成）架构的智能菜谱问答系统。简单来说，这个系统可以理解用户用自然语言提出的问题（比如”红烧肉怎么做？”或者”推荐几个简单的素菜”），然后从本地存储的 323 个中文菜谱中检索出最相关的内容，最后调用大语言模型生成一个结构清晰、实用详细的回答。gith">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG 菜谱检索与生成系统">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/05/04/RAG%E9%A1%B9%E7%9B%AE-1/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="RAG 菜谱检索与生成系统 — 技术文档一、项目概述本项目是一个基于 RAG（Retrieval-Augmented Generation，检索增强生成）架构的智能菜谱问答系统。简单来说，这个系统可以理解用户用自然语言提出的问题（比如”红烧肉怎么做？”或者”推荐几个简单的素菜”），然后从本地存储的 323 个中文菜谱中检索出最相关的内容，最后调用大语言模型生成一个结构清晰、实用详细的回答。gith">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-04T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-04T06:59:49.016Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="langchain">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/05/04/RAG%E9%A1%B9%E7%9B%AE-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RAG 菜谱检索与生成系统 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/05/04/RAG%E9%A1%B9%E7%9B%AE-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RAG 菜谱检索与生成系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-05-04 10:00:00 / 修改时间：14:59:49" itemprop="dateCreated datePublished" datetime="2026-05-04T10:00:00+08:00">2026-05-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="RAG-菜谱检索与生成系统-—-技术文档"><a href="#RAG-菜谱检索与生成系统-—-技术文档" class="headerlink" title="RAG 菜谱检索与生成系统 — 技术文档"></a>RAG 菜谱检索与生成系统 — 技术文档</h1><h2 id="一、项目概述"><a href="#一、项目概述" class="headerlink" title="一、项目概述"></a>一、项目概述</h2><p>本项目是一个基于 RAG（Retrieval-Augmented Generation，检索增强生成）架构的智能菜谱问答系统。简单来说，这个系统可以理解用户用自然语言提出的问题（比如”红烧肉怎么做？”或者”推荐几个简单的素菜”），然后从本地存储的 323 个中文菜谱中检索出最相关的内容，最后调用大语言模型生成一个结构清晰、实用详细的回答。<code>github链接：https://github.com/ffyzsl/cook-rag-1</code></p>
+<span id="more"></span> 
+
+<p>整个系统采用经典的 RAG 四模块架构，由 <code>main.py</code> 中的 <code>RecipeRAGSystem</code> 类统一调度。四个核心模块分别是：</p>
+<ol>
+<li><strong>数据准备模块（Data Preparation）</strong>：负责从 Markdown 文件中加载菜谱，并提取其中的结构化信息（分类、难度、菜名等），然后将长文档切分成便于检索的小块。</li>
+<li><strong>索引构建模块（Index Construction）</strong>：负责将切分好的文本块转换成向量（Embedding），并构建 FAISS 向量索引，支持后续的语义搜索。</li>
+<li><strong>检索优化模块（Retrieval Optimization）</strong>：负责实现混合检索策略——同时使用基于语义的 FAISS 向量检索和基于关键词的 BM25 稀疏检索，然后通过 RRF 算法融合排序，提升检索质量。</li>
+<li><strong>生成集成模块（Generation Integration）</strong>：负责与大语言模型交互，根据检索到的菜谱内容生成最终回答，同时提供查询路由（判断用户意图）和查询重写（优化模糊查询）功能。</li>
+</ol>
+<p>技术栈方面，本项目使用 LangChain 作为 RAG 框架，阿里云百炼平台的 DashScope 作为 Embedding 模型，通义千问（Qwen）作为生成式大语言模型，FAISS 作为向量数据库。</p>
+<hr>
+<h2 id="二、项目目录结构"><a href="#二、项目目录结构" class="headerlink" title="二、项目目录结构"></a>二、项目目录结构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cook-rag-1/</span><br><span class="line">├── main.py                              # 主入口，RecipeRAGSystem 主类 + 交互式问答</span><br><span class="line">├── config.py                            # RAGConfig 配置数据类</span><br><span class="line">├── rag_modules/</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── data_preparation.py              # 数据准备模块</span><br><span class="line">│   ├── index_construction.py            # 索引构建模块</span><br><span class="line">│   ├── retrieval_optimization.py        # 检索优化模块</span><br><span class="line">│   └── generation_integration.py        # 生成集成模块</span><br><span class="line">├── data/C8/cook/dishes/                 # 323个菜谱 Markdown 文件（按分类子目录存放）</span><br><span class="line">├── vector_index/                        # 预构建的 FAISS 索引文件（可选）</span><br><span class="line">├── tests/                               # 测试套件</span><br><span class="line">├── .env                                 # 环境变量（DASHSCOPE_API_KEY）</span><br><span class="line">├── requirements.txt                     # Python 依赖</span><br><span class="line">└── CLAUDE.md                            # 项目开发指南</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、配置系统（config-py）"><a href="#三、配置系统（config-py）" class="headerlink" title="三、配置系统（config.py）"></a>三、配置系统（config.py）</h2><h3 id="3-1-RAGConfig-数据类"><a href="#3-1-RAGConfig-数据类" class="headerlink" title="3.1 RAGConfig 数据类"></a>3.1 RAGConfig 数据类</h3><p><code>config.py</code> 是整个系统的配置中心。它定义了一个名为 <code>RAGConfig</code> 的数据类（使用 Python 的 <code>@dataclass</code> 装饰器），集中管理所有可调参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RAGConfig</span>:</span></span><br><span class="line">    data_path: <span class="built_in">str</span> = <span class="string">&quot;data/C8/cook&quot;</span>           <span class="comment"># 菜谱 Markdown 文件的存放路径</span></span><br><span class="line">    index_save_path: <span class="built_in">str</span> = <span class="string">&quot;./vector_index&quot;</span>    <span class="comment"># FAISS 索引的持久化保存路径</span></span><br><span class="line">    embedding_model: <span class="built_in">str</span> = <span class="string">&quot;text-embedding-v2&quot;</span> <span class="comment"># DashScope 提供的嵌入模型名称</span></span><br><span class="line">    llm_model: <span class="built_in">str</span> = <span class="string">&quot;qwen-plus&quot;</span>               <span class="comment"># 通义千问 LLM 模型名称</span></span><br><span class="line">    top_k: <span class="built_in">int</span> = <span class="number">3</span>                             <span class="comment"># 检索时返回的最相关文档数量</span></span><br><span class="line">    temperature: <span class="built_in">float</span> = <span class="number">0.1</span>                   <span class="comment"># LLM 生成的温度参数（越低越确定）</span></span><br><span class="line">    max_tokens: <span class="built_in">int</span> = <span class="number">2048</span>                     <span class="comment"># LLM 单次生成的最大 token 数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-设计要点"><a href="#3-2-设计要点" class="headerlink" title="3.2 设计要点"></a>3.2 设计要点</h3><ul>
+<li><strong><code>from_dict</code> 类方法</strong>：允许从字典（比如从 JSON 配置文件读取的内容）直接创建 <code>RAGConfig</code> 实例。这在需要从外部文件加载配置时非常有用。</li>
+<li><strong><code>to_dict</code> 方法</strong>：将配置对象序列化回字典，方便保存或打印。</li>
+<li><strong><code>DEFAULT_CONFIG</code> 全局实例</strong>：使用默认参数创建的单例配置对象，其他模块直接 <code>from config import DEFAULT_CONFIG</code> 即可使用，避免了在多个地方重复写配置代码。</li>
+</ul>
+<p>使用 <code>@dataclass</code> 装饰器的好处是 Python 会自动生成 <code>__init__</code>、<code>__repr__</code>、<code>__eq__</code> 等方法，代码非常简洁。<code>__post_init__</code> 方法目前为空，是一个预留的扩展点，可以在初始化完成后做一些额外的校验或处理。</p>
+<hr>
+<h2 id="四、数据准备模块（rag-modules-data-preparation-py）"><a href="#四、数据准备模块（rag-modules-data-preparation-py）" class="headerlink" title="四、数据准备模块（rag_modules/data_preparation.py）"></a>四、数据准备模块（rag_modules/data_preparation.py）</h2><h3 id="4-1-模块职责"><a href="#4-1-模块职责" class="headerlink" title="4.1 模块职责"></a>4.1 模块职责</h3><p>数据准备模块是整个 RAG 系统的第一步，它负责将散落在磁盘上的 323 个 Markdown 菜谱文件加载到内存中，从中提取出结构化的元数据信息，然后将每个完整的菜谱文档按照 Markdown 标题层级切分成小块，为后续的向量化和检索做准备。</p>
+<h3 id="4-2-数据结构设计"><a href="#4-2-数据结构设计" class="headerlink" title="4.2 数据结构设计"></a>4.2 数据结构设计</h3><p>这个模块使用了<strong>父子文档模式（Parent-Child Document Pattern）</strong>，这是 RAG 系统中一个非常重要的设计模式：</p>
+<ul>
+<li><strong>父文档（Parent Document）</strong>：一个完整的菜谱 Markdown 文件。例如 <code>红烧肉.md</code> 的全部内容就是一个父文档，它包含菜品介绍、食材清单、制作步骤等完整信息。</li>
+<li><strong>子文档/子块（Child Chunk）</strong>：父文档按 Markdown 标题（<code>#</code>、<code>##</code>、<code>###</code>）切分后的小块。例如”## 食材”下面的内容就是一个子块，”## 步骤”下面的内容是另一个子块。</li>
+</ul>
+<p>这样设计的原因在于：</p>
+<ul>
+<li><strong>检索时用子块</strong>：子块粒度细，语义更聚焦（比如一块专门讲”食材”，另一块专门讲”步骤”），检索时能更精准地匹配用户的问题。</li>
+<li><strong>生成回答时用父文档</strong>：当某个子块被检索命中后，系统通过 <code>parent_child_map</code> 映射关系找回它所属的完整父文档，这样 LLM 能看到完整的菜谱上下文，生成的回答才不会”断章取义”。</li>
+</ul>
+<h3 id="4-3-CATEGORY-MAPPING-分类映射"><a href="#4-3-CATEGORY-MAPPING-分类映射" class="headerlink" title="4.3 CATEGORY_MAPPING 分类映射"></a>4.3 CATEGORY_MAPPING 分类映射</h3><p>菜谱文件存放在按分类命名的子目录下，目录名是英文，但展示给用户时需要中文。因此模块定义了一个类变量 <code>CATEGORY_MAPPING</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CATEGORY_MAPPING = &#123;</span><br><span class="line">    <span class="string">&quot;meat_dish&quot;</span>: <span class="string">&quot;荤菜&quot;</span>,</span><br><span class="line">    <span class="string">&quot;vegetable_dish&quot;</span>: <span class="string">&quot;素菜&quot;</span>,</span><br><span class="line">    <span class="string">&quot;soup&quot;</span>: <span class="string">&quot;汤品&quot;</span>,</span><br><span class="line">    <span class="string">&quot;dessert&quot;</span>: <span class="string">&quot;甜品&quot;</span>,</span><br><span class="line">    <span class="string">&quot;breakfast&quot;</span>: <span class="string">&quot;早餐&quot;</span>,</span><br><span class="line">    <span class="string">&quot;staple&quot;</span>: <span class="string">&quot;主食&quot;</span>,</span><br><span class="line">    <span class="string">&quot;aquatic&quot;</span>: <span class="string">&quot;水产&quot;</span>,</span><br><span class="line">    <span class="string">&quot;condiment&quot;</span>: <span class="string">&quot;调料&quot;</span>,</span><br><span class="line">    <span class="string">&quot;drink&quot;</span>: <span class="string">&quot;饮品&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此外还有 <code>DIFFICULTY_LABELS</code>，定义了五个难度等级：”非常简单”、”简单”、”中等”、”困难”、”非常困难”。</p>
+<h3 id="4-4-load-documents-文档加载"><a href="#4-4-load-documents-文档加载" class="headerlink" title="4.4 load_documents() 文档加载"></a>4.4 load_documents() 文档加载</h3><p>这个方法是数据准备的入口。它的工作流程如下：</p>
+<ol>
+<li>使用 <code>Path(self.data_path).rglob(&quot;*.md&quot;)</code> 递归遍历数据目录下所有的 <code>.md</code> 文件。<code>rglob</code> 是 <code>pathlib.Path</code> 的方法，不管文件在多深的子目录中都能找到。</li>
+<li>对每个 Markdown 文件：<ul>
+<li>用 UTF-8 编码读取文件内容。</li>
+<li>计算文件相对于数据根目录的路径，然后用 <strong>MD5 哈希</strong>生成一个 32 位的十六进制字符串作为 <code>parent_id</code>。使用 MD5 的好处是：相同文件每次生成的 ID 完全一致，不同文件几乎不可能产生相同的 ID。</li>
+<li>创建一个 LangChain 的 <code>Document</code> 对象，将文件内容存入 <code>page_content</code>，将 <code>source</code>（源文件路径）、<code>parent_id</code>、<code>doc_type=&quot;parent&quot;</code> 等基础信息存入 <code>metadata</code>。</li>
+</ul>
+</li>
+<li>对每个加载的文档调用 <code>_enhance_metadata()</code> 补充元数据。</li>
+<li>将加载的文档列表存入 <code>self.documents</code>。</li>
+</ol>
+<h3 id="4-5-enhance-metadata-元数据增强"><a href="#4-5-enhance-metadata-元数据增强" class="headerlink" title="4.5 _enhance_metadata() 元数据增强"></a>4.5 _enhance_metadata() 元数据增强</h3><p>这个方法负责从文档中提取更丰富的结构化信息，这是实现按分类/难度过滤检索的基础。它会从三个维度增强元数据：</p>
+<p><strong>提取分类（category）</strong>：</p>
+<ul>
+<li>将文件的完整路径拆分成各组成部分（通过 <code>Path.parts</code>）。</li>
+<li>遍历 <code>CATEGORY_MAPPING</code>，检查路径中是否包含英文目录名（如 <code>meat_dish</code>），找到后将其映射为中文分类（如”荤菜”）。</li>
+<li>如果找不到任何匹配，默认分类为”其他”。</li>
+</ul>
+<p><strong>提取菜名（dish_name）</strong>：</p>
+<ul>
+<li>直接取文件名去掉 <code>.md</code> 后缀作为菜名。这是一种约定：文件名就是菜谱名称，例如 <code>红烧肉.md</code> 的菜名就是”红烧肉”。</li>
+</ul>
+<p><strong>提取难度（difficulty）</strong>：</p>
+<ul>
+<li>通过统计文档内容中 <code>★</code>（实心五角星）的数量来判断难度等级。</li>
+<li>判断逻辑是从多到少匹配，避免子串误判。例如先检查 <code>★★★★★</code>（非常困难），再检查 <code>★★★★</code>（困难），以此类推。这是因为 <code>★★★★★</code> 包含子串 <code>★</code>，如果先匹配 <code>★</code> 就会错误地将”非常困难”判定为”非常简单”。</li>
+<li>没有任何星号标记的默认为”未知”。</li>
+</ul>
+<h3 id="4-6-chunk-documents-文档分块"><a href="#4-6-chunk-documents-文档分块" class="headerlink" title="4.6 chunk_documents() 文档分块"></a>4.6 chunk_documents() 文档分块</h3><p>这个方法是实现父子文档模式的关键。它将每个父文档按 Markdown 标题结构切分成子块：</p>
+<ol>
+<li>调用内部方法 <code>_markdown_header_split()</code> 执行实际的分块逻辑。</li>
+<li>为每个子块补充元数据：生成唯一的 <code>chunk_id</code>（使用 <code>uuid.uuid4()</code>），记录 <code>batch_index</code>（在批次中的序号）和 <code>chunk_size</code>（块内容长度）。</li>
+</ol>
+<h3 id="4-7-markdown-header-split-分块核心逻辑"><a href="#4-7-markdown-header-split-分块核心逻辑" class="headerlink" title="4.7 _markdown_header_split() 分块核心逻辑"></a>4.7 _markdown_header_split() 分块核心逻辑</h3><p>这是实际执行分块的方法，使用了 LangChain 提供的 <code>MarkdownHeaderTextSplitter</code>：</p>
+<ol>
+<li><strong>定义分割标题级别</strong>：指定在遇到 <code>#</code>（主标题）、<code>##</code>（二级标题）、<code>###</code>（三级标题）时切开文档。注意 <code>strip_headers=False</code> 保留了标题文本在分块中，这有助于后续理解块的上下文。</li>
+<li><strong>遍历每个父文档</strong>：<ul>
+<li>先快速检查文档中是否包含任何以 <code>#</code> 开头的行。如果没有，说明该文档缺少 Markdown 标题结构，记录一条警告日志。</li>
+<li>调用 <code>markdown_splitter.split_text(doc.page_content)</code> 按标题切分，返回一个子 Document 列表。</li>
+<li>对每个子块：生成 <code>chunk_id</code>、继承父文档的元数据（分类、菜名、难度等）、设置 <code>doc_type=&quot;child&quot;</code>、记录在父文档中的 <code>chunk_index</code>。</li>
+<li>最关键的一步：将 <code>child_id → parent_id</code> 的映射关系存入 <code>self.parent_child_map</code> 字典。这是后续从子块找回完整父文档的桥梁。</li>
+</ul>
+</li>
+</ol>
+<h3 id="4-8-其他辅助方法"><a href="#4-8-其他辅助方法" class="headerlink" title="4.8 其他辅助方法"></a>4.8 其他辅助方法</h3><ul>
+<li>**<code>filter_documents_by_category(category)</code>**：按分类过滤父文档，使用列表推导式简洁实现。</li>
+<li>**<code>filter_documents_by_difficulty(difficulty)</code>**：按难度过滤父文档，逻辑同上。</li>
+<li>**<code>get_statistics()</code>**：汇总统计信息，包括文档总数、分块总数、分类分布、难度分布、平均块大小。这个方法在系统启动时被调用来展示知识库概况。</li>
+<li>**<code>export_metadata(output_path)</code>**：将文档的关键元数据导出为 JSON 文件，方便离线分析或检查数据质量。</li>
+<li>**<code>get_supported_categories()</code> 和 <code>get_supported_difficulties()</code>**：类方法，对外提供支持的分类和难度标签列表，供 <code>main.py</code> 中的关键词过滤功能使用。</li>
+</ul>
+<h3 id="4-9-get-parent-documents-父子文档逆映射"><a href="#4-9-get-parent-documents-父子文档逆映射" class="headerlink" title="4.9 get_parent_documents() 父子文档逆映射"></a>4.9 get_parent_documents() 父子文档逆映射</h3><p>这是 RAG 检索流程中的关键环节。它接收一组检索到的子块，根据 <code>parent_child_map</code> 找回对应的完整父文档：</p>
+<ol>
+<li>遍历所有子块，取出每个子块的 <code>parent_id</code>，累加每个父文档被命中的子块数量（作为相关性评分）。</li>
+<li>从 <code>self.documents</code> 中查找并缓存父文档对象，避免重复遍历。</li>
+<li>将父文档按命中次数降序排列——被命中的子块越多，说明该菜谱与查询越相关。</li>
+<li>返回去重后的父文档列表，并通过日志展示每个父文档的菜名和命中块数。</li>
+</ol>
+<hr>
+<h2 id="五、索引构建模块（rag-modules-index-construction-py）"><a href="#五、索引构建模块（rag-modules-index-construction-py）" class="headerlink" title="五、索引构建模块（rag_modules/index_construction.py）"></a>五、索引构建模块（rag_modules/index_construction.py）</h2><h3 id="5-1-模块职责"><a href="#5-1-模块职责" class="headerlink" title="5.1 模块职责"></a>5.1 模块职责</h3><p>索引构建模块负责将文本块的文字内容转换成计算机能理解的向量（数字数组），然后基于这些向量构建 FAISS 索引，使得系统能够通过”语义相似度”快速找到与用户问题最相关的文本块。</p>
+<h3 id="5-2-向量化的原理"><a href="#5-2-向量化的原理" class="headerlink" title="5.2 向量化的原理"></a>5.2 向量化的原理</h3><p>向量化是 RAG 系统的核心技术之一。可以这样理解：人类的语言是文字，但计算机只认识数字。Embedding 模型就像一个”翻译官”，它能把一句话翻译成一个固定长度的数字数组（比如 768 个数字），这个数组就是”向量”。</p>
+<p>神奇的是，这个向量不是随机的。Embedding 模型经过大量语料的训练，学会了把语义相近的文本映射到向量空间中距离相近的位置。比如”红烧肉的做法”和”红烧肉的步骤”这两句话，它们生成的向量在数学上非常接近（比如余弦相似度很高）；而”红烧肉的做法”和”天气预报”这两个毫不相干的话题，它们的向量距离就很远。</p>
+<h3 id="5-3-类设计"><a href="#5-3-类设计" class="headerlink" title="5.3 类设计"></a>5.3 类设计</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexConstructionModule</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, model_name=<span class="string">&quot;BAAI/bge-small-zh-v1.5&quot;</span>, index_save_path=<span class="string">&quot;./vector_index&quot;</span></span>):</span></span><br><span class="line">        self.model_name = model_name</span><br><span class="line">        self.index_save_path = index_save_path</span><br><span class="line">        self.embeddings = <span class="literal">None</span>      <span class="comment"># 嵌入模型对象</span></span><br><span class="line">        self.vectorstore = <span class="literal">None</span>     <span class="comment"># FAISS 向量存储对象</span></span><br><span class="line">        self.setup_embeddings()     <span class="comment"># 构造函数中自动初始化嵌入模型</span></span><br></pre></td></tr></table></figure>
+
+<p>三个核心属性：</p>
+<ul>
+<li><code>model_name</code>：使用的 Embedding 模型名称。实际运行时使用的是 <code>config.py</code> 中配置的 <code>text-embedding-v2</code>（阿里云百炼平台提供的模型），而不是这里默认的 BGE 模型。这是因为 <code>main.py</code> 在创建模块实例时传入了 <code>model_name=self.config.embedding_model</code> 覆盖了默认值。</li>
+<li><code>embeddings</code>：LangChain 封装的 DashScope 嵌入对象，对外提供 <code>embed_query()</code>（将单条查询文本转为向量）和 <code>embed_documents()</code>（将多条文档文本转为向量）两个接口。</li>
+<li><code>vectorstore</code>：FAISS 向量存储实例，管理所有向量索引，支持相似度搜索。</li>
+</ul>
+<h3 id="5-4-setup-embeddings-初始化嵌入模型"><a href="#5-4-setup-embeddings-初始化嵌入模型" class="headerlink" title="5.4 setup_embeddings() 初始化嵌入模型"></a>5.4 setup_embeddings() 初始化嵌入模型</h3><p>这个方法首先检查环境变量 <code>DASHSCOPE_API_KEY</code> 是否存在，如果不存在直接抛出异常（因为后续所有操作都依赖这个 API Key）。然后创建 <code>DashScopeEmbeddings</code> 实例并赋值给 <code>self.embeddings</code>。</p>
+<p><code>DashScopeEmbeddings</code> 是 LangChain 社区包提供的对阿里云百炼 Embedding API 的封装。它内部处理了 API 调用的细节，我们只需要传入模型名称和 API Key 即可。</p>
+<h3 id="5-5-build-vector-index-chunks-构建向量索引"><a href="#5-5-build-vector-index-chunks-构建向量索引" class="headerlink" title="5.5 build_vector_index(chunks) 构建向量索引"></a>5.5 build_vector_index(chunks) 构建向量索引</h3><p>这是索引构建的核心方法，接收从数据准备模块传来的文档块列表：</p>
+<ol>
+<li>检查 <code>chunks</code> 是否为空，空列表直接抛异常（构建空索引没有意义）。</li>
+<li>调用 <code>FAISS.from_documents(documents=chunks, embedding=self.embeddings)</code>。<ul>
+<li>LangChain 的 <code>FAISS.from_documents()</code> 方法会自动做两件事：<ul>
+<li>调用 <code>self.embeddings.embed_documents()</code> 将每个文档块的文本转为向量。</li>
+<li>将所有向量组织成 FAISS 索引结构，以便后续高效检索。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将构建好的 FAISS 对象存入 <code>self.vectorstore</code>，并返回它。</li>
+</ol>
+<h3 id="5-6-save-index-保存索引"><a href="#5-6-save-index-保存索引" class="headerlink" title="5.6 save_index() 保存索引"></a>5.6 save_index() 保存索引</h3><p>将内存中的 FAISS 索引持久化到磁盘。调用 <code>self.vectorstore.save_local(self.index_save_path)</code>，FAISS 会在指定目录下生成两个文件：</p>
+<ul>
+<li><code>index.faiss</code>：存储向量数据本身。</li>
+<li><code>index.pkl</code>：存储与向量关联的文档元数据（使用 pickle 序列化）。</li>
+</ul>
+<p>在调用 <code>save_local</code> 之前，使用 <code>Path(self.index_save_path).mkdir(parents=True, exist_ok=True)</code> 确保目标目录存在。</p>
+<h3 id="5-7-load-index-加载索引"><a href="#5-7-load-index-加载索引" class="headerlink" title="5.7 load_index() 加载索引"></a>5.7 load_index() 加载索引</h3><p>从磁盘加载之前保存的 FAISS 索引：</p>
+<ol>
+<li>如果 <code>self.embeddings</code> 为 <code>None</code>（可能没有正确初始化），先调用 <code>setup_embeddings()</code> 补救。</li>
+<li>检查索引目录是否存在，不存在则返回 <code>None</code>（调用方可以根据返回值判断是否需要构建新索引）。</li>
+<li>调用 <code>FAISS.load_local(self.index_save_path, self.embeddings, allow_dangerous_deserialization=True)</code>。<ul>
+<li>需要传入 <code>self.embeddings</code>，因为 FAISS 在检索时需要将用户的查询文本转换为向量，而这个转换需要用到同一个 Embedding 模型。</li>
+<li><code>allow_dangerous_deserialization=True</code> 是安全性参数。因为 <code>index.pkl</code> 文件使用 pickle 反序列化，如果文件来源不可信可能存在安全风险。在本项目中，索引文件是本机生成的，所以可以放心使用。</li>
+</ul>
+</li>
+<li>如果加载失败（文件损坏、版本不兼容等），捕获异常并返回 <code>None</code>，让系统走重建索引的路径。</li>
+</ol>
+<h3 id="5-8-similarity-search-query-k-相似度检索"><a href="#5-8-similarity-search-query-k-相似度检索" class="headerlink" title="5.8 similarity_search(query, k) 相似度检索"></a>5.8 similarity_search(query, k) 相似度检索</h3><p>将用户的自然语言查询文本向量化，然后在 FAISS 索引中找到最相似的 k 个文档块：</p>
+<ol>
+<li>检查 <code>self.vectorstore</code> 是否为 <code>None</code>。</li>
+<li>调用 <code>self.vectorstore.similarity_search(query, k=k)</code>。FAISS 内部会先用 <code>self.embeddings.embed_query(query)</code> 将查询转为向量，然后使用高效的近似最近邻算法找到相似度最高的 k 个向量，返回对应的 Document 列表。</li>
+</ol>
+<h3 id="5-9-add-documents-new-chunks-增量添加"><a href="#5-9-add-documents-new-chunks-增量添加" class="headerlink" title="5.9 add_documents(new_chunks) 增量添加"></a>5.9 add_documents(new_chunks) 增量添加</h3><p>支持在已有索引的基础上追加新文档块，而不需要重建整个索引。调用 <code>self.vectorstore.add_documents(new_chunks)</code> 即可。</p>
+<hr>
+<h2 id="六、检索优化模块（rag-modules-retrieval-optimization-py）"><a href="#六、检索优化模块（rag-modules-retrieval-optimization-py）" class="headerlink" title="六、检索优化模块（rag_modules/retrieval_optimization.py）"></a>六、检索优化模块（rag_modules/retrieval_optimization.py）</h2><h3 id="6-1-模块职责"><a href="#6-1-模块职责" class="headerlink" title="6.1 模块职责"></a>6.1 模块职责</h3><p>检索优化模块实现了<strong>混合检索（Hybrid Search）</strong>策略。单一的检索方式——无论是纯向量检索还是纯关键词检索——都有各自的盲区。向量检索擅长理解”语义”（知道”好吃的”和”美味的”是一个意思），但可能遗漏精确的关键词匹配；关键词检索擅长精确匹配（绝对不会漏掉”红烧肉”这个词），但无法理解同义词和语义变体。</p>
+<p>混合检索将两者结合起来，取长补短，然后再用 RRF（Reciprocal Rank Fusion，倒数排名融合）算法统一排序，给出一个综合的排名结果。</p>
+<h3 id="6-2-两种检索器"><a href="#6-2-两种检索器" class="headerlink" title="6.2 两种检索器"></a>6.2 两种检索器</h3><p>模块在 <code>setup_retrievers()</code> 中初始化两种检索器：</p>
+<p><strong>向量检索器（Vector Retriever）</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.vector_retriever = self.vectorstores.as_retriever(</span><br><span class="line">    search_type=<span class="string">&quot;similarity&quot;</span>,</span><br><span class="line">    search_kwargs=&#123;<span class="string">&quot;k&quot;</span>: <span class="number">5</span>&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>基于 FAISS 索引，使用余弦相似度（或内积）计算查询向量与文档向量之间的距离。返回距离最近的 5 个文档。</p>
+<p><strong>BM25 检索器（BM25 Retriever）</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.bm25_retriever = BM25Retriever.from_documents(</span><br><span class="line">    self.chunks,</span><br><span class="line">    k=<span class="number">5</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>BM25 是一种经典的文本检索算法，基于词频（TF）和逆文档频率（IDF）计算相关性。它完全在关键词层面工作，不需要向量化。对于”红烧肉怎么做”这种包含明确关键词的查询，BM25 能非常准确地找到相关文档。</p>
+<h3 id="6-3-hybrid-search-query-top-k-混合检索"><a href="#6-3-hybrid-search-query-top-k-混合检索" class="headerlink" title="6.3 hybrid_search(query, top_k) 混合检索"></a>6.3 hybrid_search(query, top_k) 混合检索</h3><p>这是对外暴露的主检索方法，流程如下：</p>
+<ol>
+<li>分别调用向量检索器和 BM25 检索器的 <code>invoke(query)</code> 方法，各自返回 top-5 的结果。</li>
+<li>将两路结果传入 <code>_rrf_rerank()</code> 进行融合重排。</li>
+<li>返回重排后的前 <code>top_k</code> 个结果（默认 3 个）。</li>
+</ol>
+<h3 id="6-4-rrf-rerank-RRF-重排序算法"><a href="#6-4-rrf-rerank-RRF-重排序算法" class="headerlink" title="6.4 _rrf_rerank() RRF 重排序算法"></a>6.4 _rrf_rerank() RRF 重排序算法</h3><p>RRF（Reciprocal Rank Fusion）是一种简单但有效的多路检索融合算法。它的核心思想是：一个文档在某一检索路径中的排名越靠前，它应该获得越高的分数；如果文档在两条路径中都有出现（说明两种检索方式都认为它相关），它的分数应该累加起来。</p>
+<p>算法步骤：</p>
+<ol>
+<li><p><strong>初始化</strong>：创建两个字典——<code>doc_scores</code> 记录每个文档的累计 RRF 分数，<code>doc_object</code> 记录文档对象本身（用于最后重建结果列表）。文档的唯一标识通过 <code>hash(doc.page_content)</code> 生成。</p>
+</li>
+<li><p><strong>处理向量检索结果</strong>：遍历向量检索返回的文档列表，对排名为 <code>rank</code> 的文档，计算 RRF 分数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rrf_score = 1.0 / (k + rank + 1)</span><br></pre></td></tr></table></figure>
+<p>其中 <code>k</code> 是一个平滑参数（默认为 60），它防止排名非常靠后的文档获得极低的分数，同时也避免排名第一的文档分数过高导致其他结果被完全淹没。<code>rank</code> 从 0 开始（第一名 rank=0，第二名 rank=1…）。</p>
+</li>
+<li><p><strong>处理 BM25 检索结果</strong>：同样的公式，遍历 BM25 检索结果。如果某个文档在向量检索中已经出现过（相同的 <code>doc_id</code>），RRF 分数会累加到它已有的分数上。这正是融合的关键——出现在两路结果中的文档获得”双倍加分”。</p>
+</li>
+<li><p><strong>排序</strong>：按累计 RRF 分数从高到低排序。</p>
+</li>
+<li><p><strong>构建最终结果</strong>：按排序后的顺序重建文档列表，并将最终的 <code>rrf_score</code> 写入每个文档的 <code>metadata</code> 中，方便后续分析。</p>
+</li>
+</ol>
+<p>RRF 算法的一个很好的特性是它天然支持去重——相同的文档内容会生成相同的 hash ID，在字典中自然合并。</p>
+<h3 id="6-5-metadata-filtered-search-query-filters-top-k-带过滤的检索"><a href="#6-5-metadata-filtered-search-query-filters-top-k-带过滤的检索" class="headerlink" title="6.5 metadata_filtered_search(query, filters, top_k) 带过滤的检索"></a>6.5 metadata_filtered_search(query, filters, top_k) 带过滤的检索</h3><p>这个方法在混合检索的基础上增加了元数据过滤能力。例如，用户说”推荐几个简单的素菜”，系统需要先过滤出分类为”素菜”且难度为”简单”的文档，再进行语义检索。</p>
+<p>实现逻辑：</p>
+<ol>
+<li>先进行混合检索，但放宽候选范围（<code>top_k * 3</code>），获取更多的候选文档。</li>
+<li>遍历候选文档，逐一检查每个文档的 <code>metadata</code> 是否满足所有过滤条件：<ul>
+<li>如果过滤条件中的 key 不存在于文档的 metadata 中，直接判定为不匹配。</li>
+<li>如果过滤条件的 value 是列表（支持多值匹配），检查文档的 metadata 值是否在列表中。</li>
+<li>如果过滤条件是单值，直接比较是否相等。</li>
+</ul>
+</li>
+<li>收集满足全部条件的文档，数量达到 <code>top_k</code> 后提前终止遍历。</li>
+<li>返回过滤后的文档列表。</li>
+</ol>
+<hr>
+<h2 id="七、生成集成模块（rag-modules-generation-integration-py）"><a href="#七、生成集成模块（rag-modules-generation-integration-py）" class="headerlink" title="七、生成集成模块（rag_modules/generation_integration.py）"></a>七、生成集成模块（rag_modules/generation_integration.py）</h2><h3 id="7-1-模块职责"><a href="#7-1-模块职责" class="headerlink" title="7.1 模块职责"></a>7.1 模块职责</h3><p>生成集成模块是整个 RAG 系统的”出口”，它负责与大语言模型交互，将检索到的菜谱内容组织成用户友好的回答。此外，它还承担了两个智能预处理任务——查询路由和查询重写。</p>
+<h3 id="7-2-LLM-初始化"><a href="#7-2-LLM-初始化" class="headerlink" title="7.2 LLM 初始化"></a>7.2 LLM 初始化</h3><p>模块使用阿里云百炼平台提供的通义千问大模型，通过 LangChain 的 <code>ChatTongyi</code> 接口调用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">self.llm = ChatTongyi(</span><br><span class="line">    model=self.model_name,      <span class="comment"># 默认 &quot;qwen-plus&quot;</span></span><br><span class="line">    temperature=self.temperature, <span class="comment"># 默认 0.1</span></span><br><span class="line">    max_tokens=self.max_tokens,   <span class="comment"># 默认 2048</span></span><br><span class="line">    api_key=api_key,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>temperature=0.1</code> 是一个较低的值，意味着模型的输出会比较确定和一致，适合需要准确信息的菜谱问答场景。如果设为较高的值（如 0.8），模型的回答会更加”有创意”但也更容易偏离事实。</p>
+<h3 id="7-3-build-context-docs-max-length-上下文构建"><a href="#7-3-build-context-docs-max-length-上下文构建" class="headerlink" title="7.3 _build_context(docs, max_length) 上下文构建"></a>7.3 _build_context(docs, max_length) 上下文构建</h3><p>这个方法将检索到的菜谱文档整理成适合输入给 LLM 的上下文字符串：</p>
+<ol>
+<li>如果文档列表为空，返回提示信息”暂无相关食谱信息”。</li>
+<li>遍历文档（从 1 开始编号），为每个文档构建格式化的元数据头信息：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[食谱1] 红烧肉 | 分类: 荤菜 | 难度: 中等</span><br><span class="line">&lt;完整文档内容&gt;</span><br></pre></td></tr></table></figure></li>
+<li>控制上下文总长度不超过 <code>max_length</code>（默认 2000 字符）。因为 LLM 的上下文窗口有限，加上还要给系统提示词和用户问题留空间，所以需要对内容长度做截断。</li>
+<li>用分隔线 <code>=====</code> 隔开不同食谱。</li>
+</ol>
+<h3 id="7-4-query-router-query-查询路由"><a href="#7-4-query-router-query-查询路由" class="headerlink" title="7.4 query_router(query) 查询路由"></a>7.4 query_router(query) 查询路由</h3><p>查询路由是一个智能的”分流器”，它先让 LLM 分析用户的问题意图，然后将其分类为三种类型之一：</p>
+<ol>
+<li><p><strong><code>list</code>（列表查询）</strong>：用户想要获取菜品推荐列表，只需要菜名即可。例如：”推荐几个素菜”、”有什么川菜”、”给我3个简单的菜”。对于这种查询，后续只需要调用 <code>generate_list_answer()</code> 给出简洁的菜名列表。</p>
+</li>
+<li><p><strong><code>detail</code>（详细查询）</strong>：用户想要某个菜的具体制作方法。例如：”宫保鸡丁怎么做”、”红烧肉的步骤”、”蛋炒饭需要什么食材”。对于这种查询，后续会调用 <code>generate_step_by_step_answer()</code> 给出包含食材、步骤、技巧的完整回答。</p>
+</li>
+<li><p><strong><code>general</code>（一般查询）</strong>：不属于以上两种的其他问题。例如：”什么是川菜”、”炒菜的技巧”、”怎样选肉”。对于这种查询，调用 <code>generate_basic_answer()</code> 给出一般性的回答。</p>
+</li>
+</ol>
+<p>实现方式是通过一个提示词模板让 LLM 进行分类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">根据用户的问题，将其分类为以下三种类型之一:</span><br><span class="line">1. &#x27;list&#x27; - 用户想要获取菜品列表或推荐，只需要菜名</span><br><span class="line">2. &#x27;detail&#x27; - 用户想要具体的制作方法或详细信息</span><br><span class="line">3. &#x27;general&#x27; - 其他一般性问题</span><br><span class="line">请只返回分类结果: list, detail 或 general</span><br></pre></td></tr></table></figure>
+
+<p>安全防线：如果 LLM 没有按要求返回这三个词之一（这在实践中偶尔会发生，比如 LLM 返回了多余的解释文字），代码会强制回退为 <code>general</code>，确保系统不会因为意外的输出而崩溃。流程是：对 LLM 返回的内容做 <code>.strip().lower()</code> 处理后，检查是否在 <code>[&#39;list&#39;, &#39;detail&#39;, &#39;general&#39;]</code> 中，不在则返回 <code>&#39;general&#39;</code>。</p>
+<p>这里使用了 LangChain 的链式调用（Chain）模式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chain = (</span><br><span class="line">    &#123;<span class="string">&quot;query&quot;</span>: RunnablePassthrough()&#125;</span><br><span class="line">    | prompt</span><br><span class="line">    | self.llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line">result = chain.invoke(query).strip().lower()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>RunnablePassthrough()</code> 直接将输入传给下一步。</li>
+<li><code>prompt</code> 将输入填充到提示词模板中。</li>
+<li><code>self.llm</code> 调用大模型生成回答。</li>
+<li><code>StrOutputParser()</code> 将 LLM 的输出对象转换为纯字符串。</li>
+<li>管道运算符 <code>|</code> 是 LangChain 的 LCEL（LangChain Expression Language）语法，它创建了一个 <code>RunnableSequence</code>，数据从左到右依次流过每一步。</li>
+</ul>
+<h3 id="7-5-query-rewrite-query-查询重写"><a href="#7-5-query-rewrite-query-查询重写" class="headerlink" title="7.5 query_rewrite(query) 查询重写"></a>7.5 query_rewrite(query) 查询重写</h3><p>查询重写是一个智能的查询优化器。用户输入的问题有时会过于模糊或口语化，直接用于检索效果不好。例如”推荐个菜”这个查询太宽泛了，而重写后的”简单家常菜推荐”则更具体、更容易匹配到相关内容。</p>
+<p>LLM 根据以下规则判断是否需要重写：</p>
+<p><strong>保持原查询的情况</strong>（具体明确）：</p>
+<ul>
+<li>包含具体菜品名称：如”宫保鸡丁怎么做”、”红烧肉的制作方法”</li>
+<li>明确的制作询问：如”蛋炒饭需要什么食材”</li>
+<li>具体的烹饪技巧：如”如何炒菜不粘锅”</li>
+</ul>
+<p><strong>需要重写的情况</strong>（模糊不清）：</p>
+<ul>
+<li>过于宽泛：如”做菜”、”有什么好吃的”</li>
+<li>缺乏具体信息：如”川菜”、”素菜”</li>
+<li>口语化表达：如”想吃点什么”、”有饮品推荐吗”</li>
+</ul>
+<p>重写原则：</p>
+<ul>
+<li>保持原意不变</li>
+<li>增加相关烹饪术语（如添加”家常菜谱”、”制作方法”等关键词）</li>
+<li>优先推荐简单易做的</li>
+<li>保持简洁性</li>
+</ul>
+<p>这里使用的是 <code>PromptTemplate</code> 而非 <code>ChatPromptTemplate</code>，因为查询重写是一个简单的文本补全任务，不需要多轮对话的结构。</p>
+<h3 id="7-6-generate-basic-answer-query-context-docs-基础回答"><a href="#7-6-generate-basic-answer-query-context-docs-基础回答" class="headerlink" title="7.6 generate_basic_answer(query, context_docs) 基础回答"></a>7.6 generate_basic_answer(query, context_docs) 基础回答</h3><p>用于 <code>general</code> 类型查询的回答生成。使用一个通用的提示词模板，告知 LLM 它是”专业的烹饪助手”，请它根据提供的食谱信息回答用户问题。如果信息不足，要求它诚实说明而不是胡编乱造。</p>
+<h3 id="7-7-generate-basic-answer-stream-query-context-docs-流式基础回答"><a href="#7-7-generate-basic-answer-stream-query-context-docs-流式基础回答" class="headerlink" title="7.7 generate_basic_answer_stream(query, context_docs) 流式基础回答"></a>7.7 generate_basic_answer_stream(query, context_docs) 流式基础回答</h3><p>与 <code>generate_basic_answer</code> 功能相同，但使用流式输出。通过 <code>chain.stream(query)</code> 代替 <code>chain.invoke(query)</code>，结果是一个生成器（generator），每次 <code>yield</code> 一小段文本。这种方式让用户可以在前端看到逐字出现的打字效果，体验更好。</p>
+<h3 id="7-8-generate-step-by-step-answer-query-context-docs-分步骤回答"><a href="#7-8-generate-step-by-step-answer-query-context-docs-分步骤回答" class="headerlink" title="7.8 generate_step_by_step_answer(query, context_docs) 分步骤回答"></a>7.8 generate_step_by_step_answer(query, context_docs) 分步骤回答</h3><p>用于 <code>detail</code> 类型查询。提示词模板包含了详细的回答结构要求：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">## 🥘 菜品介绍</span><br><span class="line">[简要介绍菜品特点和难度]</span><br><span class="line"></span><br><span class="line">## 🛒 所需食材</span><br><span class="line">[列出主要食材和用量]</span><br><span class="line"></span><br><span class="line">## 👨‍🍳 制作步骤</span><br><span class="line">[详细的分步骤说明，每步包含具体操作和大概所需时间]</span><br><span class="line"></span><br><span class="line">## 💡 制作技巧</span><br><span class="line">[仅在有实用技巧时包含...如果原文的&quot;附加内容&quot;与烹饪无关或为空，</span><br><span class="line"> 可以基于制作步骤总结关键要点，或者完全省略此部分]</span><br></pre></td></tr></table></figure>
+
+<p>特别注意制作技巧部分的设计：代码提示词中强调”优先使用原文中的实用技巧”，但”如果原文的附加内容与烹饪无关或为空，可以完全省略此部分”。这是为了避免 LLM 在没有实际技巧时强行填充无关内容（比如把步骤重复一遍当技巧），影响回答质量。</p>
+<h3 id="7-9-generate-list-answer-query-context-docs-列表回答"><a href="#7-9-generate-list-answer-query-context-docs-列表回答" class="headerlink" title="7.9 generate_list_answer(query, context_docs) 列表回答"></a>7.9 generate_list_answer(query, context_docs) 列表回答</h3><p>用于 <code>list</code> 类型查询。不需要调用 LLM，而是直接从文档元数据中提取菜品名称，按数量生成不同格式的回答：</p>
+<ul>
+<li><strong>0 个文档</strong>：返回”抱歉，没有找到相关的菜品信息。”</li>
+<li><strong>1 个文档</strong>：<code>&quot;为您推荐：红烧肉&quot;</code></li>
+<li><strong>2-3 个文档</strong>：带编号的列表，如 <code>&quot;1. 红烧肉\n2. 宫保鸡丁\n3. 清炒白菜&quot;</code></li>
+<li><strong>超过 3 个文档</strong>：列出前 3 个，并提示”还有其他 N 道菜品可供选择。”</li>
+</ul>
+<p>注意这里做了去重处理——如果多个子块来自同一个父文档，菜名只出现一次。</p>
+<hr>
+<h2 id="八、主系统（main-py）"><a href="#八、主系统（main-py）" class="headerlink" title="八、主系统（main.py）"></a>八、主系统（main.py）</h2><h3 id="8-1-RecipeRAGSystem-主类"><a href="#8-1-RecipeRAGSystem-主类" class="headerlink" title="8.1 RecipeRAGSystem 主类"></a>8.1 RecipeRAGSystem 主类</h3><p><code>RecipeRAGSystem</code> 是整个系统的”大脑”，它协调四个模块的工作流程。它的核心职责是：</p>
+<ol>
+<li>初始化时加载配置、检查数据路径和 API Key。</li>
+<li>按正确的顺序启动各个模块。</li>
+<li>构建知识库（加载文档 → 分块 → 构建/加载索引 → 初始化检索器）。</li>
+<li>运行问答循环：接收用户问题 → 路由 → 重写 → 检索 → 生成回答。</li>
+</ol>
+<h3 id="8-2-init-初始化"><a href="#8-2-init-初始化" class="headerlink" title="8.2 init() 初始化"></a>8.2 <strong>init</strong>() 初始化</h3><p>构造函数主要做三件事：</p>
+<ul>
+<li>保存配置对象（如果没传就用 <code>DEFAULT_CONFIG</code>）。</li>
+<li>检查数据路径 <code>self.config.data_path</code> 是否存在，不存在直接抛 <code>FileNotFoundError</code>。</li>
+<li>检查 <code>MOONSHOT_API_KEY</code> 环境变量是否存在（注意：这是项目中的一个已知问题，实际上系统只使用 <code>DASHSCOPE_API_KEY</code>，<code>MOONSHOT_API_KEY</code> 的检查是遗留代码，没有模块真正使用它）。</li>
+</ul>
+<h3 id="8-3-initialize-system-初始化所有模块"><a href="#8-3-initialize-system-初始化所有模块" class="headerlink" title="8.3 initialize_system() 初始化所有模块"></a>8.3 initialize_system() 初始化所有模块</h3><p>按顺序创建四个模块的实例：</p>
+<ol>
+<li><code>DataPreparationModule</code> — 传入数据路径。</li>
+<li><code>IndexConstructionModule</code> — 传入嵌入模型名称和索引保存路径。</li>
+<li><code>GenerationIntegrationModule</code> — 传入 LLM 模型名称、温度和最大 token 数。</li>
+<li><code>RetrievalOptimizationModule</code> 不在这里创建，而是在 <code>build_knowledge_base()</code> 中创建，因为它需要 FAISS vectorstore 和 chunks 作为参数。</li>
+</ol>
+<h3 id="8-4-build-knowledge-base-构建知识库"><a href="#8-4-build-knowledge-base-构建知识库" class="headerlink" title="8.4 build_knowledge_base() 构建知识库"></a>8.4 build_knowledge_base() 构建知识库</h3><p>这个方法是整个系统最复杂的方法之一，它实现了两种路径：</p>
+<p><strong>路径一：已有预构建索引</strong></p>
+<ol>
+<li>调用 <code>self.index_module.load_index()</code> 尝试加载磁盘上已保存的 FAISS 索引。</li>
+<li>如果加载成功，虽然向量数据已就绪，但索引本身只保存了向量和文档内容，不包含父文档列表和父子映射关系。因此仍然需要：<ul>
+<li>重新加载原始文档（<code>self.data_module.load_documents()</code>）</li>
+<li>重新分块（<code>self.data_module.chunk_documents()</code>），重建 <code>parent_child_map</code></li>
+</ul>
+</li>
+<li>这样既复用了向量计算的结果（节省了 Embedding API 调用的费用和时间），又重建了完整的元数据结构。</li>
+</ol>
+<p><strong>路径二：从零构建新索引</strong></p>
+<ol>
+<li>加载原始文档。</li>
+<li>进行文本分块。</li>
+<li>调用 <code>self.index_module.build_vector_index(chunks)</code> 构建新的 FAISS 索引。</li>
+<li>调用 <code>self.index_module.save_index()</code> 保存到磁盘，下次启动就可以走路径一了。</li>
+</ol>
+<p>两条路径最终都会：</p>
+<ul>
+<li>创建 <code>RetrievalOptimizationModule</code> 实例。</li>
+<li>调用 <code>self.data_module.get_statistics()</code> 打印知识库统计信息。</li>
+</ul>
+<h3 id="8-5-ask-question-question-stream-核心问答流程"><a href="#8-5-ask-question-question-stream-核心问答流程" class="headerlink" title="8.5 ask_question(question, stream) 核心问答流程"></a>8.5 ask_question(question, stream) 核心问答流程</h3><p>这是用户交互的核心入口，包含一个精心设计的管道：</p>
+<p><strong>第一步：查询路由</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route_type = self.generation_module.query_router(question)</span><br></pre></td></tr></table></figure>
+<p>让 LLM 判断用户意图是 <code>list</code>、<code>detail</code> 还是 <code>general</code>。</p>
+<p><strong>第二步：查询重写</strong></p>
+<ul>
+<li>如果路由结果是 <code>list</code>，保持原查询不变（因为列表查询不需要重写，用户说的菜系/类型/难度已经足够）。</li>
+<li>如果路由结果是 <code>detail</code> 或 <code>general</code>，调用智能重写优化查询。</li>
+</ul>
+<p><strong>第三步：检索</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">filter</span> = self._extract_filters_from_query(question)</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">filter</span>:</span><br><span class="line">    relevant_chunks = self.retrieval_module.metadata_filtered_search(...)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    relevant_chunks = self.retrieval_module.hybrid_search(...)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>先从用户问题中提取分类和难度的关键词。</li>
+<li>如果有过滤条件（比如用户说了”素菜”），使用带过滤的检索。</li>
+<li>如果没有过滤条件，使用普通的混合检索。</li>
+</ul>
+<p><strong>第四步：获取完整文档</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">relevant_docs = self.data_module.get_parent_documents(relevant_chunks)</span><br></pre></td></tr></table></figure>
+<p>从检索到的子块找回完整的父文档（完整菜谱），供 LLM 生成回答时使用。</p>
+<p><strong>第五步：生成回答</strong></p>
+<ul>
+<li>如果没有找到任何相关文档，直接返回抱歉信息。</li>
+<li><code>list</code> 类型 → <code>generate_list_answer()</code>（不需要 LLM，直接提取菜名）。</li>
+<li><code>detail</code> 类型 → <code>generate_step_by_step_answer()</code> 或流式版本。</li>
+<li><code>general</code> 类型 → <code>generate_basic_answer()</code> 或流式版本。</li>
+</ul>
+<h3 id="8-6-extract-filters-from-query-query-关键词过滤提取"><a href="#8-6-extract-filters-from-query-query-关键词过滤提取" class="headerlink" title="8.6 _extract_filters_from_query(query) 关键词过滤提取"></a>8.6 _extract_filters_from_query(query) 关键词过滤提取</h3><p>这个方法是一个简单但实用的关键词匹配器：</p>
+<ol>
+<li>从 <code>DataPreparationModule.get_supported_categories()</code> 获取所有的中文分类标签（如”荤菜”、”素菜”、”汤品”）。</li>
+<li>检查用户查询中是否包含任意一个分类标签，如果包含就加入过滤条件。</li>
+<li>同样的逻辑处理难度标签（如”简单”、”中等”）。</li>
+</ol>
+<p>例如，用户输入”推荐几个简单的素菜”，这个方法会返回 <code>&#123;&quot;category&quot;: &quot;素菜&quot;, &quot;difficulty&quot;: &quot;简单&quot;&#125;</code>（注意：实际代码中只会匹配到一个分类和一个难度即退出循环）。</p>
+<h3 id="8-7-search-by-category-category-query-分类搜索"><a href="#8-7-search-by-category-category-query-分类搜索" class="headerlink" title="8.7 search_by_category(category, query) 分类搜索"></a>8.7 search_by_category(category, query) 分类搜索</h3><p>一个便捷方法，允许用户按分类浏览菜品。内部调用 <code>metadata_filtered_search</code>，指定 <code>filter=&#123;&quot;category&quot;: category&#125;</code>，返回去重后的菜名列表。</p>
+<h3 id="8-8-get-ingredients-list-dish-name-获取食材"><a href="#8-8-get-ingredients-list-dish-name-获取食材" class="headerlink" title="8.8 get_ingredients_list(dish_name) 获取食材"></a>8.8 get_ingredients_list(dish_name) 获取食材</h3><p>根据菜名搜索相关的文档块，然后让 LLM 生成该菜品的食材清单。调用了混合检索和基础回答生成。</p>
+<h3 id="8-9-run-interactive-交互式问答"><a href="#8-9-run-interactive-交互式问答" class="headerlink" title="8.9 run_interactive() 交互式问答"></a>8.9 run_interactive() 交互式问答</h3><p>启动一个命令行交互循环：</p>
+<ol>
+<li>初始化系统模块。</li>
+<li>构建知识库。</li>
+<li>进入 <code>while True</code> 循环：<ul>
+<li>读取用户输入。</li>
+<li>如果输入为空或退出命令（”退出”/“quit”/“exit”），结束循环。</li>
+<li>询问用户是否使用流式输出。</li>
+<li>调用 <code>ask_question()</code> 获取回答。</li>
+<li>流式模式下逐块打印（<code>print(chunk, end=&quot;&quot;, flush=True)</code>），<code>flush=True</code> 确保每个字符块立即显示。</li>
+<li>非流式模式下一次性打印完整回答。</li>
+</ul>
+</li>
+<li>处理 <code>KeyboardInterrupt</code>（Ctrl+C）优雅退出。</li>
+</ol>
+<hr>
+<h2 id="九、RAG-系统的数据流全貌"><a href="#九、RAG-系统的数据流全貌" class="headerlink" title="九、RAG 系统的数据流全貌"></a>九、RAG 系统的数据流全貌</h2><p>让我们用”用户问’红烧肉怎么做’”这个例子，完整走一遍数据流：</p>
+<h3 id="步骤-1：系统启动"><a href="#步骤-1：系统启动" class="headerlink" title="步骤 1：系统启动"></a>步骤 1：系统启动</h3><ol>
+<li><code>RecipeRAGSystem.__init__()</code> 加载配置，检查路径和 API Key。</li>
+<li><code>initialize_system()</code> 创建四个模块实例。</li>
+<li><code>build_knowledge_base()</code> 加载 323 个菜谱 Markdown 文件 → 按标题分割成若干子块 → 向量化 → 构建 FAISS 索引 → 初始化 BM25 检索器。</li>
+</ol>
+<h3 id="步骤-2：接收查询"><a href="#步骤-2：接收查询" class="headerlink" title="步骤 2：接收查询"></a>步骤 2：接收查询</h3><p>用户输入：<code>&quot;红烧肉怎么做&quot;</code></p>
+<h3 id="步骤-3：查询路由"><a href="#步骤-3：查询路由" class="headerlink" title="步骤 3：查询路由"></a>步骤 3：查询路由</h3><p><code>query_router(&quot;红烧肉怎么做&quot;)</code> → LLM 分析 → 返回 <code>&quot;detail&quot;</code></p>
+<h3 id="步骤-4：查询重写"><a href="#步骤-4：查询重写" class="headerlink" title="步骤 4：查询重写"></a>步骤 4：查询重写</h3><p><code>query_rewrite(&quot;红烧肉怎么做&quot;)</code> → LLM 判断这是具体查询 → 保持原样返回 <code>&quot;红烧肉怎么做&quot;</code></p>
+<h3 id="步骤-5：关键词过滤提取"><a href="#步骤-5：关键词过滤提取" class="headerlink" title="步骤 5：关键词过滤提取"></a>步骤 5：关键词过滤提取</h3><p><code>_extract_filters_from_query(&quot;红烧肉怎么做&quot;)</code> → 不包含分类或难度关键词 → 返回空字典 <code>&#123;&#125;</code></p>
+<h3 id="步骤-6：混合检索"><a href="#步骤-6：混合检索" class="headerlink" title="步骤 6：混合检索"></a>步骤 6：混合检索</h3><p><code>hybrid_search(&quot;红烧肉怎么做&quot;, top_k=3)</code> → </p>
+<ul>
+<li>向量检索器返回 5 个语义最相关的子块</li>
+<li>BM25 检索器返回 5 个关键词最匹配的子块</li>
+<li>RRF 算法融合两路结果，取前 3 个</li>
+</ul>
+<h3 id="步骤-7：父子文档映射"><a href="#步骤-7：父子文档映射" class="headerlink" title="步骤 7：父子文档映射"></a>步骤 7：父子文档映射</h3><p><code>get_parent_documents(检索到的3个子块)</code> → 从 <code>parent_child_map</code> 找回对应的完整父文档 → 得到完整版《红烧肉》菜谱</p>
+<h3 id="步骤-8：生成回答"><a href="#步骤-8：生成回答" class="headerlink" title="步骤 8：生成回答"></a>步骤 8：生成回答</h3><p>因为路由类型是 <code>detail</code>，调用 <code>generate_step_by_step_answer(&quot;红烧肉怎么做&quot;, [红烧肉完整文档])</code> →</p>
+<ul>
+<li>构建包含完整菜谱内容的上下文字符串</li>
+<li>填入提示词模板（包含菜品介绍、食材、步骤、技巧的结构要求）</li>
+<li>调用通义千问 LLM 生成结构化回答</li>
+<li>返回给用户</li>
+</ul>
+<h3 id="步骤-9：输出"><a href="#步骤-9：输出" class="headerlink" title="步骤 9：输出"></a>步骤 9：输出</h3><p>用户看到包含 🥘 菜品介绍、🛒 所需食材、👨‍🍳 制作步骤、💡 制作技巧的完整回答。</p>
+<hr>
+<h2 id="十、关键技术决策与设计理念"><a href="#十、关键技术决策与设计理念" class="headerlink" title="十、关键技术决策与设计理念"></a>十、关键技术决策与设计理念</h2><h3 id="10-1-为什么使用父子文档模式？"><a href="#10-1-为什么使用父子文档模式？" class="headerlink" title="10.1 为什么使用父子文档模式？"></a>10.1 为什么使用父子文档模式？</h3><p>在 RAG 系统中，文档粒度需要在”检索精准度”和”上下文完整性”之间做权衡。如果直接用完整文档做检索，文档太长，语义被稀释，检索不准；如果只用小块做检索和生成，LLM 只能看到片段，生成质量差。父子文档模式同时解决了这两个问题——小块用于精准检索，大块用于完整生成。</p>
+<h3 id="10-2-为什么使用混合检索？"><a href="#10-2-为什么使用混合检索？" class="headerlink" title="10.2 为什么使用混合检索？"></a>10.2 为什么使用混合检索？</h3><p>纯向量检索虽然在多数情况下表现很好，但有两个弱点：</p>
+<ul>
+<li>对专有名词（如”宫保鸡丁”）的精确匹配不如关键词检索。</li>
+<li>嵌入模型可能对某些领域的术语理解不够好。</li>
+</ul>
+<p>BM25 正好弥补了这些弱点。而 RRF 算法提供了一个不需要调参的融合方案——不需要手动设置向量检索和关键词检索的权重，算法自动根据排名来融合。</p>
+<h3 id="10-3-为什么需要查询路由？"><a href="#10-3-为什么需要查询路由？" class="headerlink" title="10.3 为什么需要查询路由？"></a>10.3 为什么需要查询路由？</h3><p>不同类型的查询需要不同风格的回答。如果一个用户说”推荐几个素菜”，你给他返回”素菜分几步怎么做”的长篇大论显然不合适；反之如果用户问”红烧肉怎么做”，只返回一个菜名列表也不够。查询路由让系统能根据用户意图自适应地调整回答策略。</p>
+<h3 id="10-4-为什么-temperature-设得这么低？"><a href="#10-4-为什么-temperature-设得这么低？" class="headerlink" title="10.4 为什么 temperature 设得这么低？"></a>10.4 为什么 temperature 设得这么低？</h3><p>菜谱问答是一个需要准确性的任务。用户需要精确的食材用量和正确的步骤顺序。<code>temperature=0.1</code> 使 LLM 的输出更确定、更可预测、更不容易”自由发挥”出错误的菜谱。</p>
+<hr>
+<h2 id="十一、测试体系"><a href="#十一、测试体系" class="headerlink" title="十一、测试体系"></a>十一、测试体系</h2><p>项目 <code>tests/</code> 目录下有完整的单元测试套件，覆盖所有四个核心模块和主控制系统，共 95 个测试用例。测试使用了 <code>pytest</code> 框架和 <code>unittest.mock</code> 进行模拟，不依赖真实的 API Key 或数据文件即可运行。</p>
+<p>各测试文件的分工：</p>
+<ul>
+<li><code>test_config.py</code>：验证配置类的默认值、序列化/反序列化</li>
+<li><code>test_data_preparation.py</code>：验证文档加载、元数据提取、Markdown 分块、父子映射、过滤和统计</li>
+<li><code>test_index_construction.py</code>：验证嵌入模型初始化、FAISS 索引构建/保存/加载、相似度搜索</li>
+<li><code>test_retrieval_optimization.py</code>：验证混合检索、RRF 重排算法、元数据过滤</li>
+<li><code>test_generation_integration.py</code>：验证 LLM 初始化、上下文构建、查询路由/重写、各类回答生成</li>
+<li><code>test_main.py</code>：验证主系统初始化、过滤条件提取、分类搜索、问答流程</li>
+</ul>
+<p>运行测试的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest tests/ -v</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、运行方式"><a href="#十二、运行方式" class="headerlink" title="十二、运行方式"></a>十二、运行方式</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ol>
+<li>创建并激活 conda 环境：<code>conda activate cook-rag-1</code></li>
+<li>安装依赖：<code>pip install -r requirements.txt</code></li>
+<li>在 <code>.env</code> 文件中设置 <code>DASHSCOPE_API_KEY=你的API密钥</code></li>
+</ol>
+<h3 id="启动系统"><a href="#启动系统" class="headerlink" title="启动系统"></a>启动系统</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python main.py</span><br></pre></td></tr></table></figure>
+
+<p>系统会自动：</p>
+<ol>
+<li>尝试加载已保存的 FAISS 索引（<code>vector_index/</code> 目录）</li>
+<li>如果索引不存在，从零构建新索引</li>
+<li>进入交互式问答模式</li>
+</ol>
+<h3 id="交互示例"><a href="#交互示例" class="headerlink" title="交互示例"></a>交互示例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">您的问题: 红烧肉怎么做</span><br><span class="line">🎯 查询类型: detail</span><br><span class="line">📝 列表查询保持原样: 红烧肉怎么做</span><br><span class="line">🔍 检索相关文档...</span><br><span class="line">找到 3 个相关文档块: 红烧肉(食材), 红烧肉(步骤), ...</span><br><span class="line">获取完整文档...</span><br><span class="line">找到文档: 红烧肉</span><br><span class="line">✍️ 生成详细回答...</span><br><span class="line"></span><br><span class="line">## 🥘 菜品介绍</span><br><span class="line">红烧肉是一道经典的中式荤菜，色泽红亮，肥而不腻...</span><br><span class="line"></span><br><span class="line">## 🛒 所需食材</span><br><span class="line">- 五花肉 500g</span><br><span class="line">- 冰糖 30g</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+              <a href="/tags/langchain/" rel="tag"># langchain</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/03/18/Go-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-2/" rel="prev" title="Go 流程控制(2)">
+      <i class="fa fa-chevron-left"></i> Go 流程控制(2)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG-%E8%8F%9C%E8%B0%B1%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%94%9F%E6%88%90%E7%B3%BB%E7%BB%9F-%E2%80%94-%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3"><span class="nav-number">1.</span> <span class="nav-text">RAG 菜谱检索与生成系统 — 技术文档</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">一、项目概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">二、项目目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F%EF%BC%88config-py%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">三、配置系统（config.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-RAGConfig-%E6%95%B0%E6%8D%AE%E7%B1%BB"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 RAGConfig 数据类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%AE%BE%E8%AE%A1%E8%A6%81%E7%82%B9"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 设计要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87%E6%A8%A1%E5%9D%97%EF%BC%88rag-modules-data-preparation-py%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">四、数据准备模块（rag_modules&#x2F;data_preparation.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 模块职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 数据结构设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-CATEGORY-MAPPING-%E5%88%86%E7%B1%BB%E6%98%A0%E5%B0%84"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 CATEGORY_MAPPING 分类映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-load-documents-%E6%96%87%E6%A1%A3%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 load_documents() 文档加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-enhance-metadata-%E5%85%83%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA"><span class="nav-number">1.4.5.</span> <span class="nav-text">4.5 _enhance_metadata() 元数据增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-chunk-documents-%E6%96%87%E6%A1%A3%E5%88%86%E5%9D%97"><span class="nav-number">1.4.6.</span> <span class="nav-text">4.6 chunk_documents() 文档分块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-markdown-header-split-%E5%88%86%E5%9D%97%E6%A0%B8%E5%BF%83%E9%80%BB%E8%BE%91"><span class="nav-number">1.4.7.</span> <span class="nav-text">4.7 _markdown_header_split() 分块核心逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-%E5%85%B6%E4%BB%96%E8%BE%85%E5%8A%A9%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.8.</span> <span class="nav-text">4.8 其他辅助方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-9-get-parent-documents-%E7%88%B6%E5%AD%90%E6%96%87%E6%A1%A3%E9%80%86%E6%98%A0%E5%B0%84"><span class="nav-number">1.4.9.</span> <span class="nav-text">4.9 get_parent_documents() 父子文档逆映射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%B4%A2%E5%BC%95%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9D%97%EF%BC%88rag-modules-index-construction-py%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">五、索引构建模块（rag_modules&#x2F;index_construction.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 模块职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%90%91%E9%87%8F%E5%8C%96%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 向量化的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 类设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-setup-embeddings-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B5%8C%E5%85%A5%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.5.4.</span> <span class="nav-text">5.4 setup_embeddings() 初始化嵌入模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-build-vector-index-chunks-%E6%9E%84%E5%BB%BA%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-number">1.5.5.</span> <span class="nav-text">5.5 build_vector_index(chunks) 构建向量索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-save-index-%E4%BF%9D%E5%AD%98%E7%B4%A2%E5%BC%95"><span class="nav-number">1.5.6.</span> <span class="nav-text">5.6 save_index() 保存索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-7-load-index-%E5%8A%A0%E8%BD%BD%E7%B4%A2%E5%BC%95"><span class="nav-number">1.5.7.</span> <span class="nav-text">5.7 load_index() 加载索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-8-similarity-search-query-k-%E7%9B%B8%E4%BC%BC%E5%BA%A6%E6%A3%80%E7%B4%A2"><span class="nav-number">1.5.8.</span> <span class="nav-text">5.8 similarity_search(query, k) 相似度检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-9-add-documents-new-chunks-%E5%A2%9E%E9%87%8F%E6%B7%BB%E5%8A%A0"><span class="nav-number">1.5.9.</span> <span class="nav-text">5.9 add_documents(new_chunks) 增量添加</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%A3%80%E7%B4%A2%E4%BC%98%E5%8C%96%E6%A8%A1%E5%9D%97%EF%BC%88rag-modules-retrieval-optimization-py%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">六、检索优化模块（rag_modules&#x2F;retrieval_optimization.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1 模块职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E4%B8%A4%E7%A7%8D%E6%A3%80%E7%B4%A2%E5%99%A8"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 两种检索器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-hybrid-search-query-top-k-%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 hybrid_search(query, top_k) 混合检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-rrf-rerank-RRF-%E9%87%8D%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">1.6.4.</span> <span class="nav-text">6.4 _rrf_rerank() RRF 重排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-metadata-filtered-search-query-filters-top-k-%E5%B8%A6%E8%BF%87%E6%BB%A4%E7%9A%84%E6%A3%80%E7%B4%A2"><span class="nav-number">1.6.5.</span> <span class="nav-text">6.5 metadata_filtered_search(query, filters, top_k) 带过滤的检索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%94%9F%E6%88%90%E9%9B%86%E6%88%90%E6%A8%A1%E5%9D%97%EF%BC%88rag-modules-generation-integration-py%EF%BC%89"><span class="nav-number">1.7.</span> <span class="nav-text">七、生成集成模块（rag_modules&#x2F;generation_integration.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3"><span class="nav-number">1.7.1.</span> <span class="nav-text">7.1 模块职责</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-LLM-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.7.2.</span> <span class="nav-text">7.2 LLM 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-build-context-docs-max-length-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%84%E5%BB%BA"><span class="nav-number">1.7.3.</span> <span class="nav-text">7.3 _build_context(docs, max_length) 上下文构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-query-router-query-%E6%9F%A5%E8%AF%A2%E8%B7%AF%E7%94%B1"><span class="nav-number">1.7.4.</span> <span class="nav-text">7.4 query_router(query) 查询路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-query-rewrite-query-%E6%9F%A5%E8%AF%A2%E9%87%8D%E5%86%99"><span class="nav-number">1.7.5.</span> <span class="nav-text">7.5 query_rewrite(query) 查询重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6-generate-basic-answer-query-context-docs-%E5%9F%BA%E7%A1%80%E5%9B%9E%E7%AD%94"><span class="nav-number">1.7.6.</span> <span class="nav-text">7.6 generate_basic_answer(query, context_docs) 基础回答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-7-generate-basic-answer-stream-query-context-docs-%E6%B5%81%E5%BC%8F%E5%9F%BA%E7%A1%80%E5%9B%9E%E7%AD%94"><span class="nav-number">1.7.7.</span> <span class="nav-text">7.7 generate_basic_answer_stream(query, context_docs) 流式基础回答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-8-generate-step-by-step-answer-query-context-docs-%E5%88%86%E6%AD%A5%E9%AA%A4%E5%9B%9E%E7%AD%94"><span class="nav-number">1.7.8.</span> <span class="nav-text">7.8 generate_step_by_step_answer(query, context_docs) 分步骤回答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-9-generate-list-answer-query-context-docs-%E5%88%97%E8%A1%A8%E5%9B%9E%E7%AD%94"><span class="nav-number">1.7.9.</span> <span class="nav-text">7.9 generate_list_answer(query, context_docs) 列表回答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E4%B8%BB%E7%B3%BB%E7%BB%9F%EF%BC%88main-py%EF%BC%89"><span class="nav-number">1.8.</span> <span class="nav-text">八、主系统（main.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-RecipeRAGSystem-%E4%B8%BB%E7%B1%BB"><span class="nav-number">1.8.1.</span> <span class="nav-text">8.1 RecipeRAGSystem 主类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-init-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.8.2.</span> <span class="nav-text">8.2 init() 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-initialize-system-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%89%80%E6%9C%89%E6%A8%A1%E5%9D%97"><span class="nav-number">1.8.3.</span> <span class="nav-text">8.3 initialize_system() 初始化所有模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-build-knowledge-base-%E6%9E%84%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="nav-number">1.8.4.</span> <span class="nav-text">8.4 build_knowledge_base() 构建知识库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-ask-question-question-stream-%E6%A0%B8%E5%BF%83%E9%97%AE%E7%AD%94%E6%B5%81%E7%A8%8B"><span class="nav-number">1.8.5.</span> <span class="nav-text">8.5 ask_question(question, stream) 核心问答流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-6-extract-filters-from-query-query-%E5%85%B3%E9%94%AE%E8%AF%8D%E8%BF%87%E6%BB%A4%E6%8F%90%E5%8F%96"><span class="nav-number">1.8.6.</span> <span class="nav-text">8.6 _extract_filters_from_query(query) 关键词过滤提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-7-search-by-category-category-query-%E5%88%86%E7%B1%BB%E6%90%9C%E7%B4%A2"><span class="nav-number">1.8.7.</span> <span class="nav-text">8.7 search_by_category(category, query) 分类搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-8-get-ingredients-list-dish-name-%E8%8E%B7%E5%8F%96%E9%A3%9F%E6%9D%90"><span class="nav-number">1.8.8.</span> <span class="nav-text">8.8 get_ingredients_list(dish_name) 获取食材</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-9-run-interactive-%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%97%AE%E7%AD%94"><span class="nav-number">1.8.9.</span> <span class="nav-text">8.9 run_interactive() 交互式问答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81RAG-%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%85%A8%E8%B2%8C"><span class="nav-number">1.9.</span> <span class="nav-text">九、RAG 系统的数据流全貌</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-number">1.9.1.</span> <span class="nav-text">步骤 1：系统启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-2%EF%BC%9A%E6%8E%A5%E6%94%B6%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.9.2.</span> <span class="nav-text">步骤 2：接收查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-3%EF%BC%9A%E6%9F%A5%E8%AF%A2%E8%B7%AF%E7%94%B1"><span class="nav-number">1.9.3.</span> <span class="nav-text">步骤 3：查询路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-4%EF%BC%9A%E6%9F%A5%E8%AF%A2%E9%87%8D%E5%86%99"><span class="nav-number">1.9.4.</span> <span class="nav-text">步骤 4：查询重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-5%EF%BC%9A%E5%85%B3%E9%94%AE%E8%AF%8D%E8%BF%87%E6%BB%A4%E6%8F%90%E5%8F%96"><span class="nav-number">1.9.5.</span> <span class="nav-text">步骤 5：关键词过滤提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-6%EF%BC%9A%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2"><span class="nav-number">1.9.6.</span> <span class="nav-text">步骤 6：混合检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-7%EF%BC%9A%E7%88%B6%E5%AD%90%E6%96%87%E6%A1%A3%E6%98%A0%E5%B0%84"><span class="nav-number">1.9.7.</span> <span class="nav-text">步骤 7：父子文档映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-8%EF%BC%9A%E7%94%9F%E6%88%90%E5%9B%9E%E7%AD%94"><span class="nav-number">1.9.8.</span> <span class="nav-text">步骤 8：生成回答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-9%EF%BC%9A%E8%BE%93%E5%87%BA"><span class="nav-number">1.9.9.</span> <span class="nav-text">步骤 9：输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E5%86%B3%E7%AD%96%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-number">1.10.</span> <span class="nav-text">十、关键技术决策与设计理念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E7%88%B6%E5%AD%90%E6%96%87%E6%A1%A3%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.10.1.</span> <span class="nav-text">10.1 为什么使用父子文档模式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2%EF%BC%9F"><span class="nav-number">1.10.2.</span> <span class="nav-text">10.2 为什么使用混合检索？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%9F%A5%E8%AF%A2%E8%B7%AF%E7%94%B1%EF%BC%9F"><span class="nav-number">1.10.3.</span> <span class="nav-text">10.3 为什么需要查询路由？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-4-%E4%B8%BA%E4%BB%80%E4%B9%88-temperature-%E8%AE%BE%E5%BE%97%E8%BF%99%E4%B9%88%E4%BD%8E%EF%BC%9F"><span class="nav-number">1.10.4.</span> <span class="nav-text">10.4 为什么 temperature 设得这么低？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E6%B5%8B%E8%AF%95%E4%BD%93%E7%B3%BB"><span class="nav-number">1.11.</span> <span class="nav-text">十一、测试体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.12.</span> <span class="nav-text">十二、运行方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">1.12.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.12.2.</span> <span class="nav-text">启动系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.12.3.</span> <span class="nav-text">交互示例</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
