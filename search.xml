@@ -8109,4 +8109,234 @@ public static JSONArray getObject(ArrayList&lt;Object&gt; arrayList)&#123;
         <category>javaSE</category>
       </categories>
   </entry>
+  <entry>
+    <title>PromptTemplate与ChatPromptTemplate详解</title>
+    <url>/2026/05/04/PromptTemplate%E4%B8%8EChatPromptTemplate%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>在 LangChain 中，Prompt 模板是构建 LLM 应用的核心组件。本文介绍四种最常用的模板类：<code>PromptTemplate</code>、<code>ChatPromptTemplate</code>、<code>FewShotPromptTemplate</code>，以及它们之间的区别、联系和常用方法。</p>
+<span id="more"></span>
+
+<h2 id="2-PromptTemplate（基础字符串模板）"><a href="#2-PromptTemplate（基础字符串模板）" class="headerlink" title="2. PromptTemplate（基础字符串模板）"></a>2. PromptTemplate（基础字符串模板）</h2><p><code>PromptTemplate</code> 是最基础的模板类，用于生成纯文本 prompt。它通过 <code>&#123;variable&#125;</code> 占位符支持变量替换。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">prompt = PromptTemplate.from_template(<span class="string">&quot;请用&#123;language&#125;语言解释以下概念：&#123;concept&#125;&quot;</span>)</span><br><span class="line">result = prompt.<span class="built_in">format</span>(language=<span class="string">&quot;中文&quot;</span>, concept=<span class="string">&quot;机器学习&quot;</span>)</span><br><span class="line"><span class="comment"># 输出: 请用中文语言解释以下概念：机器学习</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>from_template(template)</code></td>
+<td>类方法，直接从字符串创建模板</td>
+</tr>
+<tr>
+<td><code>format(**kwargs)</code></td>
+<td>传入变量，返回填充后的字符串</td>
+</tr>
+<tr>
+<td><code>invoke(input_dict)</code></td>
+<td>LCEL 接口，等同于 <code>format()</code></td>
+</tr>
+<tr>
+<td><code>partial(**kwargs)</code></td>
+<td>预设部分变量，返回新模板</td>
+</tr>
+<tr>
+<td><code>format_prompt(**kwargs)</code></td>
+<td>返回 <code>PromptValue</code> 对象（字符串 + 消息双模式）</td>
+</tr>
+</tbody></table>
+<h3 id="partial-的使用"><a href="#partial-的使用" class="headerlink" title="partial() 的使用"></a>partial() 的使用</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = PromptTemplate.from_template(<span class="string">&quot;&#123;greeting&#125;，&#123;name&#125;！&quot;</span>)</span><br><span class="line">partial_prompt = prompt.partial(greeting=<span class="string">&quot;你好&quot;</span>)</span><br><span class="line">result = partial_prompt.<span class="built_in">format</span>(name=<span class="string">&quot;张三&quot;</span>)</span><br><span class="line"><span class="comment"># 输出: 你好，张三！</span></span><br></pre></td></tr></table></figure>
+
+<p><code>partial()</code> 适合固定一部分变量，让调用方只传剩余的变量。</p>
+<h2 id="3-ChatPromptTemplate（聊天消息模板）"><a href="#3-ChatPromptTemplate（聊天消息模板）" class="headerlink" title="3. ChatPromptTemplate（聊天消息模板）"></a>3. ChatPromptTemplate（聊天消息模板）</h2><p><code>ChatPromptTemplate</code> 是专门为聊天模型（Chat Model）设计的模板。它由多个消息模板（<code>SystemMessagePromptTemplate</code>、<code>HumanMessagePromptTemplate</code>、<code>AIMessagePromptTemplate</code>）组成，生成的是消息列表而非纯字符串。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line">chat_prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;你是一个&#123;role&#125;助手，请用&#123;language&#125;回答。&quot;</span>),</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;请解释：&#123;question&#125;&quot;</span>),</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">messages = chat_prompt.format_messages(</span><br><span class="line">    role=<span class="string">&quot;编程&quot;</span>, language=<span class="string">&quot;中文&quot;</span>, question=<span class="string">&quot;什么是闭包&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 返回: [SystemMessage(...), HumanMessage(...)]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常用方法-1"><a href="#常用方法-1" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>from_messages(messages)</code></td>
+<td>类方法，从消息列表创建模板</td>
+</tr>
+<tr>
+<td><code>from_template(template)</code></td>
+<td>类方法，从单个字符串创建（自动包装为 human 消息）</td>
+</tr>
+<tr>
+<td><code>format_messages(**kwargs)</code></td>
+<td>返回 <code>List[BaseMessage]</code></td>
+</tr>
+<tr>
+<td><code>format(**kwargs)</code></td>
+<td>返回字符串（拼接所有消息）</td>
+</tr>
+<tr>
+<td><code>invoke(input_dict)</code></td>
+<td>LCEL 接口，返回消息列表</td>
+</tr>
+<tr>
+<td><code>partial(**kwargs)</code></td>
+<td>预设部分变量</td>
+</tr>
+</tbody></table>
+<h3 id="消息角色说明"><a href="#消息角色说明" class="headerlink" title="消息角色说明"></a>消息角色说明</h3><ul>
+<li><code>(&quot;system&quot;, &quot;...&quot;)</code> — 系统消息，设定 AI 的行为和角色</li>
+<li><code>(&quot;human&quot;, &quot;...&quot;)</code> — 用户消息，用户的输入</li>
+<li><code>(&quot;ai&quot;, &quot;...&quot;)</code> — AI 消息，对话历史中的 AI 回复</li>
+<li><code>MessagePlaceholder</code> — 消息占位符，用于注入历史消息列表</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> MessagesPlaceholder</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;你是一个智能助手。&quot;</span>),</span><br><span class="line">    MessagesPlaceholder(variable_name=<span class="string">&quot;history&quot;</span>),</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;input&#125;&quot;</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-FewShotPromptTemplate（少样本提示模板）"><a href="#4-FewShotPromptTemplate（少样本提示模板）" class="headerlink" title="4. FewShotPromptTemplate（少样本提示模板）"></a>4. FewShotPromptTemplate（少样本提示模板）</h2><p><code>FewShotPromptTemplate</code> 在基础模板之上增加了<strong>示例（Examples）</strong>机制，通过 <code>prefix</code>、<code>examples</code>、<code>suffix</code> 三段式结构组织 prompt。</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">prefix（前缀，一般是任务说明）</span><br><span class="line">  ↓</span><br><span class="line">示例1 → 示例2 → 示例3 ...（由 example_prompt 格式化）</span><br><span class="line">  ↓</span><br><span class="line">suffix（后缀，实际要处理的问题）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> FewShotPromptTemplate, PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 定义一个 example_prompt（每个示例的格式）</span></span><br><span class="line">example_prompt = PromptTemplate.from_template(<span class="string">&quot;输入：&#123;input&#125;\n输出：&#123;output&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 准备示例数据</span></span><br><span class="line">examples = [</span><br><span class="line">    &#123;<span class="string">&quot;input&quot;</span>: <span class="string">&quot;开心&quot;</span>, <span class="string">&quot;output&quot;</span>: <span class="string">&quot;positive&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;input&quot;</span>: <span class="string">&quot;难过&quot;</span>, <span class="string">&quot;output&quot;</span>: <span class="string">&quot;negative&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;input&quot;</span>: <span class="string">&quot;一般&quot;</span>, <span class="string">&quot;output&quot;</span>: <span class="string">&quot;neutral&quot;</span>&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 构建 FewShotPromptTemplate</span></span><br><span class="line">few_shot = FewShotPromptTemplate(</span><br><span class="line">    examples=examples,</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    prefix=<span class="string">&quot;请对以下文本进行情感分类：&quot;</span>,</span><br><span class="line">    suffix=<span class="string">&quot;输入：&#123;text&#125;\n输出：&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;text&quot;</span>],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">result = few_shot.<span class="built_in">format</span>(text=<span class="string">&quot;爽快&quot;</span>)</span><br><span class="line"><span class="comment"># 输出:</span></span><br><span class="line"><span class="comment"># 请对以下文本进行情感分类：</span></span><br><span class="line"><span class="comment"># 输入：开心</span></span><br><span class="line"><span class="comment"># 输出：positive</span></span><br><span class="line"><span class="comment"># 输入：难过</span></span><br><span class="line"><span class="comment"># 输出：negative</span></span><br><span class="line"><span class="comment"># 输入：一般</span></span><br><span class="line"><span class="comment"># 输出：neutral</span></span><br><span class="line"><span class="comment"># 输入：爽快</span></span><br><span class="line"><span class="comment"># 输出：</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常用方法-2"><a href="#常用方法-2" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>format(**kwargs)</code></td>
+<td>传入变量，返回完整 prompt 字符串</td>
+</tr>
+<tr>
+<td><code>invoke(input_dict)</code></td>
+<td>LCEL 接口</td>
+</tr>
+</tbody></table>
+<h3 id="动态选择示例：example-selector"><a href="#动态选择示例：example-selector" class="headerlink" title="动态选择示例：example_selector"></a>动态选择示例：<code>example_selector</code></h3><p>当示例很多时可以用 <code>example_selector</code> 根据相似度自动选择最相关的示例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.example_selectors <span class="keyword">import</span> SemanticSimilarityExampleSelector</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"></span><br><span class="line">example_selector = SemanticSimilarityExampleSelector.from_examples(</span><br><span class="line">    examples,</span><br><span class="line">    OpenAIEmbeddings(),</span><br><span class="line">    Chroma,</span><br><span class="line">    k=<span class="number">1</span>,  <span class="comment"># 每次选最相似的 1 个示例</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">few_shot = FewShotPromptTemplate(</span><br><span class="line">    example_selector=example_selector,</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    prefix=<span class="string">&quot;请对以下文本进行情感分类：&quot;</span>,</span><br><span class="line">    suffix=<span class="string">&quot;输入：&#123;text&#125;\n输出：&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;text&quot;</span>],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="聊天模型的对应：FewShotChatMessagePromptTemplate"><a href="#聊天模型的对应：FewShotChatMessagePromptTemplate" class="headerlink" title="聊天模型的对应：FewShotChatMessagePromptTemplate"></a>聊天模型的对应：<code>FewShotChatMessagePromptTemplate</code></h3><p>对于 Chat Model，有对应的 <code>FewShotChatMessagePromptTemplate</code>，示例由消息列表组成：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> FewShotChatMessagePromptTemplate</span><br><span class="line"></span><br><span class="line">few_shot_chat = FewShotChatMessagePromptTemplate(</span><br><span class="line">    examples=[</span><br><span class="line">        &#123;<span class="string">&quot;input&quot;</span>: <span class="string">&quot;开心&quot;</span>, <span class="string">&quot;output&quot;</span>: <span class="string">&quot;positive&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;input&quot;</span>: <span class="string">&quot;难过&quot;</span>, <span class="string">&quot;output&quot;</span>: <span class="string">&quot;negative&quot;</span>&#125;,</span><br><span class="line">    ],</span><br><span class="line">    example_prompt=ChatPromptTemplate.from_messages([</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;input&#125;&quot;</span>),</span><br><span class="line">        (<span class="string">&quot;ai&quot;</span>, <span class="string">&quot;&#123;output&#125;&quot;</span>),</span><br><span class="line">    ]),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chat_prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    (<span class="string">&quot;system&quot;</span>, <span class="string">&quot;你是一个情感分析助手。&quot;</span>),</span><br><span class="line">    few_shot_chat,</span><br><span class="line">    (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;text&#125;&quot;</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>FewShotChatMessagePromptTemplate</code> 可以直接作为消息列表的一部分嵌入 <code>ChatPromptTemplate</code>。</p>
+<h2 id="5-区别与联系"><a href="#5-区别与联系" class="headerlink" title="5. 区别与联系"></a>5. 区别与联系</h2><h3 id="核心关系图"><a href="#核心关系图" class="headerlink" title="核心关系图"></a>核心关系图</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PromptTemplate（基础）</span><br><span class="line">    ├── 文本模型场景: 直接使用</span><br><span class="line">    │   └── 需要示例: FewShotPromptTemplate</span><br><span class="line">    │</span><br><span class="line">    └── 聊天模型场景: ChatPromptTemplate</span><br><span class="line">        └── 需要示例: FewShotChatMessagePromptTemplate</span><br></pre></td></tr></table></figure>
+
+<h3 id="对比表"><a href="#对比表" class="headerlink" title="对比表"></a>对比表</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>PromptTemplate</th>
+<th>ChatPromptTemplate</th>
+<th>FewShotPromptTemplate</th>
+<th>FewShotChatMessagePromptTemplate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生成内容</td>
+<td>字符串</td>
+<td>消息列表 <code>List[BaseMessage]</code></td>
+<td>字符串（含示例）</td>
+<td>消息列表（含示例）</td>
+</tr>
+<tr>
+<td>适用模型</td>
+<td>LLM（文本补全）</td>
+<td>Chat Model（聊天）</td>
+<td>LLM（文本补全）</td>
+<td>Chat Model（聊天）</td>
+</tr>
+<tr>
+<td>消息角色</td>
+<td>无</td>
+<td>system/human/ai</td>
+<td>无</td>
+<td>system/human/ai</td>
+</tr>
+<tr>
+<td>示例机制</td>
+<td>无</td>
+<td>无</td>
+<td>固定/动态选择</td>
+<td>固定/动态选择</td>
+</tr>
+<tr>
+<td><code>format()</code> 返回</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>消息列表</td>
+</tr>
+<tr>
+<td><code>format_messages()</code></td>
+<td>不支持</td>
+<td>返回消息列表</td>
+<td>不支持</td>
+<td>返回消息列表</td>
+</tr>
+<tr>
+<td>嵌入上层模板</td>
+<td>—</td>
+<td>支持 MessagePlaceholder</td>
+<td>不能</td>
+<td><strong>可以</strong>直接放入 ChatPromptTemplate</td>
+</tr>
+</tbody></table>
+<h3 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h3><ol>
+<li><strong>使用文本模型（LLM）</strong> → <code>PromptTemplate</code>，需要示例加 <code>FewShotPromptTemplate</code></li>
+<li><strong>使用聊天模型（Chat Model）</strong> → <code>ChatPromptTemplate</code>，需要示例加 <code>FewShotChatMessagePromptTemplate</code></li>
+</ol>
+<h2 id="6-partial-的深度用法"><a href="#6-partial-的深度用法" class="headerlink" title="6. partial() 的深度用法"></a>6. partial() 的深度用法</h2><p><code>partial()</code> 有三个典型场景：</p>
+<h3 id="场景一：固定部分变量"><a href="#场景一：固定部分变量" class="headerlink" title="场景一：固定部分变量"></a>场景一：固定部分变量</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = PromptTemplate.from_template(<span class="string">&quot;&#123;greeting&#125;，&#123;name&#125;&quot;</span>)</span><br><span class="line">partial = prompt.partial(greeting=<span class="string">&quot;你好&quot;</span>)</span><br><span class="line">partial.<span class="built_in">format</span>(name=<span class="string">&quot;张三&quot;</span>)  <span class="comment"># 调用时只需传 name</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="场景二：函数绑定（运行时动态获取）"><a href="#场景二：函数绑定（运行时动态获取）" class="headerlink" title="场景二：函数绑定（运行时动态获取）"></a>场景二：函数绑定（运行时动态获取）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_current_date</span>():</span></span><br><span class="line">    <span class="keyword">return</span> datetime.now().strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line"></span><br><span class="line">prompt = PromptTemplate.from_template(<span class="string">&quot;今天是&#123;date&#125;，请推荐&#123;activity&#125;&quot;</span>)</span><br><span class="line">partial = prompt.partial(date=get_current_date)</span><br><span class="line"><span class="comment"># 每次 format 都会重新调用 get_current_date()</span></span><br><span class="line">partial.<span class="built_in">format</span>(activity=<span class="string">&quot;户外活动&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="场景三：逐步构建复杂模板"><a href="#场景三：逐步构建复杂模板" class="headerlink" title="场景三：逐步构建复杂模板"></a>场景三：逐步构建复杂模板</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">system_partial = chat_prompt.partial(role=<span class="string">&quot;翻译官&quot;</span>)</span><br><span class="line">final = system_partial.format_messages(language=<span class="string">&quot;英文&quot;</span>, question=<span class="string">&quot;机器学习&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-LCEL-统一接口"><a href="#7-LCEL-统一接口" class="headerlink" title="7. LCEL 统一接口"></a>7. LCEL 统一接口</h2><p>以上所有模板都实现了 <code>Runnable</code> 接口，可以直接用 <code>invoke()</code> 调用并串入 Chain：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(<span class="string">&quot;用&#123;language&#125;解释：&#123;topic&#125;&quot;</span>)</span><br><span class="line">model = ChatOpenAI()</span><br><span class="line"></span><br><span class="line">chain = prompt | model  <span class="comment"># 直接用 | 连接</span></span><br><span class="line">result = chain.invoke(&#123;<span class="string">&quot;language&quot;</span>: <span class="string">&quot;中文&quot;</span>, <span class="string">&quot;topic&quot;</span>: <span class="string">&quot;闭包&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><table>
+<thead>
+<tr>
+<th>你需要的是</th>
+<th>推荐方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单的文本补全 prompt</td>
+<td><code>PromptTemplate</code></td>
+</tr>
+<tr>
+<td>聊天对话，需要区分角色</td>
+<td><code>ChatPromptTemplate</code></td>
+</tr>
+<tr>
+<td>文本模型 + 少量示例引导</td>
+<td><code>FewShotPromptTemplate</code></td>
+</tr>
+<tr>
+<td>聊天模型 + 少量示例引导</td>
+<td><code>FewShotChatMessagePromptTemplate</code> 嵌入 <code>ChatPromptTemplate</code></td>
+</tr>
+<tr>
+<td>示例很多，需要自动选</td>
+<td>加 <code>example_selector</code>（<code>SemanticSimilarityExampleSelector</code>）</td>
+</tr>
+<tr>
+<td>函数动态生成变量值</td>
+<td><code>partial()</code> 绑定函数</td>
+</tr>
+<tr>
+<td>对话历史注入</td>
+<td><code>MessagesPlaceholder</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>LangChain</tag>
+        <tag>LLM</tag>
+        <tag>Prompt</tag>
+      </tags>
+  </entry>
 </search>
