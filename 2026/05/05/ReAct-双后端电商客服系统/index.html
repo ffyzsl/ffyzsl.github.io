@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ReAct (1) - 双后端电商客服系统 构建一个能查询商品、检索优惠、计算价格的 AI 客服系统。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReAct 双后端电商客服系统">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/05/05/ReAct-%E5%8F%8C%E5%90%8E%E7%AB%AF%E7%94%B5%E5%95%86%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="ReAct (1) - 双后端电商客服系统 构建一个能查询商品、检索优惠、计算价格的 AI 客服系统。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-05T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-05-05T12:33:05.475Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="ReAct">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/05/05/ReAct-%E5%8F%8C%E5%90%8E%E7%AB%AF%E7%94%B5%E5%95%86%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ReAct 双后端电商客服系统 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/05/05/ReAct-%E5%8F%8C%E5%90%8E%E7%AB%AF%E7%94%B5%E5%95%86%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ReAct 双后端电商客服系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-05-05 20:30:00 / 修改时间：20:33:05" itemprop="dateCreated datePublished" datetime="2026-05-05T20:30:00+08:00">2026-05-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ReAct-1-双后端电商客服系统"><a href="#ReAct-1-双后端电商客服系统" class="headerlink" title="ReAct (1) - 双后端电商客服系统"></a>ReAct (1) - 双后端电商客服系统</h1><blockquote>
+<p>构建一个能查询商品、检索优惠、计算价格的 AI 客服系统。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-react">什么是 ReAct？</a></li>
+<li><a href="#2-%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0">项目概述</a></li>
+<li><a href="#3-%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E4%B8%80%E8%A7%88">项目架构一览</a></li>
+<li><a href="#4-%E9%98%B6%E6%AE%B5-1%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%E4%B8%8E%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F">阶段 1：环境准备与配置系统</a></li>
+<li><a href="#5-%E9%98%B6%E6%AE%B5-2%E5%B7%A5%E5%85%B7%E5%B1%82--act-%E7%9A%84%E9%83%A8%E5%88%86">阶段 2：工具层 —— Act 的部分</a></li>
+<li><a href="#6-%E9%98%B6%E6%AE%B5-3llm-%E5%AE%A2%E6%88%B7%E7%AB%AF--%E8%BF%9E%E6%8E%A5%E5%A4%A7%E8%84%91">阶段 3：LLM 客户端 —— 连接大脑</a></li>
+<li><a href="#7-%E9%98%B6%E6%AE%B5-4agent-%E6%A0%B8%E5%BF%83--reasoning-%E7%9A%84%E9%83%A8%E5%88%86">阶段 4：Agent 核心 —— Reasoning 的部分</a></li>
+<li><a href="#8-%E9%98%B6%E6%AE%B5-5%E4%B8%BB%E5%BE%AA%E7%8E%AF--react-%E7%BC%96%E6%8E%92%E5%99%A8">阶段 5：主循环 —— ReAct 编排器</a></li>
+<li><a href="#9-%E9%98%B6%E6%AE%B5-6%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E4%B8%8E%E8%B0%83%E8%AF%95">阶段 6：集成测试与调试</a></li>
+<li><a href="#10-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">常见问题与解决方案</a></li>
+<li><a href="#11-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%B4%A2%E5%BC%95">关键知识点索引</a></li>
+</ol>
+<hr>
+<h2 id="1-什么是-ReAct？"><a href="#1-什么是-ReAct？" class="headerlink" title="1. 什么是 ReAct？"></a>1. 什么是 ReAct？</h2><h3 id="1-1-名字的由来"><a href="#1-1-名字的由来" class="headerlink" title="1.1 名字的由来"></a>1.1 名字的由来</h3><p><strong>ReAct = Reasoning（推理） + Acting（行动）</strong></p>
+<p>这是一种让大语言模型（LLM）既能”想”又能”做”的模式。传统的聊天机器人只能根据训练数据回答问题，而 ReAct Agent 可以<strong>调用外部工具</strong>来获取实时信息，并基于这些信息进行多步推理。</p>
+<h3 id="1-2-一个具体例子"><a href="#1-2-一个具体例子" class="headerlink" title="1.2 一个具体例子"></a>1.2 一个具体例子</h3><p>没有 ReAct 的对话：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用户：你们有足球吗？多少钱？</span><br><span class="line">模型：抱歉，我无法获取实时库存信息。</span><br></pre></td></tr></table></figure>
+
+<p>有 ReAct 的对话：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">用户：你们有足球吗？有什么优惠？最终多少钱？</span><br><span class="line"></span><br><span class="line">→ Thought：我需要先查数据库，看有没有足球。</span><br><span class="line">→ Action：query_by_product_name(&quot;足球&quot;)</span><br><span class="line">→ Observation：足球，品牌耐克，价格 120 元，库存 50</span><br><span class="line"></span><br><span class="line">→ Thought：查到了足球，120 元。接下来需要查优惠。</span><br><span class="line">→ Action：read_store_promotions(&quot;足球&quot;)</span><br><span class="line">→ Observation：购买足球可享受 9 折优惠</span><br><span class="line"></span><br><span class="line">→ Thought：有 9 折优惠，需要计算最终价格。</span><br><span class="line">→ Action：calculate(&quot;120 * 0.9&quot;)</span><br><span class="line">→ Observation：108.0</span><br><span class="line"></span><br><span class="line">→ Answer：我们有足球，价格 120 元，目前享受 9 折优惠，最终价格为 108 元。</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-ReAct-循环的三个角色"><a href="#1-3-ReAct-循环的三个角色" class="headerlink" title="1.3 ReAct 循环的三个角色"></a>1.3 ReAct 循环的三个角色</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──────────┐     ┌──────────┐     ┌──────────────┐</span><br><span class="line">│ Thought  │ ──→ │  Action  │ ──→ │ Observation  │</span><br><span class="line">│  (思考)   │     │  (行动)   │     │   (观察)      │</span><br><span class="line">└──────────┘     └──────────┘     └──────────────┘</span><br><span class="line">      ↑                                    │</span><br><span class="line">      └────────────────────────────────────┘</span><br><span class="line">                 循环直到得出答案</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>谁来写</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Thought</strong>（思考）</td>
+<td>模型</td>
+<td>分析当前情况，决定下一步做什么</td>
+</tr>
+<tr>
+<td><strong>Action</strong>（行动）</td>
+<td>模型</td>
+<td>调用一个工具（查数据库、读文件、做计算）</td>
+</tr>
+<tr>
+<td><strong>Observation</strong>（观察）</td>
+<td>系统</td>
+<td>工具的实际返回结果，反馈给模型</td>
+</tr>
+<tr>
+<td><strong>Answer</strong>（回答）</td>
+<td>模型</td>
+<td>当信息足够时，给出最终答案</td>
+</tr>
+</tbody></table>
+<p><strong>关键理解</strong>：Thought 和 Action 由模型输出，Observation 由系统（你的代码）提供。这三者交替循环，直到模型认为信息足够了，输出 Answer 结束。</p>
+<hr>
+<h2 id="2-项目概述"><a href="#2-项目概述" class="headerlink" title="2. 项目概述"></a>2. 项目概述</h2><h3 id="2-1-这个项目做什么？"><a href="#2-1-这个项目做什么？" class="headerlink" title="2.1 这个项目做什么？"></a>2.1 这个项目做什么？</h3><p>一个<strong>电商客服 AI Agent</strong>，用户可以：</p>
+<ul>
+<li>询问商品信息（价格、库存、品牌等）</li>
+<li>查询优惠策略</li>
+<li>计算最终成交价格</li>
+<li>进行简单的寒暄对话</li>
+</ul>
+<h3 id="2-2-技术栈"><a href="#2-2-技术栈" class="headerlink" title="2.2 技术栈"></a>2.2 技术栈</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>技术选择</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM 后端（云端）</td>
+<td>阿里云百炼 <code>qwen-plus</code></td>
+<td>通过 OpenAI 兼容接口调用</td>
+</tr>
+<tr>
+<td>LLM 后端（本地）</td>
+<td>Ollama <code>llama3.1:8b</code></td>
+<td>本地部署，无需联网</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>SQLite</td>
+<td>轻量文件数据库，零配置</td>
+</tr>
+<tr>
+<td>Python SDK</td>
+<td><code>openai</code> 库</td>
+<td>百炼兼容 OpenAI 协议</td>
+</tr>
+<tr>
+<td>HTTP 请求</td>
+<td><code>requests</code></td>
+<td>用于调用 Ollama REST API</td>
+</tr>
+<tr>
+<td>环境变量管理</td>
+<td><code>python-dotenv</code></td>
+<td>从 <code>.env</code> 文件加载密钥</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-为什么叫”双后端”？"><a href="#2-3-为什么叫”双后端”？" class="headerlink" title="2.3 为什么叫”双后端”？"></a>2.3 为什么叫”双后端”？</h3><p>系统支持两种 LLM 后端，通过 <code>config.json</code> 一键切换：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;bailian&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;use_model&quot;</span>: <span class="literal">true</span>,        <span class="comment">// ← 当前使用百炼</span></span><br><span class="line">        <span class="attr">&quot;model_name&quot;</span>: <span class="string">&quot;qwen-plus&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;temperature&quot;</span>: <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">&quot;max_iterations&quot;</span>: <span class="number">20</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;ollama&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;use_model&quot;</span>: <span class="literal">false</span>,       <span class="comment">// ← 当前不使用 Ollama</span></span><br><span class="line">        <span class="attr">&quot;model_name&quot;</span>: <span class="string">&quot;llama3.1:8b&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;temperature&quot;</span>: <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">&quot;max_iterations&quot;</span>: <span class="number">20</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>切换方式：一个设为 <code>true</code>，另一个设为 <code>false</code> 即可。</p>
+<hr>
+<h2 id="3-项目架构一览"><a href="#3-项目架构一览" class="headerlink" title="3. 项目架构一览"></a>3. 项目架构一览</h2><h3 id="3-1-文件结构"><a href="#3-1-文件结构" class="headerlink" title="3.1 文件结构"></a>3.1 文件结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ReAct_learn_1/</span><br><span class="line">├── main.py                      # 主循环（用户交互 + ReAct 编排）</span><br><span class="line">├── agent.py                     # Agent 类（System Prompt + LLM 调用）</span><br><span class="line">├── op_llm_client.py             # Ollama 客户端封装</span><br><span class="line">├── config.json                  # 配置文件（选择后端、模型参数）</span><br><span class="line">├── .env                         # 密钥（不提交 git）</span><br><span class="line">├── .env.example                 # 密钥模板（提交 git）</span><br><span class="line">├── .gitignore                   # 忽略规则</span><br><span class="line">├── requirements.txt             # Python 依赖</span><br><span class="line">├── SportsEquipment.db           # SQLite 商品数据库</span><br><span class="line">├── store_promotions.txt         # 优惠策略文本</span><br><span class="line">└── tools/                       # 工具包</span><br><span class="line">    ├── __init__.py              # 使 tools/ 成为 Python 包</span><br><span class="line">    ├── query_product_data.py    # 工具1：商品查询</span><br><span class="line">    ├── read_promotions.py       # 工具2：优惠检索</span><br><span class="line">    └── calc.py                  # 工具3：价格计算</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-数据流向图"><a href="#3-2-数据流向图" class="headerlink" title="3.2 数据流向图"></a>3.2 数据流向图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">用户输入</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│ main.py — ReAct 编排器                       │</span><br><span class="line">│                                             │</span><br><span class="line">│  ┌───────────────────────────────────────┐  │</span><br><span class="line">│  │  while iteration &lt; max_iterations:    │  │</span><br><span class="line">│  │                                       │  │</span><br><span class="line">│  │  ① agent(query) ──────────────────┐   │  │</span><br><span class="line">│  │     │                             │   │  │</span><br><span class="line">│  │     ▼                             ▼   │  │</span><br><span class="line">│  │  ┌──────────────┐    ┌────────────────┐ │  │</span><br><span class="line">│  │  │  agent.py    │───→│ 百炼 / Ollama  │ │  │</span><br><span class="line">│  │  │ System Prompt│    │ LLM 推理       │ │  │</span><br><span class="line">│  │  └──────────────┘    └────────────────┘ │  │</span><br><span class="line">│  │     │                             │   │  │</span><br><span class="line">│  │     ▼                             │   │  │</span><br><span class="line">│  │  模型输出文本                      │   │  │</span><br><span class="line">│  │     │                             │   │  │</span><br><span class="line">│  │  ② 正则解析                        │   │  │</span><br><span class="line">│  │     │                             │   │  │</span><br><span class="line">│  │     ├── Action: xxx → ③执行工具 ──┤   │  │</span><br><span class="line">│  │     │       ▲                    │   │  │</span><br><span class="line">│  │     │       └── Observation ─────┘   │  │</span><br><span class="line">│  │     │                                │  │</span><br><span class="line">│  │     └── Answer: xxx → ④打印，结束    │  │</span><br><span class="line">│  └───────────────────────────────────────┘  │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-核心设计决策"><a href="#3-3-核心设计决策" class="headerlink" title="3.3 核心设计决策"></a>3.3 核心设计决策</h3><table>
+<thead>
+<tr>
+<th>决策</th>
+<th>说明</th>
+<th>为什么这样设计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>文本式工具调用</strong></td>
+<td>用正则解析模型输出的 Action 文本</td>
+<td>不依赖特定 API 的 Function Calling，OpenAI/Ollama 通用</td>
+</tr>
+<tr>
+<td><strong>Observation 作为 User Message</strong></td>
+<td>工具结果包装为 <code>Observation: xxx</code>，以 user 角色注入消息列表</td>
+<td>LLM 对 user 消息重视程度最高，确保模型认真处理工具结果</td>
+</tr>
+<tr>
+<td><strong>双后端 <code>isinstance</code> 分支</strong></td>
+<td><code>agent.py:execute()</code> 检查 <code>isinstance(self.client, OllamaClient)</code></td>
+<td>两个后端返回格式不同（Ollama 返回 str，OpenAI SDK 返回对象），需要分别处理</td>
+</tr>
+<tr>
+<td><strong>消息列表无界增长</strong></td>
+<td>所有历史消息都保留在 <code>self.messages</code> 中</td>
+<td>学习阶段简单优先，生产环境需要加截断或摘要</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-阶段-1：环境准备与配置系统"><a href="#4-阶段-1：环境准备与配置系统" class="headerlink" title="4. 阶段 1：环境准备与配置系统"></a>4. 阶段 1：环境准备与配置系统</h2><h3 id="4-1-目标"><a href="#4-1-目标" class="headerlink" title="4.1 目标"></a>4.1 目标</h3><p>搭建项目骨架，创建配置文件，理解<strong>什么信息该放哪里</strong>。</p>
+<h3 id="4-2-为什么需要三个配置文件？"><a href="#4-2-为什么需要三个配置文件？" class="headerlink" title="4.2 为什么需要三个配置文件？"></a>4.2 为什么需要三个配置文件？</h3><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>存什么</th>
+<th>进 git 吗</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>config.json</code></td>
+<td>非敏感的运行参数</td>
+<td>✅ 进</td>
+<td>模型名、temperature、max_iterations</td>
+</tr>
+<tr>
+<td><code>.env</code></td>
+<td>敏感的密钥</td>
+<td>❌ 不进</td>
+<td><code>DASHSCOPE_API_KEY=sk-xxx</code></td>
+</tr>
+<tr>
+<td><code>.env.example</code></td>
+<td>密钥的<strong>模板</strong></td>
+<td>✅ 进</td>
+<td><code>DASHSCOPE_API_KEY=your-key-here</code></td>
+</tr>
+</tbody></table>
+<p><strong>核心原则</strong>：代码和配置分离，敏感信息和普通配置分离。</p>
+<p>想象你把项目分享给同事：</p>
+<ul>
+<li>同事看到 <code>.env.example</code> 知道需要申请什么 Key</li>
+<li>同事创建自己的 <code>.env</code> 填入真实 Key</li>
+<li><code>.gitignore</code> 确保 <code>.env</code> 不会被提交到 GitHub</li>
+</ul>
+<h3 id="4-3-config-json-详解"><a href="#4-3-config-json-详解" class="headerlink" title="4.3 config.json 详解"></a>4.3 <code>config.json</code> 详解</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;ollama&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;use_model&quot;</span>: <span class="literal">false</span>,          <span class="comment">// 是否使用 Ollama（true/false）</span></span><br><span class="line">        <span class="attr">&quot;model_name&quot;</span>: <span class="string">&quot;llama3.1:8b&quot;</span>, <span class="comment">// Ollama 中的模型名称</span></span><br><span class="line">        <span class="attr">&quot;temperature&quot;</span>: <span class="number">1.0</span>,          <span class="comment">// 温度参数（0-2），越高越随机</span></span><br><span class="line">        <span class="attr">&quot;max_iterations&quot;</span>: <span class="number">20</span>         <span class="comment">// 最大循环次数，防止死循环</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;bailian&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;use_model&quot;</span>: <span class="literal">true</span>,           <span class="comment">// 是否使用百炼（true/false）</span></span><br><span class="line">        <span class="attr">&quot;model_name&quot;</span>: <span class="string">&quot;qwen-plus&quot;</span>,   <span class="comment">// 百炼模型名称</span></span><br><span class="line">        <span class="attr">&quot;temperature&quot;</span>: <span class="number">1.0</span>,          <span class="comment">// 温度参数</span></span><br><span class="line">        <span class="attr">&quot;max_iterations&quot;</span>: <span class="number">20</span>         <span class="comment">// 最大循环次数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>temperature 参数说明</strong>：</p>
+<ul>
+<li><code>temperature = 0</code> → 模型每次输出几乎相同，适合需要稳定输出的场景</li>
+<li><code>temperature = 1.0</code> → 输出有一定随机性，适合客服对话</li>
+<li><code>temperature = 2.0</code> → 输出非常随机，可能出现不稳定的结果</li>
+</ul>
+<h3 id="4-4-load-config-函数"><a href="#4-4-load-config-函数" class="headerlink" title="4.4 load_config() 函数"></a>4.4 <code>load_config()</code> 函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_config</span>():</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;config.json&#x27;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">return</span> json.load(f)</span><br></pre></td></tr></table></figure>
+
+<p><code>json.load(f)</code> 读取 JSON 文件内容并转换为 Python 字典。非常简单，但在整个项目中会被多处使用。</p>
+<h3 id="4-5-python-dotenv-的工作机制"><a href="#4-5-python-dotenv-的工作机制" class="headerlink" title="4.5 python-dotenv 的工作机制"></a>4.5 <code>python-dotenv</code> 的工作机制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">你的 .env 文件：                    Python 代码中：</span><br><span class="line">─────────────────────────          ─────────────────────</span><br><span class="line">DASHSCOPE_API_KEY=sk-xxx           from dotenv import load_dotenv</span><br><span class="line">                                   import os</span><br><span class="line">                                   load_dotenv()</span><br><span class="line">                                   # 这行之后，os.environ 里就有了</span><br><span class="line">                                   key = os.environ.get(&quot;DASHSCOPE_API_KEY&quot;)</span><br><span class="line">                                   # key = &quot;sk-xxx&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>load_dotenv()</code> 扫描项目根目录的 <code>.env</code> 文件，把每一行 <code>KEY=VALUE</code> 注入到系统环境变量 <code>os.environ</code> 中。之后你就可以用 <code>os.environ.get(&quot;KEY_NAME&quot;)</code> 读取。</p>
+<hr>
+<h2 id="5-阶段-2：工具层-——-Act-的部分"><a href="#5-阶段-2：工具层-——-Act-的部分" class="headerlink" title="5. 阶段 2：工具层 —— Act 的部分"></a>5. 阶段 2：工具层 —— Act 的部分</h2><h3 id="5-1-什么是-Tool（工具）？"><a href="#5-1-什么是-Tool（工具）？" class="headerlink" title="5.1 什么是 Tool（工具）？"></a>5.1 什么是 Tool（工具）？</h3><p>在 ReAct 模式中，<strong>Tool = Agent 的手</strong>。Agent 不是全知全能的，它通过工具获取外部信息：</p>
+<ul>
+<li>商品有哪些？→ 工具 1 查数据库</li>
+<li>有什么优惠？→ 工具 2 读优惠文件</li>
+<li>最终价格多少？→ 工具 3 做计算</li>
+</ul>
+<p>每个工具都是一个<strong>普通的 Python 函数</strong>，接收字符串参数，返回结果。</p>
+<h3 id="5-2-工具-1：query-product-data-py-—-商品查询"><a href="#5-2-工具-1：query-product-data-py-—-商品查询" class="headerlink" title="5.2 工具 1：query_product_data.py — 商品查询"></a>5.2 工具 1：<code>query_product_data.py</code> — 商品查询</h3><h4 id="5-2-1-SQLite-是什么？"><a href="#5-2-1-SQLite-是什么？" class="headerlink" title="5.2.1 SQLite 是什么？"></a>5.2.1 SQLite 是什么？</h4><p>SQLite 是一个<strong>嵌入式数据库</strong>，数据存在一个 <code>.db</code> 文件中，不需要安装数据库服务器。Python 标准库自带 <code>sqlite3</code> 模块，开箱即用。</p>
+<h4 id="5-2-2-数据库表结构"><a href="#5-2-2-数据库表结构" class="headerlink" title="5.2.2 数据库表结构"></a>5.2.2 数据库表结构</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> products (</span><br><span class="line">    product_id      TEXT,      <span class="comment">-- 商品编号，如 &quot;001&quot;</span></span><br><span class="line">    product_name    TEXT,      <span class="comment">-- 商品名称，如 &quot;足球&quot;</span></span><br><span class="line">    description     TEXT,      <span class="comment">-- 商品描述</span></span><br><span class="line">    specifications  TEXT,      <span class="comment">-- 规格参数</span></span><br><span class="line">    usage           TEXT,      <span class="comment">-- 适用场景</span></span><br><span class="line">    brand           TEXT,      <span class="comment">-- 品牌</span></span><br><span class="line">    price           <span class="type">REAL</span>,      <span class="comment">-- 价格（浮点数）</span></span><br><span class="line">    stock_quantity  <span class="type">INTEGER</span>    <span class="comment">-- 库存数量</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>共 10 条数据：足球、羽毛球拍、篮球、跑步鞋、瑜伽垫、速干运动衫、电子计步器、乒乓球拍套装、健身手套、膝盖护具。</p>
+<h4 id="5-2-3-核心函数"><a href="#5-2-3-核心函数" class="headerlink" title="5.2.3 核心函数"></a>5.2.3 核心函数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">query_by_product_name</span>(<span class="params">product_name</span>):</span></span><br><span class="line">    <span class="comment"># 1. 连接数据库</span></span><br><span class="line">    conn = sqlite3.connect(<span class="string">&#x27;SportsEquipment.db&#x27;</span>)</span><br><span class="line">    cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 参数化查询（安全！）</span></span><br><span class="line">    cursor.execute(</span><br><span class="line">        <span class="string">&quot;SELECT * FROM products WHERE product_name LIKE ?&quot;</span>,</span><br><span class="line">        (<span class="string">&#x27;%&#x27;</span> + product_name + <span class="string">&#x27;%&#x27;</span>,)   <span class="comment"># %是SQL通配符，表示任意字符</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment">#   LIKE &#x27;%足球%&#x27; 会匹配 &quot;足球&quot;、&quot;中国足球鞋&quot; 等</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 获取结果</span></span><br><span class="line">    rows = cursor.fetchall()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 关闭连接</span></span><br><span class="line">    conn.close()</span><br><span class="line">    <span class="keyword">return</span> rows</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-4-SQL-注入与参数化查询（重要安全知识）"><a href="#5-2-4-SQL-注入与参数化查询（重要安全知识）" class="headerlink" title="5.2.4 SQL 注入与参数化查询（重要安全知识）"></a>5.2.4 SQL 注入与参数化查询（重要安全知识）</h4><p><strong>什么是 SQL 注入？</strong></p>
+<p>如果直接把用户输入拼接到 SQL 语句中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 危险！千万不要这样做</span></span><br><span class="line">cursor.execute(<span class="string">f&quot;SELECT * FROM products WHERE product_name LIKE &#x27;%<span class="subst">&#123;keyword&#125;</span>%&#x27;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>攻击者输入 <code>&#39; OR &#39;1&#39;=&#39;1</code> → SQL 变成 <code>WHERE name LIKE &#39;%&#39; OR &#39;1&#39;=&#39;1%&#39;</code> → 返回所有数据。</p>
+<p><strong>安全的做法：参数化查询</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ✅ 安全！用 ? 占位符，参数单独传入</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT * FROM products WHERE product_name LIKE ?&quot;</span>, (<span class="string">&#x27;%&#x27;</span> + keyword + <span class="string">&#x27;%&#x27;</span>,))</span><br></pre></td></tr></table></figure>
+
+<p>SQLite 的 <code>?</code> 占位符会自动对参数进行转义，攻击者的输入会被当作<strong>普通字符串</strong>处理，不会改变 SQL 语句的结构。</p>
+<h3 id="5-3-工具-2：read-promotions-py-—-优惠检索"><a href="#5-3-工具-2：read-promotions-py-—-优惠检索" class="headerlink" title="5.3 工具 2：read_promotions.py — 优惠检索"></a>5.3 工具 2：<code>read_promotions.py</code> — 优惠检索</h3><h4 id="5-3-1-实现思路"><a href="#5-3-1-实现思路" class="headerlink" title="5.3.1 实现思路"></a>5.3.1 实现思路</h4><p>优惠信息存在 <code>store_promotions.txt</code> 纯文本文件中。工具读取文件，逐行匹配包含产品名称的行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_store_promotions</span>(<span class="params">product_name</span>):</span></span><br><span class="line">    file_path = <span class="string">&#x27;store_promotions.txt&#x27;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">            promotions_content = file.readlines()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 逐行匹配（简单但有效）</span></span><br><span class="line">        filtered_content = [line <span class="keyword">for</span> line <span class="keyword">in</span> promotions_content <span class="keyword">if</span> product_name <span class="keyword">in</span> line]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> filtered_content:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(filtered_content)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;没有找到关于该产品的优惠政策&quot;</span></span><br><span class="line">    <span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;优惠政策未找到，请检查文件路径是否正确&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-3-2-错误处理的重要性"><a href="#5-3-2-错误处理的重要性" class="headerlink" title="5.3.2 错误处理的重要性"></a>5.3.2 错误处理的重要性</h4><p>这个工具展示了三个层次的错误处理：</p>
+<table>
+<thead>
+<tr>
+<th>异常类型</th>
+<th>处理方式</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FileNotFoundError</code></td>
+<td>返回友好提示</td>
+<td>文件被误删时不会崩溃，而是告知用户</td>
+</tr>
+<tr>
+<td>其他 <code>Exception</code></td>
+<td>返回错误信息</td>
+<td>捕获未知错误，保持程序运行</td>
+</tr>
+<tr>
+<td>无匹配结果</td>
+<td>返回”未找到”</td>
+<td>业务逻辑上的正常情况，不是错误</td>
+</tr>
+</tbody></table>
+<h3 id="5-4-工具-3：calc-py-—-安全计算"><a href="#5-4-工具-3：calc-py-—-安全计算" class="headerlink" title="5.4 工具 3：calc.py — 安全计算"></a>5.4 工具 3：<code>calc.py</code> — 安全计算</h3><h4 id="5-4-1-为什么不能用裸-eval-？"><a href="#5-4-1-为什么不能用裸-eval-？" class="headerlink" title="5.4.1 为什么不能用裸 eval()？"></a>5.4.1 为什么不能用裸 <code>eval()</code>？</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 极度危险！</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">what</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">eval</span>(what)  <span class="comment"># 执行任意 Python 代码！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果 LLM 输出了以下内容（可能被诱导）：</span></span><br><span class="line">calculate(<span class="string">&quot;__import__(&#x27;os&#x27;).system(&#x27;rm -rf /&#x27;)&quot;</span>)</span><br><span class="line"><span class="comment"># → 整个系统被删除！</span></span><br></pre></td></tr></table></figure>
+
+<p><code>eval()</code> 会执行<strong>任意 Python 代码</strong>。在大模型时代，攻击者可以通过 prompt injection 诱导模型输出恶意表达式。**凡是接受外部输入的代码，绝不能用裸 <code>eval()</code>**。</p>
+<h4 id="5-4-2-安全方案：正则白名单-受限-eval"><a href="#5-4-2-安全方案：正则白名单-受限-eval" class="headerlink" title="5.4.2 安全方案：正则白名单 + 受限 eval"></a>5.4.2 安全方案：正则白名单 + 受限 eval</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">what</span>):</span></span><br><span class="line">    <span class="comment"># 第一道防线：正则白名单</span></span><br><span class="line">    <span class="comment"># 只允许数字、空格、+、-、*、/、.、(、) 这些字符</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> re.match(<span class="string">r&#x27;^[\d\s+\-*/().]+$&#x27;</span>, what):</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">f&quot;Invalid expression: <span class="subst">&#123;what&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 第二道防线：禁用 __builtins__</span></span><br><span class="line">    <span class="comment"># 即使表达式通过正则，也无法调用任何内置函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">eval</span>(what, &#123;<span class="string">&quot;__builtins__&quot;</span>: &#123;&#125;&#125;, &#123;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>两道防线的原理：</p>
+<table>
+<thead>
+<tr>
+<th>防线</th>
+<th>作用</th>
+<th>阻挡了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正则 <code>^[\d\s+\-*/().]+$</code></td>
+<td>只放行数学符号</td>
+<td><code>__import__</code>、<code>os.system</code> 中包含字母和点号，无法通过</td>
+</tr>
+<tr>
+<td><code>&#123;&quot;__builtins__&quot;: &#123;&#125;&#125;</code></td>
+<td>禁用所有内置函数</td>
+<td>即使有办法绕过正则，也无法调用任何 Python 内置功能</td>
+</tr>
+</tbody></table>
+<p><strong>为什么 <code>_</code> 很重要</strong>：正则中不包含 <code>_</code>（下划线），所以 <code>__import__</code>、<code>__class__</code>、<code>__bases__</code> 等 Python 特殊属性全部无法拼写。这是关键的安全保障。</p>
+<hr>
+<h2 id="6-阶段-3：LLM-客户端-——-连接大脑"><a href="#6-阶段-3：LLM-客户端-——-连接大脑" class="headerlink" title="6. 阶段 3：LLM 客户端 —— 连接大脑"></a>6. 阶段 3：LLM 客户端 —— 连接大脑</h2><h3 id="6-1-两个后端的区别"><a href="#6-1-两个后端的区别" class="headerlink" title="6.1 两个后端的区别"></a>6.1 两个后端的区别</h3><table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>百炼（阿里云）</th>
+<th>Ollama（本地）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>运行位置</td>
+<td>阿里云服务器</td>
+<td>你的电脑</td>
+</tr>
+<tr>
+<td>是否需要联网</td>
+<td>是</td>
+<td>否（下载模型时需要）</td>
+</tr>
+<tr>
+<td>API 协议</td>
+<td>OpenAI 兼容</td>
+<td>Ollama REST API</td>
+</tr>
+<tr>
+<td>费用</td>
+<td>按 token 计费</td>
+<td>免费（消耗本机算力）</td>
+</tr>
+<tr>
+<td>使用的端点</td>
+<td><code>/v1/chat/completions</code></td>
+<td><code>/api/generate</code></td>
+</tr>
+<tr>
+<td>Python 调用方式</td>
+<td><code>openai</code> SDK</td>
+<td><code>requests</code> 直接调用</td>
+</tr>
+</tbody></table>
+<h3 id="6-2-百炼客户端"><a href="#6-2-百炼客户端" class="headerlink" title="6.2 百炼客户端"></a>6.2 百炼客户端</h3><p>百炼提供 OpenAI 兼容接口，直接用 <code>openai</code> SDK，只需改两个参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">client = OpenAI(</span><br><span class="line">    api_key=os.environ.get(<span class="string">&quot;DASHSCOPE_API_KEY&quot;</span>),  <span class="comment"># 百炼 API Key</span></span><br><span class="line">    base_url=<span class="string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>,  <span class="comment"># 百炼地址</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 之后的调用方式和原生 OpenAI 完全一致</span></span><br><span class="line">completion = client.chat.completions.create(</span><br><span class="line">    model=<span class="string">&quot;qwen-plus&quot;</span>,</span><br><span class="line">    messages=[&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你好&quot;</span>&#125;],</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(completion.choices[<span class="number">0</span>].message.content)</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键理解</strong>：<code>base_url</code> 就是 SDK 发 HTTP 请求的目标地址。默认是 <code>api.openai.com</code>，改成百炼的地址后，请求就发到了百炼的服务器。百炼返回的 JSON 格式和 OpenAI 完全一样，所以 SDK 能正确解析。</p>
+<h3 id="6-3-Ollama-客户端"><a href="#6-3-Ollama-客户端" class="headerlink" title="6.3 Ollama 客户端"></a>6.3 Ollama 客户端</h3><p>Ollama 不走 OpenAI 协议，需要用 <code>requests</code> 库直接发 HTTP 请求：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OllamaClient</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, base_url=<span class="string">&quot;http://localhost:11434&quot;</span></span>):</span></span><br><span class="line">        self.base_url = base_url   <span class="comment"># Ollama 默认端口 11434</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">chat_completions_create</span>(<span class="params">self, model, messages, temperature=<span class="number">0.7</span></span>):</span></span><br><span class="line">        url = <span class="string">f&quot;<span class="subst">&#123;self.base_url&#125;</span>/api/generate&quot;</span></span><br><span class="line"></span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">&quot;model&quot;</span>: model,</span><br><span class="line">            <span class="string">&quot;prompt&quot;</span>: self._format_messages(messages),  <span class="comment"># 注意：不是 messages！</span></span><br><span class="line">            <span class="string">&quot;stream&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">            <span class="string">&quot;temperature&quot;</span>: temperature</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        response = requests.post(url, json=payload)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">            data = response.json()</span><br><span class="line">            <span class="keyword">return</span> data[<span class="string">&#x27;response&#x27;</span>]   <span class="comment"># 提取响应文本</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> Exception(<span class="string">f&quot;Ollama API error: <span class="subst">&#123;response.status_code&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_format_messages</span>(<span class="params">self, messages</span>):</span></span><br><span class="line">        <span class="comment"># 将 messages 列表压平为纯文本</span></span><br><span class="line">        formatted = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> msg <span class="keyword">in</span> messages:</span><br><span class="line">            <span class="keyword">if</span> msg[<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;system&quot;</span>:</span><br><span class="line">                formatted += <span class="string">f&quot;System: <span class="subst">&#123;msg[<span class="string">&#x27;content&#x27;</span>]&#125;</span>\n&quot;</span></span><br><span class="line">            <span class="keyword">elif</span> msg[<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;user&quot;</span>:</span><br><span class="line">                formatted += <span class="string">f&quot;Human: <span class="subst">&#123;msg[<span class="string">&#x27;content&#x27;</span>]&#125;</span>\n&quot;</span></span><br><span class="line">            <span class="keyword">elif</span> msg[<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;assistant&quot;</span>:</span><br><span class="line">                formatted += <span class="string">f&quot;Assistant: <span class="subst">&#123;msg[<span class="string">&#x27;content&#x27;</span>]&#125;</span>\n&quot;</span></span><br><span class="line">        <span class="keyword">return</span> formatted.strip()</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-3-1-api-generate-vs-api-chat"><a href="#6-3-1-api-generate-vs-api-chat" class="headerlink" title="6.3.1 /api/generate vs /api/chat"></a>6.3.1 <code>/api/generate</code> vs <code>/api/chat</code></h4><p>Ollama 有两个端点：</p>
+<table>
+<thead>
+<tr>
+<th>端点</th>
+<th>输入格式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/api/chat</code></td>
+<td><code>messages</code> 数组（类似 OpenAI）</td>
+<td>聊天</td>
+</tr>
+<tr>
+<td><code>/api/generate</code></td>
+<td><code>prompt</code> 字符串</td>
+<td>文本补全</td>
+</tr>
+</tbody></table>
+<p>本项目使用 <code>/api/generate</code>，所以需要 <code>_format_messages()</code> 把聊天消息列表转换为一个纯文本 prompt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">OpenAI 格式（数组）                     Ollama 格式（纯文本）</span><br><span class="line">────────────────────────              ─────────────────────</span><br><span class="line">[                                     System: You are helpful.</span><br><span class="line">  &#123;&quot;role&quot;: &quot;system&quot;,                  Human: Do you sell football?</span><br><span class="line">   &quot;content&quot;: &quot;You are helpful.&quot;&#125;,    Assistant: Thought: I need...</span><br><span class="line">  &#123;&quot;role&quot;: &quot;user&quot;,</span><br><span class="line">   &quot;content&quot;: &quot;Do you sell football?&quot;&#125;,</span><br><span class="line">  &#123;&quot;role&quot;: &quot;assistant&quot;,</span><br><span class="line">   &quot;content&quot;: &quot;Thought: I need...&quot;&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-4-Chat-Completions-API-的-messages-结构"><a href="#6-4-Chat-Completions-API-的-messages-结构" class="headerlink" title="6.4 Chat Completions API 的 messages 结构"></a>6.4 Chat Completions API 的 messages 结构</h3><p>这是最基础的 LLM API 概念，理解它对后续学习至关重要：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">messages = [</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>,    <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是一个有帮助的助手&quot;</span>&#125;,      <span class="comment"># 系统指令</span></span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,      <span class="string">&quot;content&quot;</span>: <span class="string">&quot;足球多少钱？&quot;</span>&#125;,              <span class="comment"># 用户消息</span></span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;足球的价格是120元&quot;</span>&#125;,        <span class="comment"># 模型回复</span></span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,      <span class="string">&quot;content&quot;</span>: <span class="string">&quot;有什么优惠吗？&quot;</span>&#125;,            <span class="comment"># 下一轮用户消息</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>三个角色：</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>谁说的</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>system</code></td>
+<td>开发者设置</td>
+<td>定义模型的行为、角色、规则，通常放在第一条</td>
+</tr>
+<tr>
+<td><code>user</code></td>
+<td>用户</td>
+<td>用户的问题/输入</td>
+</tr>
+<tr>
+<td><code>assistant</code></td>
+<td>模型</td>
+<td>模型之前的回复</td>
+</tr>
+</tbody></table>
+<p>模型会阅读<strong>整个 messages 列表</strong>来理解对话上下文，然后生成新的 assistant 消息。这就是为什么 <code>agent.py</code> 要把所有历史消息都保存在 <code>self.messages</code> 中。</p>
+<hr>
+<h2 id="7-阶段-4：Agent-核心-——-Reasoning-的部分"><a href="#7-阶段-4：Agent-核心-——-Reasoning-的部分" class="headerlink" title="7. 阶段 4：Agent 核心 —— Reasoning 的部分"></a>7. 阶段 4：Agent 核心 —— Reasoning 的部分</h2><h3 id="7-1-CustomerServiceAgent-类"><a href="#7-1-CustomerServiceAgent-类" class="headerlink" title="7.1 CustomerServiceAgent 类"></a>7.1 CustomerServiceAgent 类</h3><p>这是整个系统的核心类，负责三个职责：</p>
+<ol>
+<li><strong>存储对话历史</strong>（<code>self.messages</code>）</li>
+<li><strong>定义行为准则</strong>（System Prompt）</li>
+<li><strong>调用 LLM</strong>（<code>execute()</code> 方法）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomerServiceAgent</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, client, config</span>):</span></span><br><span class="line">        self.client = client          <span class="comment"># LLM 客户端（百炼或 Ollama）</span></span><br><span class="line">        self.config = config          <span class="comment"># 配置字典</span></span><br><span class="line">        self.messages = []            <span class="comment"># 对话历史</span></span><br><span class="line">        self.messages.append(&#123;        <span class="comment"># 第一条消息必须是 System Prompt</span></span><br><span class="line">            <span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>,</span><br><span class="line">            <span class="string">&quot;content&quot;</span>: self.system_prompt</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, message</span>):</span>      <span class="comment"># 让实例可像函数一样调用</span></span><br><span class="line">        self.messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: message&#125;)</span><br><span class="line">        response = self.execute()</span><br><span class="line">        self.messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: response&#125;)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(self.client, OllamaClient):</span><br><span class="line">            <span class="comment"># Ollama 路径：返回字符串</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 百炼路径：返回 OpenAI 对象</span></span><br><span class="line">            ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-call-魔术方法"><a href="#7-2-call-魔术方法" class="headerlink" title="7.2 __call__ 魔术方法"></a>7.2 <code>__call__</code> 魔术方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">agent = CustomerServiceAgent(client, config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这两种写法等价：</span></span><br><span class="line">result = agent(<span class="string">&quot;有什么商品？&quot;</span>)           <span class="comment"># ← __call__ 让你能这样写</span></span><br><span class="line">result = agent.__call__(<span class="string">&quot;有什么商品？&quot;</span>)  <span class="comment"># ← 底层实际调用的</span></span><br></pre></td></tr></table></figure>
+
+<p><code>__call__</code> 是 Python 的魔术方法（dunder method），让类的实例可以像函数一样被调用。这让代码更简洁自然。</p>
+<h3 id="7-3-System-Prompt-设计"><a href="#7-3-System-Prompt-设计" class="headerlink" title="7.3 System Prompt 设计"></a>7.3 System Prompt 设计</h3><p>System Prompt 是 Agent 的”行为准则”，它告诉模型：你是谁、能做什么、怎么回答、用什么格式。</p>
+<h4 id="7-3-1-一个有效的-System-Prompt-包含什么"><a href="#7-3-1-一个有效的-System-Prompt-包含什么" class="headerlink" title="7.3.1 一个有效的 System Prompt 包含什么"></a>7.3.1 一个有效的 System Prompt 包含什么</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">① 角色定义</span><br><span class="line">   ↓</span><br><span class="line">② 行为规则（CRITICAL RULES）— 明确、排在最前面</span><br><span class="line">   ↓</span><br><span class="line">③ 可用工具列表 — 名称 + 一句话描述</span><br><span class="line">   ↓</span><br><span class="line">④ 输出格式 — Action/Answer 的精确格式</span><br><span class="line">   ↓</span><br><span class="line">⑤ Few-shot 示例 — 用具体例子教学</span><br><span class="line">   ↓</span><br><span class="line">⑥ 约束条件 — 语言要求、格式要求</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-2-本项目-System-Prompt-逐段解析"><a href="#7-3-2-本项目-System-Prompt-逐段解析" class="headerlink" title="7.3.2 本项目 System Prompt 逐段解析"></a>7.3.2 本项目 System Prompt 逐段解析</h4><p><strong>第一段：角色定义</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">You are an intelligent customer service assistant for an e-commerce platform.</span><br><span class="line">Answer user questions about products.</span><br></pre></td></tr></table></figure>
+
+<p>告诉模型”你是谁”——一个电商客服。这设定了模型的语调和知识范围。</p>
+<p><strong>第二段：核心规则</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CRITICAL RULES:</span><br><span class="line">- Output ONLY ONE Thought and ONE Action per response, then STOP immediately.</span><br><span class="line">- NEVER write Observation lines yourself — the system will provide the real Observation.</span><br><span class="line">- NEVER output multiple Actions in a single response.</span><br><span class="line">- When you have enough information, output: Answer: [your final answer in Chinese]</span><br></pre></td></tr></table></figure>
+
+<p>这是<strong>最重要的部分</strong>。如果不加这些规则，模型会一次性输出整个 Thought→Action→Observation→Answer 链（包括它自己编造的假 Observation），导致整个 ReAct 循环失效。详见 <a href="#102-%E6%A8%A1%E5%9E%8B%E5%B9%BB%E8%A7%89%E8%87%AA%E5%B7%B1%E7%BC%96%E9%80%A0-observation">10.2 模型幻觉问题</a>。</p>
+<p><strong>第三段：工具列表</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Available tools:</span><br><span class="line">1. query_by_product_name: Search database for products matching a keyword.</span><br><span class="line">2. read_store_promotions: Search promotion document for a product name.</span><br><span class="line">3. calculate: Evaluate a math expression (e.g., &quot;120 * 0.9&quot;).</span><br></pre></td></tr></table></figure>
+
+<p>工具名必须和 <code>main.py</code> 中 <code>tools</code> 字典的 key 完全一致，否则会找不到工具。</p>
+<p><strong>第四段：输出格式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Format:</span><br><span class="line">Thought: [your reasoning]</span><br><span class="line">Action: tool_name: argument</span><br></pre></td></tr></table></figure>
+
+<p>精确的格式定义，确保正则表达式能正确解析。<code>tool_name</code> 和 <code>argument</code> 之间用 <code>: </code>（冒号+空格）分隔。</p>
+<p><strong>第五段：Few-shot 示例</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Example — each section separated by &quot;---&quot; is a SEPARATE response from you:</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">Human: Do you sell football? Any promotions? What is the final price?</span><br><span class="line">Thought: I need to check the database for football.</span><br><span class="line">Action: query_by_product_name: football</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">(The system will now give you an Observation. Your next response:)</span><br><span class="line">Thought: Football found at 120 yuan. Now I need to check promotions.</span><br><span class="line">Action: read_store_promotions: football</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>示例用 <code>---</code> 分隔每个轮次，明确告诉模型”每次只输出一段”。这是 Few-shot learning 的核心——通过例子而不是规则来教学。</p>
+<p><strong>为什么要用英文 Prompt？</strong> 百炼模型（qwen-plus）在英文指令上的遵循度通常优于中文指令。英文 Prompt 结构更清晰，模型更容易精确理解格式要求。但最终回答要求是中文。</p>
+<h3 id="7-4-双后端分支处理"><a href="#7-4-双后端分支处理" class="headerlink" title="7.4 双后端分支处理"></a>7.4 双后端分支处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">execute</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(self.client, OllamaClient):</span><br><span class="line">        <span class="comment"># Ollama 返回的是纯字符串</span></span><br><span class="line">        completion = self.client.chat_completions_create(</span><br><span class="line">            model=self.config[<span class="string">&quot;ollama&quot;</span>][<span class="string">&#x27;model_name&#x27;</span>],</span><br><span class="line">            messages=self.messages,</span><br><span class="line">            temperature=self.config[<span class="string">&quot;ollama&quot;</span>][<span class="string">&#x27;temperature&#x27;</span>]</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> completion  <span class="comment"># 直接返回字符串</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 百炼（OpenAI SDK）返回的是响应对象</span></span><br><span class="line">        completion = self.client.chat.completions.create(</span><br><span class="line">            model=self.config[<span class="string">&#x27;bailian&#x27;</span>][<span class="string">&#x27;model_name&#x27;</span>],</span><br><span class="line">            messages=self.messages,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> completion.choices[<span class="number">0</span>].message.content  <span class="comment"># 从对象中取 content</span></span><br></pre></td></tr></table></figure>
+
+<p>两个路径的核心区别：</p>
+<ul>
+<li><strong>Ollama</strong>：<code>chat_completions_create()</code> 返回 <code>str</code>（模型的回复文本）</li>
+<li><strong>百炼</strong>：<code>client.chat.completions.create()</code> 返回一个对象，文本在 <code>completion.choices[0].message.content</code> 中</li>
+</ul>
+<hr>
+<h2 id="8-阶段-5：主循环-——-ReAct-编排器"><a href="#8-阶段-5：主循环-——-ReAct-编排器" class="headerlink" title="8. 阶段 5：主循环 —— ReAct 编排器"></a>8. 阶段 5：主循环 —— ReAct 编排器</h2><h3 id="8-1-为什么是两层循环？"><a href="#8-1-为什么是两层循环？" class="headerlink" title="8.1 为什么是两层循环？"></a>8.1 为什么是两层循环？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────┐</span><br><span class="line">│ 外层循环：用户对话                                 │</span><br><span class="line">│ while True:                                      │</span><br><span class="line">│     query = input(&quot;输入问题或退出: &quot;)              │</span><br><span class="line">│     if query == &quot;退出&quot;: break                     │</span><br><span class="line">│                                                  │</span><br><span class="line">│     ┌──────────────────────────────────────┐     │</span><br><span class="line">│     │ 内层循环：单次 ReAct 推理              │     │</span><br><span class="line">│     │ while iteration &lt; max_iterations:    │     │</span><br><span class="line">│     │     ① 调用模型                        │     │</span><br><span class="line">│     │     ② 解析输出                        │     │</span><br><span class="line">│     │     ③ 执行工具 / 输出答案             │     │</span><br><span class="line">│     │     iteration += 1                   │     │</span><br><span class="line">│     └──────────────────────────────────────┘     │</span><br><span class="line">└──────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>循环</th>
+<th>管理者</th>
+<th>作用</th>
+<th>终止条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>外层</td>
+<td>用户对话</td>
+<td>接受多个不同问题</td>
+<td>用户输入”退出”</td>
+</tr>
+<tr>
+<td>内层</td>
+<td>单次 ReAct</td>
+<td>为一问题反复 Thought→Action→Observation</td>
+<td>出现 Answer 或 超 max_iterations</td>
+</tr>
+</tbody></table>
+<h3 id="8-2-内层循环详细流程"><a href="#8-2-内层循环详细流程" class="headerlink" title="8.2 内层循环详细流程"></a>8.2 内层循环详细流程</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> iteration &lt; max_iterations:</span><br><span class="line">    <span class="comment"># ① 调用模型</span></span><br><span class="line">    result = agent(query)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ② 正则匹配 Action 行</span></span><br><span class="line">    action_re = re.<span class="built_in">compile</span>(<span class="string">&#x27;^Action: (\w+): (.*)$&#x27;</span>)</span><br><span class="line">    actions = [action_re.match(line) <span class="keyword">for</span> line <span class="keyword">in</span> result.split(<span class="string">&#x27;\n&#x27;</span>) <span class="keyword">if</span> action_re.match(line)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> actions:                      <span class="comment"># 匹配到 Action</span></span><br><span class="line">        tool_name = actions[<span class="number">0</span>].group(<span class="number">1</span>)   <span class="comment"># 工具名</span></span><br><span class="line">        tool_args = actions[<span class="number">0</span>].group(<span class="number">2</span>)    <span class="comment"># 参数</span></span><br><span class="line">        observation = tools[tool_name](tool_args)</span><br><span class="line">        query = <span class="string">f&quot;Observation: <span class="subst">&#123;observation&#125;</span>&quot;</span>  <span class="comment"># ← 作为下一轮输入</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&quot;Answer:&quot;</span> <span class="keyword">in</span> result:        <span class="comment"># 匹配到 Answer</span></span><br><span class="line">        <span class="built_in">print</span>(result.split(<span class="string">&#x27;Answer:&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">break</span>                        <span class="comment"># ← 退出内层循环</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> result.strip():             <span class="comment"># 有输出但无 Action/Answer</span></span><br><span class="line">        <span class="built_in">print</span>(result)                <span class="comment"># 直接当答案</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    iteration += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="8-3-正则表达式解析详解"><a href="#8-3-正则表达式解析详解" class="headerlink" title="8.3 正则表达式解析详解"></a>8.3 正则表达式解析详解</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">action_re = re.<span class="built_in">compile</span>(<span class="string">&#x27;^Action: (\w+): (.*)$&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这行正则的含义：</p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>含义</th>
+<th>匹配例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>^</code></td>
+<td>行首</td>
+<td></td>
+</tr>
+<tr>
+<td><code>Action: </code></td>
+<td>字面匹配</td>
+<td><code>Action: </code></td>
+</tr>
+<tr>
+<td><code>(\w+)</code></td>
+<td>第1组：一个或多个字母数字下划线</td>
+<td><code>query_by_product_name</code></td>
+</tr>
+<tr>
+<td><code>: </code></td>
+<td>字面匹配</td>
+<td><code>: </code></td>
+</tr>
+<tr>
+<td><code>(.*)</code></td>
+<td>第2组：任意字符直到行尾</td>
+<td><code>足球</code> 或 <code>120 * 0.9</code></td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>行尾</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>匹配过程</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入行：Action: query_by_product_name: 足球</span><br><span class="line"></span><br><span class="line">^Action:          → 匹配 &quot;Action: &quot;</span><br><span class="line">(\w+)             → groups[0] = &quot;query_by_product_name&quot;</span><br><span class="line">:                 → 匹配 &quot;: &quot;</span><br><span class="line">(.*)              → groups[1] = &quot;足球&quot;</span><br><span class="line">$                 → 行尾</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么要用 groups 而不是字符串切割</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 字符串切割：如果模型多输出了内容，会把后续文本也带进来</span></span><br><span class="line">action_part = result.split(<span class="string">&quot;Action:&quot;</span>, <span class="number">1</span>)[<span class="number">1</span>].split(<span class="string">&quot;: &quot;</span>, <span class="number">1</span>)</span><br><span class="line"><span class="comment"># &quot;足球\nObservation: 模型编的内容\nAction: read_promotions: ...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 正则 groups：只取第一行匹配的内容</span></span><br><span class="line">tool_name = actions[<span class="number">0</span>].group(<span class="number">1</span>)  <span class="comment"># 精确 = &quot;query_by_product_name&quot;</span></span><br><span class="line">tool_args = actions[<span class="number">0</span>].group(<span class="number">2</span>)  <span class="comment"># 精确 = &quot;足球&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="8-4-Observation-回传机制"><a href="#8-4-Observation-回传机制" class="headerlink" title="8.4 Observation 回传机制"></a>8.4 Observation 回传机制</h3><p><strong>这是 ReAct 文本式工具调用最关键的设计</strong>。</p>
+<p>看消息列表的演变过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">初始状态：</span><br><span class="line">  [0] system:  &quot;你是电商客服...&quot;</span><br><span class="line">  [1] user:    &quot;你们有足球吗？&quot;</span><br><span class="line"></span><br><span class="line">第 1 次 agent() 调用后：</span><br><span class="line">  [0] system:  &quot;你是电商客服...&quot;</span><br><span class="line">  [1] user:    &quot;你们有足球吗？&quot;</span><br><span class="line">  [2] assistant: &quot;Thought: 查数据库\nAction: query_by_product_name: football&quot;</span><br><span class="line"></span><br><span class="line">解析到 Action，执行工具 → 构造 Observation：</span><br><span class="line">  新的 query = &quot;Observation: [(001, 足球, 耐克, 120, 50)]&quot;</span><br><span class="line"></span><br><span class="line">第 2 次 agent() 调用：</span><br><span class="line">  [0] system:  &quot;你是电商客服...&quot;</span><br><span class="line">  [1] user:    &quot;你们有足球吗？&quot;</span><br><span class="line">  [2] assistant: &quot;Thought: 查数据库\nAction: query_by_product_name: football&quot;</span><br><span class="line">  [3] user:    &quot;Observation: [(001, 足球, 耐克, 120, 50)]&quot;  ← 工具结果</span><br><span class="line">  [4] assistant: &quot;Thought: 已获得信息\nAnswer: 我们有足球，120元&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键设计：Observation 以 <code>user</code> 角色注入</strong>。这是因为模型对 user 消息的重视程度最高——user 代表”真实的外部信息”，assistant 代表”自己说过的话”。将工具结果以 user 角色注入，模型会更认真地处理这些信息。</p>
+<h3 id="8-5-get-client-—-后端选择逻辑"><a href="#8-5-get-client-—-后端选择逻辑" class="headerlink" title="8.5 get_client() — 后端选择逻辑"></a>8.5 <code>get_client()</code> — 后端选择逻辑</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_client</span>(<span class="params">config</span>):</span></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">&#x27;bailian&#x27;</span>].get(<span class="string">&#x27;use_model&#x27;</span>, <span class="literal">True</span>):</span><br><span class="line">        <span class="keyword">return</span> OpenAI(</span><br><span class="line">            api_key=os.environ.get(<span class="string">&quot;DASHSCOPE_API_KEY&quot;</span>),</span><br><span class="line">            base_url=<span class="string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>,</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> OllamaClient()</span><br></pre></td></tr></table></figure>
+
+<p><code>.get(&#39;use_model&#39;, True)</code> 的含义：读取 <code>use_model</code> 的值，如果这个 key 不存在则默认为 <code>True</code>。这是一种防御性编程。</p>
+<h3 id="8-6-max-iterations-—-安全阀"><a href="#8-6-max-iterations-—-安全阀" class="headerlink" title="8.6 max_iterations — 安全阀"></a>8.6 <code>max_iterations</code> — 安全阀</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_max_iterations</span>(<span class="params">config</span>):</span></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">&#x27;ollama&#x27;</span>][<span class="string">&#x27;use_model&#x27;</span>]:</span><br><span class="line">        <span class="keyword">return</span> config[<span class="string">&#x27;ollama&#x27;</span>][<span class="string">&#x27;max_iterations&#x27;</span>]</span><br><span class="line">    <span class="keyword">elif</span> config[<span class="string">&#x27;bailian&#x27;</span>][<span class="string">&#x27;use_model&#x27;</span>]:</span><br><span class="line">        <span class="keyword">return</span> config[<span class="string">&#x27;bailian&#x27;</span>][<span class="string">&#x27;max_iterations&#x27;</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span>  <span class="comment"># 兜底默认值</span></span><br></pre></td></tr></table></figure>
+
+<p>为什么需要这个限制？</p>
+<ul>
+<li>如果模型一直输出 Action 而不输出 Answer → 死循环</li>
+<li>如果模型格式不规范，正则解析失败 → 无限循环</li>
+<li><code>max_iterations</code> 是最后的安全阀，避免程序卡死</li>
+</ul>
+<hr>
+<h2 id="9-阶段-6：集成测试与调试"><a href="#9-阶段-6：集成测试与调试" class="headerlink" title="9. 阶段 6：集成测试与调试"></a>9. 阶段 6：集成测试与调试</h2><h3 id="9-1-测试用例"><a href="#9-1-测试用例" class="headerlink" title="9.1 测试用例"></a>9.1 测试用例</h3><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>输入</th>
+<th>预期行为</th>
+<th>验证什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>你好</code></td>
+<td>直接回答，不调用工具</td>
+<td>简单对话处理</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>你们有足球吗？有什么优惠？最终多少钱？</code></td>
+<td>查商品 → 查优惠 → 计算 → 回答</td>
+<td>完整 3 步推理链</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>篮球和羽毛球拍哪个更贵？</code></td>
+<td>查两个商品 → 比较价格</td>
+<td>多次查询 + 比较</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>退出</code></td>
+<td>程序正常结束</td>
+<td>退出逻辑</td>
+</tr>
+</tbody></table>
+<h3 id="9-2-调试日志"><a href="#9-2-调试日志" class="headerlink" title="9.2 调试日志"></a>9.2 调试日志</h3><p>在 <code>main.py</code> 的关键位置添加日志：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">result = agent(query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[迭代 <span class="subst">&#123;iteration + <span class="number">1</span>&#125;</span>] 模型原始输出:&quot;</span>)  <span class="comment"># 看到模型输出了什么</span></span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[工具调用] <span class="subst">&#123;tool_name&#125;</span>(<span class="subst">&#123;tool_args&#125;</span>)&quot;</span>)    <span class="comment"># 看到解析出了什么工具</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[观察结果] <span class="subst">&#123;<span class="built_in">str</span>(observation)[:<span class="number">200</span>]&#125;</span>&quot;</span>)     <span class="comment"># 看到工具返回了什么</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>调试 ReAct Agent 的原则</strong>：每个环节都要能看到。看不见模型输出，你就不知道是 Prompt 的问题还是解析的问题。</p>
+<hr>
+<h2 id="10-常见问题与解决方案"><a href="#10-常见问题与解决方案" class="headerlink" title="10. 常见问题与解决方案"></a>10. 常见问题与解决方案</h2><h3 id="10-1-“你好”导致死循环"><a href="#10-1-“你好”导致死循环" class="headerlink" title="10.1 “你好”导致死循环"></a>10.1 “你好”导致死循环</h3><p><strong>现象</strong>：输入”你好”，程序达到 max_iterations 仍未结束。</p>
+<p><strong>原因</strong>：模型输出 <code>你好！有什么可以帮助你的？</code>，但没加 <code>Answer:</code> 前缀。正则匹配不到 Action，也匹配不到 Answer，走 fallback 继续循环。</p>
+<p><strong>解决</strong>：添加第三个分支——如果模型输出了内容但不符合任何格式，直接当作答案处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">elif</span> result.strip():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;客服回复：<span class="subst">&#123;result.strip()&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="10-2-模型幻觉：自己编造-Observation"><a href="#10-2-模型幻觉：自己编造-Observation" class="headerlink" title="10.2 模型幻觉：自己编造 Observation"></a>10.2 模型幻觉：自己编造 Observation</h3><p><strong>现象</strong>：模型一次输出完整的 Thought→Action→Observation→Answer，其中 Observation 是编造的。</p>
+<p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thought: 查询数据库</span><br><span class="line">Action: query_by_product_name: 瑜伽垫</span><br><span class="line">Observation: 库存中有多种瑜伽垫，价格从50元到200元不等。    ← 假的！</span><br><span class="line">Thought: 查优惠</span><br><span class="line">Action: read_store_promotions: 瑜伽垫</span><br><span class="line">Observation: 当前对于标价超过100元的瑜伽垫...              ← 假的！</span><br><span class="line">Answer: ...</span><br></pre></td></tr></table></figure>
+
+<p><strong>根因</strong>：</p>
+<ol>
+<li>System Prompt 中的示例展示了完整的 Thought→Action→Observation→Answer 链，模型学会了”一次性输出全部”</li>
+<li>工具参数解析用字符串切割而非正则 groups，导致参数中混入了后续文本</li>
+</ol>
+<p><strong>解决</strong>：</p>
+<ol>
+<li>System Prompt 加 CRITICAL RULES：每次只输出一个 Action，绝不自己编 Observation</li>
+<li>用正则 groups 精确提取第一行的工具名和参数</li>
+<li>示例用 <code>---</code> 分隔每个轮次</li>
+</ol>
+<h3 id="10-3-API-Key-未设置错误"><a href="#10-3-API-Key-未设置错误" class="headerlink" title="10.3 API Key 未设置错误"></a>10.3 API Key 未设置错误</h3><p><strong>现象</strong>：<code>OpenAIError: The api_key client option must be set</code></p>
+<p><strong>原因</strong>：没有调用 <code>load_dotenv()</code>，导致 <code>.env</code> 文件未被读取。</p>
+<p><strong>解决</strong>：在使用 <code>os.environ.get()</code> 之前调用 <code>load_dotenv()</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line">load_dotenv()  <span class="comment"># 这行必须在 os.environ.get() 之前</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="10-4-工具返回空结果"><a href="#10-4-工具返回空结果" class="headerlink" title="10.4 工具返回空结果"></a>10.4 工具返回空结果</h3><p><strong>可能原因</strong>：</p>
+<ol>
+<li>工具参数包含了多余的空格或换行符 → 在调用前 <code>strip()</code> 参数</li>
+<li>数据库/文件路径不对 → 确保 CWD 是项目根目录</li>
+<li>文件编码问题 → 明确指定 <code>encoding=&#39;utf-8&#39;</code></li>
+</ol>
+<hr>
+<h2 id="11-关键知识点索引"><a href="#11-关键知识点索引" class="headerlink" title="11. 关键知识点索引"></a>11. 关键知识点索引</h2><table>
+<thead>
+<tr>
+<th>知识点</th>
+<th>位置</th>
+<th>一句话说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ReAct 模式</strong></td>
+<td>1.1-1.3</td>
+<td>模型交替输出 Thought/Action，系统提供 Observation，直到得出 Answer</td>
+</tr>
+<tr>
+<td><strong>配置分离原则</strong></td>
+<td>4.2</td>
+<td>JSON 存参数，.env 存密钥，gitignore 控制提交</td>
+</tr>
+<tr>
+<td><strong>temperature 参数</strong></td>
+<td>4.3</td>
+<td>控制模型输出的随机性，0=稳定 1=适中 2=随机</td>
+</tr>
+<tr>
+<td><strong>python-dotenv</strong></td>
+<td>4.5</td>
+<td>自动将 .env 文件加载到 os.environ</td>
+</tr>
+<tr>
+<td><strong>SQL 参数化查询</strong></td>
+<td>5.2.4</td>
+<td>用 <code>?</code> 占位符防止 SQL 注入</td>
+</tr>
+<tr>
+<td><strong>eval() 安全风险</strong></td>
+<td>5.4.1</td>
+<td>裸 eval() 可执行任意代码，必须加白名单限制</td>
+</tr>
+<tr>
+<td><strong>正则白名单</strong></td>
+<td>5.4.2</td>
+<td>只允许数学字符，阻止字母和下划线（<code>__import__</code> 无法拼写）</td>
+</tr>
+<tr>
+<td><strong>/api/generate vs /api/chat</strong></td>
+<td>6.3.1</td>
+<td>Ollama 补全端点 vs 聊天端点，输入格式不同</td>
+</tr>
+<tr>
+<td><strong>messages 三种角色</strong></td>
+<td>6.4</td>
+<td>system=规则，user=输入，assistant=回复</td>
+</tr>
+<tr>
+<td><strong>System Prompt 设计</strong></td>
+<td>7.3</td>
+<td>角色+规则+工具+格式+示例+约束</td>
+</tr>
+<tr>
+<td><strong>Few-shot 示例</strong></td>
+<td>7.3.2</td>
+<td>用具体例子教学，比用规则描述更有效</td>
+</tr>
+<tr>
+<td><strong><code>__call__</code> 魔术方法</strong></td>
+<td>7.2</td>
+<td>让类实例可以像函数一样调用</td>
+</tr>
+<tr>
+<td><strong>双后端 isinstance 分支</strong></td>
+<td>7.4</td>
+<td>Ollama 返回 str，OpenAI 返回对象，需分别处理</td>
+</tr>
+<tr>
+<td><strong>两层循环设计</strong></td>
+<td>8.1</td>
+<td>外层管多轮对话，内层管单次 ReAct 推理</td>
+</tr>
+<tr>
+<td><strong>正则解析 Action</strong></td>
+<td>8.3</td>
+<td><code>^Action: (\w+): (.*)$</code> 提取工具名和参数</td>
+</tr>
+<tr>
+<td><strong>Observation 回传</strong></td>
+<td>8.4</td>
+<td>工具结果以 user 角色注入，确保模型认真对待</td>
+</tr>
+<tr>
+<td><strong>max_iterations</strong></td>
+<td>8.6</td>
+<td>安全阀，防止死循环</td>
+</tr>
+<tr>
+<td><strong>模型幻觉</strong></td>
+<td>10.2</td>
+<td>模型编造 Observation，需用 Prompt 规则 + 精确解析解决</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="附录-A：依赖列表"><a href="#附录-A：依赖列表" class="headerlink" title="附录 A：依赖列表"></a>附录 A：依赖列表</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python-dotenv          # .env 文件加载</span><br><span class="line">openai                 # OpenAI/百炼 SDK</span><br><span class="line">requests               # Ollama HTTP 调用</span><br></pre></td></tr></table></figure>
+
+<h2 id="附录-B：运行命令"><a href="#附录-B：运行命令" class="headerlink" title="附录 B：运行命令"></a>附录 B：运行命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装依赖</span></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 配置 .env（编辑 DASHSCOPE_API_KEY）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 运行</span></span><br><span class="line">python main.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="附录-C：config-json-完整配置说明"><a href="#附录-C：config-json-完整配置说明" class="headerlink" title="附录 C：config.json 完整配置说明"></a>附录 C：config.json 完整配置说明</h2><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+<th>建议值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bailian.use_model</code></td>
+<td>bool</td>
+<td>是否使用百炼</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>bailian.model_name</code></td>
+<td>string</td>
+<td>百炼模型名</td>
+<td><code>qwen-plus</code></td>
+</tr>
+<tr>
+<td><code>bailian.temperature</code></td>
+<td>float</td>
+<td>温度 0-2</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><code>bailian.max_iterations</code></td>
+<td>int</td>
+<td>最大循环次数</td>
+<td><code>20</code></td>
+</tr>
+<tr>
+<td><code>ollama.use_model</code></td>
+<td>bool</td>
+<td>是否使用 Ollama</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ollama.model_name</code></td>
+<td>string</td>
+<td>Ollama 模型名</td>
+<td><code>llama3.1:8b</code></td>
+</tr>
+<tr>
+<td><code>ollama.temperature</code></td>
+<td>float</td>
+<td>温度 0-2</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><code>ollama.max_iterations</code></td>
+<td>int</td>
+<td>最大循环次数</td>
+<td><code>20</code></td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ReAct/" rel="tag"># ReAct</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/04/PromptTemplate%E4%B8%8EChatPromptTemplate%E8%AF%A6%E8%A7%A3/" rel="prev" title="PromptTemplate与ChatPromptTemplate详解">
+      <i class="fa fa-chevron-left"></i> PromptTemplate与ChatPromptTemplate详解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ReAct-1-%E5%8F%8C%E5%90%8E%E7%AB%AF%E7%94%B5%E5%95%86%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">ReAct (1) - 双后端电商客服系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-ReAct%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">1. 什么是 ReAct？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%90%8D%E5%AD%97%E7%9A%84%E7%94%B1%E6%9D%A5"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.1 名字的由来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%B8%80%E4%B8%AA%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2 一个具体例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-ReAct-%E5%BE%AA%E7%8E%AF%E7%9A%84%E4%B8%89%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="nav-number">1.2.3.</span> <span class="nav-text">1.3 ReAct 循环的三个角色</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="nav-number">1.3.</span> <span class="nav-text">2. 项目概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 这个项目做什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 技术栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AB%E2%80%9D%E5%8F%8C%E5%90%8E%E7%AB%AF%E2%80%9D%EF%BC%9F"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 为什么叫”双后端”？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E4%B8%80%E8%A7%88"><span class="nav-number">1.4.</span> <span class="nav-text">3. 项目架构一览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91%E5%9B%BE"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 数据流向图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E5%86%B3%E7%AD%96"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.3 核心设计决策</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%98%B6%E6%AE%B5-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%E4%B8%8E%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.</span> <span class="nav-text">4. 阶段 1：环境准备与配置系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%9B%AE%E6%A0%87"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%89%E4%B8%AA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 为什么需要三个配置文件？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-config-json-%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.5.3.</span> <span class="nav-text">4.3 config.json 详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-load-config-%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.4.</span> <span class="nav-text">4.4 load_config() 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-python-dotenv-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">1.5.5.</span> <span class="nav-text">4.5 python-dotenv 的工作机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%98%B6%E6%AE%B5-2%EF%BC%9A%E5%B7%A5%E5%85%B7%E5%B1%82-%E2%80%94%E2%80%94-Act-%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-number">1.6.</span> <span class="nav-text">5. 阶段 2：工具层 —— Act 的部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%BB%80%E4%B9%88%E6%98%AF-Tool%EF%BC%88%E5%B7%A5%E5%85%B7%EF%BC%89%EF%BC%9F"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 什么是 Tool（工具）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%B7%A5%E5%85%B7-1%EF%BC%9Aquery-product-data-py-%E2%80%94-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.6.2.</span> <span class="nav-text">5.2 工具 1：query_product_data.py — 商品查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-SQLite-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">5.2.1 SQLite 是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">5.2.2 数据库表结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-3-%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.6.2.3.</span> <span class="nav-text">5.2.3 核心函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-4-SQL-%E6%B3%A8%E5%85%A5%E4%B8%8E%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2%EF%BC%88%E9%87%8D%E8%A6%81%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86%EF%BC%89"><span class="nav-number">1.6.2.4.</span> <span class="nav-text">5.2.4 SQL 注入与参数化查询（重要安全知识）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%B7%A5%E5%85%B7-2%EF%BC%9Aread-promotions-py-%E2%80%94-%E4%BC%98%E6%83%A0%E6%A3%80%E7%B4%A2"><span class="nav-number">1.6.3.</span> <span class="nav-text">5.3 工具 2：read_promotions.py — 优惠检索</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-1-%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">5.3.1 实现思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-2-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">5.3.2 错误处理的重要性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E5%B7%A5%E5%85%B7-3%EF%BC%9Acalc-py-%E2%80%94-%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97"><span class="nav-number">1.6.4.</span> <span class="nav-text">5.4 工具 3：calc.py — 安全计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8%E8%A3%B8-eval-%EF%BC%9F"><span class="nav-number">1.6.4.1.</span> <span class="nav-text">5.4.1 为什么不能用裸 eval()？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-2-%E5%AE%89%E5%85%A8%E6%96%B9%E6%A1%88%EF%BC%9A%E6%AD%A3%E5%88%99%E7%99%BD%E5%90%8D%E5%8D%95-%E5%8F%97%E9%99%90-eval"><span class="nav-number">1.6.4.2.</span> <span class="nav-text">5.4.2 安全方案：正则白名单 + 受限 eval</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%98%B6%E6%AE%B5-3%EF%BC%9ALLM-%E5%AE%A2%E6%88%B7%E7%AB%AF-%E2%80%94%E2%80%94-%E8%BF%9E%E6%8E%A5%E5%A4%A7%E8%84%91"><span class="nav-number">1.7.</span> <span class="nav-text">6. 阶段 3：LLM 客户端 —— 连接大脑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E4%B8%A4%E4%B8%AA%E5%90%8E%E7%AB%AF%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.7.1.</span> <span class="nav-text">6.1 两个后端的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E7%99%BE%E7%82%BC%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">1.7.2.</span> <span class="nav-text">6.2 百炼客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Ollama-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">1.7.3.</span> <span class="nav-text">6.3 Ollama 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-1-api-generate-vs-api-chat"><span class="nav-number">1.7.3.1.</span> <span class="nav-text">6.3.1 &#x2F;api&#x2F;generate vs &#x2F;api&#x2F;chat</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-Chat-Completions-API-%E7%9A%84-messages-%E7%BB%93%E6%9E%84"><span class="nav-number">1.7.4.</span> <span class="nav-text">6.4 Chat Completions API 的 messages 结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E9%98%B6%E6%AE%B5-4%EF%BC%9AAgent-%E6%A0%B8%E5%BF%83-%E2%80%94%E2%80%94-Reasoning-%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-number">1.8.</span> <span class="nav-text">7. 阶段 4：Agent 核心 —— Reasoning 的部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-CustomerServiceAgent-%E7%B1%BB"><span class="nav-number">1.8.1.</span> <span class="nav-text">7.1 CustomerServiceAgent 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-call-%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95"><span class="nav-number">1.8.2.</span> <span class="nav-text">7.2 __call__ 魔术方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-System-Prompt-%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.8.3.</span> <span class="nav-text">7.3 System Prompt 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-1-%E4%B8%80%E4%B8%AA%E6%9C%89%E6%95%88%E7%9A%84-System-Prompt-%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88"><span class="nav-number">1.8.3.1.</span> <span class="nav-text">7.3.1 一个有效的 System Prompt 包含什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-2-%E6%9C%AC%E9%A1%B9%E7%9B%AE-System-Prompt-%E9%80%90%E6%AE%B5%E8%A7%A3%E6%9E%90"><span class="nav-number">1.8.3.2.</span> <span class="nav-text">7.3.2 本项目 System Prompt 逐段解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E5%8F%8C%E5%90%8E%E7%AB%AF%E5%88%86%E6%94%AF%E5%A4%84%E7%90%86"><span class="nav-number">1.8.4.</span> <span class="nav-text">7.4 双后端分支处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E9%98%B6%E6%AE%B5-5%EF%BC%9A%E4%B8%BB%E5%BE%AA%E7%8E%AF-%E2%80%94%E2%80%94-ReAct-%E7%BC%96%E6%8E%92%E5%99%A8"><span class="nav-number">1.9.</span> <span class="nav-text">8. 阶段 5：主循环 —— ReAct 编排器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%A4%E5%B1%82%E5%BE%AA%E7%8E%AF%EF%BC%9F"><span class="nav-number">1.9.1.</span> <span class="nav-text">8.1 为什么是两层循环？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E5%86%85%E5%B1%82%E5%BE%AA%E7%8E%AF%E8%AF%A6%E7%BB%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.9.2.</span> <span class="nav-text">8.2 内层循环详细流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%A7%A3%E6%9E%90%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.9.3.</span> <span class="nav-text">8.3 正则表达式解析详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-Observation-%E5%9B%9E%E4%BC%A0%E6%9C%BA%E5%88%B6"><span class="nav-number">1.9.4.</span> <span class="nav-text">8.4 Observation 回传机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-get-client-%E2%80%94-%E5%90%8E%E7%AB%AF%E9%80%89%E6%8B%A9%E9%80%BB%E8%BE%91"><span class="nav-number">1.9.5.</span> <span class="nav-text">8.5 get_client() — 后端选择逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-6-max-iterations-%E2%80%94-%E5%AE%89%E5%85%A8%E9%98%80"><span class="nav-number">1.9.6.</span> <span class="nav-text">8.6 max_iterations — 安全阀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E9%98%B6%E6%AE%B5-6%EF%BC%9A%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="nav-number">1.10.</span> <span class="nav-text">9. 阶段 6：集成测试与调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">1.10.1.</span> <span class="nav-text">9.1 测试用例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E8%B0%83%E8%AF%95%E6%97%A5%E5%BF%97"><span class="nav-number">1.10.2.</span> <span class="nav-text">9.2 调试日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.11.</span> <span class="nav-text">10. 常见问题与解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E2%80%9C%E4%BD%A0%E5%A5%BD%E2%80%9D%E5%AF%BC%E8%87%B4%E6%AD%BB%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.11.1.</span> <span class="nav-text">10.1 “你好”导致死循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%A8%A1%E5%9E%8B%E5%B9%BB%E8%A7%89%EF%BC%9A%E8%87%AA%E5%B7%B1%E7%BC%96%E9%80%A0-Observation"><span class="nav-number">1.11.2.</span> <span class="nav-text">10.2 模型幻觉：自己编造 Observation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-API-Key-%E6%9C%AA%E8%AE%BE%E7%BD%AE%E9%94%99%E8%AF%AF"><span class="nav-number">1.11.3.</span> <span class="nav-text">10.3 API Key 未设置错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-4-%E5%B7%A5%E5%85%B7%E8%BF%94%E5%9B%9E%E7%A9%BA%E7%BB%93%E6%9E%9C"><span class="nav-number">1.11.4.</span> <span class="nav-text">10.4 工具返回空结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9%E7%B4%A2%E5%BC%95"><span class="nav-number">1.12.</span> <span class="nav-text">11. 关键知识点索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95-A%EF%BC%9A%E4%BE%9D%E8%B5%96%E5%88%97%E8%A1%A8"><span class="nav-number">1.13.</span> <span class="nav-text">附录 A：依赖列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95-B%EF%BC%9A%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-number">1.14.</span> <span class="nav-text">附录 B：运行命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95-C%EF%BC%9Aconfig-json-%E5%AE%8C%E6%95%B4%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="nav-number">1.15.</span> <span class="nav-text">附录 C：config.json 完整配置说明</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
