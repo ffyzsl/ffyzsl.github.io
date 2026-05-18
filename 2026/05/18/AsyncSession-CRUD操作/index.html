@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 为什么需要 AsyncSession？在 FastAPI 这类异步 Web 框架中，如果仍然使用同步的 SQLAlchemy Session，数据库 IO 会阻塞整个事件循环，异步带来的并发优势荡然无存。SQLAlchemy 1.4+ 引入了 AsyncSession，让我们可以用 async&#x2F;await 的方式操作数据库，和 FastAPI 的异步生态无缝衔接。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AsyncSession CRUD操作">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/05/18/AsyncSession-CRUD%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="1. 为什么需要 AsyncSession？在 FastAPI 这类异步 Web 框架中，如果仍然使用同步的 SQLAlchemy Session，数据库 IO 会阻塞整个事件循环，异步带来的并发优势荡然无存。SQLAlchemy 1.4+ 引入了 AsyncSession，让我们可以用 async&#x2F;await 的方式操作数据库，和 FastAPI 的异步生态无缝衔接。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-18T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-18T12:07:38.311Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="SQLAlchemy">
+<meta property="article:tag" content="FastAPI">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/05/18/AsyncSession-CRUD%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AsyncSession CRUD操作 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/05/18/AsyncSession-CRUD%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AsyncSession CRUD操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-05-18 10:00:00 / 修改时间：20:07:38" itemprop="dateCreated datePublished" datetime="2026-05-18T10:00:00+08:00">2026-05-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-为什么需要-AsyncSession？"><a href="#1-为什么需要-AsyncSession？" class="headerlink" title="1. 为什么需要 AsyncSession？"></a>1. 为什么需要 AsyncSession？</h2><p>在 FastAPI 这类异步 Web 框架中，如果仍然使用同步的 SQLAlchemy Session，数据库 IO 会阻塞整个事件循环，异步带来的并发优势荡然无存。SQLAlchemy 1.4+ 引入了 <code>AsyncSession</code>，让我们可以用 <code>async/await</code> 的方式操作数据库，和 FastAPI 的异步生态无缝衔接。</p>
+<span id="more"></span>
+
+<h3 id="同步-vs-异步对比"><a href="#同步-vs-异步对比" class="headerlink" title="同步 vs 异步对比"></a>同步 vs 异步对比</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 同步写法 —— 阻塞当前线程，不能用于 async 路由</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_users_sync</span>():</span></span><br><span class="line">    <span class="keyword">with</span> Session(engine) <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">return</span> session.execute(select(User)).scalars().<span class="built_in">all</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步写法 —— await 让出控制权，不阻塞事件循环</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_users_async</span>():</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSession(async_engine) <span class="keyword">as</span> session:</span><br><span class="line">        result = <span class="keyword">await</span> session.execute(select(User))</span><br><span class="line">        <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<p>核心思路：<strong>凡是涉及网络 IO 的操作（execute、commit、refresh）都需要 await；纯内存操作（add、修改属性）则不需要。</strong></p>
+<hr>
+<h2 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2. 环境搭建"></a>2. 环境搭建</h2><h3 id="2-1-异步引擎与会话工厂"><a href="#2-1-异步引擎与会话工厂" class="headerlink" title="2.1 异步引擎与会话工厂"></a>2.1 异步引擎与会话工厂</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> create_async_engine, AsyncSession, async_sessionmaker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步引擎 —— MySQL 使用 aiomysql，PostgreSQL 使用 asyncpg</span></span><br><span class="line">DATABASE_URL = <span class="string">&quot;mysql+aiomysql://root:password@localhost:3306/mydb&quot;</span></span><br><span class="line">async_engine = create_async_engine(DATABASE_URL, echo=<span class="literal">True</span>, pool_size=<span class="number">10</span>, max_overflow=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 会话工厂</span></span><br><span class="line">AsyncSessionLocal = async_sessionmaker(</span><br><span class="line">    bind=async_engine,</span><br><span class="line">    class_=AsyncSession,</span><br><span class="line">    expire_on_commit=<span class="literal">False</span>,  <span class="comment"># 提交后不过期对象，避免后续访问触发 lazy load</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="expire-on-commit-False-为什么重要？"><a href="#expire-on-commit-False-为什么重要？" class="headerlink" title="expire_on_commit=False 为什么重要？"></a><code>expire_on_commit=False</code> 为什么重要？</h3><p>默认情况下，SQLAlchemy 在 <code>commit()</code> 后会使所有已加载对象过期（expire），下次访问属性时会自动发出新的 SELECT。但在异步环境下，这个”自动”会尝试在非 async 上下文中执行 IO，直接抛出 <code>MissingGreenlet</code> 错误。关掉它，提交后对象依然可用。</p>
+<h3 id="2-2-FastAPI-依赖注入"><a href="#2-2-FastAPI-依赖注入" class="headerlink" title="2.2 FastAPI 依赖注入"></a>2.2 FastAPI 依赖注入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> Depends</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_db</span>():</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSessionLocal() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">yield</span> session</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/users&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">list_users</span>(<span class="params">db: AsyncSession = Depends(<span class="params">get_db</span>)</span>):</span></span><br><span class="line">    result = <span class="keyword">await</span> db.execute(select(User))</span><br><span class="line">    <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<p><code>async with</code> 保证了请求结束时 session 被正确关闭，连接归还池中。</p>
+<hr>
+<h2 id="3-模型定义（SQLAlchemy-2-0-风格）"><a href="#3-模型定义（SQLAlchemy-2-0-风格）" class="headerlink" title="3. 模型定义（SQLAlchemy 2.0 风格）"></a>3. 模型定义（SQLAlchemy 2.0 风格）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase, Mapped, mapped_column</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> String, Integer, DateTime, func</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">DeclarativeBase</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span>(<span class="params">Base</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&quot;users&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    username: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">50</span>), unique=<span class="literal">True</span>, nullable=<span class="literal">False</span>)</span><br><span class="line">    email: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())</span><br></pre></td></tr></table></figure>
+
+<p><code>Mapped</code> + <code>mapped_column</code> 是 2.0 新式写法，类型提示更清晰。</p>
+<hr>
+<h2 id="4-Create（新增）"><a href="#4-Create（新增）" class="headerlink" title="4. Create（新增）"></a>4. Create（新增）</h2><h3 id="4-1-单条插入"><a href="#4-1-单条插入" class="headerlink" title="4.1 单条插入"></a>4.1 单条插入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">create_user</span>(<span class="params">db: AsyncSession, username: <span class="built_in">str</span>, email: <span class="built_in">str</span></span>) -&gt; User:</span></span><br><span class="line">    user = User(username=username, email=email)</span><br><span class="line">    db.add(user)           <span class="comment"># 纯内存操作，不需要 await</span></span><br><span class="line">    <span class="keyword">await</span> db.commit()      <span class="comment"># 真正写入数据库，必须 await</span></span><br><span class="line">    <span class="keyword">await</span> db.refresh(user) <span class="comment"># 刷新对象，拿到数据库生成的 id 和 created_at</span></span><br><span class="line">    <span class="keyword">return</span> user</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意：add-不需要-await，但-commit-必须-await"><a href="#注意：add-不需要-await，但-commit-必须-await" class="headerlink" title="注意：add() 不需要 await，但 commit() 必须 await"></a>注意：<code>add()</code> 不需要 await，但 <code>commit()</code> 必须 await</h3><p><code>add()</code> 只是把对象注册到 session 的待处理列表中，不涉及任何 IO。真正发 INSERT 语句是在 <code>commit()</code>（或 <code>flush()</code>）时，所以只有后者需要 await。</p>
+<h3 id="4-2-批量插入"><a href="#4-2-批量插入" class="headerlink" title="4.2 批量插入"></a>4.2 批量插入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方式一：add_all —— ORM 走全流程（触发事件、处理关系）</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bulk_create_users</span>(<span class="params">db: AsyncSession, users_data: <span class="built_in">list</span>[<span class="built_in">dict</span>]</span>) -&gt; <span class="built_in">list</span>[User]:</span></span><br><span class="line">    users = [User(**data) <span class="keyword">for</span> data <span class="keyword">in</span> users_data]</span><br><span class="line">    db.add_all(users)</span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br><span class="line">    <span class="keyword">return</span> users</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方式二：批量插入 —— 绕过 ORM，直接生成一条 INSERT，性能更高</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> insert</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bulk_insert_users</span>(<span class="params">db: AsyncSession, users_data: <span class="built_in">list</span>[<span class="built_in">dict</span>]</span>):</span></span><br><span class="line">    <span class="keyword">await</span> db.execute(insert(User), users_data)</span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>add_all</code></td>
+<td>数据量小、需要 ORM 事件/级联</td>
+</tr>
+<tr>
+<td><code>insert().values()</code> 批量</td>
+<td>数据量大、追求性能、不关心 ORM 特性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-Read（查询）"><a href="#5-Read（查询）" class="headerlink" title="5. Read（查询）"></a>5. Read（查询）</h2><h3 id="5-1-按主键查询"><a href="#5-1-按主键查询" class="headerlink" title="5.1 按主键查询"></a>5.1 按主键查询</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get() 按主键查询 —— 优先从 identity_map 取，取不到才查库</span></span><br><span class="line">user = <span class="keyword">await</span> db.get(User, user_id)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-条件查询"><a href="#5-2-条件查询" class="headerlink" title="5.2 条件查询"></a>5.2 条件查询</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> select</span><br><span class="line"></span><br><span class="line"><span class="comment"># 等值查询</span></span><br><span class="line">result = <span class="keyword">await</span> db.execute(select(User).where(User.username == <span class="string">&quot;zhangsan&quot;</span>))</span><br><span class="line">user = result.scalars().first()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多条件 AND</span></span><br><span class="line">result = <span class="keyword">await</span> db.execute(</span><br><span class="line">    select(User).where(User.age &gt;= <span class="number">18</span>, User.status == <span class="number">1</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># OR 查询</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> or_</span><br><span class="line">result = <span class="keyword">await</span> db.execute(</span><br><span class="line">    select(User).where(or_(User.username.like(<span class="string">&quot;%zhang%&quot;</span>), User.email.like(<span class="string">&quot;%zhang%&quot;</span>)))</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-分页查询"><a href="#5-3-分页查询" class="headerlink" title="5.3 分页查询"></a>5.3 分页查询</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_users_paginated</span>(<span class="params">db: AsyncSession, page: <span class="built_in">int</span> = <span class="number">1</span>, page_size: <span class="built_in">int</span> = <span class="number">10</span></span>):</span></span><br><span class="line">    offset = (page - <span class="number">1</span>) * page_size</span><br><span class="line">    result = <span class="keyword">await</span> db.execute(</span><br><span class="line">        select(User).offset(offset).limit(page_size).order_by(User.<span class="built_in">id</span>.desc())</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-统计查询"><a href="#5-4-统计查询" class="headerlink" title="5.4 统计查询"></a>5.4 统计查询</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> func</span><br><span class="line"></span><br><span class="line">result = <span class="keyword">await</span> db.execute(select(func.count(User.<span class="built_in">id</span>)))</span><br><span class="line">total = result.scalar()  <span class="comment"># 注意：聚合函数用 scalar()，不是 scalars()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="scalar-vs-scalars-vs-scalar-one"><a href="#scalar-vs-scalars-vs-scalar-one" class="headerlink" title="scalar() vs scalars() vs scalar_one()"></a><code>scalar()</code> vs <code>scalars()</code> vs <code>scalar_one()</code></h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scalars().all()</code></td>
+<td><code>list[Model]</code></td>
+<td>多行结果</td>
+</tr>
+<tr>
+<td><code>scalars().first()</code></td>
+<td><code>Model | None</code></td>
+<td>取第一行</td>
+</tr>
+<tr>
+<td><code>scalar()</code></td>
+<td>单个值</td>
+<td>聚合查询 count/sum/avg</td>
+</tr>
+<tr>
+<td><code>scalar_one()</code></td>
+<td>单个 Model</td>
+<td>确认只有一行，多了抛异常</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-Update（更新）"><a href="#6-Update（更新）" class="headerlink" title="6. Update（更新）"></a>6. Update（更新）</h2><h3 id="6-1-先查后改（推荐）"><a href="#6-1-先查后改（推荐）" class="headerlink" title="6.1 先查后改（推荐）"></a>6.1 先查后改（推荐）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">update_user_email</span>(<span class="params">db: AsyncSession, user_id: <span class="built_in">int</span>, new_email: <span class="built_in">str</span></span>):</span></span><br><span class="line">    user = <span class="keyword">await</span> db.get(User, user_id)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> user:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    user.email = new_email    <span class="comment"># ORM 自动追踪脏数据，不需要显式 update</span></span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br><span class="line">    <span class="keyword">await</span> db.refresh(user)</span><br><span class="line">    <span class="keyword">return</span> user</span><br></pre></td></tr></table></figure>
+
+<p>ORM 的 <strong>脏检查（Dirty Check）</strong> 会自动对比对象当前值和加载时的值，只生成变化的字段的 UPDATE 语句。</p>
+<h3 id="6-2-批量更新（不查直接改）"><a href="#6-2-批量更新（不查直接改）" class="headerlink" title="6.2 批量更新（不查直接改）"></a>6.2 批量更新（不查直接改）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> update</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">deactivate_inactive_users</span>(<span class="params">db: AsyncSession, days: <span class="built_in">int</span> = <span class="number">90</span></span>):</span></span><br><span class="line">    cutoff = datetime.now() - timedelta(days=days)</span><br><span class="line">    stmt = (</span><br><span class="line">        update(User)</span><br><span class="line">        .where(User.last_login &lt; cutoff, User.status == <span class="number">1</span>)</span><br><span class="line">        .values(status=<span class="number">0</span>)</span><br><span class="line">    )</span><br><span class="line">    result = <span class="keyword">await</span> db.execute(stmt)</span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br><span class="line">    <span class="keyword">return</span> result.rowcount  <span class="comment"># 受影响行数</span></span><br></pre></td></tr></table></figure>
+
+<p>先查后改适合单条、需要业务逻辑判断的场景；批量更新适合按条件批量修改，一次 SQL 搞定。</p>
+<hr>
+<h2 id="7-Delete（删除）"><a href="#7-Delete（删除）" class="headerlink" title="7. Delete（删除）"></a>7. Delete（删除）</h2><h3 id="7-1-单条删除"><a href="#7-1-单条删除" class="headerlink" title="7.1 单条删除"></a>7.1 单条删除</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">delete_user</span>(<span class="params">db: AsyncSession, user_id: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">    user = <span class="keyword">await</span> db.get(User, user_id)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> user:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">await</span> db.delete(user)   <span class="comment"># delete() 需要 await！</span></span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="delete-需要-await！"><a href="#delete-需要-await！" class="headerlink" title="delete() 需要 await！"></a><code>delete()</code> 需要 await！</h3><p><code>delete()</code> 和 <code>add()</code> 不同，它会立即发出 SQL（标记对象为 deleted 状态并 pre-flush），所以必须 await。</p>
+<h3 id="7-2-批量删除"><a href="#7-2-批量删除" class="headerlink" title="7.2 批量删除"></a>7.2 批量删除</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> delete</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">delete_inactive_users</span>(<span class="params">db: AsyncSession</span>):</span></span><br><span class="line">    stmt = delete(User).where(User.status == <span class="number">0</span>)</span><br><span class="line">    result = <span class="keyword">await</span> db.execute(stmt)</span><br><span class="line">    <span class="keyword">await</span> db.commit()</span><br><span class="line">    <span class="keyword">return</span> result.rowcount</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="8-关联查询与预加载"><a href="#8-关联查询与预加载" class="headerlink" title="8. 关联查询与预加载"></a>8. 关联查询与预加载</h2><h3 id="MissingGreenlet-——-异步开发的头号陷阱"><a href="#MissingGreenlet-——-异步开发的头号陷阱" class="headerlink" title="MissingGreenlet —— 异步开发的头号陷阱"></a>MissingGreenlet —— 异步开发的头号陷阱</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 错误写法：访问未预加载的关联属性，触发 lazy load → MissingGreenlet</span></span><br><span class="line">user = <span class="keyword">await</span> db.get(User, user_id)</span><br><span class="line"><span class="built_in">print</span>(user.articles)  <span class="comment"># 💥 MissingGreenlet!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 正确写法：用 selectinload 预加载</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> selectinload</span><br><span class="line"></span><br><span class="line">result = <span class="keyword">await</span> db.execute(</span><br><span class="line">    select(User).where(User.<span class="built_in">id</span> == user_id).options(selectinload(User.articles))</span><br><span class="line">)</span><br><span class="line">user = result.scalar()</span><br><span class="line"><span class="built_in">print</span>(user.articles)  <span class="comment"># ✅ 已经预加载到内存中，不会触发 IO</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>规则：在异步环境下，所有关联属性必须显式预加载。</strong> <code>selectinload</code> 用一条额外的 SELECT IN 加载关联数据，性能好且代码清晰；<code>joinedload</code> 用 JOIN 一次查出，适合一对一或多对一。</p>
+<hr>
+<h2 id="9-事务管理"><a href="#9-事务管理" class="headerlink" title="9. 事务管理"></a>9. 事务管理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">transfer_credits</span>(<span class="params">db: AsyncSession, from_id: <span class="built_in">int</span>, to_id: <span class="built_in">int</span>, amount: <span class="built_in">int</span></span>):</span></span><br><span class="line">    sender = <span class="keyword">await</span> db.get(User, from_id, with_for_update=<span class="literal">True</span>)  <span class="comment"># 行级锁</span></span><br><span class="line">    receiver = <span class="keyword">await</span> db.get(User, to_id, with_for_update=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> sender.credits &lt; amount:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;余额不足&quot;</span>)</span><br><span class="line"></span><br><span class="line">    sender.credits -= amount</span><br><span class="line">    receiver.credits += amount</span><br><span class="line">    <span class="keyword">await</span> db.commit()  <span class="comment"># 要么都成功，要么都失败（依赖隐式事务）</span></span><br></pre></td></tr></table></figure>
+
+<p><code>with_for_update=True</code> 加行级锁，防止并发扣款时出现超卖。FastAPI 依赖注入的 <code>async with</code> 会在异常时自动 <code>rollback</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/SQLAlchemy/" rel="tag"># SQLAlchemy</a>
+              <a href="/tags/FastAPI/" rel="tag"># FastAPI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/17/ORM%E8%AF%A6%E8%A7%A3/" rel="prev" title="ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例">
+      <i class="fa fa-chevron-left"></i> ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-AsyncSession%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要 AsyncSession？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5-vs-%E5%BC%82%E6%AD%A5%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.</span> <span class="nav-text">同步 vs 异步对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">2. 环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%BC%82%E6%AD%A5%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BC%9A%E8%AF%9D%E5%B7%A5%E5%8E%82"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 异步引擎与会话工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expire-on-commit-False-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">expire_on_commit&#x3D;False 为什么重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-FastAPI-%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="nav-number">2.3.</span> <span class="nav-text">2.2 FastAPI 依赖注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%EF%BC%88SQLAlchemy-2-0-%E9%A3%8E%E6%A0%BC%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">3. 模型定义（SQLAlchemy 2.0 风格）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Create%EF%BC%88%E6%96%B0%E5%A2%9E%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">4. Create（新增）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%8D%95%E6%9D%A1%E6%8F%92%E5%85%A5"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 单条插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9Aadd-%E4%B8%8D%E9%9C%80%E8%A6%81-await%EF%BC%8C%E4%BD%86-commit-%E5%BF%85%E9%A1%BB-await"><span class="nav-number">4.2.</span> <span class="nav-text">注意：add() 不需要 await，但 commit() 必须 await</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5"><span class="nav-number">4.3.</span> <span class="nav-text">4.2 批量插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Read%EF%BC%88%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">5. Read（查询）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E6%8C%89%E4%B8%BB%E9%94%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 按主键查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 条件查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 分页查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E7%BB%9F%E8%AE%A1%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 统计查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scalar-vs-scalars-vs-scalar-one"><span class="nav-number">5.5.</span> <span class="nav-text">scalar() vs scalars() vs scalar_one()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Update%EF%BC%88%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">6. Update（更新）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%85%88%E6%9F%A5%E5%90%8E%E6%94%B9%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 先查后改（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0%EF%BC%88%E4%B8%8D%E6%9F%A5%E7%9B%B4%E6%8E%A5%E6%94%B9%EF%BC%89"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 批量更新（不查直接改）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Delete%EF%BC%88%E5%88%A0%E9%99%A4%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">7. Delete（删除）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%8D%95%E6%9D%A1%E5%88%A0%E9%99%A4"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 单条删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#delete-%E9%9C%80%E8%A6%81-await%EF%BC%81"><span class="nav-number">7.2.</span> <span class="nav-text">delete() 需要 await！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4"><span class="nav-number">7.3.</span> <span class="nav-text">7.2 批量删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2%E4%B8%8E%E9%A2%84%E5%8A%A0%E8%BD%BD"><span class="nav-number">8.</span> <span class="nav-text">8. 关联查询与预加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MissingGreenlet-%E2%80%94%E2%80%94-%E5%BC%82%E6%AD%A5%E5%BC%80%E5%8F%91%E7%9A%84%E5%A4%B4%E5%8F%B7%E9%99%B7%E9%98%B1"><span class="nav-number">8.1.</span> <span class="nav-text">MissingGreenlet —— 异步开发的头号陷阱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">9. 事务管理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

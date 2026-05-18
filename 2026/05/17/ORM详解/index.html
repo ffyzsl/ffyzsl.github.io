@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例1. 先搞懂：没有 ORM 的时候，怎么操作数据库？1.1 数据库是什么？简单说，数据库就是一个有组织的数据存储文件。你电脑上的 .db 文件就是数据库。 本项目的数据库文件路径是： 1项目根目录&#x2F;data&#x2F;countbot.db  这只是一个普通文件，但你用记事本打不开（里面是二进制数据），需要用专门的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/05/17/ORM%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例1. 先搞懂：没有 ORM 的时候，怎么操作数据库？1.1 数据库是什么？简单说，数据库就是一个有组织的数据存储文件。你电脑上的 .db 文件就是数据库。 本项目的数据库文件路径是： 1项目根目录&#x2F;data&#x2F;countbot.db  这只是一个普通文件，但你用记事本打不开（里面是二进制数据），需要用专门的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-17T02:27:36.000Z">
+<meta property="article:modified_time" content="2026-05-17T02:16:39.046Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="ORM">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/05/17/ORM%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/05/17/ORM%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-05-17 10:27:36 / 修改时间：10:16:39" itemprop="dateCreated datePublished" datetime="2026-05-17T10:27:36+08:00">2026-05-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ORM-详解-——-以CountBot项目（SQLAlchemy-aiosqlite）为例"><a href="#ORM-详解-——-以CountBot项目（SQLAlchemy-aiosqlite）为例" class="headerlink" title="ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例"></a>ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例</h1><h2 id="1-先搞懂：没有-ORM-的时候，怎么操作数据库？"><a href="#1-先搞懂：没有-ORM-的时候，怎么操作数据库？" class="headerlink" title="1. 先搞懂：没有 ORM 的时候，怎么操作数据库？"></a>1. 先搞懂：没有 ORM 的时候，怎么操作数据库？</h2><h3 id="1-1-数据库是什么？"><a href="#1-1-数据库是什么？" class="headerlink" title="1.1 数据库是什么？"></a>1.1 数据库是什么？</h3><p>简单说，数据库就是一个<strong>有组织的数据存储文件</strong>。你电脑上的 <code>.db</code> 文件就是数据库。</p>
+<p>本项目的数据库文件路径是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">项目根目录/data/countbot.db</span><br></pre></td></tr></table></figure>
+
+<p>这只是一个普通文件，但你用记事本打不开（里面是二进制数据），需要用专门的工具来读写。</p>
+<span id="more"></span>
+
+<h3 id="1-2-没有-ORM-时，怎么和数据库打交道？"><a href="#1-2-没有-ORM-时，怎么和数据库打交道？" class="headerlink" title="1.2 没有 ORM 时，怎么和数据库打交道？"></a>1.2 没有 ORM 时，怎么和数据库打交道？</h3><p>你直接写 <strong>SQL 语句</strong>（Structured Query Language，结构化查询语言），然后通过数据库驱动发给数据库。就像这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 连接到数据库文件</span></span><br><span class="line">conn = sqlite3.connect(<span class="string">&quot;countbot.db&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建一个&quot;光标&quot;，用来执行 SQL</span></span><br><span class="line">cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行 SQL 语句 —— 创建表</span></span><br><span class="line">cursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    CREATE TABLE sessions (</span></span><br><span class="line"><span class="string">        id TEXT PRIMARY KEY,</span></span><br><span class="line"><span class="string">        name TEXT NOT NULL,</span></span><br><span class="line"><span class="string">        created_at TEXT NOT NULL</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 执行 SQL 语句 —— 插入数据</span></span><br><span class="line">cursor.execute(</span><br><span class="line">    <span class="string">&quot;INSERT INTO sessions (id, name, created_at) VALUES (?, ?, ?)&quot;</span>,</span><br><span class="line">    (<span class="string">&quot;abc-123&quot;</span>, <span class="string">&quot;我的聊天&quot;</span>, <span class="string">&quot;2025-01-01T00:00:00Z&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 执行 SQL 语句 —— 查询数据</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT id, name FROM sessions WHERE id = ?&quot;</span>, (<span class="string">&quot;abc-123&quot;</span>,))</span><br><span class="line">row = cursor.fetchone()</span><br><span class="line"><span class="built_in">print</span>(row)  <span class="comment"># (&#x27;abc-123&#x27;, &#x27;我的聊天&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 提交（保存）更改</span></span><br><span class="line">conn.commit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 关闭连接</span></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-这种方式有什么痛点？"><a href="#1-3-这种方式有什么痛点？" class="headerlink" title="1.3 这种方式有什么痛点？"></a>1.3 这种方式有什么痛点？</h3><ol>
+<li><strong>写 SQL 字符串很容易出错</strong>：表名拼错、字段名写漏，IDE 帮不了你，要到运行时才发现。</li>
+<li><strong>SQL 和 Python 代码混在一起</strong>：代码很乱，读起来费劲。</li>
+<li><strong>查询结果是元组/字典</strong>：<code>row[0]</code> 这种写法完全看不出是 <code>id</code> 还是 <code>name</code>，写错了也不报错。</li>
+<li><strong>不同数据库的 SQL 语法略有不同</strong>：换数据库（比如从 SQLite 换到 PostgreSQL）要修改 SQL 语句。</li>
+<li><strong>没有类型检查</strong>：你插入的数据类型对不对，要到执行时才知道。</li>
+</ol>
+<p><strong>ORM 就是来解决这些问题的。</strong></p>
+<hr>
+<h2 id="2-ORM-是什么？"><a href="#2-ORM-是什么？" class="headerlink" title="2. ORM 是什么？"></a>2. ORM 是什么？</h2><h3 id="2-1-一句话解释"><a href="#2-1-一句话解释" class="headerlink" title="2.1 一句话解释"></a>2.1 一句话解释</h3><blockquote>
+<p><strong>ORM（Object-Relational Mapping，对象关系映射）是一种技术：让你用操作 Python 对象的方式来操作数据库，不用手写 SQL。</strong></p>
+</blockquote>
+<h3 id="2-2-用人话打个比方"><a href="#2-2-用人话打个比方" class="headerlink" title="2.2 用人话打个比方"></a>2.2 用人话打个比方</h3><p>不用 ORM 时，你和数据库交流是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">你：（写 SQL 字符串）&quot;SELECT name FROM sessions WHERE id = &#x27;abc-123&#x27;&quot;</span><br><span class="line">数据库：（返回）&quot;我的聊天&quot;</span><br><span class="line">你：（手动解析）&quot;好的，第 0 列的值是 &#x27;我的聊天&#x27;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>用了 ORM 之后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">你：（写 Python 代码）session = await db.get(Session, &quot;abc-123&quot;)</span><br><span class="line">ORM 层：（自动生成 SQL）&quot;SELECT ... WHERE id = &#x27;abc-123&#x27;&quot;</span><br><span class="line">数据库：（返回）原始数据</span><br><span class="line">ORM 层：（自动转换成 Python 对象）Session 对象</span><br><span class="line">你：print(session.name)  # &quot;我的聊天&quot; —— 自然地使用属性</span><br></pre></td></tr></table></figure>
+
+<p>ORM 就是你和数据库之间的<strong>翻译官</strong>：你把 Python 对象交给它，它自动翻译成 SQL 发给数据库；数据库返回原始数据，它又自动翻译回 Python 对象给你。</p>
+<h3 id="2-3-ORM-的核心映射关系"><a href="#2-3-ORM-的核心映射关系" class="headerlink" title="2.3 ORM 的核心映射关系"></a>2.3 ORM 的核心映射关系</h3><p>ORM 做的最核心的事情就是<strong>映射</strong>（Mapping）：</p>
+<table>
+<thead>
+<tr>
+<th>数据库中的概念</th>
+<th>映射到 →</th>
+<th>Python 中的概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>表（Table）</td>
+<td>→</td>
+<td>类（Class）</td>
+</tr>
+<tr>
+<td>表中的一行（Row）</td>
+<td>→</td>
+<td>类的一个实例（Instance）</td>
+</tr>
+<tr>
+<td>列（Column）</td>
+<td>→</td>
+<td>实例的属性（Attribute）</td>
+</tr>
+<tr>
+<td>表之间的关系</td>
+<td>→</td>
+<td>对象之间的引用</td>
+</tr>
+</tbody></table>
+<p>图示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">数据库中的 sessions 表：              Python 中的 Session 类：</span><br><span class="line"></span><br><span class="line">┌────────────────────────────┐       class Session:</span><br><span class="line">│ id      │ name    │ created │         id: str</span><br><span class="line">├─────────┼─────────┼─────────┤         name: str</span><br><span class="line">│ abc-123 │ 我的聊天 │ 2025-.. │         created_at: datetime</span><br><span class="line">│ def-456 │ 翻译助手 │ 2025-.. │</span><br><span class="line">└─────────┴─────────┴─────────┘</span><br><span class="line">       ↕ 每一行都是一个实例 ↕</span><br><span class="line">                                  session1 = Session(id=&quot;abc-123&quot;,</span><br><span class="line">                                  ┌─────────────────────────────┐</span><br><span class="line">                                  │       name=&quot;我的聊天&quot;,        │</span><br><span class="line">                                  │       created_at=...)        │</span><br><span class="line">                                  └─────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-ORM-的优缺点"><a href="#2-4-ORM-的优缺点" class="headerlink" title="2.4 ORM 的优缺点"></a>2.4 ORM 的优缺点</h3><p><strong>优点：</strong></p>
+<ul>
+<li>写 Python 代码比写 SQL 字符串舒服，IDE 有自动补全和类型检查</li>
+<li>换数据库时（SQLite → PostgreSQL）几乎不用改代码</li>
+<li>自动防 SQL 注入（参数化查询）</li>
+<li>代码更整洁，逻辑更清晰</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>有学习成本</li>
+<li>复杂查询的性能不如手写 SQL</li>
+<li>对数据库的精细控制不如原生 SQL</li>
+</ul>
+<p>对于本项目这种桌面聊天应用来说，查询都很简单，ORM 的缺点完全不受影响，优点则是巨大的。</p>
+<hr>
+<h2 id="3-SQLAlchemy-是什么？"><a href="#3-SQLAlchemy-是什么？" class="headerlink" title="3. SQLAlchemy 是什么？"></a>3. SQLAlchemy 是什么？</h2><h3 id="3-1-一句话解释"><a href="#3-1-一句话解释" class="headerlink" title="3.1 一句话解释"></a>3.1 一句话解释</h3><blockquote>
+<p><strong>SQLAlchemy 是 Python 生态中最流行的 ORM 库。它同时支持同步和异步操作，支持几乎所有数据库（SQLite、PostgreSQL、MySQL 等）。</strong></p>
+</blockquote>
+<p>你可以把它理解为一个<strong>加强版的翻译官</strong>：它不仅能翻译 Python ↔ SQL，还有一大堆附加功能（连接池、会话管理、迁移工具等）。</p>
+<h3 id="3-2-SQLAlchemy-的两层架构"><a href="#3-2-SQLAlchemy-的两层架构" class="headerlink" title="3.2 SQLAlchemy 的两层架构"></a>3.2 SQLAlchemy 的两层架构</h3><p>SQLAlchemy 实际上有两层：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│         ORM 层（上层）            │  ← 你用 Python 对象操作数据库</span><br><span class="line">│   Session, Base, relationship   │</span><br><span class="line">├─────────────────────────────────┤</span><br><span class="line">│         Core 层（底层）           │  ← 更接近 SQL 的低级 API</span><br><span class="line">│   Engine, Connection, Table     │</span><br><span class="line">├─────────────────────────────────┤</span><br><span class="line">│         数据库驱动（DBAPI）        │  ← 真正和数据库通信的库</span><br><span class="line">│   sqlite3, aiosqlite, psycopg  │</span><br><span class="line">└─────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>你大多数时候只在<strong>ORM 层</strong>写代码。Core 层的东西（Engine、Connection）也会用到，但只是做配置。</p>
+<h3 id="3-3-本项目用到了-SQLAlchemy-的哪些部分？"><a href="#3-3-本项目用到了-SQLAlchemy-的哪些部分？" class="headerlink" title="3.3 本项目用到了 SQLAlchemy 的哪些部分？"></a>3.3 本项目用到了 SQLAlchemy 的哪些部分？</h3><p>从 <code>backend/database.py</code> 可以看到：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ORM 层 —— 模型和会话</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase        <span class="comment"># 模型的基类</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession   <span class="comment"># 异步会话</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> async_sessionmaker  <span class="comment"># 异步会话工厂</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Core 层 —— 引擎（连接数据库）</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> create_async_engine  <span class="comment"># 创建异步引擎</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine              <span class="comment"># 创建同步引擎</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> inspect                    <span class="comment"># 检查数据库结构</span></span><br></pre></td></tr></table></figure>
+
+<p>现在你不需要完全理解这些，接下来我会逐一解释。</p>
+<hr>
+<h2 id="4-SQLAlchemy-核心概念拆解"><a href="#4-SQLAlchemy-核心概念拆解" class="headerlink" title="4. SQLAlchemy 核心概念拆解"></a>4. SQLAlchemy 核心概念拆解</h2><p>这一章是文档的核心。我会用本项目的实际代码来解释每个概念。</p>
+<h3 id="4-1-Engine（引擎）——-数据库的”插座”"><a href="#4-1-Engine（引擎）——-数据库的”插座”" class="headerlink" title="4.1 Engine（引擎）—— 数据库的”插座”"></a>4.1 Engine（引擎）—— 数据库的”插座”</h3><h4 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h4><p><strong>Engine 是 SQLAlchemy 和数据库之间的连接通道。</strong> 打个比方：</p>
+<blockquote>
+<p>数据库 = 一栋房子<br>Engine = 房子墙上的电源插座<br>你要用电（操作数据库），就得先有插座（创建 Engine）</p>
+</blockquote>
+<h4 id="本项目的代码"><a href="#本项目的代码" class="headerlink" title="本项目的代码"></a>本项目的代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/database.py</span></span><br><span class="line"></span><br><span class="line">DATABASE_PATH = DATA_DIR / <span class="string">&quot;countbot.db&quot;</span>                      <span class="comment"># 数据库文件路径</span></span><br><span class="line">DATABASE_URL = <span class="string">f&quot;sqlite+aiosqlite:///<span class="subst">&#123;DATABASE_PATH&#125;</span>&quot;</span>         <span class="comment"># 异步连接 URL</span></span><br><span class="line">SYNC_DATABASE_URL = <span class="string">f&quot;sqlite:///<span class="subst">&#123;DATABASE_PATH&#125;</span>&quot;</span>              <span class="comment"># 同步连接 URL</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建异步引擎 —— 用于所有 CRUD 操作（增删改查）</span></span><br><span class="line">engine = create_async_engine(DATABASE_URL, echo=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建同步引擎 —— 用于建表等管理操作</span></span><br><span class="line">sync_engine = create_engine(SYNC_DATABASE_URL, echo=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="URL-格式详解"><a href="#URL-格式详解" class="headerlink" title="URL 格式详解"></a>URL 格式详解</h4><p><code>DATABASE_URL</code> 的值长这样（假设项目在 <code>E:\Agent学习\countBot-learn</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite+aiosqlite:///E:\Agent学习\countBot-learn\data\countbot.db</span><br></pre></td></tr></table></figure>
+
+<p>拆开来看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sqlite + aiosqlite :/// E:\Agent学习\countBot-learn\data\countbot.db</span><br><span class="line">  ↑         ↑        ↑              ↑</span><br><span class="line">  │         │        │              └── 数据库文件路径</span><br><span class="line">  │         │        └── 三个斜杠（本地文件用这个格式）</span><br><span class="line">  │         └── 使用的驱动（aiosqlite 提供异步能力）</span><br><span class="line">  └── 数据库类型（SQLite）</span><br></pre></td></tr></table></figure>
+
+<p>为什么要有两个引擎？</p>
+<ul>
+<li><strong>异步引擎</strong>（<code>sqlite+aiosqlite:///</code>）：FastAPI 是异步框架，CRUD 操作用异步引擎才不会阻塞事件循环。</li>
+<li><strong>同步引擎</strong>（<code>sqlite:///</code>）：建表（<code>create_all</code>）操作是同步的，通过 <code>run_sync()</code> 在异步环境中执行。</li>
+</ul>
+<p><code>echo=False</code> 表示不打印调试 SQL 日志（设为 <code>True</code> 可以在控制台看到每一条生成的 SQL）。</p>
+<h4 id="理解要点"><a href="#理解要点" class="headerlink" title="理解要点"></a>理解要点</h4><ul>
+<li>Engine 通常是<strong>全局唯一的</strong>，整个应用创建一个就够了</li>
+<li>Engine 自己不执行 SQL，它只是提供连接</li>
+<li>Engine 内部维护了<strong>连接池</strong>（pool），管理和复用数据库连接，避免频繁创建/销毁</li>
+</ul>
+<hr>
+<h3 id="4-2-Base（基类）——-模型的”模具”"><a href="#4-2-Base（基类）——-模型的”模具”" class="headerlink" title="4.2 Base（基类）—— 模型的”模具”"></a>4.2 Base（基类）—— 模型的”模具”</h3><h4 id="是什么？-1"><a href="#是什么？-1" class="headerlink" title="是什么？"></a>是什么？</h4><p><strong>Base 是所有 ORM 模型的共同祖先。</strong> 你定义的所有模型类都要继承它，就像所有模型从一个”模具”里出来。</p>
+<h4 id="本项目的代码-1"><a href="#本项目的代码-1" class="headerlink" title="本项目的代码"></a>本项目的代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/database.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">DeclarativeBase</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;所有 ORM 模型的基类。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    继承 DeclarativeBase 之后，子类自动获得：</span></span><br><span class="line"><span class="string">    - __tablename__ → 表名映射</span></span><br><span class="line"><span class="string">    - mapped_column() → 列定义</span></span><br><span class="line"><span class="string">    - relationship() → 表关系</span></span><br><span class="line"><span class="string">    - Base.metadata.create_all() → 批量建表</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>Base 类本身是空的（<code>pass</code>），所有能力都来自 <code>DeclarativeBase</code> 父类。</p>
+<h4 id="DeclarativeBase-是什么？"><a href="#DeclarativeBase-是什么？" class="headerlink" title="DeclarativeBase 是什么？"></a>DeclarativeBase 是什么？</h4><p><code>DeclarativeBase</code> 是 SQLAlchemy 2.0 的新写法。旧版本用 <code>declarative_base()</code> 函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 旧写法（SQLAlchemy 1.x，不要学）</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> declarative_base</span><br><span class="line">Base = declarative_base()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新写法（SQLAlchemy 2.0，本项目用的）</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">DeclarativeBase</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>新写法的好处是更灵活——如果你以后想在 Base 里加通用方法（比如所有表都要有的 <code>to_dict()</code>），直接往这个类里加就行。</p>
+<h4 id="理解要点-1"><a href="#理解要点-1" class="headerlink" title="理解要点"></a>理解要点</h4><ul>
+<li>整个项目<strong>只定义一个 Base</strong></li>
+<li>所有模型类都要 <code>class Xxx(Base):</code></li>
+<li>定义了模型类之后，SQLAlchemy 就知道你的数据库长什么样了</li>
+</ul>
+<hr>
+<h3 id="4-3-Model（模型）——-一张表-一个类"><a href="#4-3-Model（模型）——-一张表-一个类" class="headerlink" title="4.3 Model（模型）—— 一张表 = 一个类"></a>4.3 Model（模型）—— 一张表 = 一个类</h3><h4 id="是什么？-2"><a href="#是什么？-2" class="headerlink" title="是什么？"></a>是什么？</h4><p><strong>模型 = 一个 Python 类，这个类对应数据库中的一张表。</strong> 类的每个属性对应表中的一列。</p>
+<h4 id="本项目的代码-——-Session-模型"><a href="#本项目的代码-——-Session-模型" class="headerlink" title="本项目的代码 —— Session 模型"></a>本项目的代码 —— Session 模型</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/models/session.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timezone</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Optional</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Index, String, Text</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> Mapped, mapped_column, relationship</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> backend.database <span class="keyword">import</span> Base</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">utc_now</span>() -&gt; datetime:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回当前 UTC 时间，始终带时区信息。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> datetime.now(timezone.utc)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Session</span>(<span class="params">Base</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&quot;sessions&quot;</span>       <span class="comment"># ① 数据库中的表名</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ② 列定义</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">str</span>] = mapped_column(</span><br><span class="line">        String, primary_key=<span class="literal">True</span>, default=<span class="keyword">lambda</span>: <span class="built_in">str</span>(uuid.uuid4())</span><br><span class="line">    )</span><br><span class="line">    name: Mapped[<span class="built_in">str</span>] = mapped_column(String, nullable=<span class="literal">False</span>)</span><br><span class="line">    created_at: Mapped[datetime] = mapped_column(default=utc_now)</span><br><span class="line">    updated_at: Mapped[datetime] = mapped_column(default=utc_now, onupdate=utc_now)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ③ 关系定义</span></span><br><span class="line">    messages: Mapped[<span class="type">List</span>[<span class="string">&quot;Message&quot;</span>]] = relationship(</span><br><span class="line">        back_populates=<span class="string">&quot;session&quot;</span>, cascade=<span class="string">&quot;all, delete-orphan&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ④ 索引定义</span></span><br><span class="line">    __table_args__ = (</span><br><span class="line">        Index(<span class="string">&quot;idx_sessions_updated&quot;</span>, <span class="string">&quot;updated_at&quot;</span>),</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<h4 id="逐行解释"><a href="#逐行解释" class="headerlink" title="逐行解释"></a>逐行解释</h4><p><strong>① <code>__tablename__ = &quot;sessions&quot;</code></strong></p>
+<p>告诉 SQLAlchemy：这个类对应数据库中的 <code>sessions</code> 表。如果不写，默认用类名小写。</p>
+<p><strong>② 列定义</strong></p>
+<p>以 <code>id</code> 为例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span>: Mapped[<span class="built_in">str</span>] = mapped_column(String, primary_key=<span class="literal">True</span>, default=<span class="keyword">lambda</span>: <span class="built_in">str</span>(uuid.uuid4()))</span><br></pre></td></tr></table></figure>
+
+<p>拆开理解：</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>Python 属性名 = 数据库列名（也可以用 <code>mapped_column(&quot;custom_name&quot;)</code> 指定不同的列名）</td>
+</tr>
+<tr>
+<td><code>Mapped[str]</code></td>
+<td><strong>类型注解</strong>，告诉类型检查器：<code>session.id</code> 的值是 <code>str</code> 类型</td>
+</tr>
+<tr>
+<td><code>mapped_column(...)</code></td>
+<td>定义数据库列的具体属性</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>数据库列类型 = 字符串（VARCHAR）</td>
+</tr>
+<tr>
+<td><code>primary_key=True</code></td>
+<td>这是主键（唯一标识每一行，不能重复，不能为空）</td>
+</tr>
+<tr>
+<td><code>default=lambda: str(uuid.uuid4())</code></td>
+<td>默认值：插入新行时如果不提供 id，自动生成一个 UUID 字符串</td>
+</tr>
+</tbody></table>
+<p>其他列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">name: Mapped[<span class="built_in">str</span>] = mapped_column(String, nullable=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># ↑ nullable=False 表示&quot;不允许为空&quot;，等同于 SQL 中的 NOT NULL</span></span><br><span class="line"></span><br><span class="line">created_at: Mapped[datetime] = mapped_column(default=utc_now)</span><br><span class="line"><span class="comment"># ↑ default=utc_now 表示插入时自动填当前时间</span></span><br><span class="line"></span><br><span class="line">updated_at: Mapped[datetime] = mapped_column(default=utc_now, onupdate=utc_now)</span><br><span class="line"><span class="comment"># ↑ onupdate=utc_now 表示每次更新这行数据时，自动更新这个字段为当前时间</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>Mapped[T]</code> 是什么？</strong></p>
+<p><code>Mapped[str]</code> 是 Python 类型注解语法。它做两件事：</p>
+<ol>
+<li>让 IDE（VS Code / PyCharm）知道 <code>session.id</code> 是 <code>str</code>，给你自动补全</li>
+<li>让 SQLAlchemy 知道这列的类型</li>
+</ol>
+<p><strong>mapped_column 的常用参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一个位置参数</td>
+<td>数据库列类型</td>
+<td><code>String</code>, <code>Integer</code>, <code>Text</code>, <code>DateTime</code>, <code>Boolean</code></td>
+</tr>
+<tr>
+<td><code>primary_key</code></td>
+<td>是否是主键</td>
+<td><code>primary_key=True</code></td>
+</tr>
+<tr>
+<td><code>nullable</code></td>
+<td>是否允许为空</td>
+<td><code>nullable=False</code>（不允许）</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>默认值</td>
+<td><code>default=utc_now</code> 或 <code>default=0</code></td>
+</tr>
+<tr>
+<td><code>onupdate</code></td>
+<td>更新时自动设置的值</td>
+<td><code>onupdate=utc_now</code></td>
+</tr>
+<tr>
+<td><code>autoincrement</code></td>
+<td>整数自增</td>
+<td><code>autoincrement=True</code></td>
+</tr>
+<tr>
+<td><code>unique</code></td>
+<td>是否唯一</td>
+<td><code>unique=True</code></td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>是否建索引</td>
+<td><code>index=True</code></td>
+</tr>
+</tbody></table>
+<p><strong>③ 关系定义</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">messages: Mapped[<span class="type">List</span>[<span class="string">&quot;Message&quot;</span>]] = relationship(</span><br><span class="line">    back_populates=<span class="string">&quot;session&quot;</span>, cascade=<span class="string">&quot;all, delete-orphan&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这句话的意思：”一个 Session 拥有多条 Message”。具体解释见 <a href="#46-relationship%E5%85%B3%E7%B3%BB-%E8%A1%A8%E4%B8%8E%E8%A1%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E7%BA%BF">4.6 节</a>。</p>
+<p><strong>④ 索引定义</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">__table_args__ = (</span><br><span class="line">    Index(<span class="string">&quot;idx_sessions_updated&quot;</span>, <span class="string">&quot;updated_at&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>索引的作用是<strong>加速查询</strong>。<code>idx_sessions_updated</code> 是对 <code>updated_at</code> 列的索引，当你按更新时间排序会话列表时，数据库可以快速定位，不用全表扫描。</p>
+<h4 id="本项目的代码-——-Message-模型"><a href="#本项目的代码-——-Message-模型" class="headerlink" title="本项目的代码 —— Message 模型"></a>本项目的代码 —— Message 模型</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/models/message.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timezone</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> TYPE_CHECKING</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> ForeignKey, Index, Integer, String, Text</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> Mapped, mapped_column, relationship</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> backend.database <span class="keyword">import</span> Base</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> TYPE_CHECKING:</span><br><span class="line">    <span class="keyword">from</span> backend.models.session <span class="keyword">import</span> Session</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">utc_now</span>() -&gt; datetime:</span></span><br><span class="line">    <span class="keyword">return</span> datetime.now(timezone.utc)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Message</span>(<span class="params">Base</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&quot;messages&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    session_id: Mapped[<span class="built_in">str</span>] = mapped_column(</span><br><span class="line">        String, ForeignKey(<span class="string">&quot;sessions.id&quot;</span>), nullable=<span class="literal">False</span></span><br><span class="line">    )</span><br><span class="line">    role: Mapped[<span class="built_in">str</span>] = mapped_column(String, nullable=<span class="literal">False</span>)</span><br><span class="line">    content: Mapped[<span class="built_in">str</span>] = mapped_column(Text, nullable=<span class="literal">False</span>)</span><br><span class="line">    created_at: Mapped[datetime] = mapped_column(default=utc_now)</span><br><span class="line"></span><br><span class="line">    session: Mapped[<span class="string">&quot;Session&quot;</span>] = relationship(back_populates=<span class="string">&quot;messages&quot;</span>)</span><br><span class="line"></span><br><span class="line">    __table_args__ = (</span><br><span class="line">        Index(<span class="string">&quot;idx_messages_session&quot;</span>, <span class="string">&quot;session_id&quot;</span>, <span class="string">&quot;created_at&quot;</span>),</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<h4 id="逐行解释-1"><a href="#逐行解释-1" class="headerlink" title="逐行解释"></a>逐行解释</h4><p><strong>与 Session 模型的不同之处：</strong></p>
+<ol>
+<li><p>**<code>id</code> 用了 <code>Integer</code> + <code>autoincrement=True</code>**：消息 ID 用自动递增的数字（1, 2, 3…），而 Session 用 UUID 字符串。原因：</p>
+<ul>
+<li>Session ID 是暴露给用户的，用 UUID 避免被猜出数据量</li>
+<li>Message ID 只在内部使用，自增整数更高效</li>
+</ul>
+</li>
+<li><p><strong><code>session_id</code> 用了 <code>ForeignKey(&quot;sessions.id&quot;)</code><strong>：这是一个</strong>外键</strong>，表示 <code>session_id</code> 的值必须对应 <code>sessions</code> 表中某个 <code>id</code> 的值。数据库用外键来保证<strong>数据一致性</strong>——你不能插入一条属于不存在的 Session 的消息。</p>
+</li>
+<li><p><strong><code>content</code> 用了 <code>Text</code> 类型</strong>：AI 回复可能很长，<code>String</code> 有长度限制，<code>Text</code> 没有。<code>Text</code> 对应 SQLite 的 <code>TEXT</code> 类型（无长度限制），<code>String</code> 对应 <code>VARCHAR(length)</code>。</p>
+</li>
+<li><p><strong>复合索引</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Index(<span class="string">&quot;idx_messages_session&quot;</span>, <span class="string">&quot;session_id&quot;</span>, <span class="string">&quot;created_at&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这是一个两列的联合索引，加速”查某个 Session 的所有消息并按时间排序”这类查询。</p>
+</li>
+</ol>
+<h4 id="String-vs-Text-选择一览"><a href="#String-vs-Text-选择一览" class="headerlink" title="String vs Text 选择一览"></a>String vs Text 选择一览</h4><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用 String</th>
+<th>用 Text</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ID、名称、角色等已知长度的字段</td>
+<td>选这个</td>
+<td>浪费</td>
+</tr>
+<tr>
+<td>AI 回复、文章内容等未知长度的字段</td>
+<td>有限制</td>
+<td>选这个</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="4-4-Session（会话）——-和数据库的”一次通话”"><a href="#4-4-Session（会话）——-和数据库的”一次通话”" class="headerlink" title="4.4 Session（会话）—— 和数据库的”一次通话”"></a>4.4 Session（会话）—— 和数据库的”一次通话”</h3><h4 id="是什么？-3"><a href="#是什么？-3" class="headerlink" title="是什么？"></a>是什么？</h4><blockquote>
+<p><strong>SQLAlchemy 中的 Session 代表和数据库的一次”对话”。</strong> 在这个对话中，你可以做增删改查，所有操作会先暂存，最后一次性提交。</p>
+</blockquote>
+<p>⚠️ <strong>注意区分两个”Session”：</strong></p>
+<ul>
+<li>本项目的 <code>Session</code>（大写 S）= ORM 模型，对应 <code>sessions</code> 表</li>
+<li>SQLAlchemy 的 <code>session</code>（小写 s）= 数据库会话，用于执行数据库操作</li>
+</ul>
+<p>这两个概念刚好同名，但完全不同。后面我会用”ORM Session”和”DB session”来区分。</p>
+<h4 id="DB-session-的工作模式"><a href="#DB-session-的工作模式" class="headerlink" title="DB session 的工作模式"></a>DB session 的工作模式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">你创建 DB session → 你通过它操作数据 → 你提交（commit）→ 数据库真正写入</span><br><span class="line">                                         ↑</span><br><span class="line">                                    在这之前所有改动都在内存中，</span><br><span class="line">                                    数据库没有任何变化</span><br></pre></td></tr></table></figure>
+
+<p>这种”暂存再提交”的模式叫做<strong>事务（Transaction）</strong>：</p>
+<ul>
+<li>要么全部成功（commit）</li>
+<li>要么全部撤销（rollback）</li>
+</ul>
+<p>保证了数据一致性，不会出现”改了一半”的情况。</p>
+<h4 id="本项目的代码-2"><a href="#本项目的代码-2" class="headerlink" title="本项目的代码"></a>本项目的代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/database.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession, async_sessionmaker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个&quot;会话工厂&quot;——每次调用它都生成一个新的 DB session</span></span><br><span class="line">AsyncSessionLocal = async_sessionmaker(</span><br><span class="line">    engine,                           <span class="comment"># 用哪个引擎</span></span><br><span class="line">    class_=AsyncSession,              <span class="comment"># 生成的是 AsyncSession 对象</span></span><br><span class="line">    expire_on_commit=<span class="literal">False</span>            <span class="comment"># commit 后对象不过期</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>async_sessionmaker</code> 是什么？</strong></p>
+<p>它是一个工厂函数，就像工厂生产产品一样，每次调用都生成一个新的 DB session：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每调用一次 AsyncSessionLocal()，就创建一个新的数据库会话</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">some_function</span>():</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSessionLocal() <span class="keyword">as</span> session:   <span class="comment"># 创建一个新会话</span></span><br><span class="line">        <span class="comment"># 在这里做数据库操作...</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># 退出 with 块时，会话自动关闭</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>expire_on_commit=False</code> 是什么意思？</strong></p>
+<p>默认情况下，<code>commit()</code> 之后 SQLAlchemy 会让所有已加载的对象”过期”——下次访问属性时会重新查数据库。设 <code>False</code> 后对象不会过期，你 commit 完还能用。</p>
+<h4 id="FastAPI-中的使用：依赖注入"><a href="#FastAPI-中的使用：依赖注入" class="headerlink" title="FastAPI 中的使用：依赖注入"></a>FastAPI 中的使用：依赖注入</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/database.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_db</span>() -&gt; AsyncSession:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;FastAPI 的 Depends 依赖 —— 每个请求生成一个 DB session。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSessionLocal() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">yield</span> session</span><br><span class="line">    <span class="comment"># yield 之后，session 自动关闭</span></span><br></pre></td></tr></table></figure>
+
+<p>FastAPI 的依赖注入机制：每个 HTTP 请求到来时，FastAPI 自动调用 <code>get_db()</code>，生成一个新的 DB session 注入到你的处理函数中。请求结束后 session 自动关闭。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 API 路由中使用</span></span><br><span class="line"><span class="meta">@router.get(<span class="params"><span class="string">&quot;/api/sessions&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">list_sessions</span>(<span class="params">db: AsyncSession = Depends(<span class="params">get_db</span>)</span>):</span></span><br><span class="line">    <span class="comment"># db 就是 FastAPI 自动注入的 DB session</span></span><br><span class="line">    result = <span class="keyword">await</span> db.execute(select(Session))</span><br><span class="line">    <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<p>关于 <code>Depends(get_db)</code> 的更多细节：</p>
+<ul>
+<li><code>Depends</code> 是 FastAPI 的机制，告诉框架”这个参数的值请调用 <code>get_db</code> 函数来获取”</li>
+<li><code>get_db</code> 是一个异步生成器（<code>async def</code> + <code>yield</code>），<code>yield</code> 前面的代码在请求开始时执行，后面的代码在请求结束时执行</li>
+<li>这样就实现了”一个请求一个 DB session，用完自动关闭”</li>
+</ul>
+<hr>
+<h3 id="4-5-Metadata（元数据）——-所有表的”花名册”"><a href="#4-5-Metadata（元数据）——-所有表的”花名册”" class="headerlink" title="4.5 Metadata（元数据）—— 所有表的”花名册”"></a>4.5 Metadata（元数据）—— 所有表的”花名册”</h3><h4 id="是什么？-4"><a href="#是什么？-4" class="headerlink" title="是什么？"></a>是什么？</h4><p><strong>Metadata 是一个注册表，记录了你定义的所有表的信息。</strong> 它知道你的数据库里有什么表，每个表有什么列，列是什么类型。当你定义模型类并继承 Base 时，SQLAlchemy 自动把表信息注册到 <code>Base.metadata</code> 里。</p>
+<h4 id="有什么用？"><a href="#有什么用？" class="headerlink" title="有什么用？"></a>有什么用？</h4><p>最大的用途是<strong>自动建表</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># backend/database.py —— init_db() 函数中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init_db</span>() -&gt; <span class="literal">None</span>:</span></span><br><span class="line">    <span class="comment"># 1. 先导入所有模型，让它们注册到 Base.metadata</span></span><br><span class="line">    <span class="keyword">from</span> backend.models <span class="keyword">import</span> Session, Message  <span class="comment"># noqa: F401</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 根据 metadata 中的信息，在数据库中创建不存在的表</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> engine.begin() <span class="keyword">as</span> conn:</span><br><span class="line">        <span class="keyword">await</span> conn.run_sync(Base.metadata.create_all)</span><br><span class="line">    <span class="comment"># Base.metadata.create_all 会生成类似这样的 SQL：</span></span><br><span class="line">    <span class="comment"># CREATE TABLE IF NOT EXISTS sessions (...)</span></span><br><span class="line">    <span class="comment"># CREATE TABLE IF NOT EXISTS messages (...)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>create_all</code> 做了什么事？</strong></p>
+<ol>
+<li>读取 <code>Base.metadata</code> 中注册的所有表</li>
+<li>检查数据库，哪些表还不存在</li>
+<li>对于不存在的表，生成 <code>CREATE TABLE</code> SQL 并执行</li>
+<li>对于已存在的表，不做任何事（不会删表或改表）</li>
+</ol>
+<p><strong><code>run_sync</code> 是什么？</strong></p>
+<p>因为 <code>Base.metadata.create_all</code> 是同步函数，而我们在异步环境（FastAPI）中。<code>run_sync</code> 的作用就是：<strong>在异步代码中安全地执行同步函数</strong>，它会在另一个线程中执行同步函数，不阻塞事件循环。</p>
+<hr>
+<h3 id="4-6-Relationship（关系）——-表与表之间的连线"><a href="#4-6-Relationship（关系）——-表与表之间的连线" class="headerlink" title="4.6 Relationship（关系）—— 表与表之间的连线"></a>4.6 Relationship（关系）—— 表与表之间的连线</h3><h4 id="是什么？-5"><a href="#是什么？-5" class="headerlink" title="是什么？"></a>是什么？</h4><p><strong>关系（Relationship）定义了表与表之间的关联。</strong> 使用关系之后，你可以从一个对象自然地访问到关联的另一个对象。</p>
+<h4 id="本项目的表关系"><a href="#本项目的表关系" class="headerlink" title="本项目的表关系"></a>本项目的表关系</h4><p>一个会话（Session）可以有多条消息（Message）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Session (会话)  ←→  Message (消息)</span><br><span class="line">  1 个会话    →    N 条消息   （一对多）</span><br><span class="line">  1 条消息    →    1 个会话   （多对一）</span><br></pre></td></tr></table></figure>
+
+<p>在 Session 模型中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Session</span>(<span class="params">Base</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&quot;sessions&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ...列定义略...</span></span><br><span class="line"></span><br><span class="line">    messages: Mapped[<span class="type">List</span>[<span class="string">&quot;Message&quot;</span>]] = relationship(</span><br><span class="line">        back_populates=<span class="string">&quot;session&quot;</span>,</span><br><span class="line">        cascade=<span class="string">&quot;all, delete-orphan&quot;</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>在 Message 模型中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Message</span>(<span class="params">Base</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&quot;messages&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ...列定义略...</span></span><br><span class="line"></span><br><span class="line">    session_id: Mapped[<span class="built_in">str</span>] = mapped_column(</span><br><span class="line">        String, ForeignKey(<span class="string">&quot;sessions.id&quot;</span>), nullable=<span class="literal">False</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    session: Mapped[<span class="string">&quot;Session&quot;</span>] = relationship(back_populates=<span class="string">&quot;messages&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="这段代码在说什么？"><a href="#这段代码在说什么？" class="headerlink" title="这段代码在说什么？"></a>这段代码在说什么？</h4><p><strong>Message 模型这边：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session_id: Mapped[<span class="built_in">str</span>] = mapped_column(</span><br><span class="line">    String, ForeignKey(<span class="string">&quot;sessions.id&quot;</span>), nullable=<span class="literal">False</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>ForeignKey(&quot;sessions.id&quot;)</code> 在数据库层面建立了外键约束：<code>messages.session_id</code> 的值必须存在于 <code>sessions.id</code> 中。如果你试图插入一条 <code>session_id = &quot;不存在的ID&quot;</code> 的消息，数据库会拒绝。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session: Mapped[<span class="string">&quot;Session&quot;</span>] = relationship(back_populates=<span class="string">&quot;messages&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在 Python 对象层面，这让你可以这样用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">message = <span class="keyword">await</span> db.get(Message, <span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(message.session.name)   <span class="comment"># 通过 .session 直接访问到它所属的会话</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Session 模型这边：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">messages: Mapped[<span class="type">List</span>[<span class="string">&quot;Message&quot;</span>]] = relationship(</span><br><span class="line">    back_populates=<span class="string">&quot;session&quot;</span>,</span><br><span class="line">    cascade=<span class="string">&quot;all, delete-orphan&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>在 Python 对象层面，这让你可以这样用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session = <span class="keyword">await</span> db.get(Session, <span class="string">&quot;abc-123&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> msg <span class="keyword">in</span> session.messages:    <span class="comment"># 通过 .messages 直接遍历它的所有消息</span></span><br><span class="line">    <span class="built_in">print</span>(msg.content)</span><br></pre></td></tr></table></figure>
+
+<h4 id="back-populates-quot-session-quot-是什么意思？"><a href="#back-populates-quot-session-quot-是什么意思？" class="headerlink" title="back_populates=&quot;session&quot; 是什么意思？"></a><code>back_populates=&quot;session&quot;</code> 是什么意思？</h4><p>它告诉 SQLAlchemy：这两个 relationship 是<strong>互为反面</strong>的一对。Session 的 <code>messages</code> 的反面是 Message 的 <code>session</code>，反之亦然。</p>
+<p>当你修改一边时，另一边会自动同步：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">session = Session(name=<span class="string">&quot;新会话&quot;</span>)</span><br><span class="line">message = Message(content=<span class="string">&quot;你好&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立关联只需要做一边</span></span><br><span class="line">session.messages.append(message)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 另一边自动同步</span></span><br><span class="line"><span class="built_in">print</span>(message.session <span class="keyword">is</span> session)  <span class="comment"># True —— 自动设置了！</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="cascade-quot-all-delete-orphan-quot-是什么意思？"><a href="#cascade-quot-all-delete-orphan-quot-是什么意思？" class="headerlink" title="cascade=&quot;all, delete-orphan&quot; 是什么意思？"></a><code>cascade=&quot;all, delete-orphan&quot;</code> 是什么意思？</h4><table>
+<thead>
+<tr>
+<th>关键词</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>all</code></td>
+<td>对父对象的所有操作都级联到子对象（保存、更新、删除等）</td>
+</tr>
+<tr>
+<td><code>delete-orphan</code></td>
+<td>当一个 Message 从 Session 的 messages 列表中移除时，自动删除它</td>
+</tr>
+</tbody></table>
+<p>最重要的实际效果：<strong>当你删除一个 Session 时，它的所有 Message 也自动被删除</strong>。不用手动先删消息再删会话。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> db.delete(session)    <span class="comment"># 删除会话</span></span><br><span class="line"><span class="keyword">await</span> db.commit()</span><br><span class="line"><span class="comment"># 该会话的所有消息也自动被删除了，这就是 cascade 的效果</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-aiosqlite-是什么？"><a href="#5-aiosqlite-是什么？" class="headerlink" title="5. aiosqlite 是什么？"></a>5. aiosqlite 是什么？</h2><h3 id="5-1-从-sqlite3-到-aiosqlite"><a href="#5-1-从-sqlite3-到-aiosqlite" class="headerlink" title="5.1 从 sqlite3 到 aiosqlite"></a>5.1 从 sqlite3 到 aiosqlite</h3><p>Python 标准库自带 <code>sqlite3</code> 模块，可以直接操作 SQLite 数据库。但它是<strong>同步</strong>的——执行 SQL 时会阻塞当前线程，直到数据库返回结果。</p>
+<p>在异步框架（FastAPI）中，阻塞线程会影响性能：当一个请求在等数据库时，线程被卡住，其他请求只能排队等着。</p>
+<p><strong>aiosqlite 是 sqlite3 的异步版本。</strong> 它让你可以用 <code>await</code> 来执行数据库操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 同步版本（sqlite3）—— 会阻塞</span></span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line">conn = sqlite3.connect(<span class="string">&quot;countbot.db&quot;</span>)</span><br><span class="line">cursor = conn.execute(<span class="string">&quot;SELECT * FROM sessions&quot;</span>)   <span class="comment"># 这行卡住，直到查询完成</span></span><br><span class="line">rows = cursor.fetchall()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步版本（aiosqlite）—— 不阻塞</span></span><br><span class="line"><span class="keyword">import</span> aiosqlite</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiosqlite.connect(<span class="string">&quot;countbot.db&quot;</span>) <span class="keyword">as</span> conn:</span><br><span class="line">        cursor = <span class="keyword">await</span> conn.execute(<span class="string">&quot;SELECT * FROM sessions&quot;</span>)   <span class="comment"># await 不会卡线程</span></span><br><span class="line">        rows = <span class="keyword">await</span> cursor.fetchall()</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-aiosqlite-在本项目中的角色"><a href="#5-2-aiosqlite-在本项目中的角色" class="headerlink" title="5.2 aiosqlite 在本项目中的角色"></a>5.2 aiosqlite 在本项目中的角色</h3><p>在本项目中，你<strong>不直接使用 aiosqlite</strong>。它的角色是”幕后工作者”——SQLAlchemy 通过 <code>aiosqlite</code> 来和 SQLite 数据库通信：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你的代码 → SQLAlchemy ORM → aiosqlite 驱动 → countbot.db 文件</span><br></pre></td></tr></table></figure>
+
+<p><code>DATABASE_URL</code> 中的 <code>+aiosqlite</code> 就是告诉 SQLAlchemy：用 aiosqlite 作为底层驱动。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqlite+aiosqlite:///path/to/countbot.db</span><br><span class="line">  ↑      ↑</span><br><span class="line">  │      └── 用这个驱动</span><br><span class="line">  └── 数据库类型</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-为什么选-SQLite-aiosqlite？"><a href="#5-3-为什么选-SQLite-aiosqlite？" class="headerlink" title="5.3 为什么选 SQLite + aiosqlite？"></a>5.3 为什么选 SQLite + aiosqlite？</h3><table>
+<thead>
+<tr>
+<th>原因</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>零配置</strong></td>
+<td>SQLite 不需要安装数据库服务，就是一个文件</td>
+</tr>
+<tr>
+<td><strong>适合桌面应用</strong></td>
+<td>本项目的数据库在用户本地，不共享，SQLite 最合适</td>
+</tr>
+<tr>
+<td><strong>异步支持</strong></td>
+<td>aiosqlite 让 SQLite 也能用于异步框架</td>
+</tr>
+<tr>
+<td><strong>轻量</strong></td>
+<td>不需要 MySQL/PostgreSQL 那样的独立进程</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-异步-ORM-是怎么工作的？"><a href="#6-异步-ORM-是怎么工作的？" class="headerlink" title="6. 异步 ORM 是怎么工作的？"></a>6. 异步 ORM 是怎么工作的？</h2><h3 id="6-1-同步-vs-异步——用人话解释"><a href="#6-1-同步-vs-异步——用人话解释" class="headerlink" title="6.1 同步 vs 异步——用人话解释"></a>6.1 同步 vs 异步——用人话解释</h3><p>想象你在奶茶店：</p>
+<p><strong>同步：</strong> 你点一杯奶茶 → 店员开始做 → 你站在柜台等 → 做好了 → 你拿走。整个过程你一直被”卡住”。</p>
+<p><strong>异步：</strong> 你点一杯奶茶 → 店员给你一个取餐牌 → 你坐回座位刷手机 → 奶茶好了叫号 → 你去拿。在等的过程中你可以做其他事。</p>
+<p>代码中的对比：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 同步代码</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_sessions</span>():</span></span><br><span class="line">    result = session.execute(<span class="string">&quot;SELECT * FROM sessions&quot;</span>)  <span class="comment"># 卡在这里等结果</span></span><br><span class="line">    <span class="keyword">return</span> result.fetchall()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步代码</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_sessions</span>():</span></span><br><span class="line">    result = <span class="keyword">await</span> db.execute(select(Session))   <span class="comment"># await = &quot;我先去做别的，有结果了叫我&quot;</span></span><br><span class="line">    <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-本项目的异步架构"><a href="#6-2-本项目的异步架构" class="headerlink" title="6.2 本项目的异步架构"></a>6.2 本项目的异步架构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">每一层都是异步的：</span><br><span class="line"></span><br><span class="line">FastAPI 接收请求（异步）</span><br><span class="line">    ↓</span><br><span class="line">API 路由处理函数（async def）</span><br><span class="line">    ↓</span><br><span class="line">SessionManager CRUD 方法（async def）</span><br><span class="line">    ↓</span><br><span class="line">SQLAlchemy AsyncSession（async/await）</span><br><span class="line">    ↓</span><br><span class="line">aiosqlite 驱动（async/await）</span><br><span class="line">    ↓</span><br><span class="line">countbot.db 文件</span><br></pre></td></tr></table></figure>
+
+<p>这就是为什么：</p>
+<ul>
+<li>所有数据库操作函数都是 <code>async def</code></li>
+<li>所有数据库调用都用 <code>await</code></li>
+<li><code>create_async_engine</code> 而不是 <code>create_engine</code></li>
+<li><code>AsyncSession</code> 而不是普通的 <code>Session</code></li>
+<li><code>async_sessionmaker</code> 而不是普通 <code>sessionmaker</code></li>
+</ul>
+<h3 id="6-3-run-sync-——-异步世界里的同步”安全区”"><a href="#6-3-run-sync-——-异步世界里的同步”安全区”" class="headerlink" title="6.3 run_sync() —— 异步世界里的同步”安全区”"></a>6.3 <code>run_sync()</code> —— 异步世界里的同步”安全区”</h3><p>有些 SQLAlchemy 操作是同步的不支持异步，比如 <code>Base.metadata.create_all()</code>。于是 SQLAlchemy 提供了 <code>run_sync()</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> engine.begin() <span class="keyword">as</span> conn:</span><br><span class="line">    <span class="keyword">await</span> conn.run_sync(Base.metadata.create_all)</span><br></pre></td></tr></table></figure>
+
+<p>它的工作原理：</p>
+<ol>
+<li>在主线程之外开一个辅助线程</li>
+<li>在辅助线程里执行 <code>Base.metadata.create_all</code>（同步函数）</li>
+<li>主线程用 <code>await</code> 等待辅助线程完成</li>
+<li>这样主线程（事件循环）不会被同步代码阻塞</li>
+</ol>
+<hr>
+<h2 id="7-本项目数据库层完整解析"><a href="#7-本项目数据库层完整解析" class="headerlink" title="7. 本项目数据库层完整解析"></a>7. 本项目数据库层完整解析</h2><p>这一章把前面讲的零散概念串起来，按文件逐一解析。</p>
+<h3 id="7-1-依赖和安装"><a href="#7-1-依赖和安装" class="headerlink" title="7.1 依赖和安装"></a>7.1 依赖和安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># requirements.txt</span><br><span class="line">sqlalchemy[asyncio]&gt;=2.0.0     # SQLAlchemy 2.0 + 异步支持</span><br><span class="line">aiosqlite&gt;=0.20.0              # SQLite 异步驱动</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlalchemy[asyncio]</code> 中的 <code>[asyncio]</code> 是 Python 的”extras”机制——安装时会额外安装异步所需的依赖（<code>greenlet</code> 等）。</p>
+<h3 id="7-2-database-py-——-数据库核心配置"><a href="#7-2-database-py-——-数据库核心配置" class="headerlink" title="7.2 database.py —— 数据库核心配置"></a>7.2 database.py —— 数据库核心配置</h3><p>这个文件是整个数据库层的”指挥中心”。我们逐段分析：</p>
+<h4 id="路径和-URL"><a href="#路径和-URL" class="headerlink" title="路径和 URL"></a>路径和 URL</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> backend.utils.paths <span class="keyword">import</span> DATA_DIR</span><br><span class="line"></span><br><span class="line">DATABASE_PATH = DATA_DIR / <span class="string">&quot;countbot.db&quot;</span></span><br><span class="line">DATABASE_URL = <span class="string">f&quot;sqlite+aiosqlite:///<span class="subst">&#123;DATABASE_PATH&#125;</span>&quot;</span></span><br><span class="line">SYNC_DATABASE_URL = <span class="string">f&quot;sqlite:///<span class="subst">&#123;DATABASE_PATH&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>DATA_DIR</code> = 项目根目录下的 <code>data/</code> 文件夹</li>
+<li><code>DATABASE_PATH</code> = <code>data/countbot.db</code></li>
+<li>两个 URL 分别对应异步和同步连接</li>
+</ul>
+<h4 id="Base-类"><a href="#Base-类" class="headerlink" title="Base 类"></a>Base 类</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>(<span class="params">DeclarativeBase</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>所有模型类的父类。详见 <a href="#42-base%E5%9F%BA%E7%B1%BB-%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%A8%A1%E5%85%B7">4.2 节</a>。</p>
+<h4 id="引擎和会话工厂"><a href="#引擎和会话工厂" class="headerlink" title="引擎和会话工厂"></a>引擎和会话工厂</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">engine = create_async_engine(DATABASE_URL, echo=<span class="literal">False</span>)</span><br><span class="line">sync_engine = create_engine(SYNC_DATABASE_URL, echo=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=<span class="literal">False</span>)</span><br><span class="line">SessionLocal = sessionmaker(sync_engine, expire_on_commit=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>两个引擎 + 两个会话工厂。异步的用于 CRUD，同步的用于管理操作。</p>
+<h4 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_db</span>() -&gt; AsyncSession:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSessionLocal() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">yield</span> session</span><br></pre></td></tr></table></figure>
+
+<p>每个 HTTP 请求调用一次，生成独立的 DB session。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init_db</span>() -&gt; <span class="literal">None</span>:</span></span><br><span class="line">    <span class="keyword">from</span> backend.models <span class="keyword">import</span> Session, Message  <span class="comment"># noqa: F401</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> engine.begin() <span class="keyword">as</span> conn:</span><br><span class="line">        <span class="keyword">await</span> conn.run_sync(Base.metadata.create_all)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> engine.begin() <span class="keyword">as</span> conn:</span><br><span class="line">        <span class="keyword">await</span> conn.run_sync(_apply_schema_compatibility_migrations)</span><br><span class="line"></span><br><span class="line">    logger.info(<span class="string">f&quot;Database initialized: <span class="subst">&#123;DATABASE_PATH&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>启动时执行，确保所有表都已创建。</p>
+<h3 id="7-3-Session-模型-——-会话表"><a href="#7-3-Session-模型-——-会话表" class="headerlink" title="7.3 Session 模型 —— 会话表"></a>7.3 Session 模型 —— 会话表</h3><p>完整代码见 <a href="#43-model%E6%A8%A1%E5%9E%8B-%E4%B8%80%E5%BC%A0%E8%A1%A8--%E4%B8%80%E4%B8%AA%E7%B1%BB">4.3 节</a>。</p>
+<p><strong>设计要点：</strong></p>
+<table>
+<thead>
+<tr>
+<th>设计决策</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UUID 字符串作主键</td>
+<td>不暴露数据量，ID 不可猜测，便于分布式</td>
+</tr>
+<tr>
+<td><code>updated_at</code> 自动更新</td>
+<td>用于按最近活动排序会话列表</td>
+</tr>
+<tr>
+<td><code>utc_now()</code> 辅助函数</td>
+<td>保证所有时间都是带时区的 UTC，防止时区混乱</td>
+</tr>
+<tr>
+<td><code>messages</code> 关系 + cascade</td>
+<td>删会话时自动删消息，不用手动清理</td>
+</tr>
+</tbody></table>
+<h3 id="7-4-Message-模型-——-消息表"><a href="#7-4-Message-模型-——-消息表" class="headerlink" title="7.4 Message 模型 —— 消息表"></a>7.4 Message 模型 —— 消息表</h3><p>完整代码见 <a href="#43-model%E6%A8%A1%E5%9E%8B-%E4%B8%80%E5%BC%A0%E8%A1%A8--%E4%B8%80%E4%B8%AA%E7%B1%BB">4.3 节</a>。</p>
+<p><strong>设计要点：</strong></p>
+<table>
+<thead>
+<tr>
+<th>设计决策</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>整数自增主键</td>
+<td>消息是内部数据，整数索引效率最高</td>
+</tr>
+<tr>
+<td><code>ForeignKey(&quot;sessions.id&quot;)</code></td>
+<td>保证消息一定属于某个存在的会话</td>
+</tr>
+<tr>
+<td><code>Text</code> 类型存内容</td>
+<td>AI 回复可能很长，不限长度</td>
+</tr>
+<tr>
+<td><code>role</code> 字段</td>
+<td>区分 <code>user</code>（用户）/ <code>assistant</code>（AI）/ <code>system</code>（系统提示）</td>
+</tr>
+<tr>
+<td>复合索引 <code>(session_id, created_at)</code></td>
+<td>加速”查某会话的所有消息并按时间排序”</td>
+</tr>
+</tbody></table>
+<h3 id="7-5-数据库初始化流程"><a href="#7-5-数据库初始化流程" class="headerlink" title="7.5 数据库初始化流程"></a>7.5 数据库初始化流程</h3><p>当应用启动时，执行 <code>init_db()</code>，完整流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">应用启动 (lifespan startup)</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">init_db() 被调用</span><br><span class="line">    │</span><br><span class="line">    ├── ① 导入所有模型（Session, Message）</span><br><span class="line">    │       ↓</span><br><span class="line">    │   模型自动注册到 Base.metadata</span><br><span class="line">    │</span><br><span class="line">    ├── ② Base.metadata.create_all()</span><br><span class="line">    │       ↓</span><br><span class="line">    │   ┌─ 检查 sessions 表是否存在 → 不存在 → CREATE TABLE sessions (...)</span><br><span class="line">    │   └─ 检查 messages 表是否存在 → 不存在 → CREATE TABLE messages (...)</span><br><span class="line">    │</span><br><span class="line">    ├── ③ _apply_schema_compatibility_migrations()</span><br><span class="line">    │       ↓</span><br><span class="line">    │   检查已有表是否缺少列，补充新增的列</span><br><span class="line">    │   （第一次运行时，表都是刚创建的，这一步无事可做）</span><br><span class="line">    │</span><br><span class="line">    └── ④ 打印日志 &quot;Database initialized&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-6-CRUD-操作-——-增删改查"><a href="#7-6-CRUD-操作-——-增删改查" class="headerlink" title="7.6 CRUD 操作 —— 增删改查"></a>7.6 CRUD 操作 —— 增删改查</h3><p>本项目通过 <code>SessionManager</code> 类封装所有数据库操作：</p>
+<h4 id="Create（创建）——-INSERT"><a href="#Create（创建）——-INSERT" class="headerlink" title="Create（创建）—— INSERT"></a>Create（创建）—— INSERT</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">create_session</span>(<span class="params">self, name: <span class="built_in">str</span></span>) -&gt; Session:</span></span><br><span class="line">    session = Session(name=name)</span><br><span class="line">    self.db.add(session)</span><br><span class="line">    <span class="keyword">await</span> self.db.commit()</span><br><span class="line">    <span class="keyword">return</span> session</span><br></pre></td></tr></table></figure>
+
+<p>步骤解释：</p>
+<ol>
+<li><code>Session(name=name)</code> —— 创建一个 Python 对象（此时还没进数据库）</li>
+<li><code>self.db.add(session)</code> —— 把这个对象”暂存”到 DB session 中（标记为”待插入”）</li>
+<li><code>await self.db.commit()</code> —— 提交，真正写入数据库（生成 INSERT SQL 并执行）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">add_message</span>(<span class="params">self, session_id: <span class="built_in">str</span>, role: <span class="built_in">str</span>, content: <span class="built_in">str</span></span>) -&gt; Message:</span></span><br><span class="line">    <span class="comment"># 1. 先确认会话存在</span></span><br><span class="line">    session = <span class="keyword">await</span> self.db.get(Session, session_id)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> session:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;Session not found&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 创建消息对象</span></span><br><span class="line">    message = Message(session_id=session_id, role=role, content=content)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 暂存消息</span></span><br><span class="line">    self.db.add(message)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 手动更新会话的 updated_at（因为没有触发 ORM 的自动更新机制）</span></span><br><span class="line">    session.updated_at = utc_now()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. 一次性提交所有更改</span></span><br><span class="line">    <span class="keyword">await</span> self.db.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> message</span><br></pre></td></tr></table></figure>
+
+<p>注意：这里需要<strong>手动更新</strong> <code>session.updated_at</code>。因为 ORM 的 <code>onupdate=utc_now</code> 只在你直接修改 Session 对象的属性时触发。这里你修改的是 Message（新增了一行），Session 对象本身没有被 ORM 标记为”已修改”，所以需要手动触发。</p>
+<h4 id="Read（查询）——-SELECT"><a href="#Read（查询）——-SELECT" class="headerlink" title="Read（查询）—— SELECT"></a>Read（查询）—— SELECT</h4><p><strong>查询单个：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_session</span>(<span class="params">self, session_id: <span class="built_in">str</span></span>) -&gt; <span class="type">Optional</span>[Session]:</span></span><br><span class="line">    result = <span class="keyword">await</span> self.db.execute(</span><br><span class="line">        select(Session).where(Session.<span class="built_in">id</span> == session_id)</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> result.scalar_one_or_none()</span><br></pre></td></tr></table></figure>
+
+<p>这行代码生成等价的 SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> sessions <span class="keyword">WHERE</span> id <span class="operator">=</span> ?</span><br></pre></td></tr></table></figure>
+
+<p>逐行解释：</p>
+<ol>
+<li><code>select(Session)</code> —— 构造一个”从 sessions 表查询”的语句对象</li>
+<li><code>.where(Session.id == session_id)</code> —— 添加 WHERE 条件</li>
+<li><code>await self.db.execute(...)</code> —— 执行查询</li>
+<li><code>result.scalar_one_or_none()</code> —— 取出结果：有一行就返回，没有就返回 <code>None</code>，多行就报错</li>
+</ol>
+<p><strong>查询列表：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">list_sessions</span>(<span class="params">self, limit: <span class="built_in">int</span> = <span class="number">50</span>, offset: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="built_in">list</span>[Session]:</span></span><br><span class="line">    result = <span class="keyword">await</span> self.db.execute(</span><br><span class="line">        select(Session)</span><br><span class="line">        .order_by(Session.updated_at.desc())</span><br><span class="line">        .offset(offset)</span><br><span class="line">        .limit(limit)</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">list</span>(result.scalars().<span class="built_in">all</span>())</span><br></pre></td></tr></table></figure>
+
+<p>生成的 SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> sessions <span class="keyword">ORDER</span> <span class="keyword">BY</span> updated_at <span class="keyword">DESC</span> LIMIT ? <span class="keyword">OFFSET</span> ?</span><br></pre></td></tr></table></figure>
+
+<p><strong>统计数量：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> func</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_message_count</span>(<span class="params">self, session_id: <span class="built_in">str</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    result = <span class="keyword">await</span> self.db.execute(</span><br><span class="line">        select(func.count(Message.<span class="built_in">id</span>)).where(Message.session_id == session_id)</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> result.scalar_one()</span><br></pre></td></tr></table></figure>
+
+<p>生成等价的 SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(messages.id) <span class="keyword">FROM</span> messages <span class="keyword">WHERE</span> session_id <span class="operator">=</span> ?</span><br></pre></td></tr></table></figure>
+
+<p><code>func.count</code> 对应用 SQL 的 <code>COUNT()</code> 聚合函数。SQLAlchemy 的 <code>func</code> 对象可以调用任何 SQL 函数名（<code>func.count</code>, <code>func.sum</code>, <code>func.max</code> 等）。</p>
+<p><strong>高级查询：取最近 N 条消息并按时间正序排列</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_messages</span>(<span class="params">self, session_id: <span class="built_in">str</span>, limit: <span class="built_in">int</span> = <span class="number">100</span>, offset: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="built_in">list</span>[Message]:</span></span><br><span class="line">    <span class="keyword">if</span> limit:</span><br><span class="line">        <span class="comment"># 先倒序取最新 N 条，再正序排列（实现&quot;取最后 N 条但正序显示&quot;）</span></span><br><span class="line">        subquery = (</span><br><span class="line">            select(Message)</span><br><span class="line">            .where(Message.session_id == session_id)</span><br><span class="line">            .order_by(Message.created_at.desc())</span><br><span class="line">            .limit(limit)</span><br><span class="line">            .subquery()</span><br><span class="line">        )</span><br><span class="line">        result = <span class="keyword">await</span> self.db.execute(</span><br><span class="line">            select(Message)</span><br><span class="line">            .where(Message.<span class="built_in">id</span>.in_(select(subquery.c.<span class="built_in">id</span>)))</span><br><span class="line">            .order_by(Message.created_at.asc())</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result = <span class="keyword">await</span> self.db.execute(</span><br><span class="line">            select(Message)</span><br><span class="line">            .where(Message.session_id == session_id)</span><br><span class="line">            .order_by(Message.created_at.asc())</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">list</span>(result.scalars().<span class="built_in">all</span>())</span><br></pre></td></tr></table></figure>
+
+<p>这段代码用一个子查询实现了”聊天记录的取最后 N 条但按时间正序显示”。逻辑：</p>
+<ol>
+<li>子查询：取该会话的最新 N 条消息（按 <code>created_at DESC</code> 并 LIMIT）</li>
+<li>外层查询：从这些消息中按正序（<code>ASC</code>）排列返回</li>
+</ol>
+<p>这在聊天应用中很常见——用户看到的消息是从旧到新的，但只需要加载最近的 N 条。</p>
+<h4 id="Update（更新）"><a href="#Update（更新）" class="headerlink" title="Update（更新）"></a>Update（更新）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">update_session</span>(<span class="params">self, session_id: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="type">Optional</span>[Session]:</span></span><br><span class="line">    session = <span class="keyword">await</span> self.db.get(Session, session_id)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> session:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    session.name = name       <span class="comment"># 修改属性</span></span><br><span class="line">    <span class="keyword">await</span> self.db.commit()     <span class="comment"># 提交</span></span><br><span class="line">    <span class="keyword">return</span> session</span><br></pre></td></tr></table></figure>
+
+<p>关键点：不需要显式调用 <code>update()</code>。你只需要修改 Python 对象的属性，SQLAlchemy 会自动跟踪哪些属性被修改了，<code>commit()</code> 时生成相应的 <code>UPDATE</code> SQL。</p>
+<p><strong>但是</strong>前面 <code>add_message</code> 中的 <code>session.updated_at</code> 需要手动更新，这是因为虽然 SQLAlchemy 能跟踪 <code>session.name = &quot;xxx&quot;</code> 这种直接赋值，但它不会自动意识到”关联了新的 Message”也意味着 Session 应该被标记为修改。这是一个值得注意的边界情况。</p>
+<h4 id="Delete（删除）"><a href="#Delete（删除）" class="headerlink" title="Delete（删除）"></a>Delete（删除）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">delete_session</span>(<span class="params">self, session_id: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">    session = <span class="keyword">await</span> self.db.get(Session, session_id)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> session:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">await</span> self.db.delete(session)</span><br><span class="line">    <span class="keyword">await</span> self.db.commit()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>由于配置了 <code>cascade=&quot;all, delete-orphan&quot;</code>，删 Session 时，该 Session 的所有 Message 也自动被删。</p>
+<h3 id="7-7-Schema-兼容性迁移"><a href="#7-7-Schema-兼容性迁移" class="headerlink" title="7.7 Schema 兼容性迁移"></a>7.7 Schema 兼容性迁移</h3><p>项目版本升级时，可能需要给已有表增加新列。<code>_SCHEMA_COMPATIBILITY_MIGRATIONS</code> 就是做这个的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@dataclass(<span class="params">frozen=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CompatibilityColumnMigration</span>:</span></span><br><span class="line">    name: <span class="built_in">str</span>    <span class="comment"># 列名</span></span><br><span class="line">    ddl: <span class="built_in">str</span>     <span class="comment"># DDL 语句片段</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@dataclass(<span class="params">frozen=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CompatibilityTableMigration</span>:</span></span><br><span class="line">    table_name: <span class="built_in">str</span></span><br><span class="line">    columns: <span class="type">Tuple</span>[CompatibilityColumnMigration, ...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一次发布时为空，以后要加列就往里面加</span></span><br><span class="line">_SCHEMA_COMPATIBILITY_MIGRATIONS: <span class="type">Tuple</span>[CompatibilityTableMigration, ...] = (</span><br><span class="line">    <span class="comment"># 示例：以后如果要给 sessions 加一个 model_config 列</span></span><br><span class="line">    <span class="comment"># CompatibilityTableMigration(</span></span><br><span class="line">    <span class="comment">#     table_name=&quot;sessions&quot;,</span></span><br><span class="line">    <span class="comment">#     columns=(</span></span><br><span class="line">    <span class="comment">#         CompatibilityColumnMigration(</span></span><br><span class="line">    <span class="comment">#             name=&quot;model_config&quot;,</span></span><br><span class="line">    <span class="comment">#             ddl=&quot;model_config TEXT&quot;</span></span><br><span class="line">    <span class="comment">#         ),</span></span><br><span class="line">    <span class="comment">#     )</span></span><br><span class="line">    <span class="comment"># ),</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>迁移函数会检查每个表的已有列，找到缺失的列，执行 <code>ALTER TABLE ... ADD COLUMN ...</code>。</p>
+<p>这是一种<strong>最小化迁移策略</strong>——没有版本号追踪，没有回滚支持，只做”加列”一件事。对于桌面应用，这足够了。</p>
+<hr>
+<h2 id="8-完整流程串联"><a href="#8-完整流程串联" class="headerlink" title="8. 完整流程串联"></a>8. 完整流程串联</h2><p>把所有概念串起来，看一个完整的请求处理：</p>
+<blockquote>
+<p>用户在前端点击”新建会话”，输入名称”翻译助手”</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">① HTTP 请求到达</span><br><span class="line">   POST /api/sessions  &#123;&quot;name&quot;: &quot;翻译助手&quot;&#125;</span><br><span class="line">   </span><br><span class="line">② FastAPI 路由匹配</span><br><span class="line">   @router.post(&quot;/api/sessions&quot;)</span><br><span class="line">   async def create_session(</span><br><span class="line">       req: CreateSessionRequest,</span><br><span class="line">       db: AsyncSession = Depends(get_db)   ← FastAPI 调用 get_db()，生成 DB session</span><br><span class="line">   ):</span><br><span class="line">   </span><br><span class="line">③ 进入 SessionManager</span><br><span class="line">   manager = SessionManager(db)</span><br><span class="line">   session = await manager.create_session(req.name)</span><br><span class="line">   </span><br><span class="line">④ create_session 内部</span><br><span class="line">   session = Session(name=&quot;翻译助手&quot;)       ← 创建 Python 对象（还没进数据库）</span><br><span class="line">   db.add(session)                          ← 标记为&quot;待插入&quot;</span><br><span class="line">   await db.commit()                        ← 写入数据库！</span><br><span class="line">       │</span><br><span class="line">       ├── SQLAlchemy 生成 SQL：</span><br><span class="line">       │   INSERT INTO sessions (id, name, created_at, updated_at)</span><br><span class="line">       │   VALUES (?, ?, ?, ?)</span><br><span class="line">       │</span><br><span class="line">       ├── aiosqlite 执行 SQL</span><br><span class="line">       │</span><br><span class="line">       └── countbot.db 文件中多了一行数据</span><br><span class="line"></span><br><span class="line">⑤ 返回响应</span><br><span class="line">   返回 Pydantic 模型给前端（自动转换为 JSON）</span><br><span class="line">   </span><br><span class="line">⑥ 请求结束</span><br><span class="line">   get_db() 中的 yield 之后执行</span><br><span class="line">   DB session 自动关闭，归还连接到连接池</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="9-常见问题-FAQ"><a href="#9-常见问题-FAQ" class="headerlink" title="9. 常见问题 FAQ"></a>9. 常见问题 FAQ</h2><h3 id="Q1-Mapped-T-和普通类型注解有什么区别？"><a href="#Q1-Mapped-T-和普通类型注解有什么区别？" class="headerlink" title="Q1: Mapped[T] 和普通类型注解有什么区别？"></a>Q1: <code>Mapped[T]</code> 和普通类型注解有什么区别？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 普通 Python 类（和数据库无关）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span>:</span></span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span>          <span class="comment"># 只是类型注解，运行时没有任何额外行为</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ORM 模型（和数据库表绑定）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Session</span>(<span class="params">Base</span>):</span></span><br><span class="line">    name: Mapped[<span class="built_in">str</span>] = mapped_column(String)</span><br><span class="line">    <span class="comment"># Mapped[str] 不仅做类型注解，还告诉 SQLAlchemy 这对应一列</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Mapped[T]</code> 是 SQLAlchemy 2.0 的核心类型。它同时做两件事：给 IDE 提供类型信息，给 SQLAlchemy 提供列映射信息。</p>
+<h3 id="Q2-session-await-db-get-Session-id-和-select-Session-where-什么时候用哪个？"><a href="#Q2-session-await-db-get-Session-id-和-select-Session-where-什么时候用哪个？" class="headerlink" title="Q2: session = await db.get(Session, id) 和 select(Session).where(...) 什么时候用哪个？"></a>Q2: <code>session = await db.get(Session, id)</code> 和 <code>select(Session).where(...)</code> 什么时候用哪个？</h3><ul>
+<li><code>db.get(Model, primary_key_value)</code> —— 按主键查一条，最简单直接</li>
+<li><code>select(Model).where(...)</code> —— 任何其他查询（按非主键查、条件查询、排序、分页）</li>
+</ul>
+<p><code>db.get()</code> 内部等价于 <code>select(Model).where(Model.id == pk)</code>，但它更简洁，而且会先查一级缓存。</p>
+<h3 id="Q3-为什么-session-id-用-String-而不是-UUID-类型？"><a href="#Q3-为什么-session-id-用-String-而不是-UUID-类型？" class="headerlink" title="Q3: 为什么 session_id 用 String 而不是 UUID 类型？"></a>Q3: 为什么 <code>session_id</code> 用 String 而不是 UUID 类型？</h3><p>SQLAlchemy 支持 <code>UUID</code> 类型，但 SQLite 不原生支持 UUID。用 <code>String</code> 直接存 UUID 的字符串表示更简单，避免类型转换的坑。</p>
+<h3 id="Q4-ForeignKey-quot-sessions-id-quot-引用的是表名还是类名？"><a href="#Q4-ForeignKey-quot-sessions-id-quot-引用的是表名还是类名？" class="headerlink" title="Q4: ForeignKey(&quot;sessions.id&quot;) 引用的是表名还是类名？"></a>Q4: <code>ForeignKey(&quot;sessions.id&quot;)</code> 引用的是表名还是类名？</h3><p>是<strong>数据库表名</strong>（<code>sessions</code>，不是 Python 类名 <code>Session</code>）。<code>ForeignKey</code> 括号里写的是 <code>表名.列名</code>。</p>
+<h3 id="Q5-为什么不在-Message-模型里-from-backend-models-session-import-Session？"><a href="#Q5-为什么不在-Message-模型里-from-backend-models-session-import-Session？" class="headerlink" title="Q5: 为什么不在 Message 模型里 from backend.models.session import Session？"></a>Q5: 为什么不在 Message 模型里 <code>from backend.models.session import Session</code>？</h3><p>如果你这样做，就会产生<strong>循环导入</strong>：</p>
+<ul>
+<li><code>session.py</code> 需要 <code>Message</code>（定义 <code>messages</code> relationship）</li>
+<li><code>message.py</code> 需要 <code>Session</code>（定义 <code>session</code> relationship）</li>
+</ul>
+<p>本项目的解决方法是使用 <code>TYPE_CHECKING</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> annotations</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> TYPE_CHECKING</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> TYPE_CHECKING:</span><br><span class="line">    <span class="keyword">from</span> backend.models.session <span class="keyword">import</span> Session</span><br></pre></td></tr></table></figure>
+
+<p>在运行时，<code>TYPE_CHECKING</code> 是 <code>False</code>，所以这个 import 不会执行——但类型检查器（mypy / Pyright）会把它当真，IDE 也能正常补全。</p>
+<h3 id="Q6-expire-on-commit-False-到底有什么用？"><a href="#Q6-expire-on-commit-False-到底有什么用？" class="headerlink" title="Q6: expire_on_commit=False 到底有什么用？"></a>Q6: <code>expire_on_commit=False</code> 到底有什么用？</h3><p>假设你这样做：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session = <span class="keyword">await</span> db.get(Session, <span class="string">&quot;abc-123&quot;</span>)</span><br><span class="line"><span class="keyword">await</span> db.commit()              <span class="comment"># 提交（没有修改，但 commit 了）</span></span><br><span class="line"><span class="built_in">print</span>(session.name)            <span class="comment"># 还能访问吗？</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认（<code>expire_on_commit=True</code>）：commit 后对象过期，<code>print(session.name)</code> 会触发一次隐式数据库查询来刷新数据。如果此时 DB session 已关闭，直接报错。</li>
+<li><code>expire_on_commit=False</code>：commit 后对象不过期，直接返回已有值，不会触发隐式查询。</li>
+</ul>
+<p>对于 FastAPI 这种”请求结束就关 session”的模式，<code>False</code> 更合适。</p>
+<h3 id="Q7-aiosqlite-和-sqlite3-到底什么关系？"><a href="#Q7-aiosqlite-和-sqlite3-到底什么关系？" class="headerlink" title="Q7: aiosqlite 和 sqlite3 到底什么关系？"></a>Q7: aiosqlite 和 sqlite3 到底什么关系？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sqlite3      是 Python 标准库自带的同步驱动</span><br><span class="line">aiosqlite    是社区开发的异步版本（底层还是调 sqlite3，但包装成了异步）</span><br></pre></td></tr></table></figure>
+
+<p>aiosqlite 不是重写 SQLite，而是把 sqlite3 的调用放到后台线程中执行，用 <code>asyncio</code> 的事件循环机制来实现”不阻塞”的效果。</p>
+<h3 id="Q8-为什么要有两个引擎（async-engine-和-sync-engine）？"><a href="#Q8-为什么要有两个引擎（async-engine-和-sync-engine）？" class="headerlink" title="Q8: 为什么要有两个引擎（async engine 和 sync engine）？"></a>Q8: 为什么要有两个引擎（async engine 和 sync engine）？</h3><p>因为 SQLAlchemy 的某些操作只支持同步：</p>
+<ul>
+<li><code>Base.metadata.create_all()</code> —— 建表</li>
+<li><code>inspect()</code> —— 检查数据库结构（看有哪些表、哪些列）</li>
+</ul>
+<p>在 <code>init_db()</code> 中，这些同步操作通过 <code>conn.run_sync()</code> 执行——它需要一个同步引擎来创建同步连接。</p>
+<p>日常 CRUD 操作用异步引擎，建表迁移用同步引擎。</p>
+<h3 id="Q9-await-conn-run-sync-some-function-中的-conn-是异步连接还是同步连接？"><a href="#Q9-await-conn-run-sync-some-function-中的-conn-是异步连接还是同步连接？" class="headerlink" title="Q9: await conn.run_sync(some_function) 中的 conn 是异步连接还是同步连接？"></a>Q9: <code>await conn.run_sync(some_function)</code> 中的 <code>conn</code> 是异步连接还是同步连接？</h3><p>是<strong>异步连接</strong>（来自 <code>engine.begin()</code>，async engine）。<code>run_sync()</code> 方法在异步连接对象上被调用，它会在内部使用同步引擎的线程池来执行传入的同步函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> engine.begin() <span class="keyword">as</span> conn:           <span class="comment"># conn 是异步连接</span></span><br><span class="line">    <span class="keyword">await</span> conn.run_sync(Base.metadata.create_all)  <span class="comment"># 在后台线程执行同步函数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Q10-整个数据库层启动顺序是怎样的？"><a href="#Q10-整个数据库层启动顺序是怎样的？" class="headerlink" title="Q10: 整个数据库层启动顺序是怎样的？"></a>Q10: 整个数据库层启动顺序是怎样的？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">app = FastAPI(lifespan=lifespan)</span><br><span class="line">    │</span><br><span class="line">    └── lifespan 启动</span><br><span class="line">            │</span><br><span class="line">            ├── 1. 确保 data/ 目录存在</span><br><span class="line">            │</span><br><span class="line">            ├── 2. await init_db()</span><br><span class="line">            │       ├── 导入模型 (Session, Message)</span><br><span class="line">            │       ├── create_all (建表)</span><br><span class="line">            │       └── 兼容性迁移</span><br><span class="line">            │</span><br><span class="line">            └── 3. yield (应用就绪，开始接收请求)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ORM/" rel="tag"># ORM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/05/ReAct(1)-%E5%8F%8C%E5%90%8E%E7%AB%AF%E7%94%B5%E5%95%86%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F/" rel="prev" title="ReAct 双后端电商客服系统">
+      <i class="fa fa-chevron-left"></i> ReAct 双后端电商客服系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/18/AsyncSession-CRUD%E6%93%8D%E4%BD%9C/" rel="next" title="AsyncSession CRUD操作">
+      AsyncSession CRUD操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ORM-%E8%AF%A6%E8%A7%A3-%E2%80%94%E2%80%94-%E4%BB%A5CountBot%E9%A1%B9%E7%9B%AE%EF%BC%88SQLAlchemy-aiosqlite%EF%BC%89%E4%B8%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">ORM 详解 —— 以CountBot项目（SQLAlchemy + aiosqlite）为例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%85%88%E6%90%9E%E6%87%82%EF%BC%9A%E6%B2%A1%E6%9C%89-ORM-%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%80%8E%E4%B9%88%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1. 先搞懂：没有 ORM 的时候，怎么操作数据库？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 数据库是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%B2%A1%E6%9C%89-ORM-%E6%97%B6%EF%BC%8C%E6%80%8E%E4%B9%88%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%93%E4%BA%A4%E9%81%93%EF%BC%9F"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 没有 ORM 时，怎么和数据库打交道？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%BF%99%E7%A7%8D%E6%96%B9%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E7%97%9B%E7%82%B9%EF%BC%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 这种方式有什么痛点？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ORM-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">2. ORM 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%A7%A3%E9%87%8A"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 一句话解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%94%A8%E4%BA%BA%E8%AF%9D%E6%89%93%E4%B8%AA%E6%AF%94%E6%96%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 用人话打个比方</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-ORM-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 ORM 的核心映射关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-ORM-%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 ORM 的优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SQLAlchemy-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">3. SQLAlchemy 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%A7%A3%E9%87%8A"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 一句话解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-SQLAlchemy-%E7%9A%84%E4%B8%A4%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 SQLAlchemy 的两层架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%94%A8%E5%88%B0%E4%BA%86-SQLAlchemy-%E7%9A%84%E5%93%AA%E4%BA%9B%E9%83%A8%E5%88%86%EF%BC%9F"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 本项目用到了 SQLAlchemy 的哪些部分？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-SQLAlchemy-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%8B%86%E8%A7%A3"><span class="nav-number">1.4.</span> <span class="nav-text">4. SQLAlchemy 核心概念拆解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Engine%EF%BC%88%E5%BC%95%E6%93%8E%EF%BC%89%E2%80%94%E2%80%94-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E2%80%9D%E6%8F%92%E5%BA%A7%E2%80%9D"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 Engine（引擎）—— 数据库的”插座”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">本项目的代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#URL-%E6%A0%BC%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">URL 格式详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E8%A6%81%E7%82%B9"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">理解要点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Base%EF%BC%88%E5%9F%BA%E7%B1%BB%EF%BC%89%E2%80%94%E2%80%94-%E6%A8%A1%E5%9E%8B%E7%9A%84%E2%80%9D%E6%A8%A1%E5%85%B7%E2%80%9D"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 Base（基类）—— 模型的”模具”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F-1"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%A3%E7%A0%81-1"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">本项目的代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeclarativeBase-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">DeclarativeBase 是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E8%A6%81%E7%82%B9-1"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">理解要点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Model%EF%BC%88%E6%A8%A1%E5%9E%8B%EF%BC%89%E2%80%94%E2%80%94-%E4%B8%80%E5%BC%A0%E8%A1%A8-%E4%B8%80%E4%B8%AA%E7%B1%BB"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 Model（模型）—— 一张表 &#x3D; 一个类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F-2"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%A3%E7%A0%81-%E2%80%94%E2%80%94-Session-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">本项目的代码 —— Session 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%90%E8%A1%8C%E8%A7%A3%E9%87%8A"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">逐行解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%A3%E7%A0%81-%E2%80%94%E2%80%94-Message-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">本项目的代码 —— Message 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%90%E8%A1%8C%E8%A7%A3%E9%87%8A-1"><span class="nav-number">1.4.3.5.</span> <span class="nav-text">逐行解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String-vs-Text-%E9%80%89%E6%8B%A9%E4%B8%80%E8%A7%88"><span class="nav-number">1.4.3.6.</span> <span class="nav-text">String vs Text 选择一览</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Session%EF%BC%88%E4%BC%9A%E8%AF%9D%EF%BC%89%E2%80%94%E2%80%94-%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E2%80%9D%E4%B8%80%E6%AC%A1%E9%80%9A%E8%AF%9D%E2%80%9D"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 Session（会话）—— 和数据库的”一次通话”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F-3"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DB-session-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">DB session 的工作模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%A3%E7%A0%81-2"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">本项目的代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FastAPI-%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%9A%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">FastAPI 中的使用：依赖注入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Metadata%EF%BC%88%E5%85%83%E6%95%B0%E6%8D%AE%EF%BC%89%E2%80%94%E2%80%94-%E6%89%80%E6%9C%89%E8%A1%A8%E7%9A%84%E2%80%9D%E8%8A%B1%E5%90%8D%E5%86%8C%E2%80%9D"><span class="nav-number">1.4.5.</span> <span class="nav-text">4.5 Metadata（元数据）—— 所有表的”花名册”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F-4"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">有什么用？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Relationship%EF%BC%88%E5%85%B3%E7%B3%BB%EF%BC%89%E2%80%94%E2%80%94-%E8%A1%A8%E4%B8%8E%E8%A1%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%9E%E7%BA%BF"><span class="nav-number">1.4.6.</span> <span class="nav-text">4.6 Relationship（关系）—— 表与表之间的连线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F-5"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%A1%A8%E5%85%B3%E7%B3%BB"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">本项目的表关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%99%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%9C%A8%E8%AF%B4%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">这段代码在说什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#back-populates-quot-session-quot-%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="nav-number">1.4.6.4.</span> <span class="nav-text">back_populates&#x3D;&quot;session&quot; 是什么意思？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cascade-quot-all-delete-orphan-quot-%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="nav-number">1.4.6.5.</span> <span class="nav-text">cascade&#x3D;&quot;all, delete-orphan&quot; 是什么意思？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-aiosqlite-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">5. aiosqlite 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%BB%8E-sqlite3-%E5%88%B0-aiosqlite"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 从 sqlite3 到 aiosqlite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-aiosqlite-%E5%9C%A8%E6%9C%AC%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 aiosqlite 在本项目中的角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89-SQLite-aiosqlite%EF%BC%9F"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 为什么选 SQLite + aiosqlite？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%BC%82%E6%AD%A5-ORM-%E6%98%AF%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F"><span class="nav-number">1.6.</span> <span class="nav-text">6. 异步 ORM 是怎么工作的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%90%8C%E6%AD%A5-vs-%E5%BC%82%E6%AD%A5%E2%80%94%E2%80%94%E7%94%A8%E4%BA%BA%E8%AF%9D%E8%A7%A3%E9%87%8A"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1 同步 vs 异步——用人话解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%BC%82%E6%AD%A5%E6%9E%B6%E6%9E%84"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 本项目的异步架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-run-sync-%E2%80%94%E2%80%94-%E5%BC%82%E6%AD%A5%E4%B8%96%E7%95%8C%E9%87%8C%E7%9A%84%E5%90%8C%E6%AD%A5%E2%80%9D%E5%AE%89%E5%85%A8%E5%8C%BA%E2%80%9D"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 run_sync() —— 异步世界里的同步”安全区”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%9C%AC%E9%A1%B9%E7%9B%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B1%82%E5%AE%8C%E6%95%B4%E8%A7%A3%E6%9E%90"><span class="nav-number">1.7.</span> <span class="nav-text">7. 本项目数据库层完整解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BE%9D%E8%B5%96%E5%92%8C%E5%AE%89%E8%A3%85"><span class="nav-number">1.7.1.</span> <span class="nav-text">7.1 依赖和安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-database-py-%E2%80%94%E2%80%94-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.7.2.</span> <span class="nav-text">7.2 database.py —— 数据库核心配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E5%92%8C-URL"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">路径和 URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Base-%E7%B1%BB"><span class="nav-number">1.7.2.2.</span> <span class="nav-text">Base 类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%9A%E8%AF%9D%E5%B7%A5%E5%8E%82"><span class="nav-number">1.7.2.3.</span> <span class="nav-text">引擎和会话工厂</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="nav-number">1.7.2.4.</span> <span class="nav-text">依赖注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.7.2.5.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-Session-%E6%A8%A1%E5%9E%8B-%E2%80%94%E2%80%94-%E4%BC%9A%E8%AF%9D%E8%A1%A8"><span class="nav-number">1.7.3.</span> <span class="nav-text">7.3 Session 模型 —— 会话表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-Message-%E6%A8%A1%E5%9E%8B-%E2%80%94%E2%80%94-%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="nav-number">1.7.4.</span> <span class="nav-text">7.4 Message 模型 —— 消息表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-number">1.7.5.</span> <span class="nav-text">7.5 数据库初始化流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6-CRUD-%E6%93%8D%E4%BD%9C-%E2%80%94%E2%80%94-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="nav-number">1.7.6.</span> <span class="nav-text">7.6 CRUD 操作 —— 增删改查</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Create%EF%BC%88%E5%88%9B%E5%BB%BA%EF%BC%89%E2%80%94%E2%80%94-INSERT"><span class="nav-number">1.7.6.1.</span> <span class="nav-text">Create（创建）—— INSERT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Read%EF%BC%88%E6%9F%A5%E8%AF%A2%EF%BC%89%E2%80%94%E2%80%94-SELECT"><span class="nav-number">1.7.6.2.</span> <span class="nav-text">Read（查询）—— SELECT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Update%EF%BC%88%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="nav-number">1.7.6.3.</span> <span class="nav-text">Update（更新）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delete%EF%BC%88%E5%88%A0%E9%99%A4%EF%BC%89"><span class="nav-number">1.7.6.4.</span> <span class="nav-text">Delete（删除）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-7-Schema-%E5%85%BC%E5%AE%B9%E6%80%A7%E8%BF%81%E7%A7%BB"><span class="nav-number">1.7.7.</span> <span class="nav-text">7.7 Schema 兼容性迁移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%E4%B8%B2%E8%81%94"><span class="nav-number">1.8.</span> <span class="nav-text">8. 完整流程串联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-FAQ"><span class="nav-number">1.9.</span> <span class="nav-text">9. 常见问题 FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q1-Mapped-T-%E5%92%8C%E6%99%AE%E9%80%9A%E7%B1%BB%E5%9E%8B%E6%B3%A8%E8%A7%A3%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.9.1.</span> <span class="nav-text">Q1: Mapped[T] 和普通类型注解有什么区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q2-session-await-db-get-Session-id-%E5%92%8C-select-Session-where-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%E5%93%AA%E4%B8%AA%EF%BC%9F"><span class="nav-number">1.9.2.</span> <span class="nav-text">Q2: session &#x3D; await db.get(Session, id) 和 select(Session).where(...) 什么时候用哪个？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q3-%E4%B8%BA%E4%BB%80%E4%B9%88-session-id-%E7%94%A8-String-%E8%80%8C%E4%B8%8D%E6%98%AF-UUID-%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="nav-number">1.9.3.</span> <span class="nav-text">Q3: 为什么 session_id 用 String 而不是 UUID 类型？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q4-ForeignKey-quot-sessions-id-quot-%E5%BC%95%E7%94%A8%E7%9A%84%E6%98%AF%E8%A1%A8%E5%90%8D%E8%BF%98%E6%98%AF%E7%B1%BB%E5%90%8D%EF%BC%9F"><span class="nav-number">1.9.4.</span> <span class="nav-text">Q4: ForeignKey(&quot;sessions.id&quot;) 引用的是表名还是类名？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q5-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%9C%A8-Message-%E6%A8%A1%E5%9E%8B%E9%87%8C-from-backend-models-session-import-Session%EF%BC%9F"><span class="nav-number">1.9.5.</span> <span class="nav-text">Q5: 为什么不在 Message 模型里 from backend.models.session import Session？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q6-expire-on-commit-False-%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="nav-number">1.9.6.</span> <span class="nav-text">Q6: expire_on_commit&#x3D;False 到底有什么用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q7-aiosqlite-%E5%92%8C-sqlite3-%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">1.9.7.</span> <span class="nav-text">Q7: aiosqlite 和 sqlite3 到底什么关系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q8-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E4%B8%A4%E4%B8%AA%E5%BC%95%E6%93%8E%EF%BC%88async-engine-%E5%92%8C-sync-engine%EF%BC%89%EF%BC%9F"><span class="nav-number">1.9.8.</span> <span class="nav-text">Q8: 为什么要有两个引擎（async engine 和 sync engine）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q9-await-conn-run-sync-some-function-%E4%B8%AD%E7%9A%84-conn-%E6%98%AF%E5%BC%82%E6%AD%A5%E8%BF%9E%E6%8E%A5%E8%BF%98%E6%98%AF%E5%90%8C%E6%AD%A5%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="nav-number">1.9.9.</span> <span class="nav-text">Q9: await conn.run_sync(some_function) 中的 conn 是异步连接还是同步连接？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q10-%E6%95%B4%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B1%82%E5%90%AF%E5%8A%A8%E9%A1%BA%E5%BA%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">1.9.10.</span> <span class="nav-text">Q10: 整个数据库层启动顺序是怎样的？</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
