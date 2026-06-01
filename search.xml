@@ -9833,4 +9833,393 @@ public static JSONArray getObject(ArrayList&lt;Object&gt; arrayList)&#123;
         <tag>ORM</tag>
       </tags>
   </entry>
+  <entry>
+    <title>MCP详解</title>
+    <url>/2026/05/20/MCP%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="1-什么是-MCP？"><a href="#1-什么是-MCP？" class="headerlink" title="1. 什么是 MCP？"></a>1. 什么是 MCP？</h2><p>想象一下你买了一台新手机，发现它只有一个 <strong>USB-C 口</strong>。不管是充电、传文件、接显示器还是插耳机，全走这一个口。你不需要为每种外设买不同的线，因为大家都遵循同一种标准。</p>
+<p><strong>MCP（Model Context Protocol，模型上下文协议）</strong> 就是 AI 世界里的 USB-C。</p>
+<span id="more"></span>
+
+<p>在没有 MCP 之前，想让 AI 助手连接外部数据源（比如你的数据库、文件系统、GitHub），你需要给每个数据源写一套独立的对接代码。连接 GitHub 时你写一套，连接 PostgreSQL 时你写另一套，连接 Slack 时再来一套。每个数据源的 API 习惯都不一样，维护起来像个噩梦。</p>
+<p>MCP 由 Anthropic 提出并开源，它定义了一套<strong>统一的标准</strong>，让 AI 模型通过同一种方式和任何外部工具、数据源交互。你只需要学会 MCP 这一种协议，就能对接全世界。</p>
+<h3 id="一个具体的场景帮你理解"><a href="#一个具体的场景帮你理解" class="headerlink" title="一个具体的场景帮你理解"></a>一个具体的场景帮你理解</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">你：帮我查一下上周五我们团队提交了多少个 PR？</span><br><span class="line"></span><br><span class="line">如果没有 MCP：</span><br><span class="line">  你的 AI 助手 → 不知道去哪查 → 你手动打开 GitHub → 筛选日期 → 数 PR → 告诉 AI</span><br><span class="line"></span><br><span class="line">有了 MCP：</span><br><span class="line">  你的 AI 助手 → 调用 GitHub MCP Server 的 tools/call → 拿到数据 → 回答你</span><br></pre></td></tr></table></figure>
+
+<h3 id="MCP-解决了什么问题？"><a href="#MCP-解决了什么问题？" class="headerlink" title="MCP 解决了什么问题？"></a>MCP 解决了什么问题？</h3><table>
+<thead>
+<tr>
+<th>没有 MCP</th>
+<th>有了 MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每个数据源写一套对接代码（M × N 问题）</td>
+<td>统一协议，对接一次（M + N 问题）</td>
+</tr>
+<tr>
+<td>AI 只能利用训练数据回答问题</td>
+<td>AI 能实时访问外部数据</td>
+</tr>
+<tr>
+<td>工具调用碎片化，每个 AI 框架都有自己的一套</td>
+<td>统一标准，一次编写到处运行</td>
+</tr>
+<tr>
+<td>上下文信息靠你手动复制粘贴</td>
+<td>AI 自动按需获取上下文</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-核心架构：Host、Client、Server"><a href="#2-核心架构：Host、Client、Server" class="headerlink" title="2. 核心架构：Host、Client、Server"></a>2. 核心架构：Host、Client、Server</h2><p>MCP 采用了经典的 <strong>客户端-服务器（Client-Server）架构</strong>，其中包含三个角色。用餐厅来类比：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">你（用户）  →  服务员（Host）  →  厨房（Server）</span><br><span class="line">                │</span><br><span class="line">                ├── 一个服务员能同时对接多个厨房</span><br><span class="line">                ├── 厨房提供菜单（Resources / Tools / Prompts）</span><br><span class="line">                └── 你点什么菜，服务员就去对应的厨房下单</span><br></pre></td></tr></table></figure>
+
+<h3 id="三个角色的正式定义"><a href="#三个角色的正式定义" class="headerlink" title="三个角色的正式定义"></a>三个角色的正式定义</h3><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>类比</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MCP Host</strong></td>
+<td>AI 应用本身</td>
+<td>管理用户交互、运行 LLM、创建并管理 MCP Client</td>
+</tr>
+<tr>
+<td><strong>MCP Client</strong></td>
+<td>Host 和 Server 之间的”接线员”</td>
+<td>每个 Client 维护一条到 Server 的连接，负责收发 JSON-RPC 消息</td>
+</tr>
+<tr>
+<td><strong>MCP Server</strong></td>
+<td>提供能力的外部服务</td>
+<td>暴露 Tools、Resources、Prompts 供 AI 发现和调用</td>
+</tr>
+</tbody></table>
+<h3 id="关键理解：一对多"><a href="#关键理解：一对多" class="headerlink" title="关键理解：一对多"></a>关键理解：一对多</h3><p>一个 Host 可以同时连接<strong>多个</strong> Server：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Claude Desktop（Host）</span><br><span class="line">  ├── MCP Client ① ←→ Filesystem Server（读写本地文件）</span><br><span class="line">  ├── MCP Client ② ←→ GitHub Server（查 PR、创建 Issue）</span><br><span class="line">  ├── MCP Client ③ ←→ PostgreSQL Server（执行 SQL 查询）</span><br><span class="line">  └── MCP Client ④ ←→ Slack Server（发消息、查频道）</span><br></pre></td></tr></table></figure>
+
+<p>当你问 “帮我把数据库里昨天的销量生成一份报告，存到桌面，然后发到 Slack 的 #report 频道”——AI 能<strong>串联调用</strong>多个 Server 来完成你的指令。</p>
+<hr>
+<h2 id="3-MCP-的三大核心原语"><a href="#3-MCP-的三大核心原语" class="headerlink" title="3. MCP 的三大核心原语"></a>3. MCP 的三大核心原语</h2><p>MCP Server 能暴露三种能力，这是 MCP 最核心的概念：</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>谁控制</th>
+<th>类比 REST</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tools（工具）</strong></td>
+<td>模型控制</td>
+<td>POST / PUT</td>
+<td>执行操作、写数据、调用 API</td>
+</tr>
+<tr>
+<td><strong>Resources（资源）</strong></td>
+<td>应用控制</td>
+<td>GET</td>
+<td>暴露只读数据给模型</td>
+</tr>
+<tr>
+<td><strong>Prompts（提示模板）</strong></td>
+<td>用户控制</td>
+<td>预设模板</td>
+<td>可复用的交互模式</td>
+</tr>
+</tbody></table>
+<h3 id="3-1-Tools（工具）—-让-AI-动手做事情"><a href="#3-1-Tools（工具）—-让-AI-动手做事情" class="headerlink" title="3.1 Tools（工具）— 让 AI 动手做事情"></a>3.1 Tools（工具）— 让 AI 动手做事情</h3><p>Tool 是模型可以调用的<strong>可执行函数</strong>。模型根据对话上下文，自主决定调用哪个 Tool、传什么参数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一个最简单的 Tool：加法计算器</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;把两个整数相加并返回结果&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br></pre></td></tr></table></figure>
+
+<p>当你对 AI 说 “帮我算一下 123 + 456”，AI 会自动调用 <code>add(123, 456)</code>，拿到 <code>579</code>，然后回答你。</p>
+<p><strong>Tool 的关键属性：</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>唯一名称，AI 通过名称来选择和调用</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>告诉 AI 这个 Tool 是干什么的（<strong>写得越好，AI 用得越准</strong>）</td>
+</tr>
+<tr>
+<td><code>inputSchema</code></td>
+<td>JSON Schema，定义 Tool 接受什么参数、每个参数什么类型</td>
+</tr>
+<tr>
+<td><code>annotations</code></td>
+<td>安全标注（是否只读、是否可破坏数据等）</td>
+</tr>
+</tbody></table>
+<p><strong>一个更实用的 Tool：查询天气</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> httpx</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Weather Server&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_weather</span>(<span class="params">city: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;查询指定城市的实时天气。city 参数为城市中文名称，如&#x27;北京&#x27;、&#x27;上海&#x27;。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> httpx.AsyncClient() <span class="keyword">as</span> client:</span><br><span class="line">        resp = <span class="keyword">await</span> client.get(<span class="string">f&quot;https://api.weather.example.com/current?city=<span class="subst">&#123;city&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> resp.text</span><br></pre></td></tr></table></figure>
+
+<p>注意 <code>description</code> 里写清楚了参数怎么填——这个细节直接决定了 AI 能否正确调用你的 Tool。</p>
+<h3 id="3-2-Resources（资源）—-让-AI-能看到数据"><a href="#3-2-Resources（资源）—-让-AI-能看到数据" class="headerlink" title="3.2 Resources（资源）— 让 AI 能看到数据"></a>3.2 Resources（资源）— 让 AI 能看到数据</h3><p>Resource 是<strong>只读</strong>的数据端点。和 Tool 不同，Resource 不执行任何操作，只是暴露数据。它由应用（Host）决定何时读取。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 静态资源：返回一段固定的配置信息</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;config://app/version&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_version</span>() -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回当前应用的版本号&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;2.0.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 动态资源：根据参数返回不同数据</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;users://&#123;user_id&#125;/profile&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_user_profile</span>(<span class="params">user_id: <span class="built_in">int</span></span>) -&gt; <span class="built_in">dict</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取指定用户的个人资料&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;id&quot;</span>: user_id, <span class="string">&quot;name&quot;</span>: <span class="string">f&quot;用户<span class="subst">&#123;user_id&#125;</span>&quot;</span>, <span class="string">&quot;status&quot;</span>: <span class="string">&quot;在线&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Resource URI 的约定：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scheme://authority/path</span><br><span class="line">─────    ─────────────</span><br><span class="line">协议     主体/路径</span><br><span class="line"></span><br><span class="line">例如：</span><br><span class="line">  file:///home/user/report.pdf       → 本地文件</span><br><span class="line">  postgres://localhost/mydb/users     → 数据库中的 users 表</span><br><span class="line">  config://app/theme                  → 应用配置</span><br></pre></td></tr></table></figure>
+
+<p><strong>Resource vs Tool 怎么区分？</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Resource</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作类型</td>
+<td>只读（不改变数据）</td>
+<td>可读可写（可能产生副作用）</td>
+</tr>
+<tr>
+<td>谁决定调用</td>
+<td>应用（Host）</td>
+<td>模型（LLM）</td>
+</tr>
+<tr>
+<td>类比</td>
+<td><code>GET /api/users</code></td>
+<td><code>POST /api/users</code></td>
+</tr>
+</tbody></table>
+<h3 id="3-3-Prompts（提示模板）—-让交互更高效"><a href="#3-3-Prompts（提示模板）—-让交互更高效" class="headerlink" title="3.3 Prompts（提示模板）— 让交互更高效"></a>3.3 Prompts（提示模板）— 让交互更高效</h3><p>Prompt 是可复用的<strong>对话模板</strong>。它通常以斜杠命令的形式出现，用户手动触发。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@mcp.prompt()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">code_review</span>(<span class="params">code: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成一个代码审查的提示模板&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;请审查以下代码，重点关注：</span></span><br><span class="line"><span class="string">1. 潜在的 bug 和逻辑错误</span></span><br><span class="line"><span class="string">2. 性能问题</span></span><br><span class="line"><span class="string">3. 安全隐患</span></span><br><span class="line"><span class="string">4. 代码风格改进建议</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">代码：</span></span><br><span class="line"><span class="string"><span class="subst">&#123;code&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>当用户输入 <code>/code_review</code> 并粘贴代码时，这个精心设计的模板会被注入到 LLM 的上下文中，比用户每次手动敲一遍”请审查以下代码…”要高效和一致得多。</p>
+<p><strong>三种原语的协作示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">用户：帮我查一下数据库里最近 7 天的销量，然后写一份分析报告</span><br><span class="line"></span><br><span class="line">AI 的工作流程：</span><br><span class="line">  ① 调用 Tool &quot;query_sales_data&quot;，参数 &#123; &quot;days&quot;: 7 &#125;</span><br><span class="line">  ② 读取 Resource &quot;config://report/template&quot; 拿报告模板</span><br><span class="line">  ③ 调用 Prompt &quot;generate_report&quot; 生成结构化报告</span><br><span class="line">  </span><br><span class="line">→ 三个原语配合完成一个复杂任务</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-通信协议：MCP-是怎么跑起来的"><a href="#4-通信协议：MCP-是怎么跑起来的" class="headerlink" title="4. 通信协议：MCP 是怎么跑起来的"></a>4. 通信协议：MCP 是怎么跑起来的</h2><p>MCP 底层使用的是 <strong>JSON-RPC 2.0</strong>，一种轻量级的远程过程调用协议。消息以 JSON 格式通过 stdio 或 HTTP 传输。</p>
+<h3 id="4-1-生命周期：从握手到干活"><a href="#4-1-生命周期：从握手到干活" class="headerlink" title="4.1 生命周期：从握手到干活"></a>4.1 生命周期：从握手到干活</h3><p><img src="https://oss.javaguide.cn/github/javaguide/ai/skills/mcp-call-seq.png" alt="MCP 调用时序图"></p>
+<h3 id="4-2-JSON-RPC-消息长什么样"><a href="#4-2-JSON-RPC-消息长什么样" class="headerlink" title="4.2 JSON-RPC 消息长什么样"></a>4.2 JSON-RPC 消息长什么样</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 请求（Client → Server）</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;jsonrpc&quot;</span>: <span class="string">&quot;2.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;method&quot;</span>: <span class="string">&quot;tools/call&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;params&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;get_weather&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;arguments&quot;</span>: &#123; <span class="attr">&quot;city&quot;</span>: <span class="string">&quot;北京&quot;</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应（Server → Client）</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;jsonrpc&quot;</span>: <span class="string">&quot;2.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;result&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;content&quot;</span>: [</span><br><span class="line">      &#123; <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>, <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;北京当前气温 22°C，晴&quot;</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通知（Server → Client，不需要回复）</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;jsonrpc&quot;</span>: <span class="string">&quot;2.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;method&quot;</span>: <span class="string">&quot;notifications/resources/updated&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;params&quot;</span>: &#123; <span class="attr">&quot;uri&quot;</span>: <span class="string">&quot;file:///data/report.json&quot;</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="不必手写这些-JSON"><a href="#不必手写这些-JSON" class="headerlink" title="不必手写这些 JSON"></a>不必手写这些 JSON</h3><p>在实际开发中，MCP SDK 帮你封装了所有 JSON-RPC 细节。你只需要写带装饰器的 Python 函数，SDK 自动处理序列化、路由、错误处理等工作。</p>
+<hr>
+<h2 id="5-传输方式：stdio-vs-HTTP"><a href="#5-传输方式：stdio-vs-HTTP" class="headerlink" title="5. 传输方式：stdio vs HTTP"></a>5. 传输方式：stdio vs HTTP</h2><p>MCP 支持两种传输方式，选择哪一档取决于你的部署场景：</p>
+<table>
+<thead>
+<tr>
+<th>传输方式</th>
+<th>适用场景</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>stdio</strong></td>
+<td>本地 Server（和 AI 同机器）</td>
+<td>零网络配置、天然安全、延迟极低</td>
+<td>只能在本地跑</td>
+</tr>
+<tr>
+<td><strong>Streamable HTTP</strong></td>
+<td>远程 Server（服务器端部署）</td>
+<td>可远程访问、支持多客户端、可负载均衡</td>
+<td>需要认证、有网络延迟</td>
+</tr>
+</tbody></table>
+<h3 id="stdio-模式（本地）"><a href="#stdio-模式（本地）" class="headerlink" title="stdio 模式（本地）"></a>stdio 模式（本地）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Server 端 —— 就一行</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    mcp.run(transport=<span class="string">&quot;stdio&quot;</span>)  <span class="comment"># 通过标准输入输出通信</span></span><br></pre></td></tr></table></figure>
+
+<p>Host（比如 Claude Desktop）会启动这个 Server 作为<strong>子进程</strong>，通过管道向它的 stdin 发 JSON-RPC 请求，从 stdout 读 JSON-RPC 响应。因为不走网络，天然安全、延迟接近零。</p>
+<h3 id="HTTP-模式（远程）"><a href="#HTTP-模式（远程）" class="headerlink" title="HTTP 模式（远程）"></a>HTTP 模式（远程）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Server 端 —— 转为 Web 服务</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    mcp.run(</span><br><span class="line">        transport=<span class="string">&quot;http&quot;</span>,</span><br><span class="line">        host=<span class="string">&quot;0.0.0.0&quot;</span>,</span><br><span class="line">        port=<span class="number">8000</span>,</span><br><span class="line">        path=<span class="string">&quot;/mcp&quot;</span>          <span class="comment"># MCP 端点</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>远程模式支持 OAuth 2.1 认证，适合团队共享 Server 或多客户端同时连接。</p>
+<hr>
+<h2 id="6-快速入门：手写你的第一个-MCP-Server"><a href="#6-快速入门：手写你的第一个-MCP-Server" class="headerlink" title="6. 快速入门：手写你的第一个 MCP Server"></a>6. 快速入门：手写你的第一个 MCP Server</h2><p>下面我们用 Python 从零搭建一个完整的 MCP Server，它提供两个能力：</p>
+<ul>
+<li><strong>Tool</strong>：输入城市名，返回实时天气</li>
+<li><strong>Resource</strong>：暴露今天的日期</li>
+</ul>
+<h3 id="6-1-安装-SDK"><a href="#6-1-安装-SDK" class="headerlink" title="6.1 安装 SDK"></a>6.1 安装 SDK</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 MCP 官方 Python SDK（包含 FastMCP）</span></span><br><span class="line">pip install <span class="string">&quot;mcp[cli]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-完整的-Server-代码"><a href="#6-2-完整的-Server-代码" class="headerlink" title="6.2 完整的 Server 代码"></a>6.2 完整的 Server 代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># weather_server.py</span></span><br><span class="line"><span class="keyword">import</span> httpx</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP, Context</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 1：创建一个 MCP Server 实例</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;我的天气助手 ☀️&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 2：定义一个 Tool —— 查询天气</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_weather</span>(<span class="params">city: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    查询指定城市的实时天气。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    参数：</span></span><br><span class="line"><span class="string">        city: 城市的中文名称，例如 &quot;北京&quot;、&quot;上海&quot;、&quot;广州&quot;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 这里用一个公开的天气 API（示例，实际使用时替换为你的 API）</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> httpx.AsyncClient() <span class="keyword">as</span> client:</span><br><span class="line">        resp = <span class="keyword">await</span> client.get(</span><br><span class="line">            <span class="string">f&quot;https://api.open-meteo.com/v1/forecast&quot;</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">&quot;latitude&quot;</span>: <span class="number">39.9042</span>,   <span class="comment"># 示例：北京纬度</span></span><br><span class="line">                <span class="string">&quot;longitude&quot;</span>: <span class="number">116.4074</span>,  <span class="comment"># 示例：北京经度</span></span><br><span class="line">                <span class="string">&quot;current_weather&quot;</span>: <span class="literal">True</span></span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">        data = resp.json()</span><br><span class="line">        current = data.get(<span class="string">&quot;current_weather&quot;</span>, &#123;&#125;)</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="string">f&quot;<span class="subst">&#123;city&#125;</span>当前天气：\n&quot;</span></span><br><span class="line">            <span class="string">f&quot;温度：<span class="subst">&#123;current.get(<span class="string">&#x27;temperature&#x27;</span>)&#125;</span>°C\n&quot;</span></span><br><span class="line">            <span class="string">f&quot;风速：<span class="subst">&#123;current.get(<span class="string">&#x27;windspeed&#x27;</span>)&#125;</span> km/h\n&quot;</span></span><br><span class="line">            <span class="string">f&quot;天气代码：<span class="subst">&#123;current.get(<span class="string">&#x27;weathercode&#x27;</span>)&#125;</span>&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 3：定义一个 Resource —— 今天的日期</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;info://today&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_today</span>() -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回今天的日期&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;今天是 <span class="subst">&#123;date.today().isoformat()&#125;</span>，星期<span class="subst">&#123;[<span class="string">&#x27;一&#x27;</span>,<span class="string">&#x27;二&#x27;</span>,<span class="string">&#x27;三&#x27;</span>,<span class="string">&#x27;四&#x27;</span>,<span class="string">&#x27;五&#x27;</span>,<span class="string">&#x27;六&#x27;</span>,<span class="string">&#x27;日&#x27;</span>][date.today().weekday()]&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 4：定义一个 Prompt —— 天气预报分析模板</span></span><br><span class="line"><span class="meta">@mcp.prompt()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weather_analysis</span>(<span class="params">city: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成一个天气预报分析的提示模板&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;请根据<span class="subst">&#123;city&#125;</span>的当前天气数据，给出以下建议：</span></span><br><span class="line"><span class="string">1. 今天是否适合户外活动？</span></span><br><span class="line"><span class="string">2. 穿衣建议</span></span><br><span class="line"><span class="string">3. 出行注意事项&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 5：启动 Server</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    mcp.run(transport=<span class="string">&quot;stdio&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-测试你的-Server"><a href="#6-3-测试你的-Server" class="headerlink" title="6.3 测试你的 Server"></a>6.3 测试你的 Server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 方式一：用 MCP 官方调试器（推荐，图形界面）</span></span><br><span class="line">npx @modelcontextprotocol/inspector python weather_server.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方式二：用 FastMCP 自带的 dev 命令</span></span><br><span class="line">mcp dev weather_server.py</span><br></pre></td></tr></table></figure>
+
+<p>启动后会打开一个网页，你可以在里面：</p>
+<ul>
+<li>看到所有注册的 Tool、Resource、Prompt</li>
+<li>手动输入参数调用 Tool，立刻看到返回结果</li>
+<li>查看自动生成的 JSON Schema（你写的类型注解自动转换成了 Schema）</li>
+</ul>
+<h3 id="调试器中看到"><a href="#调试器中看到" class="headerlink" title="调试器中看到"></a>调试器中看到</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Tools:</span><br><span class="line">  ├── get_weather          → 查询指定城市的实时天气</span><br><span class="line">  │     city: string (必填)</span><br><span class="line"></span><br><span class="line">Resources:</span><br><span class="line">  ├── info://today          → 返回今天的日期</span><br><span class="line"></span><br><span class="line">Prompts:</span><br><span class="line">  ├── weather_analysis      → 天气预报分析模板</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="7-进阶：Tool-中使用-Context"><a href="#7-进阶：Tool-中使用-Context" class="headerlink" title="7. 进阶：Tool 中使用 Context"></a>7. 进阶：Tool 中使用 Context</h2><p><code>Context</code> 是一个强大的参数，当你把它加在 Tool 函数的参数中，MCP 会自动注入，让你在 Tool 内部做些高级操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP, Context</span><br><span class="line"></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;高级示例&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">smart_summarize</span>(<span class="params">uri: <span class="built_in">str</span>, ctx: Context</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;读取指定 URI 的资源，让 LLM 对其做摘要&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ① 记录日志（会显示在调试器中）</span></span><br><span class="line">    <span class="keyword">await</span> ctx.info(<span class="string">f&quot;开始读取资源：<span class="subst">&#123;uri&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ② 读取其他 Resource</span></span><br><span class="line">    data = <span class="keyword">await</span> ctx.read_resource(uri)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ③ 报告进度（长任务时特别有用）</span></span><br><span class="line">    <span class="keyword">await</span> ctx.report_progress(<span class="number">50</span>, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ④ 反向调用 LLM（Sampling）—— 这是最厉害的特性</span></span><br><span class="line">    summary = <span class="keyword">await</span> ctx.sample(</span><br><span class="line">        <span class="string">f&quot;请用一句话总结以下内容：\n<span class="subst">&#123;data.content[:<span class="number">500</span>]&#125;</span>&quot;</span>,</span><br><span class="line">        max_tokens=<span class="number">100</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> ctx.report_progress(<span class="number">100</span>, <span class="number">100</span>)</span><br><span class="line">    <span class="keyword">return</span> summary.text</span><br></pre></td></tr></table></figure>
+
+<h3 id="Context-能做什么"><a href="#Context-能做什么" class="headerlink" title="Context 能做什么"></a>Context 能做什么</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ctx.info(msg)</code> / <code>ctx.error(msg)</code></td>
+<td>记录日志</td>
+</tr>
+<tr>
+<td><code>ctx.report_progress(current, total)</code></td>
+<td>报告长任务进度</td>
+</tr>
+<tr>
+<td><code>ctx.read_resource(uri)</code></td>
+<td>在 Tool 内部读取 Resource</td>
+</tr>
+<tr>
+<td><code>ctx.sample(prompt)</code></td>
+<td>让 LLM 生成文本（反向调用）</td>
+</tr>
+</tbody></table>
+<p>其中 <strong><code>ctx.sample()</code></strong> 是最特别的能力——它让 MCP Server 反过来请求 LLM 做推理。这意味着你可以写一个 Server，让它在干活的过程中随时调用 AI。</p>
+<hr>
+<h2 id="8-写一个-MCP-Client"><a href="#8-写一个-MCP-Client" class="headerlink" title="8. 写一个 MCP Client"></a>8. 写一个 MCP Client</h2><p>Client 是连接和测试 Server 的客户端代码。当你写好一个 Server，可以用 Client 来验证它是否正常工作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> mcp <span class="keyword">import</span> ClientSession, StdioServerParameters</span><br><span class="line"><span class="keyword">from</span> mcp.client.stdio <span class="keyword">import</span> stdio_client</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 步骤 1：指定要启动的 Server</span></span><br><span class="line">    server_params = StdioServerParameters(</span><br><span class="line">        command=<span class="string">&quot;python&quot;</span>,</span><br><span class="line">        args=[<span class="string">&quot;weather_server.py&quot;</span>],</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 步骤 2：建立连接并初始化会话</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> stdio_client(server_params) <span class="keyword">as</span> (read, write):</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> ClientSession(read, write) <span class="keyword">as</span> session:</span><br><span class="line">            <span class="keyword">await</span> session.initialize()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 步骤 3：列出 Server 的能力</span></span><br><span class="line">            tools = <span class="keyword">await</span> session.list_tools()</span><br><span class="line">            resources = <span class="keyword">await</span> session.list_resources()</span><br><span class="line">            prompts = <span class="keyword">await</span> session.list_prompts()</span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;📦 可用工具：&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> tool <span class="keyword">in</span> tools.tools:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;   - <span class="subst">&#123;tool.name&#125;</span>: <span class="subst">&#123;tool.description&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;📂 可用资源：&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> r <span class="keyword">in</span> resources.resources:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;   - <span class="subst">&#123;r.uri&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;💬 可用提示模板：&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> prompts.prompts:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;   - <span class="subst">&#123;p.name&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 步骤 4：调用 Tool</span></span><br><span class="line">            result = <span class="keyword">await</span> session.call_tool(</span><br><span class="line">                <span class="string">&quot;get_weather&quot;</span>,</span><br><span class="line">                &#123;<span class="string">&quot;city&quot;</span>: <span class="string">&quot;北京&quot;</span>&#125;</span><br><span class="line">            )</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;\n🌤️ 天气查询结果：\n<span class="subst">&#123;result.content[<span class="number">0</span>].text&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 步骤 5：读取 Resource</span></span><br><span class="line">            data = <span class="keyword">await</span> session.read_resource(<span class="string">&quot;info://today&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;\n📅 日期资源：\n<span class="subst">&#123;data.contents[<span class="number">0</span>].text&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p><strong>运行结果：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">📦 可用工具：</span><br><span class="line">   - get_weather: 查询指定城市的实时天气。</span><br><span class="line"></span><br><span class="line">📂 可用资源：</span><br><span class="line">   - info://today</span><br><span class="line"></span><br><span class="line">💬 可用提示模板：</span><br><span class="line">   - weather_analysis</span><br><span class="line"></span><br><span class="line">🌤️ 天气查询结果：</span><br><span class="line">北京当前天气：</span><br><span class="line">温度：22°C</span><br><span class="line">风速：15 km/h</span><br><span class="line">天气代码：1</span><br><span class="line"></span><br><span class="line">📅 日期资源：</span><br><span class="line">今天是 2026-05-20，星期二</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="9-MCP-和-Claude-Code-的结合"><a href="#9-MCP-和-Claude-Code-的结合" class="headerlink" title="9. MCP 和 Claude Code 的结合"></a>9. MCP 和 Claude Code 的结合</h2><p>你在用 Claude Code 时，可能已经不知不觉地在使用 MCP 了。Claude Code 本身就是一个 <strong>MCP Host</strong>+ <strong>MCP Server</strong> 的结合体。它自带大量内置工具（Read、Write、Edit、Bash、Glob 等），这些工具本质上都是通过 MCP 协议暴露的 Tool 和 Resource。</p>
+<h3 id="如何给-Claude-Code-添加-MCP-Server"><a href="#如何给-Claude-Code-添加-MCP-Server" class="headerlink" title="如何给 Claude Code 添加 MCP Server"></a>如何给 Claude Code 添加 MCP Server</h3><p>在项目根目录的 <code>.claude/settings.json</code> 中配置：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;filesystem&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;npx&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;-y&quot;</span>, <span class="string">&quot;@modelcontextprotocol/server-filesystem&quot;</span>, <span class="string">&quot;/path/to/allowed/dir&quot;</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;github&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;npx&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;-y&quot;</span>, <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span>],</span><br><span class="line">      <span class="attr">&quot;env&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span>: <span class="string">&quot;ghp_xxxxx&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;postgres&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;npx&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;args&quot;</span>: [<span class="string">&quot;-y&quot;</span>, <span class="string">&quot;@modelcontextprotocol/server-postgres&quot;</span>, <span class="string">&quot;postgresql://localhost/mydb&quot;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后重启 Claude Code，AI 就能调用这些 Server 提供的 Tool 和 Resource 了。</p>
+<hr>
+<h2 id="10-常见-MCP-Server"><a href="#10-常见-MCP-Server" class="headerlink" title="10. 常见 MCP Server"></a>10. 常见 MCP Server</h2><p>社区已经有很多现成的 MCP Server，开箱即用：</p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@anthropic/mcp-server-filesystem</code></td>
+<td>读写本地文件</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-github</code></td>
+<td>GitHub 操作（PR、Issue、仓库管理）</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-postgres</code></td>
+<td>PostgreSQL 数据库查询</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-slack</code></td>
+<td>Slack 消息收发</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-puppeteer</code></td>
+<td>浏览器自动化（截图、网页操作）</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-google-maps</code></td>
+<td>地图和地理编码</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-memory</code></td>
+<td>持久化记忆存储</td>
+</tr>
+<tr>
+<td><code>@anthropic/mcp-server-brave-search</code></td>
+<td>网络搜索</td>
+</tr>
+</tbody></table>
+<p>基本上你能想到的第三方服务，社区都已经封装成 MCP Server 了。你只需要在 Claude Desktop 或 Claude Code 里配置一行 JSON，立即可用。</p>
+<hr>
+<h2 id="11-常见问题与坑"><a href="#11-常见问题与坑" class="headerlink" title="11. 常见问题与坑"></a>11. 常见问题与坑</h2><h3 id="坑-1：Tool-描述写得太模糊"><a href="#坑-1：Tool-描述写得太模糊" class="headerlink" title="坑 1：Tool 描述写得太模糊"></a>坑 1：Tool 描述写得太模糊</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ❌ 糟糕的描述</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search</span>(<span class="params">q: <span class="built_in">str</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;搜索&quot;&quot;&quot;</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 好的描述</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search_users</span>(<span class="params">keyword: <span class="built_in">str</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;按关键词搜索用户。keyword 支持用户名、邮箱或手机号的部分匹配。&quot;&quot;&quot;</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>Tool 的描述直接决定了 AI 能否<strong>正确地选择</strong>和<strong>正确地调用</strong>它。花时间把描述写清楚，比优化代码更重要。</p>
+<h3 id="坑-2：stdio-模式下-stdout-被污染"><a href="#坑-2：stdio-模式下-stdout-被污染" class="headerlink" title="坑 2：stdio 模式下 stdout 被污染"></a>坑 2：stdio 模式下 stdout 被污染</h3><p>stdio 模式下，Server 通过 stdout 返回 JSON-RPC 消息。如果你的代码里有 <code>print()</code>（输出到 stdout），会破坏 JSON 格式，导致通信失败。日志应该输出到 stderr。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># ❌ 不要在 stdio 模式 Server 里 print</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;server started&quot;</span>)  <span class="comment"># 会炸</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 用 logging 输出到 stderr</span></span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.basicConfig(stream=sys.stderr, level=logging.INFO)</span><br><span class="line">logging.info(<span class="string">&quot;server started&quot;</span>)  <span class="comment"># 安全</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="坑-3：Tool-返回的数据太大"><a href="#坑-3：Tool-返回的数据太大" class="headerlink" title="坑 3：Tool 返回的数据太大"></a>坑 3：Tool 返回的数据太大</h3><p>如果 Tool 返回了几 MB 的数据，它会作为 JSON 正文传输，拖慢整个对话。对于大数据量，考虑返回摘要或分页结果，或者把数据写入文件，把文件路径作为 Resource 暴露。</p>
+<h3 id="坑-4：忘记处理异常"><a href="#坑-4：忘记处理异常" class="headerlink" title="坑 4：忘记处理异常"></a>坑 4：忘记处理异常</h3><p>Tool 函数中如果抛出未捕获的异常，MCP 会把它包装成 JSON-RPC 错误返回给 Host。用户看到的可能是”内部错误”这样模糊的提示，而不是有用的信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">query_db</span>(<span class="params">sql: <span class="built_in">str</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;执行 SQL 查询并返回结果&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> db_pool.acquire() <span class="keyword">as</span> conn:</span><br><span class="line">            rows = <span class="keyword">await</span> conn.fetch(sql)</span><br><span class="line">            <span class="keyword">return</span> [<span class="built_in">dict</span>(r) <span class="keyword">for</span> r <span class="keyword">in</span> rows]</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 返回人类可读的错误信息</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;查询失败：<span class="subst">&#123;e&#125;</span>\n建议检查 SQL 语法和表名是否正确。&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MCP 的核心可以浓缩成三句话：</p>
+<ol>
+<li><strong>Tools</strong> 让 AI <strong>动手</strong>——执行操作、调用 API</li>
+<li><strong>Resources</strong> 让 AI <strong>看见</strong>——暴露数据、提供上下文</li>
+<li><strong>Prompts</strong> 让用户<strong>高效率</strong>——复用精心设计的对话模板</li>
+</ol>
+<p>三者通过统一的 JSON-RPC 协议，在 Client 和 Server 之间交互。学会 MCP，你就掌握了让 AI 从”只会聊天”进化到”能干活”的关键能力。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MCP 是什么</td>
+<td>AI 的 USB-C 接口 —— 统一的连接标准</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>模型控制的函数，让 AI 做事情</td>
+</tr>
+<tr>
+<td>Resources</td>
+<td>应用控制的只读数据 URI</td>
+</tr>
+<tr>
+<td>Prompts</td>
+<td>用户控制的对话模板</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>AI 应用本体</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>Host 和 Server 之间的连接器</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>提供 Tools / Resources / Prompts 的服务</td>
+</tr>
+<tr>
+<td>stdio</td>
+<td>本地传输（通过管道）</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>远程传输（通过网络）</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>Tool 内部的瑞士军刀（日志、采样、进度）</td>
+</tr>
+</tbody></table>
+<p>如果你想继续深入，推荐以下资源：</p>
+<ul>
+<li>官方规范：<a href="https://modelcontextprotocol.io/">modelcontextprotocol.io</a></li>
+<li>官方 GitHub：<a href="https://github.com/modelcontextprotocol">github.com/modelcontextprotocol</a></li>
+<li>MCP Server 注册表：<a href="https://mcp.so/">mcp.so</a>（社区维护的第三方注册表）</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>LLM</tag>
+        <tag>MCP</tag>
+        <tag>AI</tag>
+      </tags>
+  </entry>
 </search>
