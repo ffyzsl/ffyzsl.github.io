@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 一个问题1234567891011121314151617import asynciouser_name &#x3D; &quot;anonymous&quot;async def handle_request(name):    global user_name    user_name &#x3D; name    await asyncio.sleep(1)    print(f&quot;当前用户：&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="contextvars详解">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/06/02/contextvars/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="1. 一个问题1234567891011121314151617import asynciouser_name &#x3D; &quot;anonymous&quot;async def handle_request(name):    global user_name    user_name &#x3D; name    await asyncio.sleep(1)    print(f&quot;当前用户：&amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-02T08:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-02T08:38:03.543Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="asyncio">
+<meta property="article:tag" content="contextvars">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/06/02/contextvars/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>contextvars详解 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/06/02/contextvars/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          contextvars详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-02 16:00:00 / 修改时间：16:38:03" itemprop="dateCreated datePublished" datetime="2026-06-02T16:00:00+08:00">2026-06-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-一个问题"><a href="#1-一个问题" class="headerlink" title="1. 一个问题"></a>1. 一个问题</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line">user_name = <span class="string">&quot;anonymous&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handle_request</span>(<span class="params">name</span>):</span></span><br><span class="line">    <span class="keyword">global</span> user_name</span><br><span class="line">    user_name = name</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;当前用户：<span class="subst">&#123;user_name&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(</span><br><span class="line">        handle_request(<span class="string">&quot;Alice&quot;</span>),</span><br><span class="line">        handle_request(<span class="string">&quot;Bob&quot;</span>),</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当前用户：Bob</span><br><span class="line">当前用户：Bob</span><br></pre></td></tr></table></figure>
+
+<p>两个请求打印出来的都是 <code>Bob</code>。Alice 丢了，因为两个协程共享了同一个 <code>user_name</code> 全局变量，后面的覆盖了前面的。</p>
+<p>你可能想：那就别用全局变量，用函数参数传呗？但如果调用链很深——A 调 B、B 调 C、C 调 D，只有 D 需要用到 <code>user_name</code>——你要从 A 一路传到 D：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">A</span>():</span></span><br><span class="line">    <span class="keyword">await</span> B(user_name)  <span class="comment"># A 传</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">B</span>(<span class="params">user_name</span>):</span></span><br><span class="line">    <span class="keyword">await</span> C(user_name)  <span class="comment"># B 传（但 B 其实根本不用这个变量）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">C</span>(<span class="params">user_name</span>):</span></span><br><span class="line">    <span class="keyword">await</span> D(user_name)  <span class="comment"># C 传（C 也不用）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">D</span>(<span class="params">user_name</span>):</span>  <span class="comment"># 只有 D 才用到</span></span><br><span class="line">    <span class="built_in">print</span>(user_name)</span><br></pre></td></tr></table></figure>
+
+<p>这种**”漏斗传参”<strong>让人崩溃。Python 3.7 引入的 <code>contextvars</code> 就是为了解决这个问题——</strong>不用显式传参，每个协程自动拿到自己那份值**。</p>
+<hr>
+<h2 id="2-核心概念：三个角色一台戏"><a href="#2-核心概念：三个角色一台戏" class="headerlink" title="2. 核心概念：三个角色一台戏"></a>2. 核心概念：三个角色一台戏</h2><p><code>contextvars</code> 模块只有三个核心组件：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>一句话解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ContextVar</code></td>
+<td>变量声明——定义一个上下文变量的”槽位”</td>
+</tr>
+<tr>
+<td><code>Context</code></td>
+<td>值的快照——某个时刻所有 ContextVar 及其值的集合</td>
+</tr>
+<tr>
+<td><code>Token</code></td>
+<td>撤销凭证——<code>set()</code> 返回的令牌，用于恢复旧值</td>
+</tr>
+</tbody></table>
+<h3 id="一个比喻帮你记住"><a href="#一个比喻帮你记住" class="headerlink" title="一个比喻帮你记住"></a>一个比喻帮你记住</h3><p>想象你在图书馆借书：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ContextVar  = 每一排书架的&quot;主题标签&quot;（历史、文学、科技……）</span><br><span class="line">Context     = 整座图书馆当前所有书的&quot;快照&quot;</span><br><span class="line">Token       = 借书的&quot;回执单&quot;，还书时用到</span><br></pre></td></tr></table></figure>
+
+<p>你走进图书馆，把”历史”区的一本书换成自己的笔记（<code>set(&quot;历史&quot;, &quot;我的笔记&quot;)</code>），得到一张回执单（Token）。离开时凭回执单把笔记收回，原来的书放回去（<code>reset(token)</code>）。</p>
+<hr>
+<h2 id="3-基本用法"><a href="#3-基本用法" class="headerlink" title="3. 基本用法"></a>3. 基本用法</h2><h3 id="3-1-声明和读写"><a href="#3-1-声明和读写" class="headerlink" title="3.1 声明和读写"></a>3.1 声明和读写</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 创建 ContextVar —— 必须在模块顶层定义，不能放在函数里</span></span><br><span class="line">request_id = contextvars.ContextVar(<span class="string">&#x27;request_id&#x27;</span>, default=<span class="string">&#x27;unknown&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 读：.get() 获取当前上下文中的值</span></span><br><span class="line"><span class="built_in">print</span>(request_id.get())  <span class="comment"># unknown（没 set 过，拿 default）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 写：.set(value) 返回一个 Token</span></span><br><span class="line">token = request_id.<span class="built_in">set</span>(<span class="string">&#x27;req_001&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(request_id.get())  <span class="comment"># req_001</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 恢复：.reset(token) 用 Token 撤销到 set 之前的值</span></span><br><span class="line">request_id.reset(token)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(request_id.get())  <span class="comment"># unknown（恢复了）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="💡-default-参数是干什么的？"><a href="#💡-default-参数是干什么的？" class="headerlink" title="💡 default 参数是干什么的？"></a>💡 <code>default</code> 参数是干什么的？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 有 default → get() 永远不会抛异常</span></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="string">&#x27;默认值&#x27;</span>)</span><br><span class="line">var.get()  <span class="comment"># &#x27;默认值&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有 default → 第一个 get() 必须传默认值，否则抛 LookupError</span></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>)</span><br><span class="line">var.get()        <span class="comment"># ❌ LookupError</span></span><br><span class="line">var.get(<span class="string">&#x27;临时&#x27;</span>)  <span class="comment"># ✅ 返回 &#x27;临时&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>建议：</strong> 生产环境一律提供 <code>default</code>，省掉很多 <code>try/except</code>。</p>
+<hr>
+<h2 id="4-核心特性：异步隔离"><a href="#4-核心特性：异步隔离" class="headerlink" title="4. 核心特性：异步隔离"></a>4. 核心特性：异步隔离</h2><h3 id="4-1-同一个-ContextVar，不同协程看到不同的值"><a href="#4-1-同一个-ContextVar，不同协程看到不同的值" class="headerlink" title="4.1 同一个 ContextVar，不同协程看到不同的值"></a>4.1 同一个 ContextVar，不同协程看到不同的值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模块顶层定义</span></span><br><span class="line">current_user = contextvars.ContextVar(<span class="string">&#x27;current_user&#x27;</span>, default=<span class="string">&#x27;anonymous&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">sub_task</span>(<span class="params">step_name</span>):</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.1</span>)</span><br><span class="line">    <span class="comment"># 不用传参！直接从上下文拿</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[<span class="subst">&#123;step_name&#125;</span>] 当前用户 = <span class="subst">&#123;current_user.get()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handle_request</span>(<span class="params">username</span>):</span></span><br><span class="line">    <span class="comment"># 设置当前协程的上下文</span></span><br><span class="line">    token = current_user.<span class="built_in">set</span>(username)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;&gt;&gt;&gt; 开始处理 <span class="subst">&#123;username&#125;</span> 的请求&quot;</span>)</span><br><span class="line">        <span class="keyword">await</span> asyncio.gather(</span><br><span class="line">            sub_task(<span class="string">&#x27;查询数据库&#x27;</span>),</span><br><span class="line">            sub_task(<span class="string">&#x27;调用第三方API&#x27;</span>),</span><br><span class="line">            sub_task(<span class="string">&#x27;渲染页面&#x27;</span>),</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        current_user.reset(token)  <span class="comment"># 必须恢复！防止泄露</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(</span><br><span class="line">        handle_request(<span class="string">&#x27;Alice&#x27;</span>),</span><br><span class="line">        handle_request(<span class="string">&#x27;Bob&#x27;</span>),</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p><strong>运行结果（一种可能）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 开始处理 Alice 的请求</span><br><span class="line">&gt;&gt;&gt; 开始处理 Bob 的请求</span><br><span class="line">[查询数据库] 当前用户 = Alice</span><br><span class="line">[查询数据库] 当前用户 = Bob</span><br><span class="line">[调用第三方API] 当前用户 = Alice</span><br><span class="line">[调用第三方API] 当前用户 = Bob</span><br><span class="line">[渲染页面] 当前用户 = Alice</span><br><span class="line">[渲染页面] 当前用户 = Bob</span><br></pre></td></tr></table></figure>
+
+<p>每个协程单独拿到自己的 <code>current_user</code>，互不干扰。而且 <code>sub_task</code> 没有接收任何参数，它直接从上下文环境中取值。</p>
+<h3 id="4-2-底层原理：await-时自动切换"><a href="#4-2-底层原理：await-时自动切换" class="headerlink" title="4.2 底层原理：await 时自动切换"></a>4.2 底层原理：<code>await</code> 时自动切换</h3><p>当协程执行 <code>await</code> 时，Python 的事件循环会：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">① 把当前协程的 Context（所有 ContextVar 的值的快照）保存起来</span><br><span class="line">② 切换到另一个协程</span><br><span class="line">③ 把新协程的 Context 加载进来</span><br><span class="line">④ 继续执行</span><br></pre></td></tr></table></figure>
+
+<p>这一切对你是透明的。你只需要声明 <code>ContextVar</code>，然后 <code>.set()</code> 和 <code>.get()</code>，Python 帮你搞定切换。</p>
+<h3 id="4-3-对比-threading-local"><a href="#4-3-对比-threading-local" class="headerlink" title="4.3 对比 threading.local"></a>4.3 对比 threading.local</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="comment"># threading.local —— 只隔离线程，不隔离协程</span></span><br><span class="line">tls = threading.local()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test_tls</span>():</span></span><br><span class="line">    tls.value = <span class="string">&quot;hello&quot;</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.1</span>)</span><br><span class="line">    <span class="built_in">print</span>(tls.value)  <span class="comment"># 可能拿到其他协程的值！</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center"><code>threading.local</code></th>
+<th align="center"><code>contextvars.ContextVar</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>隔离粒度</td>
+<td align="center">线程</td>
+<td align="center">协程（asyncio Task）</td>
+</tr>
+<tr>
+<td>异步兼容</td>
+<td align="center">❌ 协程共享线程，值会窜</td>
+<td align="center">✅ 每个协程独立</td>
+</tr>
+<tr>
+<td>await 自动切换</td>
+<td align="center">❌ 不支持</td>
+<td align="center">✅ 原生支持</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td align="center">纯多线程代码</td>
+<td align="center">asyncio 异步代码</td>
+</tr>
+</tbody></table>
+<p>记住一句话：<strong>如果代码里有 <code>async/await</code>，就用 <code>contextvars</code>，忘掉 <code>threading.local</code>。</strong></p>
+<hr>
+<h2 id="5-进阶操作"><a href="#5-进阶操作" class="headerlink" title="5. 进阶操作"></a>5. 进阶操作</h2><h3 id="5-1-copy-context-——-保存当前状态快照"><a href="#5-1-copy-context-——-保存当前状态快照" class="headerlink" title="5.1 copy_context() —— 保存当前状态快照"></a>5.1 <code>copy_context()</code> —— 保存当前状态快照</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">var.<span class="built_in">set</span>(<span class="number">10</span>)</span><br><span class="line">var.<span class="built_in">set</span>(<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># copy_context() 获取当前所有 ContextVar 的值</span></span><br><span class="line">ctx = contextvars.copy_context()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(ctx[var])   <span class="comment"># 20（当前 var 在这个 context 中的值）</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">list</span>(ctx.items()))  <span class="comment"># [(&lt;ContextVar name=&#x27;var&#x27;&gt;, 20)]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-Context-run-——-在指定上下文中执行代码"><a href="#5-2-Context-run-——-在指定上下文中执行代码" class="headerlink" title="5.2 Context.run() —— 在指定上下文中执行代码"></a>5.2 <code>Context.run()</code> —— 在指定上下文中执行代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="string">&#x27;外面&#x27;</span>)</span><br><span class="line"></span><br><span class="line">var.<span class="built_in">set</span>(<span class="string">&#x27;外层值&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;在 run 内部：<span class="subst">&#123;var.get()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先捕获一份当前上下文的快照</span></span><br><span class="line">ctx = contextvars.copy_context()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 ctx.run() 内部对 var 做的任何修改不影响外部</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">modify</span>():</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;run 内部的值&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;修改后：<span class="subst">&#123;var.get()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">ctx.run(modify)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;外面还是：<span class="subst">&#123;var.get()&#125;</span>&quot;</span>)  <span class="comment"># 外面不变</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改后：run 内部的值</span><br><span class="line">外面还是：外层值</span><br></pre></td></tr></table></figure>
+
+<h3 id="🔥-关键理解：run-的作用"><a href="#🔥-关键理解：run-的作用" class="headerlink" title="🔥 关键理解：run() 的作用"></a>🔥 关键理解：<code>run()</code> 的作用</h3><p><code>Context.run()</code> 创建了一个<strong>隔离的沙箱</strong>。沙箱里的 ContextVar 修改不会泄露到外面。这正是 Starlette/FastAPI 在处理同步依赖时使用的方式。</p>
+<hr>
+<h2 id="6-实战：FastAPI-请求追踪"><a href="#6-实战：FastAPI-请求追踪" class="headerlink" title="6. 实战：FastAPI 请求追踪"></a>6. 实战：FastAPI 请求追踪</h2><h3 id="6-1-场景：给每个请求分配唯一-ID，所有日志自动带上"><a href="#6-1-场景：给每个请求分配唯一-ID，所有日志自动带上" class="headerlink" title="6.1 场景：给每个请求分配唯一 ID，所有日志自动带上"></a>6.1 场景：给每个请求分配唯一 ID，所有日志自动带上</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, Request</span><br><span class="line"></span><br><span class="line"><span class="comment"># ──── 定义 ContextVar ────</span></span><br><span class="line">request_id_var = contextvars.ContextVar(<span class="string">&#x27;request_id&#x27;</span>, default=<span class="string">&#x27;no-request&#x27;</span>)</span><br><span class="line">user_id_var = contextvars.ContextVar(<span class="string">&#x27;user_id&#x27;</span>, default=<span class="string">&#x27;anonymous&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ──── 配置日志 Filter ────</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContextFilter</span>(<span class="params">logging.Filter</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;自动把 ContextVar 的值注入到每一条日志中&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">filter</span>(<span class="params">self, record</span>):</span></span><br><span class="line">        record.request_id = request_id_var.get()</span><br><span class="line">        record.user_id = user_id_var.get()</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 root logger 装上 filter</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.INFO,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s [%(request_id)s] [用户:%(user_id)s] %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"><span class="keyword">for</span> handler <span class="keyword">in</span> logging.root.handlers:</span><br><span class="line">    handler.addFilter(ContextFilter())</span><br><span class="line"></span><br><span class="line"><span class="comment"># ──── FastAPI 中间件 ────</span></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.middleware(<span class="params"><span class="string">&quot;http&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">add_request_context</span>(<span class="params">request: Request, call_next</span>):</span></span><br><span class="line">    <span class="comment"># 设置 request_id</span></span><br><span class="line">    rid = request.headers.get(<span class="string">&quot;X-Request-ID&quot;</span>, <span class="built_in">str</span>(uuid.uuid4())[:<span class="number">8</span>])</span><br><span class="line">    token_rid = request_id_var.<span class="built_in">set</span>(rid)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置 user_id（假设从 token 解析）</span></span><br><span class="line">    uid = request.headers.get(<span class="string">&quot;X-User-ID&quot;</span>, <span class="string">&quot;anonymous&quot;</span>)</span><br><span class="line">    token_uid = user_id_var.<span class="built_in">set</span>(uid)</span><br><span class="line"></span><br><span class="line">    logger.info(<span class="string">f&quot;请求开始：<span class="subst">&#123;request.method&#125;</span> <span class="subst">&#123;request.url.path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 必须恢复！否则下一个请求可能拿到这个请求的值</span></span><br><span class="line">        request_id_var.reset(token_rid)</span><br><span class="line">        user_id_var.reset(token_uid)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ──── 业务代码 ────</span></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get_item</span>(<span class="params">item_id: <span class="built_in">int</span></span>):</span></span><br><span class="line">    logger.info(<span class="string">f&quot;查询商品 <span class="subst">&#123;item_id&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> query_database(item_id)</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;item_id&quot;</span>: item_id&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">query_database</span>(<span class="params">item_id: <span class="built_in">int</span></span>):</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.01</span>)</span><br><span class="line">    logger.info(<span class="string">f&quot;数据库查询完成&quot;</span>)  <span class="comment"># 自动带上 request_id 和 user_id</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>运行效果：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2026-06-02 16:00:00 [a1b2c3d4] [用户:alice] 请求开始：GET /items/42</span><br><span class="line">2026-06-02 16:00:00 [a1b2c3d4] [用户:alice] 查询商品 42</span><br><span class="line">2026-06-02 16:00:00 [a1b2c3d4] [用户:alice] 数据库查询完成</span><br><span class="line">2026-06-02 16:00:01 [e5f6g7h8] [用户:bob] 请求开始：GET /items/99</span><br><span class="line">2026-06-02 16:00:01 [e5f6g7h8] [用户:bob] 查询商品 99</span><br><span class="line">2026-06-02 16:00:01 [e5f6g7h8] [用户:bob] 数据库查询完成</span><br></pre></td></tr></table></figure>
+
+<p>每个请求的日志都自动带上了<strong>正确的</strong> <code>request_id</code> 和 <code>user_id</code>，即使两个请求交织执行也不会串。</p>
+<hr>
+<h2 id="7-常见坑"><a href="#7-常见坑" class="headerlink" title="7. 常见坑"></a>7. 常见坑</h2><h3 id="❌-坑-1：忘记-reset-token-——-上下文泄露"><a href="#❌-坑-1：忘记-reset-token-——-上下文泄露" class="headerlink" title="❌ 坑 1：忘记 reset(token) —— 上下文泄露"></a>❌ 坑 1：忘记 <code>reset(token)</code> —— 上下文泄露</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 错误写法</span></span><br><span class="line"><span class="meta">@app.middleware(<span class="params"><span class="string">&quot;http&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bad_middleware</span>(<span class="params">request, call_next</span>):</span></span><br><span class="line">    token = var.<span class="built_in">set</span>(<span class="string">&quot;值&quot;</span>)</span><br><span class="line">    response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">    <span class="comment"># 如果 call_next 抛异常，reset 永远不会执行！</span></span><br><span class="line">    var.reset(token)</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 正确写法：始终用 try/finally</span></span><br><span class="line"><span class="meta">@app.middleware(<span class="params"><span class="string">&quot;http&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">good_middleware</span>(<span class="params">request, call_next</span>):</span></span><br><span class="line">    token = var.<span class="built_in">set</span>(<span class="string">&quot;值&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        var.reset(token)  <span class="comment"># 异常发生时也会执行</span></span><br></pre></td></tr></table></figure>
+
+<p>不 reset 的后果：当前协程结束后，<strong>如果事件循环重用了同一个协程上下文</strong>，下一个请求会拿到上一个请求的脏数据。这种 bug 极其难排查，因为它不是每次都出现。</p>
+<h3 id="❌-坑-2：在函数内部定义-ContextVar"><a href="#❌-坑-2：在函数内部定义-ContextVar" class="headerlink" title="❌ 坑 2：在函数内部定义 ContextVar"></a>❌ 坑 2：在函数内部定义 ContextVar</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 错误：每次调用都创建新实例，之前 set 的和后面 get 的不是同一个变量</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bad</span>():</span></span><br><span class="line">    var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>)  <span class="comment"># 新实例！</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">print</span>(var.get())  <span class="comment"># 可能拿不到 &#x27;hello&#x27;，因为实例不同</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 正确：在模块顶层定义一次</span></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">good</span>():</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">print</span>(var.get())  <span class="comment"># 一定能拿到 &#x27;hello&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>ContextVar 依赖<strong>变量名</strong>和<strong>实例标识</strong>来匹配值。同一个模块顶层变量，在解释器生命周期中只存在一个实例，所有代码使用的是同一个”槽位”。</p>
+<h3 id="❌-坑-3：跨线程不自动传播"><a href="#❌-坑-3：跨线程不自动传播" class="headerlink" title="❌ 坑 3：跨线程不自动传播"></a>❌ 坑 3：跨线程不自动传播</h3><p>ContextVar 的上下文是绑定在<strong>异步 Task</strong> 上的。如果你用 <code>run_in_executor</code> 把代码放到线程池执行，默认情况下线程里拿不到 contextvars：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> contextvars</span><br><span class="line"></span><br><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="string">&#x27;no&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;yes&#x27;</span>)</span><br><span class="line">    loop = asyncio.get_running_loop()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sync_work</span>():</span></span><br><span class="line">        <span class="built_in">print</span>(var.get())  <span class="comment"># 输出 &#x27;no&#x27;！不是在 async 协程里了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> loop.run_in_executor(<span class="literal">None</span>, sync_work)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p><strong>如何解决？</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sync_work</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(var.get())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用 copy_context().run() 把 async 上下文注入到线程</span></span><br><span class="line">ctx = contextvars.copy_context()</span><br><span class="line"><span class="keyword">await</span> loop.run_in_executor(<span class="literal">None</span>, ctx.run, sync_work)  <span class="comment"># 现在输出 &#x27;yes&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>好在 FastAPI/Starlette 的 <code>run_in_threadpool</code> 已经自动帮你做了这一步，所以大部分情况下你不需要手动处理。</p>
+<h3 id="❌-坑-4：同步依赖中修改变量的值"><a href="#❌-坑-4：同步依赖中修改变量的值" class="headerlink" title="❌ 坑 4：同步依赖中修改变量的值"></a>❌ 坑 4：同步依赖中修改变量的值</h3><p>在 FastAPI 中，同步依赖在 <code>run_in_threadpool</code> 里执行时，ContextVar 的 <strong>值拷贝</strong>会被注入线程。但你在线程里对 ContextVar 做的修改<strong>不会回传到异步层</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var = contextvars.ContextVar(<span class="string">&#x27;var&#x27;</span>, default=<span class="string">&#x27;旧值&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.middleware(<span class="params"><span class="string">&quot;http&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request, call_next</span>):</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;新值&#x27;</span>)          <span class="comment"># 异步层设置为&quot;新值&quot;</span></span><br><span class="line">    response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">    <span class="built_in">print</span>(var.get())         <span class="comment"># ← 仍然是&quot;新值&quot;，即使同步依赖改了它</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sync_endpoint</span>():</span>         <span class="comment"># 同步函数——在线程池中执行</span></span><br><span class="line">    var.<span class="built_in">set</span>(<span class="string">&#x27;被改了&#x27;</span>)         <span class="comment"># 只影响线程内的 Context 副本，异步层看不到</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;ok&quot;</span>: <span class="literal">True</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决方案：</strong> 使用可变容器（<code>dict</code>、<code>list</code>），通过 <code>.get()</code> 拿到引用，直接修改引用内的内容，而不是调用 <code>.set()</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ctx = contextvars.ContextVar(<span class="string">&#x27;ctx&#x27;</span>, default=&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.middleware(<span class="params"><span class="string">&quot;http&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">middleware</span>(<span class="params">request, call_next</span>):</span></span><br><span class="line">    ctx.<span class="built_in">set</span>(&#123;&#125;)              <span class="comment"># 每个请求一个空 dict</span></span><br><span class="line">    response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">    <span class="built_in">print</span>(ctx.get())         <span class="comment"># &#123;&#x27;user&#x27;: &#x27;alice&#x27;&#125; ← 同步依赖的修改可见！</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sync_endpoint</span>():</span></span><br><span class="line">    ctx.get()[<span class="string">&#x27;user&#x27;</span>] = <span class="string">&#x27;alice&#x27;</span>  <span class="comment"># 修改 dict 内容，不是新建 dict</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;ok&quot;</span>: <span class="literal">True</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为异步层和线程层引用的是<strong>同一个 dict 对象</strong>（即使 context 被拷贝了，dict 本身的引用没变），修改直接生效。</p>
+<hr>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p><code>contextvars</code> 解决的核心问题就一句话：</p>
+<blockquote>
+<p><strong>在异步环境中，让每个协程拥有独立的”全局变量”，无需手动传参。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>代码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>声明</td>
+<td><code>var = ContextVar(&#39;name&#39;, default=&#39;&#39;)</code></td>
+<td>必须在模块顶层</td>
+</tr>
+<tr>
+<td>读取</td>
+<td><code>var.get()</code></td>
+<td>取当前协程的值</td>
+</tr>
+<tr>
+<td>写入</td>
+<td><code>token = var.set(value)</code></td>
+<td>返回 Token 供恢复</td>
+</tr>
+<tr>
+<td>恢复</td>
+<td><code>var.reset(token)</code></td>
+<td>必须用 try/finally</td>
+</tr>
+<tr>
+<td>快照</td>
+<td><code>ctx = copy_context()</code></td>
+<td>保存所有变量的当前值</td>
+</tr>
+<tr>
+<td>隔离运行</td>
+<td><code>ctx.run(func)</code></td>
+<td>在指定上下文中执行</td>
+</tr>
+</tbody></table>
+<p><strong>使用清单：</strong></p>
+<ul>
+<li>✅ 在模块顶层定义 <code>ContextVar</code></li>
+<li>✅ 始终提供 <code>default</code> 参数</li>
+<li>✅ 用 <code>try/finally</code> 确保 <code>reset(token)</code></li>
+<li>✅ 跨线程时用 <code>copy_context().run()</code></li>
+<li>✅ 同步依赖中用可变容器避开回传问题</li>
+<li>❌ 别在函数内部定义 <code>ContextVar</code></li>
+<li>❌ 别在 <code>asyncio</code> 中用 <code>threading.local</code></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/asyncio/" rel="tag"># asyncio</a>
+              <a href="/tags/contextvars/" rel="tag"># contextvars</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/02/OpenAI%E5%92%8CAnthropic%E5%AF%B9%E6%AF%94/" rel="prev" title="OpenAI和Anthropic对比">
+      <i class="fa fa-chevron-left"></i> OpenAI和Anthropic对比
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">1. 一个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E4%B8%89%E4%B8%AA%E8%A7%92%E8%89%B2%E4%B8%80%E5%8F%B0%E6%88%8F"><span class="nav-number">2.</span> <span class="nav-text">2. 核心概念：三个角色一台戏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%AF%94%E5%96%BB%E5%B8%AE%E4%BD%A0%E8%AE%B0%E4%BD%8F"><span class="nav-number">2.1.</span> <span class="nav-text">一个比喻帮你记住</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">3. 基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%A3%B0%E6%98%8E%E5%92%8C%E8%AF%BB%E5%86%99"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 声明和读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-default-%E5%8F%82%E6%95%B0%E6%98%AF%E5%B9%B2%E4%BB%80%E4%B9%88%E7%9A%84%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">💡 default 参数是干什么的？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%EF%BC%9A%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB"><span class="nav-number">4.</span> <span class="nav-text">4. 核心特性：异步隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%90%8C%E4%B8%80%E4%B8%AA-ContextVar%EF%BC%8C%E4%B8%8D%E5%90%8C%E5%8D%8F%E7%A8%8B%E7%9C%8B%E5%88%B0%E4%B8%8D%E5%90%8C%E7%9A%84%E5%80%BC"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 同一个 ContextVar，不同协程看到不同的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%EF%BC%9Aawait-%E6%97%B6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 底层原理：await 时自动切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%AF%B9%E6%AF%94-threading-local"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 对比 threading.local</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E9%98%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">5. 进阶操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-copy-context-%E2%80%94%E2%80%94-%E4%BF%9D%E5%AD%98%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E5%BF%AB%E7%85%A7"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 copy_context() —— 保存当前状态快照</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Context-run-%E2%80%94%E2%80%94-%E5%9C%A8%E6%8C%87%E5%AE%9A%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%AD%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 Context.run() —— 在指定上下文中执行代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A5-%E5%85%B3%E9%94%AE%E7%90%86%E8%A7%A3%EF%BC%9Arun-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">5.3.</span> <span class="nav-text">🔥 关键理解：run() 的作用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%AE%9E%E6%88%98%EF%BC%9AFastAPI-%E8%AF%B7%E6%B1%82%E8%BF%BD%E8%B8%AA"><span class="nav-number">6.</span> <span class="nav-text">6. 实战：FastAPI 请求追踪</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%9C%BA%E6%99%AF%EF%BC%9A%E7%BB%99%E6%AF%8F%E4%B8%AA%E8%AF%B7%E6%B1%82%E5%88%86%E9%85%8D%E5%94%AF%E4%B8%80-ID%EF%BC%8C%E6%89%80%E6%9C%89%E6%97%A5%E5%BF%97%E8%87%AA%E5%8A%A8%E5%B8%A6%E4%B8%8A"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 场景：给每个请求分配唯一 ID，所有日志自动带上</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%B8%B8%E8%A7%81%E5%9D%91"><span class="nav-number">7.</span> <span class="nav-text">7. 常见坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%8C-%E5%9D%91-1%EF%BC%9A%E5%BF%98%E8%AE%B0-reset-token-%E2%80%94%E2%80%94-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%B3%84%E9%9C%B2"><span class="nav-number">7.1.</span> <span class="nav-text">❌ 坑 1：忘记 reset(token) —— 上下文泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%8C-%E5%9D%91-2%EF%BC%9A%E5%9C%A8%E5%87%BD%E6%95%B0%E5%86%85%E9%83%A8%E5%AE%9A%E4%B9%89-ContextVar"><span class="nav-number">7.2.</span> <span class="nav-text">❌ 坑 2：在函数内部定义 ContextVar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%8C-%E5%9D%91-3%EF%BC%9A%E8%B7%A8%E7%BA%BF%E7%A8%8B%E4%B8%8D%E8%87%AA%E5%8A%A8%E4%BC%A0%E6%92%AD"><span class="nav-number">7.3.</span> <span class="nav-text">❌ 坑 3：跨线程不自动传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9D%8C-%E5%9D%91-4%EF%BC%9A%E5%90%8C%E6%AD%A5%E4%BE%9D%E8%B5%96%E4%B8%AD%E4%BF%AE%E6%94%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC"><span class="nav-number">7.4.</span> <span class="nav-text">❌ 坑 4：同步依赖中修改变量的值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">8. 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
