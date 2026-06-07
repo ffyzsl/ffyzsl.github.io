@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ffyzsl.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":15,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 什么是设计模式？你装修房子，不会从烧砖开始——你会用现成的设计方案：承重墙在哪、水电怎么走、插座留几个。这些是前人踩过无数坑后总结出来的成熟经验。 设计模式就是软件工程里的”装修方案”——针对常见的编程问题，前人总结的、可复用的解决方案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式详解">
+<meta property="og:url" content="http://ffyzsl.github.io/2026/06/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="ffy&#39;s blog">
+<meta property="og:description" content="1. 什么是设计模式？你装修房子，不会从烧砖开始——你会用现成的设计方案：承重墙在哪、水电怎么走、插座留几个。这些是前人踩过无数坑后总结出来的成熟经验。 设计模式就是软件工程里的”装修方案”——针对常见的编程问题，前人总结的、可复用的解决方案。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-07T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T02:04:22.326Z">
+<meta property="article:author" content="ffy">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="面向对象">
+<meta property="article:tag" content="软件工程">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ffyzsl.github.io/2026/06/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>设计模式详解 | ffy's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ffy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">live and study</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ffyzsl.github.io/2026/06/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ffy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ffy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-07 11:00:00 / 修改时间：10:04:22" itemprop="dateCreated datePublished" datetime="2026-06-07T11:00:00+08:00">2026-06-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-什么是设计模式？"><a href="#1-什么是设计模式？" class="headerlink" title="1. 什么是设计模式？"></a>1. 什么是设计模式？</h2><p>你装修房子，不会从烧砖开始——你会用现成的设计方案：承重墙在哪、水电怎么走、插座留几个。这些是前人踩过无数坑后总结出来的成熟经验。</p>
+<p><strong>设计模式</strong>就是软件工程里的”装修方案”——针对常见的编程问题，前人总结的、可复用的解决方案。</p>
+<span id="more"></span>
+
+<h3 id="三个分类"><a href="#三个分类" class="headerlink" title="三个分类"></a>三个分类</h3><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>解决的问题</th>
+<th>代表模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>创建型</strong></td>
+<td>怎么创建对象最灵活</td>
+<td>工厂、单例、建造者</td>
+</tr>
+<tr>
+<td><strong>结构型</strong></td>
+<td>类和对象怎么组合更合理</td>
+<td>适配器、装饰器、代理</td>
+</tr>
+<tr>
+<td><strong>行为型</strong></td>
+<td>对象之间怎么协作更优雅</td>
+<td>策略、观察者、模板方法</td>
+</tr>
+</tbody></table>
+<h3 id="什么时候用设计模式？"><a href="#什么时候用设计模式？" class="headerlink" title="什么时候用设计模式？"></a>什么时候用设计模式？</h3><p>设计模式不是写代码的起点。正常的流程是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">先写能工作的代码 → 发现重复/混乱/难维护 → 用设计模式重构</span><br></pre></td></tr></table></figure>
+
+<p>不要为了用模式而用模式。如果你写了一个简单的 if-else 就解决了问题，那就不需要引入策略模式。</p>
+<hr>
+<h2 id="2-策略模式（Strategy-Pattern）"><a href="#2-策略模式（Strategy-Pattern）" class="headerlink" title="2. 策略模式（Strategy Pattern）"></a>2. 策略模式（Strategy Pattern）</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>你在写一个电商系统，计算不同用户的折扣：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_discount</span>(<span class="params">user_type, price</span>):</span></span><br><span class="line">    <span class="keyword">if</span> user_type == <span class="string">&quot;vip&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.8</span></span><br><span class="line">    <span class="keyword">elif</span> user_type == <span class="string">&quot;svip&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.7</span></span><br><span class="line">    <span class="keyword">elif</span> user_type == <span class="string">&quot;normal&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.95</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> price</span><br></pre></td></tr></table></figure>
+
+<p>每增加一种用户类型，就要加一个 <code>elif</code>。总有一天这个 <code>if-elif-else</code> 会膨胀到不可维护。</p>
+<h3 id="策略模式怎么解决"><a href="#策略模式怎么解决" class="headerlink" title="策略模式怎么解决"></a>策略模式怎么解决</h3><p>策略模式的核心思想：<strong>把变化的”算法”封装成独立的策略类，运行时可以自由切换</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 1：定义策略接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DiscountStrategy</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 2：实现具体策略</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VIPDiscount</span>(<span class="params">DiscountStrategy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SVIPDiscount</span>(<span class="params">DiscountStrategy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.7</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NormalDiscount</span>(<span class="params">DiscountStrategy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.95</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NoDiscount</span>(<span class="params">DiscountStrategy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> price</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 3：上下文 — 使用策略</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, price: <span class="built_in">float</span>, discount_strategy: DiscountStrategy</span>):</span></span><br><span class="line">        self.price = price</span><br><span class="line">        self.discount_strategy = discount_strategy</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_final_price</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.discount_strategy.calculate(self.price)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 4：使用</span></span><br><span class="line">order1 = Order(<span class="number">100</span>, VIPDiscount())</span><br><span class="line">order2 = Order(<span class="number">100</span>, NormalDiscount())</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(order1.get_final_price())   <span class="comment"># 80.0</span></span><br><span class="line"><span class="built_in">print</span>(order2.get_final_price())   <span class="comment"># 95.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新增一种策略时，不需要修改任何已有代码</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SeasonalDiscount</span>(<span class="params">DiscountStrategy</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calculate</span>(<span class="params">self, price: <span class="built_in">float</span></span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> price * <span class="number">0.6</span></span><br><span class="line"></span><br><span class="line">order3 = Order(<span class="number">100</span>, SeasonalDiscount())</span><br><span class="line"><span class="built_in">print</span>(order3.get_final_price())   <span class="comment"># 60.0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="策略模式的核心"><a href="#策略模式的核心" class="headerlink" title="策略模式的核心"></a>策略模式的核心</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">之前：一个类里塞满 if-else → 每次加策略都要改核心代码</span><br><span class="line">之后：每个策略一个类 → 加新策略只需加一个新类</span><br></pre></td></tr></table></figure>
+
+<p>策略模式做到了面向对象设计中的<strong>开闭原则</strong>：对扩展开放（加新策略类），对修改关闭（不用改已有的 Order 类）。</p>
+<hr>
+<h2 id="3-工厂模式家族"><a href="#3-工厂模式家族" class="headerlink" title="3. 工厂模式家族"></a>3. 工厂模式家族</h2><p>工厂模式分三种，按复杂度递增排列：简单工厂 → 工厂方法 → 抽象工厂。</p>
+<h3 id="3-1-简单工厂（Simple-Factory）"><a href="#3-1-简单工厂（Simple-Factory）" class="headerlink" title="3.1 简单工厂（Simple Factory）"></a>3.1 简单工厂（Simple Factory）</h3><p>把对象的创建逻辑集中到一个地方。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;汪汪&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;喵喵&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>(<span class="params">Animal</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">speak</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;叽叽&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 简单工厂：用一个类专门负责创建对象</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AnimalFactory</span>:</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span>(<span class="params">animal_type: <span class="built_in">str</span></span>) -&gt; Animal:</span></span><br><span class="line">        <span class="keyword">if</span> animal_type == <span class="string">&quot;dog&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> Dog()</span><br><span class="line">        <span class="keyword">elif</span> animal_type == <span class="string">&quot;cat&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> Cat()</span><br><span class="line">        <span class="keyword">elif</span> animal_type == <span class="string">&quot;bird&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> Bird()</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">f&quot;未知动物类型：<span class="subst">&#123;animal_type&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">animal = AnimalFactory.create(<span class="string">&quot;dog&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(animal.speak())   <span class="comment"># &quot;汪汪&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>简单工厂的好处是：创建逻辑集中管理，调用方不需要知道具体类的构造细节。但它还不算真正的”设计模式”——只是一个好的编程习惯。</p>
+<h3 id="3-2-工厂方法（Factory-Method）"><a href="#3-2-工厂方法（Factory-Method）" class="headerlink" title="3.2 工厂方法（Factory Method）"></a>3.2 工厂方法（Factory Method）</h3><p>如果每种产品的创建逻辑更复杂，简单工厂的 <code>if-else</code> 又会膨胀。工厂方法让<strong>每个具体类都有对应的工厂</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># 产品</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Transport</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deliver</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Truck</span>(<span class="params">Transport</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deliver</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;用卡车陆运&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ship</span>(<span class="params">Transport</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deliver</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;用轮船海运&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工厂接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logistics</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_transport</span>(<span class="params">self</span>) -&gt; Transport:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">plan_delivery</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        transport = self.create_transport()</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;物流方案：<span class="subst">&#123;transport.deliver()&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体工厂</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RoadLogistics</span>(<span class="params">Logistics</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_transport</span>(<span class="params">self</span>) -&gt; Transport:</span></span><br><span class="line">        <span class="keyword">return</span> Truck()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SeaLogistics</span>(<span class="params">Logistics</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_transport</span>(<span class="params">self</span>) -&gt; Transport:</span></span><br><span class="line">        <span class="keyword">return</span> Ship()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">road = RoadLogistics()</span><br><span class="line"><span class="built_in">print</span>(road.plan_delivery())     <span class="comment"># 物流方案：用卡车陆运</span></span><br><span class="line"></span><br><span class="line">sea = SeaLogistics()</span><br><span class="line"><span class="built_in">print</span>(sea.plan_delivery())      <span class="comment"># 物流方案：用轮船海运</span></span><br></pre></td></tr></table></figure>
+
+<p>工厂方法的核心：<strong>把”创建产品”这个步骤延迟给子类决定</strong>。Logistics 基类知道该怎么做规划，但具体用什么运输工具由子工厂决定。</p>
+<h3 id="3-3-抽象工厂（Abstract-Factory）"><a href="#3-3-抽象工厂（Abstract-Factory）" class="headerlink" title="3.3 抽象工厂（Abstract Factory）"></a>3.3 抽象工厂（Abstract Factory）</h3><p>当需要创建<strong>一系列相关联</strong>的对象时，用抽象工厂。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># 产品族：按钮 和 复选框</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Checkbox</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Windows 风格的具体产品</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WindowsButton</span>(<span class="params">Button</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;[Windows 按钮]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WindowsCheckbox</span>(<span class="params">Checkbox</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;[Windows 复选框]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># macOS 风格的具体产品</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacButton</span>(<span class="params">Button</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;[macOS 按钮]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacCheckbox</span>(<span class="params">Checkbox</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">render</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;[macOS 复选框]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 抽象工厂：能创建一整套 UI 组件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIFactory</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_button</span>(<span class="params">self</span>) -&gt; Button:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_checkbox</span>(<span class="params">self</span>) -&gt; Checkbox:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体工厂：Windows 工厂</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WindowsUIFactory</span>(<span class="params">UIFactory</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_button</span>(<span class="params">self</span>) -&gt; Button:</span></span><br><span class="line">        <span class="keyword">return</span> WindowsButton()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_checkbox</span>(<span class="params">self</span>) -&gt; Checkbox:</span></span><br><span class="line">        <span class="keyword">return</span> WindowsCheckbox()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体工厂：macOS 工厂</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacUIFactory</span>(<span class="params">UIFactory</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_button</span>(<span class="params">self</span>) -&gt; Button:</span></span><br><span class="line">        <span class="keyword">return</span> MacButton()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_checkbox</span>(<span class="params">self</span>) -&gt; Checkbox:</span></span><br><span class="line">        <span class="keyword">return</span> MacCheckbox()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用：只需换工厂，整套 UI 全部切换</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_ui</span>(<span class="params">factory: UIFactory</span>):</span></span><br><span class="line">    button = factory.create_button()</span><br><span class="line">    checkbox = factory.create_checkbox()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;构建界面：<span class="subst">&#123;button.render()&#125;</span> + <span class="subst">&#123;checkbox.render()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">build_ui(WindowsUIFactory())   <span class="comment"># 构建界面：[Windows 按钮] + [Windows 复选框]</span></span><br><span class="line">build_ui(MacUIFactory())       <span class="comment"># 构建界面：[macOS 按钮] + [macOS 复选框]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="三种工厂怎么选"><a href="#三种工厂怎么选" class="headerlink" title="三种工厂怎么选"></a>三种工厂怎么选</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简单工厂：产品的创建逻辑很简单 → 一个 Factory 类 + if-else 搞定</span><br><span class="line">工厂方法：产品种类多，各有各的创建逻辑 → 每个产品对应一个工厂</span><br><span class="line">抽象工厂：产品是成套的（UI 风格、数据库驱动） → 一套工厂创建一套产品</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-单例模式（Singleton-Pattern）"><a href="#4-单例模式（Singleton-Pattern）" class="headerlink" title="4. 单例模式（Singleton Pattern）"></a>4. 单例模式（Singleton Pattern）</h2><h3 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h3><p>有些对象全局只需要一个——比如数据库连接池、配置管理器、日志记录器。如果到处 <code>new</code>，会浪费资源甚至产生冲突。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabasePool</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;全局唯一的数据库连接池&quot;&quot;&quot;</span></span><br><span class="line">    _instance = <span class="literal">None</span>          <span class="comment"># 存储唯一实例</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span>(<span class="params">cls</span>):</span></span><br><span class="line">        <span class="keyword">if</span> cls._instance <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            cls._instance = <span class="built_in">super</span>().__new__(cls)</span><br><span class="line">            cls._instance._initialized = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> cls._instance</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self._initialized:          <span class="comment"># 防止重复初始化</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;初始化连接池（只执行一次）...&quot;</span>)</span><br><span class="line">        self.pool = [<span class="string">&quot;连接1&quot;</span>, <span class="string">&quot;连接2&quot;</span>, <span class="string">&quot;连接3&quot;</span>]</span><br><span class="line">        self._initialized = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_connection</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.pool.pop()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">pool1 = DatabasePool()</span><br><span class="line">pool2 = DatabasePool()</span><br><span class="line">pool3 = DatabasePool()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(pool1 <span class="keyword">is</span> pool2)          <span class="comment"># True（同一个对象）</span></span><br><span class="line"><span class="built_in">print</span>(pool2 <span class="keyword">is</span> pool3)          <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意到&quot;初始化连接池&quot;只输出了一次</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始化连接池（只执行一次）...</span><br><span class="line">True</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+
+<p>不管调用多少次 <code>DatabasePool()</code>，返回的都是同一个实例。<code>__new__</code> 控制了对象的创建，<code>__init__</code> 中的 <code>_initialized</code> 标志防止了重复初始化。</p>
+<hr>
+<h2 id="5-适配器模式（Adapter-Pattern）"><a href="#5-适配器模式（Adapter-Pattern）" class="headerlink" title="5. 适配器模式（Adapter Pattern）"></a>5. 适配器模式（Adapter Pattern）</h2><h3 id="问题-2"><a href="#问题-2" class="headerlink" title="问题"></a>问题</h3><p>你有一个老系统的接口，和新系统的接口不兼容。就像出国旅游，中国插头插不进欧洲插座——你需要一个转换头。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 已有的老系统（不能修改它的代码）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LegacyReportGenerator</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate_report_xml</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        xml = <span class="string">&quot;&lt;report&gt;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">            xml += <span class="string">f&quot;&lt;item&gt;<span class="subst">&#123;item&#125;</span>&lt;/item&gt;&quot;</span></span><br><span class="line">        xml += <span class="string">&quot;&lt;/report&gt;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> xml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新系统要求的接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JSONReportExporter</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">export_json</span>(<span class="params">self, data: <span class="built_in">dict</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">import</span> json</span><br><span class="line">        <span class="keyword">return</span> json.dumps(data, ensure_ascii=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>老系统只输出 XML，新系统只要 JSON。怎么办？</p>
+<h3 id="适配器解决"><a href="#适配器解决" class="headerlink" title="适配器解决"></a>适配器解决</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReportAdapter</span>(<span class="params">JSONReportExporter</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;适配器：继承新接口，内部调用老系统&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.legacy = LegacyReportGenerator()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">export_json</span>(<span class="params">self, data: <span class="built_in">dict</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="comment"># 把新接口收到的 dict 转为老系统需要的 list</span></span><br><span class="line">        legacy_input = [<span class="string">f&quot;<span class="subst">&#123;k&#125;</span>:<span class="subst">&#123;v&#125;</span>&quot;</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> data.items()]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 调用老系统</span></span><br><span class="line">        xml_result = self.legacy.generate_report_xml(legacy_input)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 把老系统的 XML 输出转为 JSON（适配核心逻辑）</span></span><br><span class="line">        <span class="keyword">import</span> json</span><br><span class="line">        <span class="keyword">return</span> json.dumps(&#123;</span><br><span class="line">            <span class="string">&quot;format&quot;</span>: <span class="string">&quot;converted_from_legacy&quot;</span>,</span><br><span class="line">            <span class="string">&quot;content&quot;</span>: xml_result,</span><br><span class="line">            <span class="string">&quot;data&quot;</span>: data</span><br><span class="line">        &#125;, ensure_ascii=<span class="literal">False</span>, indent=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用：新系统通过适配器无缝调用老系统</span></span><br><span class="line">adapter = ReportAdapter()</span><br><span class="line">result = adapter.export_json(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>, <span class="string">&quot;score&quot;</span>: <span class="string">&quot;95&quot;</span>&#125;)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;converted_from_legacy&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;content&quot;</span>: <span class="string">&quot;&lt;report&gt;&lt;item&gt;name:张三&lt;/item&gt;&lt;item&gt;score:95&lt;/item&gt;&lt;/report&gt;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;data&quot;</span>: &#123;<span class="attr">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>, <span class="attr">&quot;score&quot;</span>: <span class="string">&quot;95&quot;</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器模式的核心：<strong>不改老代码，加一个中间层做翻译</strong>。</p>
+<hr>
+<h2 id="6-观察者模式（Observer-Pattern）"><a href="#6-观察者模式（Observer-Pattern）" class="headerlink" title="6. 观察者模式（Observer Pattern）"></a>6. 观察者模式（Observer Pattern）</h2><h3 id="问题-3"><a href="#问题-3" class="headerlink" title="问题"></a>问题</h3><p>一个对象的状态变了，其他多个对象需要自动知道。比如：股票价格变了，所有关注这支股票的用户都要收到通知。</p>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># 观察者接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self, stock_name: <span class="built_in">str</span>, price: <span class="built_in">float</span></span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Investor</span>(<span class="params">Observer</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name: <span class="built_in">str</span></span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self, stock_name: <span class="built_in">str</span>, price: <span class="built_in">float</span></span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  [<span class="subst">&#123;self.name&#125;</span>] 收到通知：<span class="subst">&#123;stock_name&#125;</span> 最新价 <span class="subst">&#123;price&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span>(<span class="params">Observer</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span>(<span class="params">self, stock_name: <span class="built_in">str</span>, price: <span class="built_in">float</span></span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  [日志] 记录：<span class="subst">&#123;stock_name&#125;</span> = <span class="subst">&#123;price&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 被观察者（主题）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stock</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name: <span class="built_in">str</span>, price: <span class="built_in">float</span></span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.price = price</span><br><span class="line">        self._observers = []           <span class="comment"># 观察者列表</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">attach</span>(<span class="params">self, observer: Observer</span>):</span></span><br><span class="line">        self._observers.append(observer)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detach</span>(<span class="params">self, observer: Observer</span>):</span></span><br><span class="line">        self._observers.remove(observer)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_price</span>(<span class="params">self, new_price: <span class="built_in">float</span></span>):</span></span><br><span class="line">        self.price = new_price</span><br><span class="line">        self._notify()                 <span class="comment"># 价格变化时通知所有观察者</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_notify</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> ob <span class="keyword">in</span> self._observers:</span><br><span class="line">            ob.update(self.name, self.price)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">apple = Stock(<span class="string">&quot;Apple&quot;</span>, <span class="number">150.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 观察者订阅</span></span><br><span class="line">apple.attach(Investor(<span class="string">&quot;张三&quot;</span>))</span><br><span class="line">apple.attach(Investor(<span class="string">&quot;李四&quot;</span>))</span><br><span class="line">apple.attach(Logger())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 价格变化</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;价格变化：&quot;</span>)</span><br><span class="line">apple.set_price(<span class="number">153.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n李四取消订阅&quot;</span>)</span><br><span class="line">apple.detach(apple._observers[<span class="number">1</span>])      <span class="comment"># 移除李四</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;再次变化：&quot;</span>)</span><br><span class="line">apple.set_price(<span class="number">155.5</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">价格变化：</span><br><span class="line">  [张三] 收到通知：Apple 最新价 153.0</span><br><span class="line">  [李四] 收到通知：Apple 最新价 153.0</span><br><span class="line">  [日志] 记录：Apple = 153.0</span><br><span class="line"></span><br><span class="line">李四取消订阅</span><br><span class="line">再次变化：</span><br><span class="line">  [张三] 收到通知：Apple 最新价 155.5</span><br><span class="line">  [日志] 记录：Apple = 155.5</span><br></pre></td></tr></table></figure>
+
+<p>观察者模式的核心：<strong>被观察者持有观察者列表，状态变化时遍历通知</strong>。订阅和取消订阅完全解耦，被观察者不关心有多少观察者。</p>
+<hr>
+<h2 id="7-装饰器模式（Decorator-Pattern）"><a href="#7-装饰器模式（Decorator-Pattern）" class="headerlink" title="7. 装饰器模式（Decorator Pattern）"></a>7. 装饰器模式（Decorator Pattern）</h2><h3 id="问题-4"><a href="#问题-4" class="headerlink" title="问题"></a>问题</h3><p>想给一个已有的功能增加额外行为，但不想修改原代码。比如给日志加时间戳、给 API 返回加缓存、给数据读写加压缩。</p>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># 组件接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Coffee</span>(<span class="params">ABC</span>):</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体组件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleCoffee</span>(<span class="params">Coffee</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">10.0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;基础咖啡&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器基类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CoffeeDecorator</span>(<span class="params">Coffee</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, coffee: Coffee</span>):</span></span><br><span class="line">        self._coffee = coffee       <span class="comment"># 包装被装饰对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.cost()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.description()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体装饰器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MilkDecorator</span>(<span class="params">CoffeeDecorator</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.cost() + <span class="number">3.0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.description() + <span class="string">&quot; + 牛奶&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SugarDecorator</span>(<span class="params">CoffeeDecorator</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.cost() + <span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.description() + <span class="string">&quot; + 糖&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WhippedCreamDecorator</span>(<span class="params">CoffeeDecorator</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">self</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.cost() + <span class="number">5.0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">description</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._coffee.description() + <span class="string">&quot; + 奶油&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用：可以任意组合装饰</span></span><br><span class="line">coffee = SimpleCoffee()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;coffee.description()&#125;</span>：<span class="subst">&#123;coffee.cost()&#125;</span> 元&quot;</span>)</span><br><span class="line"><span class="comment"># 基础咖啡：10.0 元</span></span><br><span class="line"></span><br><span class="line">coffee = MilkDecorator(SimpleCoffee())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;coffee.description()&#125;</span>：<span class="subst">&#123;coffee.cost()&#125;</span> 元&quot;</span>)</span><br><span class="line"><span class="comment"># 基础咖啡 + 牛奶：13.0 元</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多层装饰</span></span><br><span class="line">coffee = WhippedCreamDecorator(SugarDecorator(MilkDecorator(SimpleCoffee())))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;coffee.description()&#125;</span>：<span class="subst">&#123;coffee.cost()&#125;</span> 元&quot;</span>)</span><br><span class="line"><span class="comment"># 基础咖啡 + 牛奶 + 糖 + 奶油：19.0 元</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">基础咖啡：10.0 元</span><br><span class="line">基础咖啡 + 牛奶：13.0 元</span><br><span class="line">基础咖啡 + 牛奶 + 糖 + 奶油：19.0 元</span><br></pre></td></tr></table></figure>
+
+<p>装饰器模式的核心：<strong>不修改原类，通过嵌套包装来增加功能</strong>。Python 内置的 <code>@</code> 语法糖也是装饰器模式的一种体现。</p>
+<hr>
+<h2 id="8-代理模式（Proxy-Pattern）"><a href="#8-代理模式（Proxy-Pattern）" class="headerlink" title="8. 代理模式（Proxy Pattern）"></a>8. 代理模式（Proxy Pattern）</h2><h3 id="问题-5"><a href="#问题-5" class="headerlink" title="问题"></a>问题</h3><p>直接访问某个对象成本很高（远程调用、大文件加载），或者需要控制访问权限。代理模式在客户端和目标对象之间加一个”代理”，由代理来控制访问。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Image</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;真实对象：加载高清大图，很慢&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, filename: <span class="built_in">str</span></span>):</span></span><br><span class="line">        self.filename = filename</span><br><span class="line">        self._load_from_disk()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_load_from_disk</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  从磁盘加载图片 <span class="subst">&#123;self.filename&#125;</span>...（耗时 2 秒）&quot;</span>)</span><br><span class="line">        <span class="keyword">import</span> time</span><br><span class="line">        time.sleep(<span class="number">2</span>)  <span class="comment"># 模拟慢速加载</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">display</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;  显示图片：<span class="subst">&#123;self.filename&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ImageProxy</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;代理：延迟加载，只有真正需要时才创建真实对象&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, filename: <span class="built_in">str</span></span>):</span></span><br><span class="line">        self.filename = filename</span><br><span class="line">        self._real_image = <span class="literal">None</span>       <span class="comment"># 延迟创建</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">display</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="comment"># 只有第一次 display 时才加载</span></span><br><span class="line">        <span class="keyword">if</span> self._real_image <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            self._real_image = Image(self.filename)</span><br><span class="line">        self._real_image.display()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 浏览器加载页面 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;（页面有很多图片，但用户可能不往下翻）&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建代理（不加载真实图片）</span></span><br><span class="line">proxy1 = ImageProxy(<span class="string">&quot;photo1.jpg&quot;</span>)</span><br><span class="line">proxy2 = ImageProxy(<span class="string">&quot;photo2.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n用户滚动到了 photo1：&quot;</span>)</span><br><span class="line">proxy1.display()       <span class="comment"># 这时才真正加载</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n用户没滚动到 photo2，所以不加载&quot;</span>)</span><br><span class="line"><span class="comment"># proxy2 从未调用 display，所以从未加载</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">=== 浏览器加载页面 ===</span><br><span class="line">（页面有很多图片，但用户可能不往下翻）</span><br><span class="line"></span><br><span class="line">用户滚动到了 photo1：</span><br><span class="line">  从磁盘加载图片 photo1.jpg...（耗时 2 秒）</span><br><span class="line">  显示图片：photo1.jpg</span><br><span class="line"></span><br><span class="line">用户没滚动到 photo2，所以不加载</span><br></pre></td></tr></table></figure>
+
+<p>代理和装饰器的区别：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>代理模式</th>
+<th>装饰器模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目的</td>
+<td>控制访问（延迟、权限、远程）</td>
+<td>增强功能</td>
+</tr>
+<tr>
+<td>创建真实对象</td>
+<td>代理自己创建</td>
+<td>外部传入</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="9-模板方法模式（Template-Method）"><a href="#9-模板方法模式（Template-Method）" class="headerlink" title="9. 模板方法模式（Template Method）"></a>9. 模板方法模式（Template Method）</h2><h3 id="问题-6"><a href="#问题-6" class="headerlink" title="问题"></a>问题</h3><p>多个流程的步骤框架一样，但某些具体步骤不一样。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataExporter</span>(<span class="params">ABC</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;导出数据的模板&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">export</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;模板方法：定义了算法骨架，子类不能覆盖&quot;&quot;&quot;</span></span><br><span class="line">        validated = self.validate(data)      <span class="comment"># 步骤 1：校验</span></span><br><span class="line">        formatted = self.<span class="built_in">format</span>(validated)   <span class="comment"># 步骤 2：格式化（子类实现）</span></span><br><span class="line">        result = self.compress(formatted)    <span class="comment"># 步骤 3：压缩（可选覆盖）</span></span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;通用步骤：所有导出器都一样&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> [d <span class="keyword">for</span> d <span class="keyword">in</span> data <span class="keyword">if</span> d <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;子类必须实现：不同的导出格式&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compress</span>(<span class="params">self, data: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;钩子方法：子类可选覆盖，默认不压缩&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 具体实现</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CSVExporter</span>(<span class="params">DataExporter</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;,&quot;</span>.join(<span class="built_in">str</span>(d) <span class="keyword">for</span> d <span class="keyword">in</span> data)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JSONExporter</span>(<span class="params">DataExporter</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format</span>(<span class="params">self, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">import</span> json</span><br><span class="line">        <span class="keyword">return</span> json.dumps(data, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CompressedJSONExporter</span>(<span class="params">JSONExporter</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compress</span>(<span class="params">self, data: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">import</span> zlib</span><br><span class="line">        <span class="keyword">import</span> base64</span><br><span class="line">        compressed = zlib.compress(data.encode())</span><br><span class="line">        <span class="keyword">return</span> base64.b64encode(compressed).decode()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">data = [<span class="string">&quot;apple&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="literal">None</span>, <span class="string">&quot;orange&quot;</span>]</span><br><span class="line"></span><br><span class="line">csv = CSVExporter()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;CSV: <span class="subst">&#123;csv.export(data)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">json_exporter = JSONExporter()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;JSON: <span class="subst">&#123;json_exporter.export(data)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">compressed = CompressedJSONExporter()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;压缩JSON: <span class="subst">&#123;compressed.export(data)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CSV: apple,banana,orange</span><br><span class="line">JSON: [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</span><br><span class="line">压缩JSON: eJzzSM0tKS6pBAAFSQQI</span><br></pre></td></tr></table></figure>
+
+<p><code>export()</code> 是模板方法——它定义了算法的骨架（校验→格式化→压缩），子类不能改变骨架，只能填充 <code>format()</code> 和 <code>compress()</code> 的具体实现。</p>
+<hr>
+<h2 id="10-模式对比速查"><a href="#10-模式对比速查" class="headerlink" title="10. 模式对比速查"></a>10. 模式对比速查</h2><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>一句话</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>策略</strong></td>
+<td>把 if-else 拆成独立的策略类</td>
+<td>会员折扣、支付方式、排序算法</td>
+</tr>
+<tr>
+<td><strong>简单工厂</strong></td>
+<td>集中管理对象创建</td>
+<td>根据配置创建不同数据库连接</td>
+</tr>
+<tr>
+<td><strong>工厂方法</strong></td>
+<td>每个产品一个工厂，延迟创建</td>
+<td>物流系统（陆运/海运）</td>
+</tr>
+<tr>
+<td><strong>抽象工厂</strong></td>
+<td>创建一整套相关对象</td>
+<td>UI 主题切换、跨平台数据库驱动</td>
+</tr>
+<tr>
+<td><strong>单例</strong></td>
+<td>全局只允许一个实例</td>
+<td>数据库连接池、配置管理器</td>
+</tr>
+<tr>
+<td><strong>适配器</strong></td>
+<td>不兼容的接口之间加转换层</td>
+<td>老系统对接新接口、第三方库替换</td>
+</tr>
+<tr>
+<td><strong>观察者</strong></td>
+<td>一对多通知：状态变了自动告诉订阅者</td>
+<td>股票推送、事件总线、消息队列</td>
+</tr>
+<tr>
+<td><strong>装饰器</strong></td>
+<td>嵌套包装增加功能</td>
+<td>日志加时间戳、咖啡加配料</td>
+</tr>
+<tr>
+<td><strong>代理</strong></td>
+<td>控制对真实对象的访问</td>
+<td>图片懒加载、远程服务本地代理</td>
+</tr>
+<tr>
+<td><strong>模板方法</strong></td>
+<td>骨架固定，细节留给子类</td>
+<td>数据导出、测试框架</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="11-总结"><a href="#11-总结" class="headerlink" title="11. 总结"></a>11. 总结</h2><p>设计模式的核心思想不是背代码，而是学会<strong>把”变化的部分”和”不变的部分”分开</strong>：</p>
+<ul>
+<li>策略模式：变化的”算法”抽出去</li>
+<li>工厂模式：变化的”创建方式”抽出去</li>
+<li>适配器模式：变化的”接口”隔离开</li>
+<li>观察者模式：变化的”通知对象”灵活增减</li>
+<li>装饰器模式：变化的”附加功能”层层叠加</li>
+<li>模板方法模式：变化的”步骤细节”留给子类</li>
+</ul>
+<p>看到一段代码里有大量 <code>if-else</code>、变量在多个地方被修改、或者每次加功能都要改核心类——这些就是设计模式的应用时机。</p>
+<p>但记住最重要的原则：<strong>KISS（Keep It Simple, Stupid）</strong>。能用一个函数搞定的，不要引入五个类。设计模式是工具，不是目的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+              <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag"># 面向对象</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"># 软件工程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/05/asyncio/" rel="prev" title="asyncio详解">
+      <i class="fa fa-chevron-left"></i> asyncio详解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是设计模式？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.</span> <span class="nav-text">三个分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">什么时候用设计模式？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Strategy-Pattern%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">2. 策略模式（Strategy Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3"><span class="nav-number">2.2.</span> <span class="nav-text">策略模式怎么解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="nav-number">2.3.</span> <span class="nav-text">策略模式的核心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E5%AE%B6%E6%97%8F"><span class="nav-number">3.</span> <span class="nav-text">3. 工厂模式家族</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%EF%BC%88Simple-Factory%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 简单工厂（Simple Factory）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%EF%BC%88Factory-Method%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 工厂方法（Factory Method）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%EF%BC%88Abstract-Factory%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 抽象工厂（Abstract Factory）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E5%B7%A5%E5%8E%82%E6%80%8E%E4%B9%88%E9%80%89"><span class="nav-number">3.4.</span> <span class="nav-text">三种工厂怎么选</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton-Pattern%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">4. 单例模式（Singleton Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-1"><span class="nav-number">4.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter-Pattern%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">5. 适配器模式（Adapter Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-2"><span class="nav-number">5.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E8%A7%A3%E5%86%B3"><span class="nav-number">5.2.</span> <span class="nav-text">适配器解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Observer-Pattern%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">6. 观察者模式（Observer Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-3"><span class="nav-number">6.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">6.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Decorator-Pattern%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">7. 装饰器模式（Decorator Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-4"><span class="nav-number">7.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-2"><span class="nav-number">7.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%88Proxy-Pattern%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">8. 代理模式（Proxy Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-5"><span class="nav-number">8.1.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Template-Method%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">9. 模板方法模式（Template Method）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-6"><span class="nav-number">9.1.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E6%A8%A1%E5%BC%8F%E5%AF%B9%E6%AF%94%E9%80%9F%E6%9F%A5"><span class="nav-number">10.</span> <span class="nav-text">10. 模式对比速查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E6%80%BB%E7%BB%93"><span class="nav-number">11.</span> <span class="nav-text">11. 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ffy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ffy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script color='' opacity='' zIndex='' count='' src="/lib/canvas-nest/canvas-nest-nomobile.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
